@@ -1,0 +1,22 @@
+-r requirements.txt
+
+# development specific requirements
+# Example:
+# cython~=0.29
+# delocate
+# hypothesis
+# numpydoc
+# packaging
+# pytest>=3.1.0
+# pytest-cov>=2.2.0
+# sphinx
+# sphinx-rtd-theme
+# wheel
+
+pytest>=5.1
+sphinx>=2.2.0
+PyScaffold==3.2.2
+pyscaffoldext-custom-extension==0.5
+pyscaffoldext-dsproject==0.4
+pyscaffoldext-markdown==0.3.1
+pyscaffoldext-pyproject==0.2.1

@@ -1,0 +1,43 @@
+# =============================================================================
+# DEPRECATION WARNING:
+#
+# The file `requirements.txt` does not influence the package dependencies and
+# will not be automatically created in the next version of PyScaffold (v4.x).
+#
+# Please have look at the docs for better alternatives
+# (`Dependency Management` section).
+# =============================================================================
+#
+# Add your pinned requirements so that they can be easily installed with:
+# pip install -r requirements.txt
+# Remember to also add them in setup.cfg but unpinned.
+# Example:
+# numpy==1.13.3
+# scipy==1.0
+
+# Export installed requirements to requirements.txt:
+# pip3 freeze > requirements.txt
+
+affine>=2.3
+attrs>=19.0
+cftime>=1.0.3
+Click==7.0
+click-plugins==1.1.1
+cryptography>=2.6
+cython>=0.29
+dask[complete]>=2.0
+jupyterlab==1.1.4
+netCDF4>=1.5
+numba>=0.40
+numpy>=1.10
+pandas>=0.20
+paramiko>=2.6
+pycurl>=7.40
+pyproj>=2.0
+pyshp>=2.0
+PyYAML>=5.1
+rasterio>=1.0
+requests>=2.22
+scipy>=1.0
+Shapely>=1.6
+xarray>=0.12

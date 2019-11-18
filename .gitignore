@@ -1,3 +1,10 @@
+# Configuration yaml
+accounts.yml
+
+# tests download
+tests/data/Download/
+tests/data/Notebooks/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
