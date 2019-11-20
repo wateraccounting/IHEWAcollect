@@ -176,6 +176,9 @@ after_success:
 after_script:
   - travis-cleanup
 
+notifications:
+  slack: wateraccounting:OJL28hQ0TTDusJTelRRmmtP7
+
 cache: false
 #cache:
 #  directories:
