@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from wateraccounting.skeleton import fib
+from IHEWAcollect.skeleton import fib
 
 __author__ = "Quan Pan"
 __copyright__ = "Quan Pan"

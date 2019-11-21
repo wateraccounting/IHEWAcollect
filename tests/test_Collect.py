@@ -6,11 +6,11 @@ import numpy as np
 
 import pytest
 
-from wateraccounting.Collect.accounts import Accounts
-from wateraccounting.Collect.gis import GIS
+from IHEWAcollect.base.accounts import Accounts
+from IHEWAcollect.base.gis import GIS
 
-import wateraccounting.Collect.products.ALEXI as ALEXI
-import wateraccounting.Collect.products.ASCAT as ASCAT
+import IHEWAcollect.ALEXI as ALEXI
+import IHEWAcollect.ASCAT as ASCAT
 
 __author__ = "Quan Pan"
 __copyright__ = "Quan Pan"

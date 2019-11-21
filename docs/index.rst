@@ -43,7 +43,7 @@ PyPI upload, run ``setup.py``::
 
     $ python setup.py sdist bdist_wheel
 
-    $ twine check dist/*.tar.
+    $ twine check dist/*
 
     $ twine upload dist/*
 
