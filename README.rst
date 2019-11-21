@@ -2,26 +2,26 @@
 
 |CoverAlls|_ |Travis|_ |ReadTheDocs|_ |DockerHub|_ |PyPI|_
 
-.. |CoverAlls| image:: https://coveralls.io/repos/github/IHEProjects/WaterAccounting/badge.svg?branch=master
-.. _CoverAlls: https://coveralls.io/github/IHEProjects/WaterAccounting?branch=master
+.. |CoverAlls| image:: https://coveralls.io/repos/github/wateraccounting/IHEWAcollect/badge.svg?branch=master
+.. _CoverAlls: https://coveralls.io/github/wateraccounting/IHEWAcollect?branch=master
 
-.. |Travis| image:: https://travis-ci.org/IHEProjects/WaterAccounting.svg?branch=master
-.. _Travis: https://travis-ci.org/IHEProjects/WaterAccounting
+.. |Travis| image:: https://travis-ci.org/wateraccounting/IHEWAcollect.svg?branch=master
+.. _Travis: https://travis-ci.org/wateraccounting/IHEWAcollect
 
-.. |ReadTheDocs| image:: https://readthedocs.org/projects/wateraccounting/badge/?version=latest
-.. _ReadTheDocs: https://wateraccounting.readthedocs.io/en/latest/
+.. |ReadTheDocs| image:: https://readthedocs.org/projects/ihewacollect/badge/?version=latest
+.. _ReadTheDocs: https://ihewacollect.readthedocs.io/en/latest/
 
-.. |DockerHub| image:: https://img.shields.io/docker/cloud/build/quanpan302/ihe_projects_wateraccounting
-.. _DockerHub: https://hub.docker.com/r/quanpan302/ihe_projects_wateraccounting
+.. |DockerHub| image:: https://img.shields.io/docker/cloud/build/wateraccounting/ihewacollect
+.. _DockerHub: https://hub.docker.com/r/wateraccounting/ihewacollect
 
-.. |PyPI| image:: https://img.shields.io/pypi/v/WaterAccounting
-.. _PyPI: https://pypi.org/project/WaterAccounting/
+.. |PyPI| image:: https://img.shields.io/pypi/v/IHEWAcollect
+.. _PyPI: https://pypi.org/project/IHEWAcollect/
 
 
-IHEWACollect
+IHEWAcollect
 ============
 
-IHE WaterAccounting Collect Tool. 2019-11-15.
+IHE WaterAccounting Collect Tool.
 
 Collect
 -------
@@ -52,6 +52,11 @@ IHEWAcollect.ALEXI() functioin
 
 ...
 ^^^
+
+WAPOR
+^^^^^
+
+IHEWAcollect.WAPOR() functioin
 
 Data type
 ---------

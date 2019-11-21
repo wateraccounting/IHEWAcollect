@@ -1,6 +1,5 @@
-# docker pull wateraccounting/ihewacollect
-# docker build -t wateraccounting/ihewacollect .
-# docker run -it --name collect -p 8888:8888 -v /d/IHEWAcollect:/notebooks wateraccounting/ihewacollect
+# docker build -t wapor/jupyter .
+# docker run -it --name wapor -p 8888:8888 -v /d/20190904-Training_Oct:/notebooks wapor/jupyter
 # docker system prune -f && docker volume prune -f && docker container prune -f
 
 FROM osgeo/gdal:ubuntu-full-latest
@@ -14,8 +13,6 @@ FROM osgeo/gdal:ubuntu-full-latest
 # /usr/local/lib
 
 MAINTAINER "Quan Pan" <quanpan302@hotmail.com>
-
-ADD requirements.txt .
 
 # ADD ./tzdata.sh /tzdata.sh
 # RUN ["chmod", "+x", "/tzdata.sh"]
@@ -87,10 +84,26 @@ RUN apt-get install -y \
 # Install python libraries
 RUN apt-get install -y \
     python3-dev \
-    python3-pip
+    python3-pip \
+    python3-scipy \
+    python3-numpy \
+    python3-pandas
 
 # Install python dependencies
-RUN pip3 install -r requirements.txt
+RUN pip3 install \
+    requests \
+    pytest \
+    netcdf4 \
+    shapely \
+    pyshp \
+    rasterio \
+    "dask[complete]" \
+    "dask-ml[complete]" \
+    xarray \
+    pyproj \
+    pycurl \
+    paramiko \
+    jupyterlab
 
 # Workspace
 RUN mkdir /notebooks

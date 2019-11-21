@@ -1,0 +1,124 @@
+# None value
+#   null: account
+#   '-': data[ftype, freq, unit, time, ]
+
+# Data types
+#   time:
+#     daily
+#     weekly
+#     monthly
+#   dem:
+#     3s
+#     15s
+#     30s
+
+# Methods
+#   ftp      : from ftplib import FTP
+#   requests : import requests
+#   request  : urllib.request
+#   curl     : pycurl.Curl
+
+# File types, "Driver.FileExtension"
+#   grb2, grib2
+#   tif, nc,
+#   gz:
+#     dat(dtype="<f4")
+#   zip:
+#     adf, bil
+
+# Numeric types
+#   Python : https://docs.python.org/3/library/stdtypes.html
+#     Text Type      : str
+#     Numeric Types  : int, float, complex
+#     Sequence Types : list, tuple, range
+#     Mapping Type   : dict
+#     Set Types      : set, frozenset
+#     Boolean Type   : bool
+#     Binary Types   : bytes, by
+#   Numpy  : https://docs.scipy.org/doc/numpy/user/basics.types.html
+#   NetCDF : https://www.unidata.ucar.edu/software/netcdf/docs/data_type.html
+#
+#   np.float32, <f4
+
+# Datetime
+#   strftime codes: http://strftime.org/
+#   pandas date_range alias: https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#timeseries-offset-aliases
+#     D  : calendar day frequency
+#     7D : week frequency
+#     MS : month start frequency
+
+# Name
+#   var: variable name, lower case
+#   Var: variable name, upper case
+#
+#   i: ith part of file, ``for i in range(0, 4):``
+#
+#   '{:%Y-%m-%d %H:%M}'.format(datetime(2001, 2, 3, 4, 5)) => 2001-02-03 04:05
+#   Y: year, stirng[4]
+#   m: month, string[2]
+#   d: day, string[2]
+#   j: day of year, string[3]
+#
+#   latlon: DEM tile's name, string[7], n00e005
+
+# File
+#   rmtname : downloaded to './download/'
+#   tmpfile : generated to './temporary/', to be deleted at the end
+#   locfile : saved to './'
+
+products:
+  ALEXI:
+    account: 'FTP_WA'
+    meta:
+      owner: 'IHE Delft'
+      description:
+        ''
+      websites: ['https://www.wateraccounting.org']
+      protocols: ['FTP']
+      methods: ['ftp']
+      ftypes: ['gz']
+      datasets: ['ET']
+      versions: ['v1']
+      datatypes: ['daily', 'weekly']
+      projection: 'WGS84'
+    data:
+      ET:
+        v1:
+          daily:
+            name: 'Daily Evaporation'
+            description:
+              ''
+            # 201910, QPan:
+            #   ftp://ftp.wateraccounting.unesco-ihe.org/WaterAccounting/Data_Satellite/Evaporation/ALEXI/World_05182018/EDAY_CERES_2005001.dat.gz
+            url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
+            dir: '/WaterAccounting/Data_Satellite/Evaporation/ALEXI/World_05182018/'
+            method: 'ftp'
+            ftype:
+              d: 'gz'
+              t: 'dat'
+              o: 'GTiff.tif'
+            dtype:
+              i: 'float32'
+              o: 'float32'
+            freq: 'D'
+            variables:
+              ETa:
+                unit:
+                  f: 'MJ/m2d'
+                  t: 'mm/d'
+                  m: 2.45
+                lat:
+                  s: -60.0
+                  n: 70.0
+                  r: 0.05
+                lon:
+                  w: -180.0
+                  e: 180.0
+                  r: 0.05
+                time:
+                  s: 2005-01-01
+                  e: 2016-12-31
+            rmtname: 'EDAY_CERES_{Y:>04s}{j:>03s}.dat.gz'
+            tmpfile: ''
+            locfile: '{var:.3S}_ALEXI_CSFR_mm-day-1_daily_{Y:>04s}.{m:>02s}.{d:>02s}.tif'
+          monthly:

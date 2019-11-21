@@ -1,0 +1,992 @@
+#level:
+#  0: Success
+#  1: Error
+#  2: Warning
+
+messages:
+  0:
+    msg: 'No error'
+    level: 0
+  1:
+    msg: 'Error'
+    level: 0
+  2:
+    msg: 'Warning'
+    level: 0
+
+  202:
+    msg: 'OK'
+    level: 1
+  404:
+    msg: 'Not Found'
+    level: 1
+
+products:
+  ALEXI:
+    account: 'FTP_WA'
+    meta:
+      owner: 'IHE Delft'
+      description:
+        ''
+      websites: ['https://www.wateraccounting.org']
+      protocols: ['FTP']
+      methods: ['ftp']
+      ftypes: ['gz']
+      datasets: ['Evaporation']
+      versions: ['v1']
+      datatypes: ['daily', 'weekly']
+      projection: 'WGS84'
+    data:
+      Evaporation:
+        v1:
+          daily:
+            name: 'Daily Evaporation'
+            description:
+              ''
+            # 201910, QPan:
+            #   ftp://ftp.wateraccounting.unesco-ihe.org/WaterAccounting/Data_Satellite/Evaporation/ALEXI/World_05182018/EDAY_CERES_2005001.dat.gz
+            url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
+            dir: '/WaterAccounting/Data_Satellite/Evaporation/ALEXI/World_05182018/'
+            method: 'ftp'
+            ftype:
+              d: 'gz'
+              t: 'dat'
+              o: 'GTiff.tif'
+            dtype:
+              i: 'float32'
+              o: 'float32'
+            freq: 'D'
+            variables:
+              ETa:
+                unit:
+                  f: 'MJ/m2d'
+                  t: 'mm/d'
+                  m: 2.45
+                lat:
+                  s: -60.0
+                  n: 70.0
+                  r: 0.05
+                lon:
+                  w: -180.0
+                  e: 180.0
+                  r: 0.05
+                time:
+                  s: 2005-01-01
+                  e: 2016-12-31
+            rmtname: 'EDAY_CERES_{Y:>04s}{j:>03s}.dat.gz'
+            tmpfile: 'EDAY_CERES_{Y:>04s}{j:>03s}.dat'
+            locfile: '{var:.3s}_ALEXI_CSFR_mm-day-1_daily_{Y:>04s}.{m:>02s}.{d:>02s}.tif'
+          weekly:
+            name: 'Weekly Evaporation'
+            description:
+              ''
+            # 201910, QPan:
+            #   ftp://ftp.wateraccounting.unesco-ihe.org/WaterAccounting/Data_Satellite/Evaporation/ALEXI/World/ALEXI_weekly_mm_008_2003.tif
+            url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
+            dir: '/WaterAccounting/Data_Satellite/Evaporation/ALEXI/World/'
+            method: 'ftp'
+            ftype:
+              d: 'GTiff.tif'
+              t: '-'
+              o: 'GTiff.tif'
+            dtype:
+              i: 'float32'
+              o: 'float32'
+            freq: '7D'
+            variables:
+              ETa:
+                unit:
+                  f: 'MJ/m2d'
+                  t: 'mm/d'
+                  m: 2.45
+                lat:
+                  s: -60.0
+                  n: 70.0
+                  r: 0.05
+                lon:
+                  w: -180.0
+                  e: 180.0
+                  r: 0.05
+                time:
+                  s: 2003-01-01
+                  e: 2015-12-31
+            rmtname: 'ALEXI_weekly_mm_{j:>03s}_{Y:>04s}.tif'
+            tmpfile: ''
+            locfile: '{var:.3s}_ALEXI_CSFR_mm-week-1_weekly_{Y:>04s}.{m:>02s}.{d:>02s}.tif'
+
+  ASCAT:
+    account: 'Copernicus'
+    meta:
+      owner: 'Copernicus'
+      description:
+        'The Soil Water Index quantifies the moisture condition at various depths in the
+         soil. It is mainly driven by the precipitation via the process of infiltration.
+         Soil moisture is a very heterogeneous variable and varies on small scales with
+         soil properties and drainage patterns. Satellite measurements integrate over
+         relative large-scale areas, with the presence of vegetation adding complexity to
+         the interpretation.'
+      websites: ['https://www.copernicus.eu']
+      protocols: ['HTTPS']
+      methods: ['requests']
+      ftypes: ['nc']
+      datasets: ['SoilWaterIndex']
+      versions: ['v3']
+      datatypes: ['daily']
+      projection: 'WGS84'
+    data:
+      SoilWaterIndex:
+        v3:
+          daily:
+            name: 'Daily Soil Water Index'
+            description:
+              ''
+            # before:
+            #   https://land.copernicus.vgt.vito.be/PDF/datapool/Vegetation/Soil_Water/SWI_V3/
+            # 201910, QPan:
+            #   https://land.copernicus.vgt.vito.be/PDF/datapool/Vegetation/Soil_Water_Index/Daily_SWI_12.5km_Global_V3/2007/01/01/SWI_200701011200_GLOBE_ASCAT_V3.1.1/c_gls_SWI_200701011200_GLOBE_ASCAT_V3.1.1.nc
+            url: 'https://land.copernicus.vgt.vito.be/PDF/datapool'
+            dir: '/Vegetation/Soil_Water_Index/Daily_SWI_12.5km_Global_V3/{Y:>04s}/{m:>02s}/{d:>02s}/SWI_{Y:>04s}/{m:>02s}/{d:>02s}1200_GLOBE_ASCAT_V3.1.1/'
+            method: 'requests'
+            ftype:
+              d: 'nc'
+              t: '-'
+              o: 'GTiff.tif'
+            dtype:
+              i: 'ubyte'
+              o: 'float32'
+            freq: 'D'
+            variables:
+              SWI_010:
+                unit:
+                  f: '-'
+                  t: '-'
+                  m: 1
+                lat:
+                  s: -90.0
+                  n: 90.0
+                  r: 0.1
+                lon:
+                  w: -180.0
+                  e: 180.0
+                  r: 0.1
+                time:
+                  s: 2007-01-01
+                  e: '-'
+            rmtname: 'c_gls_SWI_{Y:>04s}/{m:>02s}/{d:>02s}1200_GLOBE_ASCAT_V3.1.1.nc'
+            tmpfile: ''
+            locfile: '{Var:.3s}_ASCAT_V3_Percentage_daily_{Y:>04s}.{m:>02s}.{d:>02s}.tif'
+
+  CFSR:
+    account: null
+    meta:
+      owner: 'NOAA'
+      description:
+        'The Climate Forecast System (CFS) is a model representing the global interaction
+         between Earth''s oceans, land, and atmosphere. Produced by several dozen scientists
+         under guidance from the National Centers for Environmental Prediction (NCEP), this
+         model offers hourly data with a horizontal resolution down to one-half of a degree
+         (approximately 56 km) around Earth for many variables. CFS uses the latest scientific
+         approaches for taking in, or assimilating, observations from data sources including
+         surface observations, upper air balloon observations, aircraft observations, and
+         satellite observations.'
+      websites: ['https://www.noaa.gov']
+      protocols: ['FTP', 'HTTPS', 'TDS']
+      methods: ['curl']
+      ftypes: ['grb2', 'grib2']
+      datasets: ['Radiation']
+      versions: ['v1', 'v2']
+      datatypes: ['daily', 'monthly']
+      projection: 'WGS84'
+    data:
+      Radiation:
+        v1:
+          daily:
+            name: 'Daily Radiation'
+            description:
+              'The NCEP Climate Forecast System Reanalysis (CFSR) was designed and executed
+               as a global, high-resolution, coupled atmosphere-ocean-land surface-sea ice
+               system to provide the best estimate of the state of these coupled domains over
+               the 32-year period of record from January 1979 to March 2011. It has been
+               extended as an operational real-time product.'
+            # 201910, QPan:
+            #   https://nomads.ncdc.noaa.gov/data/cfsr/197901/dlwsfc.gdas.197901.grb2
+            url: 'https://nomads.ncdc.noaa.gov'
+            dir: '/data/cfsr/{Y:>04s}{m:>02s}/'
+            method: 'curl'
+            ftype:
+              d: 'grb2'
+              t: 'nc'
+              o: 'GTiff.tif'
+            dtype:
+              i: 'float64'
+              o: 'float32'
+            freq: 'D'
+            variables:
+              dlwsfc:
+                unit:
+                  f: 'W/m^2'
+                  t: 'W/m^2'
+                  m: 1
+                lat:
+                  s: -89.9171038899
+                  n: 89.9171038899
+                  r: 0.3125
+                lon:
+                  w: -180.0
+                  e: 179.843249782
+                  r: 0.3125
+                time:
+                  s: 1979-01-01
+                  e: 2011-03-31
+              dswsfc:
+                unit:
+                  f: 'W/m^2'
+                  t: 'W/m^2'
+                  m: 1
+                lat:
+                  s: -89.9171038899
+                  n: 89.9171038899
+                  r: 0.3125
+                lon:
+                  w: -180.0
+                  e: 179.843249782
+                  r: 0.3125
+                time:
+                  s: 1979-01-01
+                  e: 2011-03-31
+              ulwsfc:
+                unit:
+                  f: 'W/m^2'
+                  t: 'W/m^2'
+                  m: 1
+                lat:
+                  s: -89.9171038899
+                  n: 89.9171038899
+                  r: 0.3125
+                lon:
+                  w: -180.0
+                  e: 179.843249782
+                  r: 0.3125
+                time:
+                  s: 1979-01-01
+                  e: 2011-03-31
+              uswsfc:
+                unit:
+                  f: 'W/m^2'
+                  t: 'W/m^2'
+                  m: 1
+                lat:
+                  s: -89.9171038899
+                  n: 89.9171038899
+                  r: 0.3125
+                lon:
+                  w: -180.0
+                  e: 179.843249782
+                  r: 0.3125
+                time:
+                  s: 1979-01-01
+                  e: 2011-03-31
+            rmtname: '{var}.gdas.{Y:>04s}{m:>02s}.grb2'
+            # band = (int(Date.strftime('%d')) - 1) * 28 + (i + 1) * 7
+            tmpfile: 'Output{Y:>04s}{m:>02s}{d:>02s}-{i}.nc'
+            locfile: '{Var:.3s}R_CFSR_W-m2_{Y:>04s}.{m:>02s}.{d:>02s}.tif'
+          monthly:
+        v2:
+          daily:
+            name: 'Daily Radiation'
+            description:
+              'The NCEP Climate Forecast System Reanalysis (CFSR) was designed and executed
+               as a global, high-resolution, coupled atmosphere-ocean-land surface-sea ice
+               system to provide the best estimate of the state of these coupled domains over
+               the 32-year period of record from January 1979 to March 2011. It has been
+               extended as an operational real-time product.'
+            # 201910, QPan:
+            #   https://nomads.ncdc.noaa.gov/modeldata/cfsv2_analysis_timeseries/2011/201104/dlwsfc.gdas.201104.grib2
+            url: 'https://nomads.ncdc.noaa.gov'
+            dir: '/modeldata/cfsv2_analysis_timeseries/{Y:>04s}/{Y:>04s}{m:>02s}/'
+            method: 'curl'
+            ftype:
+              d: 'grib2'
+              t: 'nc'
+              o: 'GTiff.tif'
+            dtype:
+              i: 'float64'
+              o: 'float32'
+            freq: 'D'
+            variables:
+              dlwsfc:
+                unit:
+                  f: 'W/m^2'
+                  t: 'W/m^2'
+                  m: 1
+                lat:
+                  s: -89.9462116040955806
+                  n: 89.9462116040955806
+                  r: 0.204545
+                lon:
+                  w: -180.0
+                  e: 179.8977275
+                  r: 0.204545
+                time:
+                  s: 2011-04-01
+                  e: '-'
+              dswsfc:
+                unit:
+                  f: 'W/m^2'
+                  t: 'W/m^2'
+                  m: 1
+                lat:
+                  s: -89.9462116040955806
+                  n: 89.9462116040955806
+                  r: 0.204545
+                lon:
+                  w: -180.0
+                  e: 179.8977275
+                  r: 0.204545
+                time:
+                  s: 2011-04-01
+                  e: '-'
+              ulwsfc:
+                unit:
+                  f: 'W/m^2'
+                  t: 'W/m^2'
+                  m: 1
+                lat:
+                  s: -89.9462116040955806
+                  n: 89.9462116040955806
+                  r: 0.204545
+                lon:
+                  w: -180.0
+                  e: 179.8977275
+                  r: 0.204545
+                time:
+                  s: 2011-04-01
+                  e: '-'
+              uswsfc:
+                unit:
+                  f: 'W/m^2'
+                  t: 'W/m^2'
+                  m: 1
+                lat:
+                  s: -89.9462116040955806
+                  n: 89.9462116040955806
+                  r: 0.204545
+                lon:
+                  w: -180.0
+                  e: 179.8977275
+                  r: 0.204545
+                time:
+                  s: 2011-04-01
+                  e: '-'
+            rmtname: '{var}.gdas.{Y:>04s}{m:>02s}.grib2'
+            tmpfile: 'Output{Y:>04s}{m:>02s}{d:>02s}-{i}.nc'
+            locfile: '{Var:.3s}R_CFSR_W-m2_{Y:>04s}.{m:>02s}.{d:>02s}.tif'
+          monthly:
+
+  CHIRPS:
+    account: null
+    meta:
+      owner: 'University of California at Santa Barbara'
+      description:
+        'Since 1999, USGS and CHC scientists—supported by funding from USAID, NASA, and
+         NOAA—have developed techniques for producing rainfall maps, especially in areas
+         where surface data is sparse.'
+      websites: ['https://geog.ucsb.edu']
+      protocols: ['FTP']
+      methods: ['ftp']
+      ftypes: ['gz', 'nc']
+      datasets: ['Precipitation']
+      versions: ['v2']
+      datatypes: ['daily', 'monthly']
+      projection: 'WGS84'
+    data:
+      Precipitation:
+        v2:
+          daily:
+            name: 'Daily Precipitation'
+            description:
+              ''
+            # 201910, QPan:
+            #   ftp://chg-ftpout.geog.ucsb.edu/pub/org/chg/products/CHIRPS-2.0/global_daily/tifs/p05/1981/chirps-v2.0.1981.01.01.tif.gz
+            url: 'ftp://chg-ftpout.geog.ucsb.edu'
+            dir: '/pub/org/chg/products/CHIRPS-2.0/global_daily/tifs/p05/{Y:>04s}/'
+            method: 'ftp'
+            ftype:
+              d: 'gz'
+              t: 'GTiff.tif'
+              o: 'GTiff.tif'
+            dtype:
+              i: 'float32'
+              o: 'float32'
+            freq: 'D'
+            variables:
+              P:
+                unit:
+                  f: 'mm/day'
+                  t: 'mm/day'
+                  m: 1
+                lat:
+                  s: -50.0
+                  n: 50.0
+                  r: 0.204545
+                lon:
+                  w: -180.0
+                  e: 180.0
+                  r: 0.204545
+                time:
+                  s: 1981-01-01
+                  e: '-'
+            rmtname: 'chirps-v2.0.{Y:>04s}.{m:>02s}.{d:>02s}.tif.gz'
+            tmpfile: 'chirps-v2.0.{Y:>04s}.{m:>02s}.{d:>02s}.tif'
+            locfile: '{Var:.3s}_CHIRPS.v2.0_mm-day-1_daily_{Y:>04s}.{m:>02s}.{d:>02s}.tif'
+          monthly:
+            name: 'Monthly Precipitation'
+            description:
+              ''
+            # 201910, QPan:
+            #   ftp://chg-ftpout.geog.ucsb.edu/pub/org/chg/products/CHIRPS-2.0/global_monthly/tifs/chirps-v2.0.1981.01.tif.gz
+            url: 'ftp://chg-ftpout.geog.ucsb.edu'
+            dir: '/pub/org/chg/products/CHIRPS-2.0/global_monthly/tifs/'
+            method: 'ftp'
+            ftype:
+              d: 'gz'
+              t: 'GTiff.tif'
+              o: 'GTiff.tif'
+            dtype:
+              i: 'float32'
+              o: 'float32'
+            freq: 'MS'
+            variables:
+              P:
+                unit:
+                  f: 'mm/day'
+                  t: 'mm/day'
+                  m: 1
+                lat:
+                  s: -50.0
+                  n: 50.0
+                  r: 0.204545
+                lon:
+                  w: -180.0
+                  e: 180.0
+                  r: 0.204545
+                time:
+                  s: 1981-01-01
+                  e: '-'
+            rmtname: 'chirps-v2.0.{Y:>04s}.{m:>02s}.tif.gz'
+            tmpfile: 'chirps-v2.0.{Y:>04s}.{m:>02s}.tif'
+            locfile: '{Var:.3s}_CHIRPS.v2.0_mm-month-1_monthly_{Y:>04s}.{m:>02s}.{d:>02s}.tif'
+
+  CMRSET:
+    account: 'FTP_WA'
+    meta:
+      owner: 'IHE Delft'
+      description:
+        ''
+      websites: ['https://www.wateraccounting.org']
+      protocols: ['FTP']
+      methods: ['ftp']
+      ftypes: ['tif']
+      datasets: ['Evaporation']
+      versions: ['v1']
+      datatypes: ['monthly']
+      projection: 'WGS84'
+    data:
+      Evaporation:
+        v1:
+          monthly:
+            name: 'Monthly Evaporation'
+            description:
+              ''
+            # 201910, QPan:
+            #   ftp://ftp.wateraccounting.unesco-ihe.org/WaterAccounting/Data_Satellite/Evaporation/CMRSET/Global/M01CMRSETGlobalY2000M01.tif
+            url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
+            dir: '/WaterAccounting/Data_Satellite/Evaporation/CMRSET/Global/'
+            method: 'ftp'
+            ftype:
+              d: 'GTiff.tif'
+              t: '-'
+              o: 'GTiff.tif'
+            dtype:
+              i: 'float64'
+              o: 'float32'
+            freq: 'MS'
+            variables:
+              ETa:
+                unit:
+                  f: 'mm/d'
+                  t: 'mm/d'
+                  m: 1
+                lat:
+                  s: -90.0
+                  n: 90.0
+                  r: 0.05
+                lon:
+                  w: -180.0
+                  e: 180.0
+                  r: 0.05
+                time:
+                  s: 2000-01-01
+                  e: 2012-12-31
+            rmtname: 'M01CMRSETGlobalY{Y:>04s}M{m:>02s}.tif'
+            tmpfile: ''
+            locfile: '{var:.3s}_CMRSET_mm-month-1_monthly_{Y:>04s}.{m:>02s}.{d:>02s}.tif'
+
+  DEM:
+    account: null'
+    meta:
+      owner: 'WWF'
+      description:
+        'HydroSHEDS is a mapping product that provides hydrographic information for
+         regional and global-scale applications in a consistent format. It offers a
+         suite of geo-referenced data sets (vector & raster) at various scales, including
+         river networks, watershed boundaries, drainage directions, and flow accumulations.
+         HydroSHEDS is based on high-resolution elevation data obtained during a Space
+         Shuttle flight for NASA''s Shuttle Radar Topography Mission (SRTM).'
+      websites: ['http://earlywarning.usgs.gov']
+      protocols: ['HTTPS']
+      methods: ['request']
+      ftypes: ['zip']
+      datasets: ['DEM', 'DIR']
+      versions: ['v1']
+      datatypes: ['3s', '15s', '30s']
+      projection: 'WGS84'
+    data:
+      DEM:
+        v1:
+          3s:
+            name: 'HydroSHEDS Digital Elevation Model'
+            description:
+              ''
+            # 201910, QPan:
+            #   https://edcintl.cr.usgs.gov/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/AF/n00e005_dem_grid.zip
+            url: 'https://edcintl.cr.usgs.gov'
+            dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/{Var:.2s}/'
+            method: 'request'
+            ftype:
+              d: 'zip'
+              t: 'AIG.adf'
+              o: 'GTiff.tif'
+            dtype:
+              i: 'int16'
+              o: 'float32'
+            freq: '-'
+            variables:
+              af:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: -35.0
+                  n: 38.0
+                  r: 0.00083333333333333
+                lon:
+                  w: -19.0
+                  e: 55.0
+                  r: 0.00083333333333333
+                time:
+                  s: '-'
+                  e: '-'
+              as:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: -12.0
+                  n: 61.0
+                  r: 0.00083333333333333
+                lon:
+                  w: 57.0
+                  e: 180.0
+                  r: 0.00083333333333333
+                time:
+                  s: '-'
+                  e: '-'
+              au:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: -56.0
+                  n: -10.0
+                  r: 0.00083333333333333
+                lon:
+                  w: 112.0
+                  e: 180.0
+                  r: 0.00083333333333333
+                time:
+                  s: '-'
+                  e: '-'
+              ca:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: 5.0
+                  n: 39.0
+                  r: 0.00083333333333333
+                lon:
+                  w: -119.0
+                  e: -60.0
+                  r: 0.00083333333333333
+                time:
+                  s: '-'
+                  e: '-'
+              eu:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: 12.0
+                  n: 62.0
+                  r: 0.00083333333333333
+                lon:
+                  w: -14.0
+                  e: 70.0
+                  r: 0.00083333333333333
+                time:
+                  s: '-'
+                  e: '-'
+              na:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: 24.0
+                  n: 60.0
+                  r: 0.00083333333333333
+                lon:
+                  w: -138.0
+                  e: -52.0
+                  r: 0.00083333333333333
+                time:
+                  s: '-'
+                  e: '-'
+              sa:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: -56.0
+                  n: 15.0
+                  r: 0.00083333333333333
+                lon:
+                  w: -93.0
+                  e: -32.0
+                  r: 0.00083333333333333
+                time:
+                  s: '-'
+                  e: '-'
+            rmtname: '{latlon}_dem_grid.zip'
+            tmpfile: '{}_temporary.tif'
+            locfile: 'DEM_HydroShed_m_3s.tif'
+          15s:
+            name: 'HydroSHEDS Digital Elevation Model'
+            description:
+              ''
+            # 201910, QPan:
+            #   https://edcintl.cr.usgs.gov/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/af_dem_15s_grid.zip
+            url: 'https://edcintl.cr.usgs.gov'
+            dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
+            method: 'request'
+            ftype:
+              d: 'zip'
+              t: 'AIG.adf'
+              o: 'GTiff.tif'
+            freq: '-'
+            variables:
+              af:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: -35.0
+                  n: 38.0
+                  r: 0.00416667
+                lon:
+                  w: -19.0
+                  e: 55.0
+                  r: 0.00416667
+                time:
+                  s: '-'
+                  e: '-'
+              as:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: -12.0
+                  n: 61.0
+                  r: 0.00416667
+                lon:
+                  w: 57.0
+                  e: 180.0
+                  r: 0.00416667
+                time:
+                  s: '-'
+                  e: '-'
+              au:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: -56.0
+                  n: -10.0
+                  r: 0.00416667
+                lon:
+                  w: 112.0
+                  e: 180.0
+                  r: 0.00416667
+                time:
+                  s: '-'
+                  e: '-'
+              ca:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: 5.0
+                  n: 39.0
+                  r: 0.00416667
+                lon:
+                  w: -119.0
+                  e: -60.0
+                  r: 0.00416667
+                time:
+                  s: '-'
+                  e: '-'
+              eu:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: 12.0
+                  n: 62.0
+                  r: 0.00416667
+                lon:
+                  w: -14.0
+                  e: 70.0
+                  r: 0.00416667
+                time:
+                  s: '-'
+                  e: '-'
+              na:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: 24.0
+                  n: 60.0
+                  r: 0.00416667
+                lon:
+                  w: -138.0
+                  e: -52.0
+                  r: 0.00416667
+                time:
+                  s: '-'
+                  e: '-'
+              sa:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: -56.0
+                  n: 15.0
+                  r: 0.00416667
+                lon:
+                  w: -93.0
+                  e: -32.0
+                  r: 0.00416667
+                time:
+                  s: '-'
+                  e: '-'
+            rmtname: '{var:.2s}_dem_15s_grid.zip'
+            tmpfile: '{}_merged.tif'
+            locfile: 'DEM_HydroShed_m_15s.tif'
+          30s:
+            name: 'HydroSHEDS Digital Elevation Model'
+            description:
+              ''
+            # 201910, QPan:
+            #   https://edcintl.cr.usgs.gov/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/af_dem_30s_bil.zip
+            url: 'https://edcintl.cr.usgs.gov'
+            dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+            method: 'request'
+            ftype:
+              d: 'zip'
+              t: 'EHdr.bil'
+              o: 'GTiff.tif'
+            freq: '-'
+            variables:
+              af:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: -35.0
+                  n: 38.0
+                  r: 0.00833334
+                lon:
+                  w: -19.0
+                  e: 55.0
+                  r: 0.00833334
+                time:
+                  s: '-'
+                  e: '-'
+              as:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: -12.0
+                  n: 61.0
+                  r: 0.00833334
+                lon:
+                  w: 57.0
+                  e: 180.0
+                  r: 0.00833334
+                time:
+                  s: '-'
+                  e: '-'
+              au:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: -56.0
+                  n: -10.0
+                  r: 0.00833334
+                lon:
+                  w: 112.0
+                  e: 180.0
+                  r: 0.00833334
+                time:
+                  s: '-'
+                  e: '-'
+              ca:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: 5.0
+                  n: 39.0
+                  r: 0.00833334
+                lon:
+                  w: -119.0
+                  e: -60.0
+                  r: 0.00833334
+                time:
+                  s: '-'
+                  e: '-'
+              eu:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: 12.0
+                  n: 62.0
+                  r: 0.00833334
+                lon:
+                  w: -14.0
+                  e: 70.0
+                  r: 0.00833334
+                time:
+                  s: '-'
+                  e: '-'
+              na:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: 24.0
+                  n: 60.0
+                  r: 0.00833334
+                lon:
+                  w: -138.0
+                  e: -52.0
+                  r: 0.00833334
+                time:
+                  s: '-'
+                  e: '-'
+              sa:
+                unit:
+                  f: 'm'
+                  t: 'm'
+                  m: 1
+                lat:
+                  s: -56.0
+                  n: 15.0
+                  r: 0.00833334
+                lon:
+                  w: -93.0
+                  e: -32.0
+                  r: 0.00833334
+                time:
+                  s: '-'
+                  e: '-'
+            rmtname: '{var:.2s}_dem_30s_bil.zip'
+            tmpfile: '{}_merged.tif'
+            locfile: 'DEM_HydroShed_m_30s.tif'
+      DIR:
+        v1:
+          3s:
+            name: 'HydroSHEDS Drainage Directions'
+            description:
+              ''
+            # 201910, QPan:
+            #   https://edcintl.cr.usgs.gov/downloads/sciweb1/shared/hydrosheds/sa_dir_3s_zip_grid/AF/n00e005_dir_grid.zip
+            url: 'https://edcintl.cr.usgs.gov'
+            dir: '/downloads/sciweb1/shared/hydrosheds/sa_dir_3s_zip_grid/{Var:.3s}/'
+            method: 'request'
+            ftype:
+              d: 'zip'
+              t: 'AIG.adf'
+              o: 'GTiff.tif'
+            freq: 'MS'
+            variables:
+              af:
+                unit:
+                  f: '-'
+                  t: '-'
+                  m: 1
+                lat:
+                  s: -90.0
+                  n: 90.0
+                  r: 0.00833334
+                lon:
+                  w: -180.0
+                  e: 180.0
+                  r: 0.0
+                time:
+                  s: '-'
+                  e: '-'
+              as:
+              au:
+              ca:
+              eu:
+              na:
+              sa:
+            rmtname: '{latlon}_dir_grid.zip'
+            tmpfile: '{}_temporary.tif'
+            locfile: 'DIR_HydroShed_-_3s.tif'
+
