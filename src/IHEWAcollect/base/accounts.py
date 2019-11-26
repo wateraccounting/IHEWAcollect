@@ -164,8 +164,8 @@ class Accounts(Base):
         - File to read: ``accounts.yml-encrypted``
         - File to read: ``credential.yml``
         """
-        f_cfg_org = os.path.join(self.__conf['path'],
-                                 self.__conf['file'].split('-encrypted')[0])
+        # f_cfg_org = os.path.join(self.__conf['path'],
+        #                          self.__conf['file'].split('-encrypted')[0])
         f_cfg_enc = os.path.join(self.__conf['path'],
                                  self.__conf['file'])
         f_crd = os.path.join(self.__conf['path'],

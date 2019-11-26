@@ -2,6 +2,7 @@
 accounts.yml
 
 # tests download
+tests/data/Products/
 tests/data/Download/
 tests/data/Notebooks/
 

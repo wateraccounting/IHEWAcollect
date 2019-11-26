@@ -28,6 +28,8 @@ import inspect
 # from datetime import datetime
 
 import gzip
+import numpy as np
+import pandas as pd
 
 try:
     from .accounts import Accounts
@@ -57,7 +59,9 @@ class Download(Accounts, GIS):
         'data': {}
     }
 
-    def __init__(self, workspace='', account='', is_status=True, **kwargs):
+    def __init__(self, workspace='', account='',
+                 product='', version='', timescale='', variable='',
+                 is_status=True, **kwargs):
         """Class instantiation
         """
         Accounts.__init__(self, workspace, account, is_status, **kwargs)
@@ -76,51 +80,54 @@ class Download(Accounts, GIS):
             # self._conf()
             message = ''
 
+        self.latlim = self._Base__conf['data']['products']['ALEXI']['v1']['Evaporation']['daily']['variables']['ETa']['lat']
+        self.lonlim = self._Base__conf['data']['products']['ALEXI']['v1']['Evaporation']['daily']['variables']['ETa']['lon']
+        self.timlim = self._Base__conf['data']['products']['ALEXI']['v1']['Evaporation']['daily']['variables']['ETa']['time']
+
         self._status(
             inspect.currentframe().f_code.co_name,
             prt=self.is_status,
             ext=message)
 
-    def check_latlon_lim(self):
-        # if latlim[0] < -60 or latlim[1] > 70:
-        #     print(
-        #         'Latitude above 70N or below 60S is not possible. Value set to maximum')
-        #     latlim[0] = np.max(latlim[0], -60)
-        #     latlim[1] = np.min(latlim[1], 70)
-        # if lonlim[0] < -180 or lonlim[1] > 180:
-        #     print(
-        #         'Longitude must be between 180E and 180W. Now value is set to maximum')
-        #     lonlim[0] = np.max(lonlim[0], -180)
-        #     lonlim[1] = np.min(lonlim[1], 180)
-        pass
+    def check_latlon_lim(self, latlim, lonlim):
+        if latlim[0] < self.latlim.s or latlim[1] > self.latlim.n:
+            print(
+                'Latitude above 70N or below 60S is not possible. Value set to maximum')
+            latlim[0] = np.max(latlim[0], self.latlim.s)
+            latlim[1] = np.min(latlim[1], self.latlim.n)
+        if lonlim[0] < self.lonlim.w or lonlim[1] > self.lonlim.e:
+            print(
+                'Longitude must be between 180E and 180W. Now value is set to maximum')
+            lonlim[0] = np.max(lonlim[0], self.lonlim.w)
+            lonlim[1] = np.min(lonlim[1], self.lonlim.e)
 
     def cal_latlon_index(self):
         # # Define IDs
         # yID = 3000 - np.int16(
         #     np.array([np.ceil((latlim[1] + 60) * 20), np.floor((latlim[0] + 60) * 20)]))
         # xID = np.int16(
-        #     np.array([np.floor((lonlim[0]) * 20), np.ceil((lonlim[1]) * 20)]) + 3600)
+        # np.array([np.floor((lonlim[0]) * 20), np.ceil((lonlim[1]) * 20)]) +
+        # 3600)
         pass
 
-    def check_time_lim(self):
-        # # Check Startdate and Enddate
-        # if not Startdate:
-        #     if TimeStep == 'weekly':
-        #         Startdate = pd.Timestamp('2003-01-01')
-        #     if TimeStep == 'daily':
-        #         Startdate = pd.Timestamp('2005-01-01')
-        # if not Enddate:
-        #     if TimeStep == 'weekly':
-        #         Enddate = pd.Timestamp('2015-12-31')
-        #     if TimeStep == 'daily':
-        #         Enddate = pd.Timestamp('2016-12-31')
-        #
-        # # Make a panda timestamp of the date
-        # try:
-        #     Enddate = pd.Timestamp(Enddate)
-        # except BaseException:
-        #     Enddate = Enddate
-        pass
+    def check_time_lim(self, Startdate, Enddate, TimeStep='daily'):
+        # Check Startdate and Enddate
+        if not Startdate:
+            if TimeStep == 'weekly':
+                Startdate = pd.Timestamp(self.timlim.s)
+            if TimeStep == 'daily':
+                Startdate = pd.Timestamp(self.timlim.s)
+        if not Enddate:
+            if TimeStep == 'weekly':
+                Enddate = pd.Timestamp(self.timlim.e)
+            if TimeStep == 'daily':
+                Enddate = pd.Timestamp(self.timlim.e)
+
+        # Make a panda timestamp of the date
+        try:
+            Enddate = pd.Timestamp(Enddate)
+        except BaseException:
+            Enddate = Enddate
 
     def cal_time_range(self):
         # if TimeStep == 'daily':
@@ -161,18 +168,64 @@ class Download(Accounts, GIS):
             raise ValueError('Unknown product: {v}'.format(v=product))
         pass
 
-    def check_method(self, method=''):
-        if method == '':
+    def check_method(self, Protocol='', method=''):
+        py_lib = 'requests'
+        py_method = 'requests.get'
+
+        if Protocol == '':
             pass
-        elif method == 'ftp':
-            pass
-        elif method == 'request':
-            pass
-        elif method == 'curl':
-            pass
+        elif Protocol == 'FTP':
+            py_lib = 'ftp'
+
+            if method == 'get':
+                py_method = '.'.join(py_lib, method)
+            elif method == 'post':
+                py_method = '.'.join(py_lib, method)
+            else:
+                raise ValueError('Unknown method: {v}'.format(v=method))
+        elif Protocol == 'HTTP':
+            py_lib = 'requests'
+            # py_lib = 'urllib'
+            # py_lib = 'pycurl'
+
+            if method == 'get':
+                py_method = '.'.join(py_lib, method)
+            elif method == 'post':
+                py_method = '.'.join(py_lib, method)
+            else:
+                raise ValueError('Unknown method: {v}'.format(v=method))
+        elif Protocol == 'HTTPS':
+            py_lib = 'requests'
+            # py_lib = 'urllib'
+            # py_lib = 'pycurl'
+
+            if method == 'get':
+                py_method = '.'.join(py_lib, method)
+            elif method == 'post':
+                py_method = '.'.join(py_lib, method)
+            else:
+                raise ValueError('Unknown method: {v}'.format(v=method))
+        elif Protocol == 'TDS':
+            py_lib = 'pytds'
+
+            if method == 'get':
+                py_method = '.'.join(py_lib, method)
+            elif method == 'post':
+                py_method = '.'.join(py_lib, method)
+            else:
+                raise ValueError('Unknown method: {v}'.format(v=method))
+        elif Protocol == 'ECMWF':
+            py_lib = 'ecmwfapi'
+
+            if method == 'retrieve':
+                py_method = '.'.join(py_lib, method)
+            else:
+                raise ValueError('Unknown method: {v}'.format(v=method))
         else:
-            raise ValueError('Unknown method: {v}'.format(v=method))
-        pass
+            raise ValueError('Unknown method: {v}'.format(v=Protocol))
+
+        return py_method
+
 
     def check_version(self, version=''):
         if version == '':
@@ -262,7 +315,7 @@ def main():
         print(key)
         print('-----')
         pprint(val['meta'])
-        pprint(val['data'])
+        pprint(val[val['meta']['versions'][0]])
 
 
 if __name__ == "__main__":

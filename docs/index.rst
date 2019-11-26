@@ -18,7 +18,7 @@ Format scripts by PEP8
 
 .. code-block:: console
 
-    $ autopep8 --in-place --aggressive src/IHEWAcollect/Collect/base.py
+    $ autopep8 --in-place --aggressive src/IHEWAcollect/base/base.py
 
 Unit test
 
