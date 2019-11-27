@@ -2,27 +2,34 @@ account:
   NASA:
     username: ''
     password: ''
+    apitoken: ''
 
   GLEAM:
     username: ''
     password: ''
+    apitoken: ''
 
   FTP_WA:
     username: ''
     password: ''
+    apitoken: ''
 
   FTP_WA_GUESS:
     username: 'wateraccountingguest'
     password: 'W@t3r@ccounting'
+    apitoken: ''
 
   MSWEP:
     username: ''
     password: ''
+    apitoken: ''
 
   Copernicus:
     username: ''
     password: ''
+    apitoken: ''
 
   VITO:
     username: ''
     password: ''
+    apitoken: ''

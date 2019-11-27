@@ -2491,7 +2491,7 @@ products:
         daily:
           url: 'https://edcintl.cr.usgs.gov'
           method: 'get'
-          freq: 'MS'
+          freq: 'D'
           variables:
             ETp:
               name: 'Daily Potential Evaporation'
@@ -2528,3 +2528,6 @@ products:
               dem:
                 w: 360
                 h: 181
+
+  GLDAS:
+    account: ''
