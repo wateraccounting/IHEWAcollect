@@ -2,15 +2,15 @@
 """
 """
 import os
-import numpy as np
+# import numpy as np
 
 import pytest
 
 from IHEWAcollect.base.accounts import Accounts
-from IHEWAcollect.base.gis import GIS
+# from IHEWAcollect.base.gis import GIS
 
-import IHEWAcollect.ALEXI as ALEXI
-import IHEWAcollect.ASCAT as ASCAT
+# import IHEWAcollect.ALEXI as ALEXI
+# import IHEWAcollect.ASCAT as ASCAT
 
 __author__ = "Quan Pan"
 __copyright__ = "Quan Pan"

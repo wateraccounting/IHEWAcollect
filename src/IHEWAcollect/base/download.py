@@ -60,7 +60,7 @@ class Download(Accounts, GIS):
     }
 
     def __init__(self, workspace='', account='',
-                 product='', version='', timescale='', variable='',
+                 product='', version='', variable='', timescale='',
                  is_status=True, **kwargs):
         """Class instantiation
         """
@@ -80,9 +80,10 @@ class Download(Accounts, GIS):
             # self._conf()
             message = ''
 
-        self.latlim = self._Base__conf['data']['products']['ALEXI']['v1']['Evaporation']['daily']['variables']['ETa']['lat']
-        self.lonlim = self._Base__conf['data']['products']['ALEXI']['v1']['Evaporation']['daily']['variables']['ETa']['lon']
-        self.timlim = self._Base__conf['data']['products']['ALEXI']['v1']['Evaporation']['daily']['variables']['ETa']['time']
+        self.variable = self._Base__conf['data']['products'][product][version][variable]
+        self.latlim = self.variable[timescale]['ETa']['lat']
+        self.lonlim = self.variable[timescale]['ETa']['lon']
+        self.timlim = self.variable[timescale]['ETa']['time']
 
         self._status(
             inspect.currentframe().f_code.co_name,
@@ -225,7 +226,6 @@ class Download(Accounts, GIS):
             raise ValueError('Unknown method: {v}'.format(v=Protocol))
 
         return py_method
-
 
     def check_version(self, version=''):
         if version == '':

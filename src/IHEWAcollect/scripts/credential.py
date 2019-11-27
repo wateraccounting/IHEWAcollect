@@ -127,7 +127,8 @@
 #
 #         return key
 #
-#     def decrypt_cfg(self, path='', file='config.yml-encrypted', password='WaterAccounting'):
+#     def decrypt_cfg(self, path='', file='config.yml-encrypted',
+#                     password='WaterAccounting'):
 #         """Getting a key
 #
 #         This function decrypt config.yml file.
