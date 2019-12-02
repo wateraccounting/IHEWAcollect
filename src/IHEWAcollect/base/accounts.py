@@ -10,7 +10,7 @@ permission of the WA+ team.
 `Description`
 
 Before use this module, set account information
-in the ``IHEWAcollect/accounts.yml`` file.
+in the ``accounts.yml`` file.
 
 **Examples:**
 ::
@@ -42,6 +42,11 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 try:
+    from .exception import *
+except ImportError:
+    from src.IHEWAcollect.base.exception import *
+
+try:
     from .base import Base
 except ImportError:
     from src.IHEWAcollect.base.base import Base
@@ -54,22 +59,41 @@ class Accounts(Base):
 
     Args:
       workspace (str): Directory to accounts.yml.
-      account (str): Account name of data product.
+      product (str): Product name of data products.
       is_status (bool): Is to print status message.
       kwargs (dict): Other arguments.
     """
+    status = 'Global status.'
+
+    __status = {
+        'messages': {
+            0: 'S: WA.Accounts {f:>20} : status {c}, {m}',
+            1: 'E: WA.Accounts {f:>20} : status {c}: {m}',
+            2: 'W: WA.Accounts {f:>20} : status {c}: {m}',
+        },
+        'code': 0,
+        'message': '',
+        'is_print': True
+    }
+
     __conf = {
-        'path': '',
+        'path': os.path.join(
+            os.getcwd(),
+            os.path.dirname(
+                inspect.getfile(
+                    inspect.currentframe())),
+            '../', '../', '../'),
         'file': 'accounts.yml-encrypted',
+        'product': {},
         'account': {},
         'data': {
             'credential': {
-                'file': 'credential.yml',
-                'password': 'W@t3r@ccounting',
+                'file': 'accounts.yml-credential',
+                'password': b'',
                 'length': 32,
                 'iterations': 100000,
-                'salt': 'WaterAccounting_',
-                'key': b'OzdmSGV76EmKWVS-MzhWMAa3B4c_oFdbuX8_iSDqbZo='
+                'salt': b'WaterAccounting_',
+                'key': b''
             },
             'accounts': {
                 'NASA': {},
@@ -83,76 +107,41 @@ class Accounts(Base):
         }
     }
 
-    def __init__(self, workspace, account, is_status, **kwargs):
+    def __init__(self, workspace, product, is_status, **kwargs):
         """Class instantiation
         """
         Base.__init__(self, is_status)
         # super(Accounts, self).__init__(is_status)
 
-        self.stmsg = {
-            0: 'S: WA.Accounts "{f}" status {c}: {m}',
-            1: 'E: WA.Accounts "{f}" status {c}: {m}',
-            2: 'W: WA.Accounts "{f}" status {c}: {m}',
-        }
-        self.stcode = 0
-        self.status = 'Accounts status.'
-
         for argkey, argval in kwargs.items():
-            if argkey == 'passward':
-                self.__conf['data']['credential'][argkey] = argval
-            if argkey == 'key':
-                self.__conf['data']['credential'][argkey] = argval
+            if argkey == 'others':
+                self.argkey = argval
 
-        if isinstance(workspace, str):
-            if workspace != '':
-                self.__conf['path'] = workspace
-            else:
-                self.__conf['path'] = os.path.join(
-                    self._Base__conf['path'], '../', '../', '../'
-                )
-            if self.is_status:
-                print('I: "{k:10}": "{v}"'
-                      .format(k='workspace',
-                              v=self.__conf['path']))
+        vname, rtype, vdata = 'is_status', bool, is_status
+        if self.check_input(vname, rtype, vdata):
+            self.__status['is_print'] = vdata
         else:
-            raise TypeError('"{k}" requires string, received "{t}"'
-                            .format(k='workspace',
-                                    t=type(workspace)))
+            self.__status['code'] = 1
 
-        if isinstance(account, str):
-            if account != '':
-                self.__conf['account'][account] = {}
-            else:
-                self.__conf['account']['FTP_WA_GUESS'] = {}
-            if self.is_status:
-                print('I: "{k:10}": "{v}"'
-                      .format(k='account',
-                              v=self.__conf['account']))
+        vname, rtype, vdata = 'workspace', str, workspace
+        if self.check_input(vname, rtype, vdata):
+            self.__conf['path'] = vdata
         else:
-            raise TypeError('"{k}" requires string, received "{t}"'
-                            .format(k='account',
-                                    t=type(account)))
+            self.__status['code'] = 1
 
-        if self.stcode == 0:
+        vname, rtype, vdata = 'product', str, product
+        if self.check_input(vname, rtype, vdata):
+            product = self._Base__conf['data']['products'][vdata]
+            self.__conf['product'] = product
+            self.__conf['account'][product['account']] = {}
+        else:
+            self.__status['code'] = 1
+
+        if self.__status['code'] == 0:
             self._user()
-            message = '"{f}" key is: "{v}"'.format(
+            self.__status['message'] = '"{f}" key is: "{v}"'.format(
                 f=self.__conf['file'],
                 v=self.__conf['data']['credential']['key'])
-
-        self._status(
-            inspect.currentframe().f_code.co_name,
-            prt=self.is_status,
-            ext=message)
-
-    def _status(self, fun, prt=False, ext=''):
-        """Set status
-
-        Args:
-          fun (str): Function name.
-          prt (bool): Is to print on screen?
-          ext (str): Extra message.
-        """
-        self.status = self.set_status(self.stcode, fun, prt, ext)
 
     def _user(self):
         """Get user information
@@ -164,86 +153,142 @@ class Accounts(Base):
         - File to read: ``accounts.yml-encrypted``
         - File to read: ``credential.yml``
         """
-        # f_cfg_org = os.path.join(self.__conf['path'],
-        #                          self.__conf['file'].split('-encrypted')[0])
-        f_cfg_enc = os.path.join(self.__conf['path'],
-                                 self.__conf['file'])
-        f_crd = os.path.join(self.__conf['path'],
-                             self.__conf['data']['credential']['file'])
+        conf_enc = None
+        fname_org = 'accounts.yml'
+        fname_enc = 'accounts.yml-encrypted'
+        fname_crd = 'accounts.yml-credential'
+        f_cfg_org = os.path.join(self.__conf['path'], fname_org)
+        f_cfg_enc = os.path.join(self.__conf['path'], fname_enc)
+        f_cfg_crd = os.path.join(self.__conf['path'], fname_crd)
 
-        if not os.path.exists(f_cfg_enc):
-            raise FileNotFoundError('User "{f}" not found.'.format(f=f_cfg_enc))
-        if not os.path.exists(f_crd):
-            raise FileNotFoundError('User "{f}" not found.'.format(f=f_crd))
+        if os.path.exists(f_cfg_crd):
+            is_enc = self._user_key(f_cfg_crd)
+            if is_enc:
+                self._user_encrypt(f_cfg_org)
+        else:
+            self.__status['code'] = 1
+            raise IHEFileError(f_cfg_crd) from None
 
-        self._user_key(f_crd)
-        # self._user_encrypt(f_cfg_org)
+        if os.path.exists(f_cfg_enc):
+            conf_enc = yaml.load(self._user_decrypt(f_cfg_enc), Loader=yaml.FullLoader)
+            for key in conf_enc:
+                try:
+                    self.__conf['data'][key] = conf_enc[key]
+                except KeyError:
+                    self.__status['code'] = 1
+                    raise IHEKeyError(key, fname_enc) from None
+                else:
+                    for subkey in self.__conf['account']:
+                        try:
+                            self.__conf['account'][subkey] = conf_enc[key][subkey]
+                        except KeyError:
+                            raise IHEKeyError(subkey, fname_enc) from None
+                        else:
+                            self.__status['code'] = 0
+        else:
+            self.__status['code'] = 1
+            raise IHEFileError(f_cfg_enc) from None
 
-        conf = yaml.load(
-            self._user_decrypt(f_cfg_enc),
-            Loader=yaml.FullLoader)
-
-        for key in conf:
-            # __conf.data[accounts, ]
-            try:
-                self.__conf['data'][key] = conf[key]
-                self.stcode = 0
-            except KeyError:
-                raise KeyError('Key "{k}" not found in "{f}".'
-                               .format(k=key, f=f_cfg_enc))
-            else:
-                # __conf.account
-                for subkey in self.__conf['account']:
-                    try:
-                        self.__conf['account'][subkey] = conf[key][subkey]
-                        self.stcode = 0
-                    except KeyError:
-                        raise KeyError('Sub key "{k}" not found in "{f}".'
-                                       .format(k=subkey, f=f_cfg_enc))
-
-        self._status(
+        self.set_status(
             inspect.currentframe().f_code.co_name,
-            prt=self.is_status,
+            prt=self.__status['is_print'],
             ext='')
 
-    def _user_key(self, file):
+    def _user_key(self, file) -> bytes:
         """Getting a key
 
         This function fun.
 
-        Returns:
-          bytes: A URL-safe base64-encoded 32-byte key.
-          This must be kept secret.
-          Anyone with this key is able to create and read messages.
+        A URL-safe base64-encoded 32-byte key.
+        This must be kept secret.
+        Anyone with this key is able to create and read messages.
+
+        Args:
+          file (str): File name.
         """
-        f_in = file
-        key = b''
+        is_renew = False
+        conf = yaml.load(open(file, 'r'), Loader=yaml.FullLoader)
 
-        with open(f_in, 'rb') as fp_in:
-            key = fp_in.read()
+        if conf is None:
+            print('W: {f} is empty.'.format(f=file))
+            pswd = input('\33[91m'
+                         'IHEWAcollect: Enter your password: '
+                         '\33[0m')
+            pswd = pswd.strip()
+            if pswd != '':
+                is_renew = True
+                conf = {
+                    'password': pswd,
+                }
+            else:
+                raise IHEKeyError('password', conf) from None
 
-            self.__conf['data']['credential']['key'] = key
+        # password, Yaml load/Python input
+        try:
+            pswd = conf['password']
+        except KeyError:
+            pswd = input('\33[91m'
+                         'IHEWAcollect: Enter your password: '
+                         '\33[0m')
+            pswd = pswd.strip()
+            if pswd != '':
+                # is_renew = True
+                pass
+            else:
+                raise IHEStringError('password') from None
+        finally:
+            self.__conf['data']['credential']['password'] = str.encode(pswd)
 
-        return key
+        # key, Yaml load/Python input/Python generate
+        try:
+            key = conf['key']
+        except KeyError:
+            print('W: "{k}"'
+                  ' not found in "{f}".'
+                  .format(k='key', f=conf))
 
-    def _user_key_generator(self):
+            is_key = input('\33[91m'
+                           'IHEWAcollect: Generate your key (y/n): '
+                           '\33[0m')
+            if is_key in ['Y', 'YES', 'y', 'Yes']:
+                key = self._user_key_generator()
+                is_renew = True
+            else:
+                raise IHEKeyError('key', conf) from None
+        finally:
+            self.__conf['data']['credential']['key'] = str.encode(key)
+
+        # Final check
+        key_from_pswd = str.encode(self._user_key_generator())
+        key_from_conf = self.__conf['data']['credential']['key']
+        if key_from_pswd == key_from_conf:
+            return is_renew
+        else:
+            raise Exception('E: "password" not match "key".')
+
+    def _user_key_generator(self) -> str:
         """Getting a key
 
         This function fun.
 
+        A URL-safe base64-encoded 32-byte key.
+        This must be kept secret.
+        Anyone with this key is able to create and read messages.
+
+        Args:
+          file (str): File name.
+          pswd (bytes): Password.
+
         Returns:
-          bytes: A URL-safe base64-encoded 32-byte key.
-          This must be kept secret.
-          Anyone with this key is able to create and read messages.
+          str: key
         """
         # from cryptography.fernet import Fernet
         # key = Fernet.generate_key()
 
-        # Convert to type bytes
-        pswd = self.__conf['data']['credential']['password'].encode()
-        salt = self.__conf['data']['credential']['salt'].encode()
         length = self.__conf['data']['credential']['length']
         iterations = self.__conf['data']['credential']['iterations']
+        salt = self.__conf['data']['credential']['salt']
+        pswd = self.__conf['data']['credential']['password']
 
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
@@ -254,7 +299,7 @@ class Accounts(Base):
         )
         key = base64.urlsafe_b64encode(kdf.derive(pswd))
 
-        return key
+        return key.decode()
 
     def _user_encrypt(self, file):
         """Encrypt file with given key
@@ -262,29 +307,32 @@ class Accounts(Base):
         This function encrypt accounts.yml file.
 
         Args:
-          file (str): File name.
-
-        Returns:
-          bytes: A URL-safe base64-encoded 32-byte key.
-          This must be kept secret.
-          Anyone with this key is able to create and read messages.
+          file (str): Encrypted file name.
         """
-        f_in = file
-        f_out = '{f}-encrypted'.format(f=f_in)
+        pswd = self.__conf['data']['credential']['password']
         key = self.__conf['data']['credential']['key']
 
-        with open(f_in, 'rb') as fp_in:
-            data = fp_in.read()
+        file_org = file
+        file_enc = file_org + '-encrypted'
+        file_crd = file_org + '-credential'
 
-        fernet = Fernet(key)
-        encrypted = fernet.encrypt(data)
+        if os.path.exists(file_org):
+            with open(file_org, 'rb') as fp_in:
+                data = fp_in.read()
 
-        with open(f_out, 'wb') as fp_out:
-            fp_out.write(encrypted)
+            with open(file_enc, 'wb') as fp_out:
+                fernet = Fernet(key)
+                encrypted = fernet.encrypt(data)
+                fp_out.write(encrypted)
 
-        return key
+            with open(file_crd, 'w') as fp_out:
+                fp_out.write('# password should be deleted!\n')
+                fp_out.write('# password: "{}"\n'.format(pswd.decode()))
+                fp_out.write('key: "{}"\n'.format(key.decode()))
+        else:
+            raise IHEFileError(file_org) from None
 
-    def _user_decrypt(self, file):
+    def _user_decrypt(self, file) -> str:
         """Decrypt file with given key
 
         This function decrypt accounts.yml file.
@@ -295,17 +343,30 @@ class Accounts(Base):
         Returns:
           str: Decrypted Yaml data by utf-8.
         """
-        f_in = file
-        decrypted = ''
-
         key = self.__conf['data']['credential']['key']
 
-        with open(f_in, 'rb') as fp_in:
-            data = fp_in.read()
+        if os.path.exists(file):
+            with open(file, 'rb') as fp_in:
+                data = fp_in.read()
 
-            decrypted = Fernet(key).decrypt(data).decode('utf8')
+                decrypted = Fernet(key).decrypt(data).decode('utf8')
 
-        return decrypted
+                return decrypted
+        else:
+            raise FileNotFoundError('IHEWAcollect: "{f}"'
+                                    ' not found.'.format(f=file))
+
+    def set_status(self, fun='', prt=False, ext=''):
+        """Set status
+
+        Args:
+          fun (str): Function name.
+          prt (bool): Is to print on screen?
+          ext (str): Extra message.
+        """
+        self.status = self._status(self.__status['messages'],
+                                   self.__status['code'],
+                                   fun, prt, ext)
 
     def get_user(self, key):
         """Get user information
@@ -338,16 +399,17 @@ class Accounts(Base):
             ...
             KeyError:
         """
+        fun_name =inspect.currentframe().f_code.co_name
         if key in self.__conf:
-            self.stcode = 0
+            self.__stcode = 0
         else:
-            self.stcode = 1
+            self.__stcode = 1
             raise KeyError('Key "{k}" not found in "{v}".'
                            .format(k=key, v=self.__conf.keys()))
 
-        self._status(
-            inspect.currentframe().f_code.co_name,
-            prt=self.is_status,
+        self.set_status(
+            fun=fun_name,
+            prt=self.__prtstd,
             ext='')
         return self.__conf[key]
 
@@ -393,18 +455,26 @@ def main():
 
     # Accounts __init__
     print('\nAccounts\n=====')
-    accounts = Accounts('', 'FTP_WA', is_status=True)
+    path = os.path.join(
+        os.getcwd(),
+        os.path.dirname(
+            inspect.getfile(
+                inspect.currentframe())),
+        '../', '../', '../'
+    )
+    accounts = Accounts(path, 'ALEXI', is_status=True)
 
     # Base attributes
     print('\naccounts._Base__conf\n=====')
-    pprint(accounts._Base__conf)
+    # pprint(accounts._Base__conf)
 
     # Accounts attributes
     print('\naccounts._Accounts__conf\n=====')
-    pprint(accounts._Accounts__conf)
+    print(accounts._Accounts__conf['data']['accounts'].keys())
+    # pprint(accounts._Accounts__conf)
 
     # Accounts methods
-    print('\naccounts.Base.get_status()\n=====')
+    print('\naccounts.get_status()\n=====')
     pprint(accounts.get_status())
 
 

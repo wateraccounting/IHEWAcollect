@@ -54,6 +54,11 @@ import yaml
 # >>> from base import Base
 # OK
 
+try:
+    from .exception import *
+except ImportError:
+    from src.IHEWAcollect.base.exception import *
+
 
 class Base(object):
     """This Base class
@@ -61,6 +66,19 @@ class Base(object):
     Args:
       is_status (bool): Is to print status message.
     """
+    status = 'Global status.'
+
+    __status = {
+        'messages': {
+            0: 'S: WA.Base     {f:>20} : status {c}, {m}',
+            1: 'E: WA.Base     {f:>20} : status {c}: {m}',
+            2: 'W: WA.Base     {f:>20} : status {c}: {m}',
+        },
+        'code': 0,
+        'message': '',
+        'is_print': True
+    }
+
     __conf = {
         'path': os.path.join(
             os.getcwd(),
@@ -77,93 +95,81 @@ class Base(object):
     def __init__(self, is_status):
         """Class instantiation
         """
-        self.stmsg = {
-            0: 'S: WA.Base "{f}" status {c}: {m}',
-            1: 'E: WA.Base "{f}" status {c}: {m}',
-            2: 'W: WA.Base "{f}" status {c}: {m}',
-        }
-        self.stcode = 0
-        self.status = 'Base status.'
-
-        if isinstance(is_status, bool):
-            self.is_status = is_status
+        # IHEStringError, IHEFileError, IHEKeyError, IHETypeError
+        vname, rtype, vdata = 'is_status', bool, is_status
+        if self.check_input(vname, rtype, vdata):
+            self.__status['is_print'] = vdata
         else:
-            raise TypeError('"{k}" requires bool, received "{t}"'
-                            .format(k='is_status',
-                                    t=type(is_status)))
+            self.__status['code'] = 1
 
-        self.set_conf()
-        self.set_status(
-            self.stcode,
-            inspect.currentframe().f_code.co_name,
-            prt=self.is_status,
-            ext='')
+        if self.__status['code'] == 0:
+            self._conf()
 
-    def set_conf(self):
+    def _conf(self):
         """Get configuration
 
         This function open collect.cfg configuration file.
         """
+        fun_name =inspect.currentframe().f_code.co_name
         f_in = os.path.join(self.__conf['path'],
                             self.__conf['file'])
 
-        if not os.path.exists(f_in):
-            raise FileNotFoundError('Collect "{f}" not found.'.format(f=f_in))
+        if os.path.exists(f_in):
+            conf = yaml.load(open(f_in, 'r'), Loader=yaml.FullLoader)
+            # try:
+            #     conf = yaml.load(open(f_in, 'r'), Loader=yaml.FullLoader)
+            # except yaml.YAMLError as err:
+            #     self.__status['code'] = 1
+            #     if hasattr(err, 'problem_mark'):
+            #         mark = err.problem_mark
+            #         print('Position: (%s:%s)' % (mark.line + 1, mark.column + 1))
+            for key in conf:
+                try:
+                    self.__conf['data'][key] = conf[key]
+                except KeyError:
+                    self.__status['code'] = 1
+                    raise IHEKeyError(key, f_in) from None
+                else:
+                    self.__status['code'] = 0
+        else:
+            self.__status['code'] = 1
+            raise IHEFileError(f_in)from None
 
-        conf = yaml.load(open(f_in, 'r'), Loader=yaml.FullLoader)
-
-        for key in conf:
-            # __conf.data[messages, ]
-            try:
-                self.__conf['data'][key] = conf[key]
-                self.stcode = 0
-            except KeyError:
-                raise KeyError(
-                    '"{k}" not found in "{f}".'.format(
-                        k=key, f=f_in))
-
-        self.set_status(
-            self.stcode,
-            inspect.currentframe().f_code.co_name,
-            prt=self.is_status,
+        self.__status['message'] = self._status(
+            self.__status['messages'],
+            cod=self.__status['code'],
+            fun=fun_name,
+            prt=self.__status['is_print'],
             ext='')
 
-    def set_status(self, cod, fun, prt=False, ext=''):
+    def _status(self, stdmsg, cod, fun, prt=False, ext='') -> str:
         """Set Status
 
         Returns:
           str: Status message.
         """
-        # cod = self.stcode
-        # msg = self._Base__conf['data']['messages'][cod]['msg']
-        # lvl = self._Base__conf['data']['messages'][cod]['level']
-        # if ext != '':
-        #     self.status = self.stmsg[lvl].format(
-        #         f=fun, c=cod, m='{m}\n   {e}'.format(m=msg, e=ext))
-        # else:
-        #     self.status = self.stmsg[lvl].format(
-        #         f=fun, c=cod, m='{m}'.format(m=msg))
-        #
-        # self._Base__conf['status'] = self.status
-        #
-        # if prt:
-        #     print(self.status)
-
+        # Global
         msg = self.__conf['data']['messages'][cod]['msg']
         lvl = self.__conf['data']['messages'][cod]['level']
+
+        # Local
         if ext != '':
-            self.status = self.stmsg[lvl].format(
+            status = stdmsg[lvl].format(
                 f=fun, c=cod, m='{m}\nI: {e}'.format(m=msg, e=ext))
         else:
-            self.status = self.stmsg[lvl].format(
+            status = stdmsg[lvl].format(
                 f=fun, c=cod, m='{m}'.format(m=msg))
 
         if prt:
-            print(self.status)
+            print(status)
 
-        return self.status
+        # Global self.status
+        self.status = status
 
-    def get_status(self):
+        # Local self.__status['message']
+        return status
+
+    def get_status(self) -> str:
         """Get status
 
         This is the function to get project status.
@@ -173,7 +179,7 @@ class Base(object):
         """
         return self.status
 
-    def get_conf(self, key):
+    def get_conf(self, key) -> dict:
         """Get configuration information
 
         This is the function to get project's configuration data.
@@ -194,16 +200,34 @@ class Base(object):
             base.yml
         """
         if key in self.__conf:
-            self.stcode = 0
+            self.__status['code'] = 0
         else:
-            self.stcode = 1
-            raise KeyError('Key "{k}" not found in "{v}".'
-                           .format(k=key, v=self.__conf.keys()))
+            self.__status['code'] = 1
+            raise IHEKeyError(key, self.__conf.keys()) from None
 
         return self.__conf[key]
 
+    def check_input(self, vname, rtype, vdata) -> bool:
+        if isinstance(vdata, rtype):
+            if rtype == bool:
+                # print('I: {k:} = "{v}"'
+                #       .format(k=name,
+                #               v=ndata))
+                return True
+
+            if rtype == str:
+                if vdata != '':
+                    # print('I: {k:} = "{v}"'
+                    #       .format(k=name,
+                    #               v=ndata))
+                    return True
+                else:
+                    raise IHEStringError(vname) from None
+        else:
+            raise IHETypeError(vname, rtype, vdata) from None
+
     @classmethod
-    def check_conf(cls, key, is_status):
+    def check_conf(cls, key, is_status) -> dict:
         """Check configuration information
 
         This is the function to get user's configuration data.
@@ -259,7 +283,8 @@ def main():
     base = Base(is_status=True)
 
     # Base attributes
-    pprint(base._Base__conf)
+    print(base._Base__conf['data']['products'].keys())
+    # pprint(base._Base__conf)
 
     # # Base methods
 

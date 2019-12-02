@@ -31,7 +31,7 @@ products:
       websites: ['https://www.wateraccounting.org']
       protocols: ['FTP']
       methods: ['get']
-      ftypes: ['gz']
+      ftypes: ['gz', 'GTiff']
       versions: ['v1']
       datasets: ['Evaporation']
       datatypes: ['daily', 'weekly']
@@ -61,8 +61,8 @@ products:
                 t: 'float32'
                 l: 'float32'
               unit:
-                f: 'MJ/m2d'
-                t: 'mm/d'
+                r: 'MJ/m2d'
+                l: 'mm/d'
                 m: 2.45
               lat:
                 s: -60.0
@@ -101,8 +101,8 @@ products:
                 t: null
                 l: 'float32'
               unit:
-                f: 'MJ/m2d'
-                t: 'mm/d'
+                r: 'MJ/m2d'
+                l: 'mm/d'
                 m: 2.45
               lat:
                 s: -60.0
@@ -164,8 +164,8 @@ products:
                 t: null
                 l: 'float32'
               unit:
-                f: null
-                t: null
+                r: null
+                l: null
                 m: 1
               lat:
                 s: -90.0
@@ -232,8 +232,8 @@ products:
                 t: 'float64'
                 l: 'float32'
               unit:
-                f: 'W/m^2'
-                t: 'W/m^2'
+                r: 'W/m^2'
+                l: 'W/m^2'
                 m: 1
               lat:
                 s: -89.9171060869565224
@@ -271,8 +271,8 @@ products:
                 t: 'float64'
                 l: 'float32'
               unit:
-                f: 'W/m^2'
-                t: 'W/m^2'
+                r: 'W/m^2'
+                l: 'W/m^2'
                 m: 1
               lat:
                 s: -89.9171060869565224
@@ -310,8 +310,8 @@ products:
                 t: 'float64'
                 l: 'float32'
               unit:
-                f: 'W/m^2'
-                t: 'W/m^2'
+                r: 'W/m^2'
+                l: 'W/m^2'
                 m: 1
               lat:
                 s: -89.9171060869565224
@@ -349,8 +349,8 @@ products:
                 t: 'float64'
                 l: 'float32'
               unit:
-                f: 'W/m^2'
-                t: 'W/m^2'
+                r: 'W/m^2'
+                l: 'W/m^2'
                 m: 1
               lat:
                 s: -89.9171060869565224
@@ -396,8 +396,8 @@ products:
                 t: 'float64'
                 l: 'float32'
               unit:
-                f: 'W/m^2'
-                t: 'W/m^2'
+                r: 'W/m^2'
+                l: 'W/m^2'
                 m: 1
               lat:
                 s: -89.9462116040955806
@@ -435,8 +435,8 @@ products:
                 t: 'float64'
                 l: 'float32'
               unit:
-                f: 'W/m^2'
-                t: 'W/m^2'
+                r: 'W/m^2'
+                l: 'W/m^2'
                 m: 1
               lat:
                 s: -89.9462116040955806
@@ -474,8 +474,8 @@ products:
                 t: 'float64'
                 l: 'float32'
               unit:
-                f: 'W/m^2'
-                t: 'W/m^2'
+                r: 'W/m^2'
+                l: 'W/m^2'
                 m: 1
               lat:
                 s: -89.9462116040955806
@@ -513,8 +513,8 @@ products:
                 t: 'float64'
                 l: 'float32'
               unit:
-                f: 'W/m^2'
-                t: 'W/m^2'
+                r: 'W/m^2'
+                l: 'W/m^2'
                 m: 1
               lat:
                 s: -89.9462116040955806
@@ -573,8 +573,8 @@ products:
                 t: 'float32'
                 l: 'float32'
               unit:
-                f: 'mm/d'
-                t: 'mm/d'
+                r: 'mm/d'
+                l: 'mm/d'
                 m: 1
               lat:
                 s: -50.0
@@ -613,8 +613,8 @@ products:
                 t: 'float32'
                 l: 'float32'
               unit:
-                f: 'mm/d'
-                t: 'mm/d'
+                r: 'mm/d'
+                l: 'mm/d'
                 m: 1
               lat:
                 s: -50.0
@@ -670,8 +670,8 @@ products:
                 t: null
                 l: 'float32'
               unit:
-                f: 'mm/d'
-                t: 'mm/d'
+                r: 'mm/d'
+                l: 'mm/d'
                 m: 1
               lat:
                 s: -90.0
@@ -732,8 +732,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -35.0
@@ -767,8 +767,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -12.0
@@ -802,8 +802,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -56.0
@@ -837,8 +837,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 5.0
@@ -872,8 +872,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 12.0
@@ -907,8 +907,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 24.0
@@ -942,8 +942,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -56.0
@@ -982,8 +982,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -35.0
@@ -1017,8 +1017,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -12.0
@@ -1052,8 +1052,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -56.0
@@ -1087,8 +1087,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 5.0
@@ -1122,8 +1122,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 12.0
@@ -1157,8 +1157,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 24.0
@@ -1192,8 +1192,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -56.0
@@ -1232,8 +1232,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -35.0
@@ -1267,8 +1267,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -12.0
@@ -1302,8 +1302,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -56.0
@@ -1337,8 +1337,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 5.0
@@ -1372,8 +1372,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 12.0
@@ -1407,8 +1407,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 24.0
@@ -1442,8 +1442,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -56.0
@@ -1483,8 +1483,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: null
-                t: null
+                r: null
+                l: null
                 m: 1
               lat:
                 s: -35.0
@@ -1517,8 +1517,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -12.0
@@ -1552,8 +1552,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -56.0
@@ -1587,8 +1587,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 5.0
@@ -1622,8 +1622,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 12.0
@@ -1657,8 +1657,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 24.0
@@ -1692,8 +1692,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -56.0
@@ -1732,8 +1732,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -35.0
@@ -1767,8 +1767,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -12.0
@@ -1802,8 +1802,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -56.0
@@ -1837,8 +1837,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 5.0
@@ -1872,8 +1872,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 12.0
@@ -1907,8 +1907,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 24.0
@@ -1942,8 +1942,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -56.0
@@ -1982,8 +1982,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -35.0
@@ -2017,8 +2017,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -12.0
@@ -2052,8 +2052,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -56.0
@@ -2087,8 +2087,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 5.0
@@ -2122,8 +2122,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 12.0
@@ -2157,8 +2157,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: 24.0
@@ -2192,8 +2192,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               unit:
-                f: 'm'
-                t: 'm'
+                r: 'm'
+                l: 'm'
                 m: 1
               lat:
                 s: -56.0
@@ -2275,8 +2275,8 @@ products:
                 t: null
                 l: 'float32'
               unit:
-                f: 'mm/d'
-                t: 'mm/d'
+                r: 'mm/d'
+                l: 'mm/d'
                 m: 1
               lat:
                 s: -6671700.0
@@ -2310,8 +2310,8 @@ products:
                 t: null
                 l: 'float32'
               unit:
-                f: 'mm/d'
-                t: 'mm/d'
+                r: 'mm/d'
+                l: 'mm/d'
                 m: 1
               lat:
                 s: -6671700.0
@@ -2345,8 +2345,8 @@ products:
                 t: null
                 l: 'float32'
               unit:
-                f: 'mm/d'
-                t: 'mm/d'
+                r: 'mm/d'
+                l: 'mm/d'
                 m: 1
               lat:
                 s: -6671700.0
@@ -2380,8 +2380,8 @@ products:
                 t: null
                 l: 'float32'
               unit:
-                f: 'mm/d'
-                t: 'mm/d'
+                r: 'mm/d'
+                l: 'mm/d'
                 m: 1
               lat:
                 s: -6671700.0
@@ -2415,8 +2415,8 @@ products:
                 t: null
                 l: 'float32'
               unit:
-                f: 'mm/d'
-                t: 'mm/d'
+                r: 'mm/d'
+                l: 'mm/d'
                 m: 1
               lat:
                 s: -6671700.0
@@ -2450,8 +2450,8 @@ products:
                 t: null
                 l: 'float32'
               unit:
-                f: 'mm/d'
-                t: 'mm/d'
+                r: 'mm/d'
+                l: 'mm/d'
                 m: 1
               lat:
                 s: -6671700.0
@@ -2511,8 +2511,8 @@ products:
                 t: null
                 l: 'float32'
               unit:
-                f: 'mm/d'
-                t: 'mm/d'
+                r: 'mm/d'
+                l: 'mm/d'
                 m: 1
               lat:
                 s: -90.5

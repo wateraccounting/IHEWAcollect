@@ -49,46 +49,95 @@ class Download(Accounts, GIS):
 
     Args:
       workspace (str): Directory to accounts.yml.
-      account (str): Account name of data product.
+      product (str): Product name.
+      version (str): Version name.
+      parameter (str): Parameter name.
+      resolution (str): Resolution name.
+      variable (str): Variable name.
       is_status (bool): Is to print status message.
       kwargs (dict): Other arguments.
     """
+    status = 'Global status.'
+
+    __status = {
+        'messages': {
+            0: 'S: WA.Download {f:>20} : status {c}, {m}',
+            1: 'E: WA.Download {f:>20} : status {c}: {m}',
+            2: 'W: WA.Download {f:>20} : status {c}: {m}',
+        },
+        'code': 0,
+        'message': '',
+        'is_print': True
+    }
+
     __conf = {
         'path': '',
         'file': '',
+        'product': '',
+        'version': '',
+        'parameter': '',
+        'resolution': '',
+        'variable': '',
         'data': {}
     }
 
-    def __init__(self, workspace='', account='',
-                 product='', version='', variable='', timescale='',
+    def __init__(self, workspace='',
+                 product='', version='', parameter='', resolution='', variable='',
                  is_status=True, **kwargs):
         """Class instantiation
         """
-        Accounts.__init__(self, workspace, account, is_status, **kwargs)
+        wa_args = {
+            'product': product,
+            'version': version,
+            'parameter': parameter,
+            'resolution': resolution,
+            'variable': variable
+        }
+
+        vname, rtype, vdata = 'is_status', bool, is_status
+        if self.check_input(vname, rtype, vdata):
+            self.__status['is_print'] = vname
+        else:
+            self.__status['code'] = 1
+
+        vname, rtype, vdata = 'workspace', str, workspace
+        if self.check_input(vname, rtype, vdata):
+            self.__conf['path'] = vname
+        else:
+            self.__status['code'] = 1
+
+        rtype = str
+        for vname, vdata in wa_args.items():
+            if self.check_input(vname, rtype, vdata):
+                self.__conf[vname] = vname
+            else:
+                self.__status['code'] = 1
+
+        Accounts.__init__(self, workspace, product, is_status, **kwargs)
         GIS.__init__(self, workspace, is_status, **kwargs)
         # super(Download, self).__init__(workspace, account, is_status, **kwargs)
-        self.stmsg = {
-            0: 'S: WA.Download "{f}" status {c}: {m}',
-            1: 'E: WA.Download "{f}" status {c}: {m}',
-            2: 'W: WA.Download "{f}" status {c}: {m}',
-        }
-        self.stcode = 0
-        self.status = 'Download status.'
-        self.is_status = is_status
 
-        if self.stcode == 0:
+        self.prod = self._Base__conf['data']['products'][product]
+        self.para = self._Base__conf['data']['products'][product][version][parameter]
+        self.latlim = self.para[resolution]['variables'][variable]['lat']
+        self.lonlim = self.para[resolution]['variables'][variable]['lon']
+        self.timlim = self.para[resolution]['variables'][variable]['time']
+
+        if self.__status['code'] == 0:
             # self._conf()
-            message = ''
+            self.__status['message'] = ''
 
-        self.variable = self._Base__conf['data']['products'][product][version][variable]
-        self.latlim = self.variable[timescale]['ETa']['lat']
-        self.lonlim = self.variable[timescale]['ETa']['lon']
-        self.timlim = self.variable[timescale]['ETa']['time']
+    def set_status(self, fun='', prt=False, ext=''):
+        """Set status
 
-        self._status(
-            inspect.currentframe().f_code.co_name,
-            prt=self.is_status,
-            ext=message)
+        Args:
+          fun (str): Function name.
+          prt (bool): Is to print on screen?
+          ext (str): Extra message.
+        """
+        self.status = self._status(self.__status['messages'],
+                                   self.__status['code'],
+                                   fun, prt, ext)
 
     def check_latlon_lim(self, latlim, lonlim):
         if latlim[0] < self.latlim.s or latlim[1] > self.latlim.n:
@@ -289,12 +338,32 @@ def main():
 
     # Download __init__
     print('\nDownload\n=====')
-    download = Download('', 'FTP_WA', is_status=False)
+    path = os.path.join(
+        os.getcwd(),
+        os.path.dirname(
+            inspect.getfile(
+                inspect.currentframe())),
+        '../', '../', '../'
+    )
+    download = Download(path,
+                        product='ALEXI',
+                        version='v1',
+                        parameter='Evaporation',
+                        resolution='daily',
+                        variable='ETa',
+                        is_status=False)
     # 'Copernicus', is_status=False)
 
     # # Base attributes
     # print('\ndownload._Base__conf\n=====')
     # pprint(download._Base__conf)
+    #
+    # print('\n\n=====')
+    # for key, val in download._Base__conf['data']['products'].items():
+    #     print(key)
+    #     print('-----')
+    #     pprint(val['meta'])
+    #     pprint(val[val['meta']['versions'][0]])
     #
     # # Accounts attributes
     # print('\ndownload._Accounts__conf\n=====')
@@ -303,19 +372,15 @@ def main():
     # # GIS attributes
     # print('\ndownload._GIS__conf:\n=====')
     # pprint(download._GIS__conf)
-    #
-    # # Download attributes
-    #
-    # # Download methods
-    # print('\ndownload.Base.get_status()\n=====')
-    # pprint(download.get_status())
 
-    print('\n\n=====')
-    for key, val in download._Base__conf['data']['products'].items():
-        print(key)
-        print('-----')
-        pprint(val['meta'])
-        pprint(val[val['meta']['versions'][0]])
+    # Download attributes
+    print('\ndownload._Download__conf()\n=====')
+    pprint(download._Download__conf.keys())
+    # pprint(download._Download__conf)
+
+    # Download methods
+    print('\ndownload.get_status()\n=====')
+    pprint(download.get_status())
 
 
 if __name__ == "__main__":

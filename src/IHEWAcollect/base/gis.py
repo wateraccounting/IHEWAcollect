@@ -45,22 +45,39 @@ except ImportError:
     import gdalconst
 
 try:
+    from .exception import *
+except ImportError:
+    from src.IHEWAcollect.base.exception import *
+
+try:
     from .base import Base
 except ImportError:
     from src.IHEWAcollect.base.base import Base
 
 
 class GIS(Base):
-    """This Base class
+    """This GIS class
 
     Description
 
     Args:
       workspace (str): Directory to accounts.yml.
-      account (str): Account name of data product.
       is_status (bool): Is to print status message.
       kwargs (dict): Other arguments.
     """
+    status = 'Global status.'
+
+    __status = {
+        'messages': {
+            0: 'S: WA.GIS      {f:>20} : status {c}, {m}',
+            1: 'E: WA.GIS      {f:>20} : status {c}: {m}',
+            2: 'W: WA.GIS      {f:>20} : status {c}: {m}',
+        },
+        'code': 0,
+        'message': '',
+        'is_print': True
+    }
+
     __conf = {
         'path': '',
         'file': '',
@@ -73,40 +90,23 @@ class GIS(Base):
         Base.__init__(self, is_status)
         # super(GIS, self).__init__(is_status)
 
-        self.stmsg = {
-            0: 'S: WA.GIS "{f}" status {c}: {m}',
-            1: 'E: WA.GIS "{f}" status {c}: {m}',
-            2: 'W: WA.GIS "{f}" status {c}: {m}',
-        }
-        self.stcode = 0
-        self.status = 'GIS status.'
-
-        if isinstance(workspace, str):
-            if workspace != '':
-                self.__conf['path'] = workspace
-            else:
-                self.__conf['path'] = os.path.join(
-                    self._Base__conf['path'], '../', '../', '../'
-                )
-            if self.is_status:
-                print('"{k}": "{v}"'
-                      .format(k='workspace',
-                              v=self.__conf['path']))
+        vname, rtype, vdata = 'is_status', bool, is_status
+        if self.check_input(vname, rtype, vdata):
+            self.__status['is_print'] = vdata
         else:
-            raise TypeError('"{k}" requires string, received "{t}"'
-                            .format(k='workspace',
-                                    t=type(workspace)))
+            self.__status['code'] = 1
 
-        if self.stcode == 0:
+        vname, rtype, vdata = 'workspace', str, workspace
+        if self.check_input(vname, rtype, vdata):
+            self.__conf['path'] = vdata
+        else:
+            self.__status['code'] = 1
+
+        if self.__status['code'] == 0:
             # self._conf()
-            message = ''
+            self.__status['message'] = ''
 
-        self._status(
-            inspect.currentframe().f_code.co_name,
-            prt=self.is_status,
-            ext=message)
-
-    def _status(self, fun, prt=False, ext=''):
+    def set_status(self, fun='', prt=False, ext=''):
         """Set status
 
         Args:
@@ -114,7 +114,9 @@ class GIS(Base):
           prt (bool): Is to print on screen?
           ext (str): Extra message.
         """
-        self.status = self.set_status(self.stcode, fun, prt, ext)
+        self.status = self._status(self.__status['messages'],
+                                   self.__status['code'],
+                                   fun, prt, ext)
 
     def get_tif(self, file='', band=1):
         """Get tif band data
@@ -158,14 +160,16 @@ class GIS(Base):
         if band == '':
             band = 1
 
-        f = gdal.Open(file)
-        if f is not None:
+        fp = gdal.Open(file)
+        if fp is not None:
             try:
-                Data = f.GetRasterBand(band).ReadAsArray()
+                Data = fp.GetRasterBand(band).ReadAsArray()
             except AttributeError:
-                raise AttributeError('Band {band} not found.'.format(band=band))
+                raise IHEKeyError('Band {b}'.format(b=band), file) from None
+                # raise AttributeError('Band {band} not found.'.format(band=band))
         else:
-            raise IOError('{} not found.'.format(file))
+            raise IHEFileError(file)from None
+            # raise IOError('{} not found.'.format(file))
 
         return Data
 
@@ -256,15 +260,23 @@ def main():
 
     # GIS __init__
     print('\nGIS\n=====')
-    gis = GIS('', is_status=True)
+    path = os.path.join(
+        os.getcwd(),
+        os.path.dirname(
+            inspect.getfile(
+                inspect.currentframe())),
+        '../', '../', '../'
+    )
+    gis = GIS(path, is_status=True)
 
     # Base attributes
     print('\ngis._Base__conf\n=====')
-    pprint(gis._Base__conf)
+    # pprint(gis._Base__conf)
 
     # GIS attributes
     print('\ngis._GIS__conf:\n=====')
-    pprint(gis._GIS__conf)
+    print(gis._GIS__conf['data'].keys())
+    # pprint(gis._GIS__conf)
 
     # GIS methods
     print('\ngis.Base.get_status()\n=====')
