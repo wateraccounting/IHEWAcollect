@@ -42,9 +42,9 @@ __path_data = os.path.join(__path, 'data')
 
 def test_Accounts():
     path = os.path.join(__path, '../')
-    account = 'FTP_WA_GUESS'
+    product = 'Test'
 
-    accounts = Accounts(path, account, is_status=True)
+    accounts = Accounts(path, product, is_status=True)
 
     assert accounts.get_conf('file') == 'base.yml'
 

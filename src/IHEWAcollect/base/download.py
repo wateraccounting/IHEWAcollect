@@ -32,6 +32,11 @@ import numpy as np
 import pandas as pd
 
 try:
+    from .exception import *
+except ImportError:
+    from src.IHEWAcollect.base.exception import *
+
+try:
     from .accounts import Accounts
 except ImportError:
     from src.IHEWAcollect.base.accounts import Accounts
@@ -46,6 +51,12 @@ class Download(Accounts, GIS):
     """This Download class
 
     Description
+
+    - product = 'ALEXI',
+    - version = 'v1',
+    - parameter = 'Evaporation',
+    - resolution = 'daily',
+    - variable = 'ETa',
 
     Args:
       workspace (str): Directory to accounts.yml.
@@ -117,11 +128,36 @@ class Download(Accounts, GIS):
         GIS.__init__(self, workspace, is_status, **kwargs)
         # super(Download, self).__init__(workspace, account, is_status, **kwargs)
 
-        self.prod = self._Base__conf['data']['products'][product]
-        self.para = self._Base__conf['data']['products'][product][version][parameter]
-        self.latlim = self.para[resolution]['variables'][variable]['lat']
-        self.lonlim = self.para[resolution]['variables'][variable]['lon']
-        self.timlim = self.para[resolution]['variables'][variable]['time']
+        keys = self._Base__conf['data'][
+            'products'].keys()
+        if product not in keys:
+            self.__status['code'] = 1
+            raise IHEKeyError(product, keys) from None
+        keys = self._Base__conf['data'][
+            'products'][product].keys()
+        if version not in keys:
+            self.__status['code'] = 1
+            raise IHEKeyError(version, keys) from None
+        keys = self._Base__conf['data'][
+            'products'][product][version].keys()
+        if parameter not in keys:
+            self.__status['code'] = 1
+            raise IHEKeyError(parameter, keys) from None
+        keys = self._Base__conf['data'][
+            'products'][product][version][parameter].keys()
+        if resolution not in keys:
+            self.__status['code'] = 1
+            raise IHEKeyError(resolution, keys) from None
+        keys = self._Base__conf['data'][
+            'products'][product][version][parameter][resolution]['variables'].keys()
+        if variable not in keys:
+            self.__status['code'] = 1
+            raise IHEKeyError(variable, keys) from None
+        self.var = self._Base__conf['data']['products'][
+            product][version][parameter][resolution]['variables'][variable]
+        self.latlim = self.var['lat']
+        self.lonlim = self.var['lon']
+        self.timlim = self.var['time']
 
         if self.__status['code'] == 0:
             # self._conf()
@@ -345,6 +381,13 @@ def main():
                 inspect.currentframe())),
         '../', '../', '../'
     )
+    # download = Download(path,
+    #                     product='ALEXI',
+    #                     version='v1',
+    #                     parameter='Evaporation',
+    #                     resolution='daily',
+    #                     variable='ETa',
+    #                     is_status=False)
     download = Download(path,
                         product='ALEXI',
                         version='v1',

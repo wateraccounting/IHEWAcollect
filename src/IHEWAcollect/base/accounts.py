@@ -131,9 +131,14 @@ class Accounts(Base):
 
         vname, rtype, vdata = 'product', str, product
         if self.check_input(vname, rtype, vdata):
-            product = self._Base__conf['data']['products'][vdata]
-            self.__conf['product'] = product
-            self.__conf['account'][product['account']] = {}
+            if vdata not in self._Base__conf['data']['products'].keys():
+                self.__status['code'] = 1
+                raise IHEKeyError(vdata,
+                                  self._Base__conf['data']['products'].keys()) from None
+            else:
+                account = self._Base__conf['data']['products'][vdata]['account']
+                self.__conf['account'][account] = {}
+                self.__conf['product'] = self._Base__conf['data']['products'][vdata]
         else:
             self.__status['code'] = 1
 
@@ -221,7 +226,7 @@ class Accounts(Base):
                     'password': pswd,
                 }
             else:
-                raise IHEKeyError('password', conf) from None
+                raise IHEKeyError('password', conf.keys()) from None
 
         # password, Yaml load/Python input
         try:
@@ -254,7 +259,7 @@ class Accounts(Base):
                 key = self._user_key_generator()
                 is_renew = True
             else:
-                raise IHEKeyError('key', conf) from None
+                raise IHEKeyError('key', conf.keys()) from None
         finally:
             self.__conf['data']['credential']['key'] = str.encode(key)
 
