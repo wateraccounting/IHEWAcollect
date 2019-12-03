@@ -6,6 +6,7 @@ import os
 
 import pytest
 
+from IHEWAcollect.base.exception import *
 from IHEWAcollect.base.accounts import Accounts
 # from IHEWAcollect.base.gis import GIS
 
@@ -48,7 +49,7 @@ def test_Accounts():
 
     assert accounts.get_conf('file') == 'base.yml'
 
-    with pytest.raises(KeyError, match=r".* not .*"):
+    with pytest.raises(IHEKeyError, match=r".* not .*"):
         accounts.get_conf('test')
 
 

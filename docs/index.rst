@@ -4,6 +4,40 @@ IHEWAcollect
 
 This is the documentation of **IHEWAcollect**.
 
+Products
+========
+
++------------+---------------------------------+-------------------------------------+
+| Product    |  Image                          | Link                                |
++============+=================================+=====================================+
+| ALEXI      | .. image:: ./img/ALEXI.png      | https://www.wateraccounting.org     |
+|            |    :height: 40pt                |                                     |
++------------+---------------------------------+-------------------------------------+
+| ASCAT      | .. image:: ./img/ASCAT.png      | https://www.copernicus.eu           |
+|            |    :height: 40pt                |                                     |
++------------+---------------------------------+-------------------------------------+
+| CFSR       | .. image:: ./img/CFSR.png       | https://www.noaa.gov                |
+|            |    :height: 40pt                |                                     |
++------------+---------------------------------+-------------------------------------+
+| CMRSET     | .. image:: ./img/CMRSET.png     | https://www.wateraccounting.org     |
+|            |    :height: 40pt                |                                     |
++------------+---------------------------------+-------------------------------------+
+| DEM        | .. image:: ./img/DEM.png        | http://earlywarning.usgs.gov        |
+|            |    :height: 40pt                |                                     |
++------------+---------------------------------+-------------------------------------+
+| ECMWF      |                                 | https://www.ecmwf.int               |
++------------+---------------------------------+-------------------------------------+
+| ETmonitor  | .. image:: ./img/ETmonitor.png  | https://www.wateraccounting.org     |
+|            |    :height: 40pt                |                                     |
++------------+---------------------------------+-------------------------------------+
+| FEWS       | .. image:: ./img/FEWS.png       | https://earlywarning.usgs.gov/fews  |
+|            |    :height: 40pt                |                                     |
++------------+---------------------------------+-------------------------------------+
+
+
+Development
+===========
+
 .. code-block:: console
 
     $ git clone https://github.com/wateraccounting/IHEWAcollect.git
@@ -49,7 +83,7 @@ PyPI upload, run ``setup.py``::
 
 .. warning::
 
-    Must contain **config.yml** and **accounts.yml-encrypted** file.
+    Must contain **accounts.yml-credential** and **accounts.yml-encrypted** file.
 
 
 Contents

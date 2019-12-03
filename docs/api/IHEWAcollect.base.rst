@@ -28,6 +28,14 @@ IHEWAcollect.base.download module
    :undoc-members:
    :show-inheritance:
 
+IHEWAcollect.base.exception module
+----------------------------------
+
+.. automodule:: IHEWAcollect.base.exception
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 IHEWAcollect.base.gis module
 ----------------------------
 
