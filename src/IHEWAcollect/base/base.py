@@ -55,9 +55,11 @@ import yaml
 # OK
 
 try:
-    from .exception import *
+    from .exception import \
+        IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 except ImportError:
-    from src.IHEWAcollect.base.exception import *
+    from src.IHEWAcollect.base.exception \
+        import IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 
 
 class Base(object):

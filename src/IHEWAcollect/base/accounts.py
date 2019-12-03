@@ -42,9 +42,11 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 try:
-    from .exception import *
+    from .exception import \
+        IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 except ImportError:
-    from src.IHEWAcollect.base.exception import *
+    from src.IHEWAcollect.base.exception \
+        import IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 
 try:
     from .base import Base

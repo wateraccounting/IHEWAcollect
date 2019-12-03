@@ -45,9 +45,11 @@ except ImportError:
     import gdalconst
 
 try:
-    from .exception import *
+    from .exception import \
+        IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 except ImportError:
-    from src.IHEWAcollect.base.exception import *
+    from src.IHEWAcollect.base.exception \
+        import IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 
 try:
     from .base import Base
@@ -216,8 +218,11 @@ class GIS(Base):
         """
         # save as a geotiff
         driver = gdal.GetDriverByName("GTiff")
-        dst_ds = driver.Create(name, int(data.shape[1]), int(data.shape[0]), 1,
-                               gdal.GDT_Float32, ['COMPRESS=LZW'])
+        dst_ds = driver.Create(name,
+                               int(data.shape[1]), int(data.shape[0]),
+                               1,
+                               gdal.GDT_Float32,
+                               ['COMPRESS=LZW'])
         srse = osr.SpatialReference()
         if projection == '':
             srse.SetWellKnownGeogCS("WGS84")

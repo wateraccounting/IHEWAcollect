@@ -6,7 +6,8 @@ import os
 
 import pytest
 
-from IHEWAcollect.base.exception import *
+from IHEWAcollect.base.exception import \
+    IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 from IHEWAcollect.base.accounts import Accounts
 # from IHEWAcollect.base.gis import GIS
 

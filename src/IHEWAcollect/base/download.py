@@ -32,9 +32,11 @@ import numpy as np
 import pandas as pd
 
 try:
-    from .exception import *
+    from .exception import \
+        IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 except ImportError:
-    from src.IHEWAcollect.base.exception import *
+    from src.IHEWAcollect.base.exception \
+        import IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 
 try:
     from .accounts import Accounts
