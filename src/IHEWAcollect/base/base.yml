@@ -3214,6 +3214,7 @@ products:
       websites:
         - 'https://pmm.gsfc.nasa.gov/GPM'
         - 'https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDF_06/summary?keywords=GPM'
+        - 'https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGM_06/summary?keywords=GPM'
       protocols:
         - 'HTTPS'
       methods:
@@ -3221,11 +3222,101 @@ products:
       ftypes:
         - 'NetCDF'
       versions:
-        - 'v2.1'
+        - 'v6'
       datasets:
-        - 'Evapotranspiration'
+        - 'Precipitation'
       datatypes:
-        - 'three_hourly'
+        - 'daily'
         - 'monthly'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
+    v6:
+      precipitation:
+        daily:
+          url: 'https://gpm1.gesdisc.eosdis.nasa.gov'
+          method: 'get'
+          freq: 'D'
+          variables:
+            PCP:
+              variable: 'precipitationCal'
+              name: 'Daily Precipitation'
+              description:
+                ''
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/data/GPM_L3/GPM_3IMERGDF.06/{dtime:%Y/%m}/'
+              fname:
+                r: '3B-DAY.MS.MRG.3IMERG.{dtime:%Y%m%d}-S000000-E235959.V06.nc4'
+                t: null
+                l: 'GPM_v6_mm_D-{dtime:%Y%m%d}.tif'
+              ftype:
+                r: 'NetCDF'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'mm'
+                l: 'mm'
+                m: 1.0
+              lat:
+                s: -90.0
+                n: 90.0
+                r: 0.1
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.1
+              time:
+                s: 2000-06-01
+                e: 2019-09-01
+              dem:
+                w: 3600
+                h: 1800
+        monthly:
+          url: 'https://gpm1.gesdisc.eosdis.nasa.gov'
+          method: 'get'
+          freq: 'MS'
+          variables:
+            PCP:
+              variable: 'precipitationCal'
+              name: 'Monthly Precipitation'
+              description:
+                ''
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/data/GPM_L3/GPM_3IMERGM.06/{dtime:%Y}/'
+              fname:
+                r: '3B-MO.MS.MRG.3IMERG.{dtime:%Y%m01}-S000000-E235959.06.V06B.HDF5'
+                t: null
+                l: 'GPM_v6_mm_MS-{dtime:%Y%m}.tif'
+              ftype:
+                r: 'NetCDF.Grid'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'mm'
+                l: 'mm'
+                m: 1.0
+              lat:
+                s: -90.0
+                n: 90.0
+                r: 0.1
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.1
+              time:
+                s: 2000-06-01
+                e: 2019-08-01
+              dem:
+                w: 3600
+                h: 1800

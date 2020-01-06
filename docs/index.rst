@@ -40,6 +40,9 @@ Products
 | GLEAM      | .. image:: ./img/GLEAM.png      | http://www.gleam.eu                 |
 |            |    :height: 40pt                |                                     |
 +------------+---------------------------------+-------------------------------------+
+| GPM        | .. image:: ./img/GPM.png        | https://pmm.gsfc.nasa.gov/GPM       |
+|            |    :height: 40pt                |                                     |
++------------+---------------------------------+-------------------------------------+
 
 
 Development
