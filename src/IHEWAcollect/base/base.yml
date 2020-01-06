@@ -28,30 +28,44 @@ products:
       owner: 'IHE Delft'
       description:
         ''
-      websites: ['https://www.wateraccounting.org']
-      protocols: ['FTP']
-      methods: ['get']
-      ftypes: ['gz', 'GTiff']
-      versions: ['v1']
-      datasets: ['Evaporation']
-      datatypes: ['daily', 'weekly']
-      projection: ['EPSG:4326 - WGS 84 - Geographic']
+      websites:
+        - 'https://www.wateraccounting.org'
+      protocols:
+        - 'FTP'
+      methods:
+        - 'get'
+      ftypes:
+        - 'gz'
+        - 'GTiff'
+      versions:
+        - 'v1'
+      datasets:
+        - 'Evapotranspiration'
+      datatypes:
+        - 'daily'
+        - 'weekly'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
     v1:
-      Evaporation:
+      evapotranspiration:
         daily:
           url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
           method: 'get'
           freq: 'D'
           variables:
-            ETa:
-              name: 'Daily Evaporation'
+            ETA:
+              variable: null
+              name: 'Daily Evapotranspiration'
               description:
                 ''
+              dfmt: null
+              rfmt: 'dtime'
+              tfmt: 'dtime'
               dir: '/WaterAccounting/Data_Satellite/Evaporation/ALEXI/World_05182018/'
               fname:
-                r: 'EDAY_CERES_{Y:>04s}{j:>03s}.dat.gz'
-                t: 'EDAY_CERES_{Y:>04s}{j:>03s}.dat'
-                l: 'ETa-ALEXI_v1_mmpd_daily-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                r: 'EDAY_CERES_{dtime:%Y%j}.dat.gz'
+                t: 'EDAY_CERES_{dtime:%Y%j}.dat'
+                l: 'ALEXI_v1_mm_D-{dtime:%Y%m%d}.tif'
               ftype:
                 r: 'gz'
                 t: 'dat'
@@ -60,9 +74,9 @@ products:
                 r: 'binary'
                 t: 'float32'
                 l: 'float32'
-              unit:
-                r: 'MJ/m2d'
-                l: 'mm/d'
+              units:
+                r: 'MJ.m2.d'
+                l: 'mm'
                 m: 2.45
               lat:
                 s: -60.0
@@ -83,15 +97,19 @@ products:
           method: 'get'
           freq: '7D'
           variables:
-            ETa:
+            ETA:
+              variable: null
               name: 'Weekly Evaporation'
               description:
                 ''
+              dfmt: null
+              rfmt: 'dtime'
+              tfmt: null
               dir: '/WaterAccounting/Data_Satellite/Evaporation/ALEXI/World/'
               fname:
-                r: 'ALEXI_weekly_mm_{j:>03s}_{Y:>04s}.tif'
+                r: 'ALEXI_weekly_mm_{dtime:%j_%Y}.tif'
                 t: null
-                l: 'ETa-ALEXI_v1_mmpd_weekly-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                l: 'ALEXI_v1_mm_7D-{dtime:%Y%m%d}.tif'
               ftype:
                 r: 'GTiff'
                 t: null
@@ -100,9 +118,9 @@ products:
                 r: 'binary'
                 t: null
                 l: 'float32'
-              unit:
-                r: 'MJ/m2d'
-                l: 'mm/d'
+              units:
+                r: 'MJ.m2.d'
+                l: 'mm.d'
                 m: 2.45
               lat:
                 s: -60.0
@@ -130,16 +148,24 @@ products:
          soil properties and drainage patterns. Satellite measurements integrate over
          relative large-scale areas, with the presence of vegetation adding complexity to
          the interpretation.'
-      websites: ['https://www.copernicus.eu']
-      protocols: ['HTTPS']
-      methods: ['get']
-      ftypes: ['netCDF']
-      versions: ['v3']
-      datasets: ['SoilWaterIndex']
-      datatypes: ['daily']
-      projection: ['EPSG:4326 - WGS 84 - Geographic']
-    v3:
-      SoilWaterIndex:
+      websites:
+        - 'https://www.copernicus.eu'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'get'
+      ftypes:
+        - 'NetCDF'
+      versions:
+        - 'v3.1.1'
+      datasets:
+        - 'Soil Water Index'
+      datatypes:
+        - 'daily'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
+    v3.1.1:
+      soil_water_index:
         daily:
           # 2019-10-22, before: https://land.copernicus.vgt.vito.be/PDF/datapool/Vegetation/Soil_Water/SWI_V3/
           url: 'https://land.copernicus.vgt.vito.be/PDF/datapool'
@@ -147,26 +173,30 @@ products:
           freq: 'D'
           variables:
             SWI_010:
+              variable: 'SWI_010'
               name: 'Daily Soil Water Index'
               description:
                 ''
-              dir: '/Vegetation/Soil_Water_Index/Daily_SWI_12.5km_Global_V3/{Y:>04s}/{m:>02s}/{d:>02s}/SWI_{Y:>04s}/{m:>02s}/{d:>02s}1200_GLOBE_ASCAT_V3.1.1/'
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/Vegetation/Soil_Water_Index/Daily_SWI_12.5km_Global_V3/{dtime:%Y/%m/%d}/SWI_{dtime:%Y/%m/%d}1200_GLOBE_ASCAT_V3.1.1/'
               fname:
-                r: 'c_gls_SWI_{Y:>04s}/{m:>02s}/{d:>02s}1200_GLOBE_ASCAT_V3.1.1.nc'
+                r: 'c_gls_SWI_{dtime:%Y/%m/%d}1200_GLOBE_ASCAT_V3.1.1.nc'
                 t: null
-                l: 'SWI-ASCAT_v3_percentage_daily-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                l: 'ASCAT_v3.1.1_._D-{dtime:%Y%m%d}.tif'
               ftype:
-                r: 'netCDF'
+                r: 'NetCDF'
                 t: null
                 l: 'GTiff'
               dtype:
                 r: 'binary'
                 t: null
                 l: 'float32'
-              unit:
-                r: null
-                l: null
-                m: 1
+              units:
+                r: '.'
+                l: '.'
+                m: 1.0
               lat:
                 s: -90.0
                 n: 90.0
@@ -195,22 +225,34 @@ products:
          approaches for taking in, or assimilating, observations from data sources including
          surface observations, upper air balloon observations, aircraft observations, and
          satellite observations.'
-      websites: ['https://www.noaa.gov']
-      protocols: ['FTP', 'HTTPS', 'TDS']
-      methods: ['get']
-      ftypes: ['grb2', 'GRIB']
-      versions: ['v1', 'v2']
-      datasets: ['Radiation']
-      datatypes: ['daily', 'monthly']
-      projection: ['USER:100022 - * Generated CRS (+proj=longlat +R=6371229 +no_defs) - Projected']
+      websites:
+        - 'https://www.noaa.gov'
+      protocols:
+        - 'FTP'
+        - 'HTTPS'
+        - 'TDS'
+      methods:
+        - 'get'
+      ftypes:
+        - 'GRIB'
+      versions:
+        - 'v1'
+        - 'v2'
+      datasets:
+        - 'Radiation'
+      datatypes:
+        - 'daily'
+      projection:
+        - 'USER:100022 - * Generated CRS (+proj=longlat +R=6371229 +no_defs) - Projected'
     v1:
-      Radiation:
+      radiation:
         daily:
           url: 'https://nomads.ncdc.noaa.gov'
           method: 'get'
           freq: 'D'
           variables:
             dlwsfc:
+              variable: null
               name: 'Daily Radiation'
               description:
                 'The NCEP Climate Forecast System Reanalysis (CFSR) was designed and executed
@@ -218,23 +260,26 @@ products:
                  system to provide the best estimate of the state of these coupled domains over
                  the 32-year period of record from January 1979 to March 2011. It has been
                  extended as an operational real-time product.'
-              dir: '/data/cfsr/{Y:>04s}{m:>02s}/'
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: 'dtime'
+              dir: '/data/cfsr/{dtime:%Y%m}/'
               fname:
-                r: 'dlwsfc.gdas.{Y:>04s}{m:>02s}.grb2'
-                t: 'dlwsfc-{Y:>04s}{m:>02s}{d:>02s}-{i}.nc'
-                l: 'DLW-CFSR_v1_Wpm2_daily-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                r: 'dlwsfc.gdas.{dtime:%Y%m}.grb2'
+                t: 'dlwsfc-{dtime:%Y%m%d}-{ipart}.nc'
+                l: 'CFSR_v1_W.m2_D-{dtime:%Y%m%d}.tif'
               ftype:
                 r: 'grb2'
-                t: 'netCDF'
+                t: 'NetCDF'
                 l: 'GTiff'
               dtype:
                 r: 'binary'
                 t: 'float64'
                 l: 'float32'
-              unit:
-                r: 'W/m^2'
-                l: 'W/m^2'
-                m: 1
+              units:
+                r: 'W.m2'
+                l: 'W.m2'
+                m: 1.0
               lat:
                 s: -89.9171060869565224
                 n: 89.9171060869565224
@@ -250,6 +295,7 @@ products:
                 w: 1152
                 h: 576
             dswsfc:
+              variable: null
               name: 'Daily Radiation'
               description:
                 'The NCEP Climate Forecast System Reanalysis (CFSR) was designed and executed
@@ -257,23 +303,26 @@ products:
                  system to provide the best estimate of the state of these coupled domains over
                  the 32-year period of record from January 1979 to March 2011. It has been
                  extended as an operational real-time product.'
-              dir: '/data/cfsr/{Y:>04s}{m:>02s}/'
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: 'dtime'
+              dir: '/data/cfsr/{dtime:%Y%m}/'
               fname:
-                r: 'dswsfc.gdas.{Y:>04s}{m:>02s}.grb2'
-                t: 'dswsfc-{Y:>04s}{m:>02s}{d:>02s}-{i}.nc'
-                l: 'DSW-CFSR_v1_Wpm2_daily-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                r: 'dswsfc.gdas.{dtime:%Y%m}.grb2'
+                t: 'dswsfc-{dtime:%Y%m%d}-{ipart}.nc'
+                l: 'CFSR_v1_W.m2_D-{dtime:%Y%m%d}.tif'
               ftype:
                 r: 'grb2'
-                t: 'netCDF'
+                t: 'NetCDF'
                 l: 'GTiff'
               dtype:
                 r: 'binary'
                 t: 'float64'
                 l: 'float32'
-              unit:
-                r: 'W/m^2'
-                l: 'W/m^2'
-                m: 1
+              units:
+                r: 'W.m2'
+                l: 'W.m2'
+                m: 1.0
               lat:
                 s: -89.9171060869565224
                 n: 89.9171060869565224
@@ -289,6 +338,7 @@ products:
                 w: 1152
                 h: 576
             ulwsfc:
+              variable: null
               name: 'Daily Radiation'
               description:
                 'The NCEP Climate Forecast System Reanalysis (CFSR) was designed and executed
@@ -296,23 +346,26 @@ products:
                  system to provide the best estimate of the state of these coupled domains over
                  the 32-year period of record from January 1979 to March 2011. It has been
                  extended as an operational real-time product.'
-              dir: '/data/cfsr/{Y:>04s}{m:>02s}/'
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: 'dtime'
+              dir: '/data/cfsr/{dtime:%Y%m}/'
               fname:
-                r: 'ulwsfc.gdas.{Y:>04s}{m:>02s}.grb2'
-                t: 'ulwsfc-{Y:>04s}{m:>02s}{d:>02s}-{i}.nc'
-                l: 'ULW-CFSR_v1_Wpm2_daily-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                r: 'ulwsfc.gdas.{dtime:%Y%m}.grb2'
+                t: 'ulwsfc-{dtime:%Y%m%d}-{ipart}.nc'
+                l: 'CFSR_v1_W.m2_D-{dtime:%Y%m%d}.tif'
               ftype:
                 r: 'grb2'
-                t: 'netCDF'
+                t: 'NetCDF'
                 l: 'GTiff'
               dtype:
                 r: 'binary'
                 t: 'float64'
                 l: 'float32'
-              unit:
-                r: 'W/m^2'
-                l: 'W/m^2'
-                m: 1
+              units:
+                r: 'W.m2'
+                l: 'W.m2'
+                m: 1.0
               lat:
                 s: -89.9171060869565224
                 n: 89.9171060869565224
@@ -328,6 +381,7 @@ products:
                 w: 1152
                 h: 576
             uswsfc:
+              variable: null
               name: 'Daily Radiation'
               description:
                 'The NCEP Climate Forecast System Reanalysis (CFSR) was designed and executed
@@ -335,23 +389,26 @@ products:
                  system to provide the best estimate of the state of these coupled domains over
                  the 32-year period of record from January 1979 to March 2011. It has been
                  extended as an operational real-time product.'
-              dir: '/data/cfsr/{Y:>04s}{m:>02s}/'
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: 'dtime'
+              dir: '/data/cfsr/{dtime:%Y%m}/'
               fname:
-                r: 'uswsfc.gdas.{Y:>04s}{m:>02s}.grb2'
-                t: 'uswsfc-{Y:>04s}{m:>02s}{d:>02s}-{i}.nc'
-                l: 'USW-CFSR_v1_Wpm2_daily-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                r: 'uswsfc.gdas.{dtime:%Y%m}.grb2'
+                t: 'uswsfc-{dtime:%Y%m%d}-{ipart}.nc'
+                l: 'CFSR_v1_W.m2_D-{dtime:%Y%m%d}.tif'
               ftype:
                 r: 'grb2'
-                t: 'netCDF'
+                t: 'NetCDF'
                 l: 'GTiff'
               dtype:
                 r: 'binary'
                 t: 'float64'
                 l: 'float32'
-              unit:
-                r: 'W/m^2'
-                l: 'W/m^2'
-                m: 1
+              units:
+                r: 'W.m2'
+                l: 'W.m2'
+                m: 1.0
               lat:
                 s: -89.9171060869565224
                 n: 89.9171060869565224
@@ -366,7 +423,6 @@ products:
               dem:
                 w: 1152
                 h: 576
-        monthly:
     v2:
       Radiation:
         daily:
@@ -375,6 +431,7 @@ products:
           freq: 'D'
           variables:
             dlwsfc:
+              variable: null
               name: 'Daily Radiation'
               description:
                 'The NCEP Climate Forecast System Reanalysis (CFSR) was designed and executed
@@ -382,23 +439,26 @@ products:
                  system to provide the best estimate of the state of these coupled domains over
                  the 32-year period of record from January 1979 to March 2011. It has been
                  extended as an operational real-time product.'
-              dir: '/modeldata/cfsv2_analysis_timeseries/{Y:>04s}/{Y:>04s}{m:>02s}/'
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: 'dtime'
+              dir: '/modeldata/cfsv2_analysis_timeseries/{dtime:%Y}/{dtime:%Y%m}/'
               fname:
-                r: 'dlwsfc.gdas.{Y:>04s}{m:>02s}.grib2'
-                t: 'dlwsfc-{Y:>04s}{m:>02s}{d:>02s}-{i}.nc'
-                l: 'DLW-CFSR_v2_Wpm2_daily-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                r: 'dlwsfc.gdas.{dtime:%Y%m}.grib2'
+                t: 'dlwsfc-{dtime:%Y%m%d}-{ipart}.nc'
+                l: 'CFSR_v2_W.m2_D-{dtime:%Y%m%d}.tif'
               ftype:
                 r: 'GRIB'
-                t: 'netCDF'
+                t: 'NetCDF'
                 l: 'GTiff'
               dtype:
                 r: 'binary'
                 t: 'float64'
                 l: 'float32'
-              unit:
-                r: 'W/m^2'
-                l: 'W/m^2'
-                m: 1
+              units:
+                r: 'W.m2'
+                l: 'W.m2'
+                m: 1.0
               lat:
                 s: -89.9462116040955806
                 n: 89.9462116040955522
@@ -414,6 +474,7 @@ products:
                 w: 1760
                 h: 880
             dswsfc:
+              variable: null
               name: 'Daily Radiation'
               description:
                 'The NCEP Climate Forecast System Reanalysis (CFSR) was designed and executed
@@ -421,23 +482,26 @@ products:
                  system to provide the best estimate of the state of these coupled domains over
                  the 32-year period of record from January 1979 to March 2011. It has been
                  extended as an operational real-time product.'
-              dir: '/modeldata/cfsv2_analysis_timeseries/{Y:>04s}/{Y:>04s}{m:>02s}/'
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: 'dtime'
+              dir: '/modeldata/cfsv2_analysis_timeseries/{dtime:%Y}/{dtime:%Y%m}/'
               fname:
-                r: 'dswsfc.gdas.{Y:>04s}{m:>02s}.grib2'
-                t: 'dswsfc-{Y:>04s}{m:>02s}{d:>02s}-{i}.nc'
-                l: 'DSW-CFSR_v2_Wpm2_daily-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                r: 'dswsfc.gdas.{dtime:%Y%m}.grib2'
+                t: 'dswsfc-{dtime:%Y%m%d}-{ipart}.nc'
+                l: 'CFSR_v2_W.m2_D-{dtime:%Y%m%d}.tif'
               ftype:
                 r: 'GRIB'
-                t: 'netCDF'
+                t: 'NetCDF'
                 l: 'GTiff'
               dtype:
                 r: 'binary'
                 t: 'float64'
                 l: 'float32'
-              unit:
-                r: 'W/m^2'
-                l: 'W/m^2'
-                m: 1
+              units:
+                r: 'W.m2'
+                l: 'W.m2'
+                m: 1.0
               lat:
                 s: -89.9462116040955806
                 n: 89.9462116040955522
@@ -453,6 +517,7 @@ products:
                 w: 1760
                 h: 880
             ulwsfc:
+              variable: null
               name: 'Daily Radiation'
               description:
                 'The NCEP Climate Forecast System Reanalysis (CFSR) was designed and executed
@@ -460,23 +525,26 @@ products:
                  system to provide the best estimate of the state of these coupled domains over
                  the 32-year period of record from January 1979 to March 2011. It has been
                  extended as an operational real-time product.'
-              dir: '/modeldata/cfsv2_analysis_timeseries/{Y:>04s}/{Y:>04s}{m:>02s}/'
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: 'dtime'
+              dir: '/modeldata/cfsv2_analysis_timeseries/{dtime:%Y}/{dtime:%Y%m}/'
               fname:
-                r: 'ulwsfc.gdas.{Y:>04s}{m:>02s}.grib2'
-                t: 'ulwsfc-{Y:>04s}{m:>02s}{d:>02s}-{i}.nc'
-                l: 'ULW-CFSR_v2_Wpm2_daily-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                r: 'ulwsfc.gdas.{dtime:%Y%m}.grib2'
+                t: 'ulwsfc-{dtime:%Y%m%d}-{ipart}.nc'
+                l: 'CFSR_v2_W.m2_D-{dtime:%Y%m%d}.tif'
               ftype:
                 r: 'GRIB'
-                t: 'netCDF'
+                t: 'NetCDF'
                 l: 'GTiff'
               dtype:
                 r: 'binary'
                 t: 'float64'
                 l: 'float32'
-              unit:
-                r: 'W/m^2'
-                l: 'W/m^2'
-                m: 1
+              units:
+                r: 'W.m2'
+                l: 'W.m2'
+                m: 1.0
               lat:
                 s: -89.9462116040955806
                 n: 89.9462116040955522
@@ -492,6 +560,7 @@ products:
                 w: 1760
                 h: 880
             uswsfc:
+              variable: null
               name: 'Daily Radiation'
               description:
                 'The NCEP Climate Forecast System Reanalysis (CFSR) was designed and executed
@@ -499,23 +568,26 @@ products:
                  system to provide the best estimate of the state of these coupled domains over
                  the 32-year period of record from January 1979 to March 2011. It has been
                  extended as an operational real-time product.'
-              dir: '/modeldata/cfsv2_analysis_timeseries/{Y:>04s}/{Y:>04s}{m:>02s}/'
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: 'dtime'
+              dir: '/modeldata/cfsv2_analysis_timeseries/{dtime:%Y}/{dtime:%Y%m}/'
               fname:
-                r: 'uswsfc.gdas.{Y:>04s}{m:>02s}.grib2'
-                t: 'uswsfc-{Y:>04s}{m:>02s}{d:>02s}-{i}.nc'
-                l: 'USW-CFSR_v2_Wpm2_daily-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                r: 'uswsfc.gdas.{dtime:%Y%m}.grib2'
+                t: 'uswsfc-{dtime:%Y%m%d}-{ipart}.nc'
+                l: 'CFSR_v2_W.m2_D-{dtime:%Y%m%d}.tif'
               ftype:
                 r: 'GRIB'
-                t: 'netCDF'
+                t: 'NetCDF'
                 l: 'GTiff'
               dtype:
                 r: 'binary'
                 t: 'float64'
                 l: 'float32'
-              unit:
-                r: 'W/m^2'
-                l: 'W/m^2'
-                m: 1
+              units:
+                r: 'W.m2'
+                l: 'W.m2'
+                m: 1.0
               lat:
                 s: -89.9462116040955806
                 n: 89.9462116040955522
@@ -530,7 +602,6 @@ products:
               dem:
                 w: 1760
                 h: 880
-        monthly:
 
   CHIRPS:
     account: null
@@ -540,30 +611,44 @@ products:
         'Since 1999, USGS and CHC scientists—supported by funding from USAID, NASA, and
          NOAA—have developed techniques for producing rainfall maps, especially in areas
          where surface data is sparse.'
-      websites: ['https://geog.ucsb.edu']
-      protocols: ['FTP']
-      methods: ['get']
-      ftypes: ['gz', 'netCDF']
-      versions: ['v2']
-      datasets: ['Precipitation']
-      datatypes: ['daily', 'monthly']
-      projection: ['EPSG:4326 - WGS 84 - Geographic']
-    v2:
-      Precipitation:
+      websites:
+        - 'https://geog.ucsb.edu'
+      protocols:
+        - 'FTP'
+      methods:
+        - 'get'
+      ftypes:
+        - 'gz'
+        - 'NetCDF'
+      versions:
+        - 'v2.0'
+      datasets:
+        - 'Precipitation'
+      datatypes:
+        - 'daily'
+        - 'monthly'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
+    v2.0:
+      precipitation:
         daily:
           url: 'ftp://chg-ftpout.geog.ucsb.edu'
           method: 'get'
           freq: 'D'
           variables:
             PCP:
+              variable: null
               name: 'Daily Precipitation'
               description:
                 ''
-              dir: '/pub/org/chg/products/CHIRPS-2.0/global_daily/tifs/p05/{Y:>04s}/'
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: 'dtime'
+              dir: '/pub/org/chg/products/CHIRPS-2.0/global_daily/tifs/p05/{dtime:%Y}/'
               fname:
-                r: 'chirps-v2.0.{Y:>04s}.{m:>02s}.{d:>02s}.tif.gz'
-                t: 'chirps-v2.0.{Y:>04s}.{m:>02s}.{d:>02s}.tif'
-                l: 'PCP-CHIRPS_v2_mmpd_daily-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                r: 'chirps-v2.0.{dtime:%Y.%m.%d}.tif.gz'
+                t: 'chirps-v2.0.{dtime:%Y.%m.%d}.tif'
+                l: 'CHIRPS_v2.0_mm_D-{dtime:%Y%m%d}.tif'
               ftype:
                 r: 'gz'
                 t: 'GTiff'
@@ -572,10 +657,10 @@ products:
                 r: 'binary'
                 t: 'float32'
                 l: 'float32'
-              unit:
-                r: 'mm/d'
-                l: 'mm/d'
-                m: 1
+              units:
+                r: 'mm'
+                l: 'mm'
+                m: 1.0
               lat:
                 s: -50.0
                 n: 50.0
@@ -596,14 +681,18 @@ products:
           freq: 'MS'
           variables:
             PCP:
+              variable: null
               name: 'Monthly Precipitation'
               description:
                 ''
+              dfmt: null
+              rfmt: 'dtime'
+              tfmt: 'dtime'
               dir: '/pub/org/chg/products/CHIRPS-2.0/global_monthly/tifs/'
               fname:
-                r: 'chirps-v2.0.{Y:>04s}.{m:>02s}.tif.gz'
-                t: 'chirps-v2.0.{Y:>04s}.{m:>02s}.tif'
-                l: 'PCP-CHIRPS_v2_mmpd_monthly-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                r: 'chirps-v2.0.{dtime:%Y.%m}.tif.gz'
+                t: 'chirps-v2.0.{dtime:%Y.%m}.tif'
+                l: 'CHIRPS_v2.0_mm_MS-{dtime:%Y%m}.tif'
               ftype:
                 r: 'gz'
                 t: 'GTiff'
@@ -612,10 +701,10 @@ products:
                 r: 'binary'
                 t: 'float32'
                 l: 'float32'
-              unit:
-                r: 'mm/d'
-                l: 'mm/d'
-                m: 1
+              units:
+                r: 'mm'
+                l: 'mm'
+                m: 1.0
               lat:
                 s: -50.0
                 n: 50.0
@@ -637,30 +726,42 @@ products:
       owner: 'IHE Delft'
       description:
         ''
-      websites: ['https://www.wateraccounting.org']
-      protocols: ['FTP']
-      methods: ['get']
-      ftypes: ['tif']
-      versions: ['v1']
-      datasets: ['Evaporation']
-      datatypes: ['monthly']
-      projection: ['EPSG:4326 - WGS 84 - Geographic']
+      websites:
+        - 'https://www.wateraccounting.org'
+      protocols:
+        - 'FTP'
+      methods:
+        - 'get'
+      ftypes:
+        - 'GTiff'
+      versions:
+        - 'v1'
+      datasets:
+        - 'Evapotranspiration'
+      datatypes:
+        - 'monthly'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
     v1:
-      Evaporation:
+      evapotranspiration:
         monthly:
           url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
           method: 'get'
           freq: 'MS'
           variables:
-            ETa:
+            ETA:
+              variable: null
               name: 'Monthly Evaporation'
               description:
                 ''
+              dfmt: null
+              rfmt: 'dtime'
+              tfmt: null
               dir: '/WaterAccounting/Data_Satellite/Evaporation/CMRSET/Global/'
               fname:
-                r: 'M01CMRSETGlobalY{Y:>04s}M{m:>02s}.tif'
+                r: 'M01CMRSETGlobal{dtime:Y%YM%m}.tif'
                 t: null
-                l: 'ETa-CMRSET_v1_mmpd_monthly-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                l: 'CMRSET_v1_mm_MS-{dtime:%Y%m}.tif'
               ftype:
                 r: 'GTiff'
                 t: null
@@ -669,10 +770,10 @@ products:
                 r: 'float64'
                 t: null
                 l: 'float32'
-              unit:
-                r: 'mm/d'
-                l: 'mm/d'
-                m: 1
+              units:
+                r: 'mm.d'
+                l: 'mm.d'
+                m: 1.0
               lat:
                 s: -90.0
                 n: 90.0
@@ -699,30 +800,45 @@ products:
          river networks, watershed boundaries, drainage directions, and flow accumulations.
          HydroSHEDS is based on high-resolution elevation data obtained during a Space
          Shuttle flight for NASA''s Shuttle Radar Topography Mission (SRTM).'
-      websites: ['http://earlywarning.usgs.gov']
-      protocols: ['HTTPS']
-      methods: ['get']
-      ftypes: ['zip']
-      versions: ['v1']
-      datasets: ['DEM', 'DIR']
-      datatypes: ['3s', '15s', '30s']
-      projection: ['WGS84']
+      websites:
+        - 'http://earlywarning.usgs.gov'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'get'
+      ftypes:
+        - 'zip'
+      versions:
+        - 'v1'
+      datasets:
+        - 'Digital Elevation Model'
+        - 'Drainage Direction Model'
+      datatypes:
+        - '3s'
+        - '15s'
+        - '30s'
+      projection:
+        - 'WGS84'
     v1:
-      DEM:
+      digital_elevation_model:
         3s:
           url: 'https://edcintl.cr.usgs.gov'
           method: 'get'
           freq: null
           variables:
             af:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: 'latlon'
+              tfmt: 'latlon'
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/AF/'
               fname:
                 r: '{lat}{lon}_dem_grid.zip'
                 t: 'DEM-af_3s_merged_{lat}{lon}.adf'
-                l: 'DEM-HydroShed_v1_3s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -731,10 +847,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -35.0
                 n: 38.0
@@ -750,14 +866,18 @@ products:
                 w: 88800
                 h: 87600
             as:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: 'latlon'
+              tfmt: 'latlon'
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/AS/'
               fname:
                 r: '{lat}{lon}_dem_grid.zip'
                 t: 'DEM-as_3s_merged_{lat}{lon}.adf'
-                l: 'DEM-HydroShed_v1_3s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -766,10 +886,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -12.0
                 n: 61.0
@@ -785,14 +905,18 @@ products:
                 w: 147600
                 h: 87600
             au:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: 'latlon'
+              tfmt: 'latlon'
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/AU/'
               fname:
                 r: '{lat}{lon}_dem_grid.zip'
                 t: 'DEM-au_3s_merged_{lat}{lon}.adf'
-                l: 'DEM-HydroShed_v1_3s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -801,10 +925,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -56.0
                 n: -10.0
@@ -820,14 +944,18 @@ products:
                 w: 81600
                 h: 55200
             ca:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: 'latlon'
+              tfmt: 'latlon'
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/CA/'
               fname:
                 r: '{lat}{lon}_dem_grid.zip'
                 t: 'DEM-ca_3s_merged_{lat}{lon}.adf'
-                l: 'DEM-HydroShed_v1_3s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -836,10 +964,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 5.0
                 n: 39.0
@@ -855,14 +983,18 @@ products:
                 w: 70800
                 h: 40800
             eu:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: 'latlon'
+              tfmt: 'latlon'
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/EU/'
               fname:
                 r: '{lat}{lon}_dem_grid.zip'
                 t: 'DEM-eu_3s_merged_{lat}{lon}.adf'
-                l: 'DEM-HydroShed_v1_3s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -871,10 +1003,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 12.0
                 n: 62.0
@@ -890,14 +1022,18 @@ products:
                 w: 100800
                 h: 60000
             na:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: 'latlon'
+              tfmt: 'latlon'
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/NA/'
               fname:
                 r: '{lat}{lon}_dem_grid.zip'
                 t: 'DEM-na_3s_merged_{lat}{lon}.adf'
-                l: 'DEM-HydroShed_v1_3s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -906,10 +1042,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 24.0
                 n: 60.0
@@ -925,14 +1061,18 @@ products:
                 w: 103200
                 h: 43200
             sa:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: 'latlon'
+              tfmt: 'latlon'
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/SA/'
               fname:
                 r: '{lat}{lon}_dem_grid.zip'
                 t: 'DEM-sa_3s_merged_{lat}{lon}.adf'
-                l: 'DEM-HydroShed_v1_3s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -941,10 +1081,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -56.0
                 n: 15.0
@@ -965,14 +1105,18 @@ products:
           freq: null
           variables:
             af:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
               fname:
                 r: 'af_dem_15s_grid.zip'
                 t: 'DEM-af_15s_merged.adf'
-                l: 'DEM-HydroShed_v1_15s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -981,10 +1125,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -35.0
                 n: 38.0
@@ -1000,14 +1144,18 @@ products:
                 w: 17760
                 h: 17520
             as:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
               fname:
                 r: 'as_dem_15s_grid.zip'
                 t: 'DEM-as_15s_merged.adf'
-                l: 'DEM-HydroShed_v1_15s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1016,10 +1164,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -12.0
                 n: 61.0
@@ -1035,14 +1183,18 @@ products:
                 w: 29520
                 h: 17520
             au:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
               fname:
                 r: 'au_dem_15s_grid.zip'
                 t: 'DEM-au_15s_merged.adf'
-                l: 'DEM-HydroShed_v1_15s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1051,10 +1203,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -56.0
                 n: -10.0
@@ -1070,14 +1222,18 @@ products:
                 w: 16320
                 h: 11040
             ca:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
               fname:
                 r: 'ca_dem_15s_grid.zip'
                 t: 'DEM-ca_15s_merged.adf'
-                l: 'DEM-HydroShed_v1_15s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1086,10 +1242,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 5.0
                 n: 39.0
@@ -1105,14 +1261,18 @@ products:
                 w: 14160
                 h: 8160
             eu:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
               fname:
                 r: 'eu_dem_15s_grid.zip'
                 t: 'DEM-eu_15s_merged.adf'
-                l: 'DEM-HydroShed_v1_15s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1121,10 +1281,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 12.0
                 n: 62.0
@@ -1140,14 +1300,18 @@ products:
                 w: 20160
                 h: 12000
             na:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
               fname:
                 r: 'na_dem_15s_grid.zip'
                 t: 'DEM-na_15s_merged.adf'
-                l: 'DEM-HydroShed_v1_15s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1156,10 +1320,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 24.0
                 n: 60.0
@@ -1175,14 +1339,18 @@ products:
                 w: 20640
                 h: 8640
             sa:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
               fname:
                 r: 'sa_dem_15s_grid.zip'
                 t: 'DEM-sa_15s_merged.adf'
-                l: 'DEM-HydroShed_v1_15s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1191,10 +1359,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -56.0
                 n: 15.0
@@ -1215,14 +1383,18 @@ products:
           freq: null
           variables:
             af:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
               fname:
                 r: 'af_dem_30s_bil.zip'
                 t: 'DEM-af_30s_merged.adf'
-                l: 'DEM-HydroShed_v1_30s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'EHdr'
@@ -1231,10 +1403,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -35.0
                 n: 38.0
@@ -1250,14 +1422,18 @@ products:
                 w: 8880
                 h: 8760
             as:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
               fname:
                 r: 'as_dem_30s_bil.zip'
                 t: 'DEM-as_30s_merged.adf'
-                l: 'DEM-HydroShed_v1_30s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'EHdr'
@@ -1266,10 +1442,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -12.0
                 n: 61.0
@@ -1285,14 +1461,18 @@ products:
                 w: 14760
                 h: 8760
             au:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
               fname:
                 r: 'au_dem_30s_bil.zip'
                 t: 'DEM-au_30s_merged.adf'
-                l: 'DEM-HydroShed_v1_30s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'EHdr'
@@ -1301,10 +1481,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -56.0
                 n: -10.0
@@ -1320,14 +1500,18 @@ products:
                 w: 8160
                 h: 5520
             ca:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
               fname:
                 r: 'ca_dem_30s_bil.zip'
                 t: 'DEM-ca_30s_merged.adf'
-                l: 'DEM-HydroShed_v1_30s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'EHdr'
@@ -1336,10 +1520,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 5.0
                 n: 39.0
@@ -1355,14 +1539,18 @@ products:
                 w: 7080
                 h: 4080
             eu:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
               fname:
                 r: 'eu_dem_30s_bil.zip'
                 t: 'DEM-eu_30s_merged.adf'
-                l: 'DEM-HydroShed_v1_30s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'EHdr'
@@ -1371,10 +1559,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 12.0
                 n: 62.0
@@ -1390,14 +1578,18 @@ products:
                 w: 10080
                 h: 6000
             na:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
               fname:
                 r: 'na_dem_30s_bil.zip'
                 t: 'DEM-na_30s_merged.adf'
-                l: 'DEM-HydroShed_v1_30s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'EHdr'
@@ -1406,10 +1598,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 24.0
                 n: 60.0
@@ -1425,14 +1617,18 @@ products:
                 w: 10320
                 h: 4320
             sa:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
               fname:
                 r: 'sa_dem_30s_bil.zip'
                 t: 'DEM-sa_30s_merged.adf'
-                l: 'DEM-HydroShed_v1_30s.tif'
+                l: 'DEM_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'EHdr'
@@ -1441,10 +1637,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -56.0
                 n: 15.0
@@ -1459,21 +1655,25 @@ products:
               dem:
                 w: 7320
                 h: 8520
-      DIR:
+      drainage_direction_model:
         3s:
           url: 'https://edcintl.cr.usgs.gov'
           method: 'get'
           freq: null
           variables:
             af:
+              variable: null
               name: 'HydroSHEDS Drainage Directions'
               description:
                 ''
+              dfmt: null
+              rfmt: 'latlon'
+              tfmt: 'latlon'
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/AF/'
               fname:
                 r: '{lat}{lon}_dir_grid.zip'
                 t: 'DIR-af_3s_merged_{lat}{lon}.adf'
-                l: 'DIR-HydroShed_v1_3s.tif'
+                l: 'DIR_v1_3s.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1482,10 +1682,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
+              units:
                 r: null
                 l: null
-                m: 1
+                m: 1.0
               lat:
                 s: -35.0
                 n: 38.0
@@ -1500,14 +1700,18 @@ products:
                 w: 88800
                 h: 87600
             as:
+              variable: null
               name: 'HydroSHEDS Drainage Directions'
               description:
                 ''
+              dfmt: null
+              rfmt: 'latlon'
+              tfmt: 'latlon'
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/AS/'
               fname:
                 r: '{lat}{lon}_dir_grid.zip'
                 t: 'DIR-as_3s_merged_{lat}{lon}.adf'
-                l: 'DIR-HydroShed_v1_3s.tif'
+                l: 'DIR_v1_3s.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1516,10 +1720,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -12.0
                 n: 61.0
@@ -1535,14 +1739,18 @@ products:
                 w: 147600
                 h: 87600
             au:
+              variable: null
               name: 'HydroSHEDS Drainage Directions'
               description:
                 ''
+              dfmt: null
+              rfmt: 'latlon'
+              tfmt: 'latlon'
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/AU/'
               fname:
                 r: '{lat}{lon}_dir_grid.zip'
                 t: 'DIR-au_3s_merged_{lat}{lon}.adf'
-                l: 'DIR-HydroShed_v1_3s.tif'
+                l: 'DIR_v1_3s.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1551,10 +1759,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -56.0
                 n: -10.0
@@ -1570,14 +1778,18 @@ products:
                 w: 81600
                 h: 55200
             ca:
+              variable: null
               name: 'HydroSHEDS Drainage Directions'
               description:
                 ''
+              dfmt: null
+              rfmt: 'latlon'
+              tfmt: 'latlon'
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/CA/'
               fname:
                 r: '{lat}{lon}_dir_grid.zip'
                 t: 'DIR-ca_3s_merged_{lat}{lon}.adf'
-                l: 'DIR-HydroShed_v1_3s.tif'
+                l: 'DIR_v1_3s.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1586,10 +1798,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 5.0
                 n: 39.0
@@ -1605,14 +1817,18 @@ products:
                 w: 70800
                 h: 40800
             eu:
+              variable: null
               name: 'HydroSHEDS Drainage Directions'
               description:
                 ''
+              dfmt: null
+              rfmt: 'latlon'
+              tfmt: 'latlon'
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/EU/'
               fname:
                 r: '{lat}{lon}_dir_grid.zip'
                 t: 'DIR-eu_3s_merged_{lat}{lon}.adf'
-                l: 'DIR-HydroShed_v1_3s.tif'
+                l: 'DIR_v1_3s.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1621,10 +1837,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 12.0
                 n: 62.0
@@ -1640,14 +1856,18 @@ products:
                 w: 100800
                 h: 60000
             na:
+              variable: null
               name: 'HydroSHEDS Drainage Directions'
               description:
                 ''
+              dfmt: null
+              rfmt: 'latlon'
+              tfmt: 'latlon'
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/NA/'
               fname:
                 r: '{lat}{lon}_dir_grid.zip'
                 t: 'DIR-na_3s_merged_{lat}{lon}.adf'
-                l: 'DIR-HydroShed_v1_3s.tif'
+                l: 'DIR_v1_3s.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1656,10 +1876,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 24.0
                 n: 60.0
@@ -1675,14 +1895,18 @@ products:
                 w: 103200
                 h: 43200
             sa:
+              variable: null
               name: 'HydroSHEDS Drainage Directions'
               description:
                 ''
+              dfmt: null
+              rfmt: 'latlon'
+              tfmt: 'latlon'
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/SA/'
               fname:
                 r: '{lat}{lon}_dir_grid.zip'
                 t: 'DIR-sa_3s_merged_{lat}{lon}.adf'
-                l: 'DIR-HydroShed_v1_3s.tif'
+                l: 'DIR_v1_3s.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1691,10 +1915,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -56.0
                 n: 15.0
@@ -1715,14 +1939,18 @@ products:
           freq: null
           variables:
             af:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
               fname:
                 r: 'af_dir_15s_grid.zip'
                 t: 'DIR-af_15s_merged.adf'
-                l: 'DIR-HydroShed_v1_15s.tif'
+                l: 'DIR_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1731,10 +1959,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -35.0
                 n: 38.0
@@ -1750,14 +1978,18 @@ products:
                 w: 17760
                 h: 17520
             as:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
               fname:
                 r: 'as_dir_15s_grid.zip'
                 t: 'DIR-as_15s_merged.adf'
-                l: 'DIR-HydroShed_v1_15s.tif'
+                l: 'DIR_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1766,10 +1998,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -12.0
                 n: 61.0
@@ -1785,14 +2017,18 @@ products:
                 w: 29520
                 h: 17520
             au:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
               fname:
                 r: 'au_dir_15s_grid.zip'
                 t: 'DIR-au_15s_merged.adf'
-                l: 'DIR-HydroShed_v1_15s.tif'
+                l: 'DIR_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1801,10 +2037,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -56.0
                 n: -10.0
@@ -1820,14 +2056,18 @@ products:
                 w: 16320
                 h: 11040
             ca:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
               fname:
                 r: 'ca_dir_15s_grid.zip'
                 t: 'DIR-ca_15s_merged.adf'
-                l: 'DIR-HydroShed_v1_15s.tif'
+                l: 'DIR_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1836,10 +2076,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 5.0
                 n: 39.0
@@ -1855,14 +2095,18 @@ products:
                 w: 14160
                 h: 8160
             eu:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
               fname:
                 r: 'eu_dir_15s_grid.zip'
                 t: 'DIR-eu_15s_merged.adf'
-                l: 'DIR-HydroShed_v1_15s.tif'
+                l: 'DIR_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1871,10 +2115,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 12.0
                 n: 62.0
@@ -1890,14 +2134,18 @@ products:
                 w: 20160
                 h: 12000
             na:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
               fname:
                 r: 'na_dir_15s_grid.zip'
                 t: 'DIR-na_15s_merged.adf'
-                l: 'DIR-HydroShed_v1_15s.tif'
+                l: 'DIR_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1906,10 +2154,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 24.0
                 n: 60.0
@@ -1925,14 +2173,18 @@ products:
                 w: 20640
                 h: 8640
             sa:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
               fname:
                 r: 'sa_dir_15s_grid.zip'
                 t: 'DIR-sa_15s_merged.adf'
-                l: 'DIR-HydroShed_v1_15s.tif'
+                l: 'DIR_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'AIG'
@@ -1941,10 +2193,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -56.0
                 n: 15.0
@@ -1965,14 +2217,18 @@ products:
           freq: null
           variables:
             af:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
               fname:
                 r: 'af_dir_30s_bil.zip'
                 t: 'DIR-af_30s_merged.adf'
-                l: 'DIR-HydroShed_v1_30s.tif'
+                l: 'DIR_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'EHdr'
@@ -1981,10 +2237,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -35.0
                 n: 38.0
@@ -2000,14 +2256,18 @@ products:
                 w: 8880
                 h: 8760
             as:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
               fname:
                 r: 'as_dir_30s_bil.zip'
                 t: 'DIR-as_30s_merged.adf'
-                l: 'DIR-HydroShed_v1_30s.tif'
+                l: 'DIR_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'EHdr'
@@ -2016,10 +2276,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -12.0
                 n: 61.0
@@ -2035,14 +2295,18 @@ products:
                 w: 14760
                 h: 8760
             au:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
               fname:
                 r: 'au_dir_30s_bil.zip'
                 t: 'DIR-au_30s_merged.adf'
-                l: 'DIR-HydroShed_v1_30s.tif'
+                l: 'DIR_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'EHdr'
@@ -2051,10 +2315,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -56.0
                 n: -10.0
@@ -2070,14 +2334,18 @@ products:
                 w: 8160
                 h: 5520
             ca:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
               fname:
                 r: 'ca_dir_30s_bil.zip'
                 t: 'DIR-ca_30s_merged.adf'
-                l: 'DIR-HydroShed_v1_30s.tif'
+                l: 'DIR_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'EHdr'
@@ -2086,10 +2354,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 5.0
                 n: 39.0
@@ -2105,14 +2373,18 @@ products:
                 w: 7080
                 h: 4080
             eu:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
               fname:
                 r: 'eu_dir_30s_bil.zip'
                 t: 'DIR-eu_30s_merged.adf'
-                l: 'DIR-HydroShed_v1_30s.tif'
+                l: 'DIR_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'EHdr'
@@ -2121,10 +2393,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 12.0
                 n: 62.0
@@ -2140,14 +2412,18 @@ products:
                 w: 10080
                 h: 6000
             na:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
               fname:
                 r: 'na_dir_30s_bil.zip'
                 t: 'DIR-na_30s_merged.adf'
-                l: 'DIR-HydroShed_v1_30s.tif'
+                l: 'DIR_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'EHdr'
@@ -2156,10 +2432,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: 24.0
                 n: 60.0
@@ -2175,14 +2451,18 @@ products:
                 w: 10320
                 h: 4320
             sa:
+              variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
               fname:
                 r: 'sa_dir_30s_bil.zip'
                 t: 'DIR-sa_30s_merged.adf'
-                l: 'DIR-HydroShed_v1_30s.tif'
+                l: 'DIR_v1_degree.tif'
               ftype:
                 r: 'zip'
                 t: 'EHdr'
@@ -2191,10 +2471,10 @@ products:
                 r: 'binary'
                 t: 'int16'
                 l: 'float32'
-              unit:
-                r: 'm'
-                l: 'm'
-                m: 1
+              units:
+                r: 'degree'
+                l: 'degree'
+                m: 1.0
               lat:
                 s: -56.0
                 n: 15.0
@@ -2226,116 +2506,67 @@ products:
          We operate two services from the EU’s Copernicus Earth observation programme, the
          Copernicus Atmosphere Monitoring Service (CAMS) and the Copernicus Climate Change
          Service (C3S). We also contribute to the Copernicus Emergency Management Service (CEMS).'
-      websites: ['https://www.ecmwf.int/']
-      protocols: ['ECMWF']
-      methods: ['retrieve']
-      ftypes: []
-      versions: []
-      datasets: []
-      datatypes: []
-      projection: ['WGS84']
+      websites:
+        - 'https://www.ecmwf.int/'
+      protocols:
+        - 'ECMWF'
+      methods:
+        - 'api'
+      ftypes:
+        - ''
+      versions:
+        - ''
+      datasets:
+        - ''
+      datatypes:
+        - ''
+      projection:
+        - 'WGS84'
     v1:
 
   ETmonitor:
+    # https://www.mdpi.com/books/pdfview/book/1661
     account: 'FTP_WA'
     meta:
       owner: 'IHE Delft'
       description:
         ''
-      websites: ['https://www.wateraccounting.org']
-      protocols: ['FTP']
-      methods: ['get']
-      ftypes: ['tif']
-      versions: ['v1']
-      datasets: ['Evapotranspiration']
-      datatypes: ['monthly']
-      projection: ['USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected']
+      websites:
+        - 'https://www.wateraccounting.org'
+      protocols:
+        - 'FTP'
+      methods:
+        - 'get'
+      ftypes:
+        - 'tif'
+      versions:
+        - 'v1'
+      datasets:
+        - 'Evapotranspiration'
+      datatypes:
+        - 'monthly'
+      projection:
+        - 'USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected'
     v1:
-      Evapotranspiration:
+      evapotranspiration:
         monthly:
           url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
           method: 'get'
           freq: 'MS'
           variables:
-            Ei:
-              name: 'Monthly Evaporation'
-              description:
-                ''
-              dir: '/WaterAccounting/Data_Satellite/Evaporation/ETmonitor/Global/'
-              fname:
-                r: 'Ei_ETmonitor_mm-month_{Y:>04s}_{m:>02s}_{d:>02s}.tif'
-                t: null
-                l: 'Ei-ETmonitor_v1_mmpd_monthly-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
-              ftype:
-                r: 'GTiff'
-                t: null
-                l: 'GTiff'
-              dtype:
-                r: 'float32'
-                t: null
-                l: 'float32'
-              unit:
-                r: 'mm/d'
-                l: 'mm/d'
-                m: 1
-              lat:
-                s: -6671700.0
-                n: 10007550.0
-                r: 926.625
-              lon:
-                w: -12231450.0
-                e: 16679250.0
-                r: 926.625
-              time:
-                s: 2008-01-01
-                e: 2013-12-31
-              dem:
-                w: 31200
-                h: 18000
-            Es:
-              name: 'Monthly Evaporation'
-              description:
-                ''
-              dir: '/WaterAccounting/Data_Satellite/Evaporation/ETmonitor/Global/'
-              fname:
-                r: 'Es_ETmonitor_mm-month_{Y:>04s}_{m:>02s}_{d:>02s}.tif'
-                t: null
-                l: 'Es-ETmonitor_v1_mmpd_monthly-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
-              ftype:
-                r: 'GTiff'
-                t: null
-                l: 'GTiff'
-              dtype:
-                r: 'float32'
-                t: null
-                l: 'float32'
-              unit:
-                r: 'mm/d'
-                l: 'mm/d'
-                m: 1
-              lat:
-                s: -6671700.0
-                n: 10007550.0
-                r: 926.625
-              lon:
-                w: -12231450.0
-                e: 16679250.0
-                r: 926.625
-              time:
-                s: 2008-01-01
-                e: 2013-12-31
-              dem:
-                w: 31200
-                h: 18000
-            ETa:
+            ETA:
+              variable: null
               name: 'Monthly Actual Evaporation'
               description:
                 ''
+              dfmt: null
+              rfmt: 'dtime'
+              tfmt: null
               dir: '/WaterAccounting/Data_Satellite/Evaporation/ETmonitor/Global/'
               fname:
-                r: 'ET_ETmonitor_mm-month_{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                r: 'ET_ETmonitor_mm-month_{dtime:%Y_%m_%d}.tif'
                 t: null
-                l: 'ETa-ETmonitor_v1_mmpd_monthly-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
               ftype:
                 r: 'GTiff'
                 t: null
@@ -2344,10 +2575,10 @@ products:
                 r: 'float32'
                 t: null
                 l: 'float32'
-              unit:
-                r: 'mm/d'
-                l: 'mm/d'
-                m: 1
+              units:
+                r: 'mm'
+                l: 'mm'
+                m: 1.0
               lat:
                 s: -6671700.0
                 n: 10007550.0
@@ -2362,15 +2593,19 @@ products:
               dem:
                 w: 31200
                 h: 18000
-            ETp:
+            ETP:
+              variable: null
               name: 'Monthly Potential Evapotranspiration'
               description:
                 ''
+              dfmt: null
+              rfmt: 'dtime'
+              tfmt: null
               dir: '/WaterAccounting/Data_Satellite/Evaporation/ETmonitor/Potential_Evapotranspiration/'
               fname:
-                r: 'ETpot_ETmonitor_mm-month_{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                r: 'ETpot_ETmonitor_mm-month_{dtime:%Y_%m_%d}.tif'
                 t: null
-                l: 'ETp-ETmonitor_v1_mmpd_monthly-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
               ftype:
                 r: 'GTiff'
                 t: null
@@ -2379,10 +2614,10 @@ products:
                 r: 'float32'
                 t: null
                 l: 'float32'
-              unit:
-                r: 'mm/d'
-                l: 'mm/d'
-                m: 1
+              units:
+                r: 'mm'
+                l: 'mm'
+                m: 1.0
               lat:
                 s: -6671700.0
                 n: 10007550.0
@@ -2397,15 +2632,19 @@ products:
               dem:
                 w: 31200
                 h: 18000
-            Ew:
-              name: 'Monthly Evaporation'
+            EW:
+              variable: null
+              name: 'Monthly Water Evaporation'
               description:
                 ''
+              dfmt: null
+              rfmt: 'dtime'
+              tfmt: null
               dir: '/WaterAccounting/Data_Satellite/Evaporation/ETmonitor/Global/'
               fname:
-                r: 'Ew_ETmonitor_mm-month_{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                r: 'Ew_ETmonitor_mm-month_{dtime:%Y_%m_%d}.tif'
                 t: null
-                l: 'Ew-ETmonitor_v1_mmpd_monthly-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
               ftype:
                 r: 'GTiff'
                 t: null
@@ -2414,10 +2653,10 @@ products:
                 r: 'float32'
                 t: null
                 l: 'float32'
-              unit:
-                r: 'mm/d'
-                l: 'mm/d'
-                m: 1
+              units:
+                r: 'mm'
+                l: 'mm'
+                m: 1.0
               lat:
                 s: -6671700.0
                 n: 10007550.0
@@ -2432,15 +2671,97 @@ products:
               dem:
                 w: 31200
                 h: 18000
-            Tr:
+            ES:
+              variable: null
+              name: 'Monthly Soil Evaporation'
+              description:
+                ''
+              dfmt: null
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/WaterAccounting/Data_Satellite/Evaporation/ETmonitor/Global/'
+              fname:
+                r: 'Es_ETmonitor_mm-month_{dtime:%Y_%m_%d}.tif'
+                t: null
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'mm'
+                l: 'mm'
+                m: 1.0
+              lat:
+                s: -6671700.0
+                n: 10007550.0
+                r: 926.625
+              lon:
+                w: -12231450.0
+                e: 16679250.0
+                r: 926.625
+              time:
+                s: 2008-01-01
+                e: 2013-12-31
+              dem:
+                w: 31200
+                h: 18000
+            EI:
+              variable: null
+              name: 'Monthly Canopy Rainfall Interceptioin Loss'
+              description:
+                ''
+              dfmt: null
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/WaterAccounting/Data_Satellite/Evaporation/ETmonitor/Global/'
+              fname:
+                r: 'Ei_ETmonitor_mm-month_{dtime:%Y_%m_%d}.tif'
+                t: null
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'mm'
+                l: 'mm'
+                m: 1.0
+              lat:
+                s: -6671700.0
+                n: 10007550.0
+                r: 926.625
+              lon:
+                w: -12231450.0
+                e: 16679250.0
+                r: 926.625
+              time:
+                s: 2008-01-01
+                e: 2013-12-31
+              dem:
+                w: 31200
+                h: 18000
+            T:
+              variable: null
               name: 'Monthly Transpiration'
               description:
                 ''
+              dfmt: null
+              rfmt: 'dtime'
+              tfmt: null
               dir: '/WaterAccounting/Data_Satellite/Evaporation/ETmonitor/Global/'
               fname:
-                r: 'Tr_ETmonitor_mm-month_{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                r: 'Tr_ETmonitor_mm-month_{dtime:%Y_%m_%d}.tif'
                 t: null
-                l: 'Tr-ETmonitor_v1_mmpd_monthly-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
               ftype:
                 r: 'GTiff'
                 t: null
@@ -2449,10 +2770,10 @@ products:
                 r: 'float32'
                 t: null
                 l: 'float32'
-              unit:
-                r: 'mm/d'
-                l: 'mm/d'
-                m: 1
+              units:
+                r: 'mm'
+                l: 'mm'
+                m: 1.0
               lat:
                 s: -6671700.0
                 n: 10007550.0
@@ -2478,50 +2799,62 @@ products:
          throughout the world. This portal is provided by the USGS FEWS NET Project, part of
          the Early Warning Focus Area at the USGS Earth Resources Observation and Science
          (EROS) Center.'
-      websites: ['https://earlywarning.usgs.gov/fews']
-      protocols: ['HTTPS']
-      methods: ['get']
-      ftypes: ['gz']
-      versions: ['v4']
-      datasets: ['Evaporation']
-      datatypes: ['daily']
-      projection: ['EPSG:4326 - WGS 84 - Geographic']
+      websites:
+        - 'https://earlywarning.usgs.gov/fews'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'get'
+      ftypes:
+        - 'gz'
+      versions:
+        - 'v4'
+      datasets:
+        - 'Evapotranspiration'
+      datatypes:
+        - 'daily'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
     v4:
-      Evaporation:
+      evapotranspiration:
         daily:
           url: 'https://edcintl.cr.usgs.gov'
           method: 'get'
           freq: 'D'
           variables:
-            ETp:
+            ETP:
+              variable: null
               name: 'Daily Potential Evaporation'
               description:
                 ''
+              dfmt: null
+              rfmt: 'dtime'
+              tfmt: 'dtime'
               dir: '/downloads/sciweb1/shared/fews/web/global/daily/pet/downloads/daily/'
               fname:
-                r: 'et{Y:>02s}{m:>02s}{d:>02s}.tar.gz'
-                t: null
-                l: 'ETp-FEWS_v4_mmpd_daily-{Y:>04s}_{m:>02s}_{d:>02s}.tif'
+                r: 'et{dtime:%y%m%d}.tar.gz'
+                t: 'et{dtime:%y%m%d}.bil'
+                l: 'FEWS_v4_mm_D-{dtime:%Y%m%d}.tif'
               ftype:
-                r: 'EHdr'
-                t: null
+                r: 'gz'
+                t: 'EHdr'
                 l: 'GTiff'
               dtype:
-                r: 'uint16'
-                t: null
+                r: 'binary'
+                t: 'uint16'
                 l: 'float32'
-              unit:
-                r: 'mm/d'
-                l: 'mm/d'
-                m: 1
+              units:
+                r: 'mm'
+                l: 'mm'
+                m: 1.0
               lat:
                 s: -90.5
                 n: 90.5
-                r: 1
+                r: 1.0
               lon:
                 w: -180.5
                 e: 179.5
-                r: 1
+                r: 1.0
               time:
                 s: 2001-01-01
                 e: null
@@ -2530,4 +2863,369 @@ products:
                 h: 181
 
   GLDAS:
-    account: ''
+    account: 'NASA'
+    meta:
+      owner: 'National Aeronautics and Space Administration'
+      description:
+        'The goal of the Global Land Data Assimilation System (GLDAS) is to ingest satellite-
+         and ground-based observational data products, using advanced land surface modeling and
+         data assimilation techniques, in order to generate optimal fields of land surface states
+         and fluxes (Rodell et al., 2004a). The software, which has been streamlined and
+         parallelized by the Land Information System (LIS) sister project, drives multiple,
+         offline (not coupled to the atmosphere) land surface models, integrates a huge quantity
+         of observation based data, executes globally at high resolutions (2.5-degrees to 1 km),
+         and is capable of producing results in near-real time.'
+      websites:
+        - 'https://ldas.gsfc.nasa.gov/gldas'
+        - 'https://disc.gsfc.nasa.gov/datasets/GLDAS_NOAH025_3H_2.1/summary?keywords=GLDAS'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'get'
+      ftypes:
+        - 'NetCDF'
+      versions:
+        - 'v2.1'
+      datasets:
+        - 'Evapotranspiration'
+      datatypes:
+        - 'three_hourly'
+        - 'monthly'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
+    v2.1:
+      evapotranspiration:
+        three_hourly:
+          url: 'https://hydro1.gesdisc.eosdis.nasa.gov'
+          method: 'get'
+          freq: '3H'
+          variables:
+            E:
+              variable: 'Evap_tavg'
+              name: 'Three Hourly Evaporation'
+              description:
+                ''
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/data/GLDAS/GLDAS_NOAH025_3H.2.1/{dtime:%Y/%j}/'
+              fname:
+                r: 'GLDAS_NOAH025_3H.A{dtime:%y%m%d.%H%M}.021.nc4'
+                t: null
+                l: 'GLDAS_v2.1_mm_3H-{dtime:%Y%m%d_%H%M}.tif'
+              ftype:
+                r: 'NetCDF'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'kg.m2.s'
+                l: 'mm'
+                m: 86400.0
+              lat:
+                s: -60.0
+                n: 90.0
+                r: 0.25
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.25
+              time:
+                s: 2000-01-01
+                e: null
+              dem:
+                w: 1440
+                h: 600
+        monthly:
+          url: 'https://hydro1.gesdisc.eosdis.nasa.gov'
+          method: 'get'
+          freq: 'MS'
+          variables:
+            E:
+              variable: 'Evap_tavg'
+              name: 'Monthly Evaporation'
+              description:
+                ''
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/data/GLDAS/GLDAS_NOAH025_M.2.1/{dtime:%Y}/'
+              fname:
+                r: 'GLDAS_NOAH025_M.A{dtime:%y%m}.021.nc4'
+                t: null
+                l: 'GLDAS_v2.1_mm_MS-{dtime:%Y%m}.tif'
+              ftype:
+                r: 'NetCDF'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'kg.m2.s'
+                l: 'mm'
+                m: 86400.0
+              lat:
+                s: -60.0
+                n: 90.0
+                r: 0.25
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.25
+              time:
+                s: 2000-01-01
+                e: null
+              dem:
+                w: 1440
+                h: 600
+
+  GLEAM:
+    account: 'GLEAM'
+    meta:
+      owner: 'ESA, Universiteit Gent'
+      description:
+        'GLEAM (Global Land Evaporation Amsterdam Model) is a set of algorithms that separately
+         estimate the different components of land evaporation (or evapotranspiration):
+         transpiration, bare-soil evaporation, interception loss, open-water evaporation and
+         sublimation. Additionally, GLEAM provides surface and root-zone soil moisture, potential
+         evaporation and evaporative stress conditions.'
+      websites:
+        - 'http://www.gleam.eu'
+      protocols:
+        - 'SFTP'
+      methods:
+        - 'get'
+      ftypes:
+        - 'NetCDF'
+      versions:
+        - 'v3.3a'
+        - 'v3.3b'
+      datasets:
+        - 'Evapotranspiration'
+      datatypes:
+        - 'daily'
+        - 'monthly'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
+    v3.3a:
+      evapotranspiration:
+        daily:
+          url: 'hydras.ugent.be:2225'
+          method: 'get'
+          freq: 'D'
+          variables:
+            ET:
+              variable: 'Et'
+              name: 'Daily Evapotranspiration'
+              description:
+                ''
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/data/v3.3a/daily/{dtime:%Y}/'
+              fname:
+                r: 'Et_{dtime:%Y}_GLEAM_v3.3a.nc'
+                t: null
+                l: 'GLEAM_v3.3a_mm_D-{dtime:%Y%m%d}.tif'
+              ftype:
+                r: 'NetCDF'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'mm.d'
+                l: 'mm.d'
+                m: 1.0
+              lat:
+                s: -89.875
+                n: 89.875
+                r: 0.25
+              lon:
+                w: -179.875
+                e: 179.875
+                r: 0.25
+              time:
+                s: 1980-01-01
+                e: 2018-12-31
+              dem:
+                w: 1440
+                h: 720
+        monthly:
+          url: 'hydras.ugent.be:2225'
+          method: 'get'
+          freq: 'MS'
+          variables:
+            ET:
+              variable: 'Et'
+              name: 'Monthly Evapotranspiration'
+              description:
+                ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
+              dir: '/data/v3.3a/monthly/'
+              fname:
+                r: 'Et_1980_2018_GLEAM_v3.3a_MO.nc'
+                t: null
+                l: 'GLEAM_v3.3a_mm_D-{dtime:%Y%m}.tif'
+              ftype:
+                r: 'NetCDF'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'mm.d'
+                l: 'mm.d'
+                m: 1.0
+              lat:
+                s: -89.875
+                n: 89.875
+                r: 0.25
+              lon:
+                w: -179.875
+                e: 179.875
+                r: 0.25
+              time:
+                s: 1980-01-01
+                e: 2018-12-31
+              dem:
+                w: 1440
+                h: 720
+    v3.3b:
+      evapotranspiration:
+        daily:
+          url: 'hydras.ugent.be:2225'
+          method: 'get'
+          freq: 'D'
+          variables:
+            ET:
+              name: 'Daily Evapotranspiration'
+              description:
+                ''
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/data/v3.3b/daily/{dtime:%Y}/'
+              fname:
+                r: 'Et_{dtime:%Y}_GLEAM_v3.3b.nc'
+                t: null
+                l: 'GLEAM_v3.3b_mm.d_D-{dtime:%Y%m%d}.tif'
+              ftype:
+                r: 'NetCDF'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'mm.d'
+                l: 'mm.d'
+                m: 1.0
+              lat:
+                s: -89.875
+                n: 89.875
+                r: 0.25
+              lon:
+                w: -179.875
+                e: 179.875
+                r: 0.25
+              time:
+                s: 2003-01-01
+                e: 2018-12-31
+              dem:
+                w: 1440
+                h: 720
+        monthly:
+          url: 'hydras.ugent.be:2225'
+          method: 'get'
+          freq: 'MS'
+          variables:
+            ET:
+              variable: 'Et'
+              name: 'Monthly Evapotranspiration'
+              description:
+                ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
+              dir: '/data/v3.3b/monthly/'
+              fname:
+                r: 'Et_2003_2018_GLEAM_v3.3b_MO.nc'
+                t: null
+                l: 'GLEAM_v3.3b_mm_D-{dtime:%Y%m}.tif'
+              ftype:
+                r: 'NetCDF'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'mm.d'
+                l: 'mm.d'
+                m: 1.0
+              lat:
+                s: -89.875
+                n: 89.875
+                r: 0.25
+              lon:
+                w: -179.875
+                e: 179.875
+                r: 0.25
+              time:
+                s: 2003-01-01
+                e: 2018-12-31
+              dem:
+                w: 1440
+                h: 720
+
+  GPM:
+    account: 'NASA'
+    meta:
+      owner: 'National Aeronautics and Space Administration'
+      description:
+        'The Global Precipitation Measurement (GPM) mission is an international network of satellites
+         that provide the next-generation global observations of rain and snow. Building upon the
+         success of the Tropical Rainfall Measuring Mission (TRMM), the GPM concept centers on the
+         deployment of a “Core” satellite carrying an advanced radar / radiometer system to measure
+         precipitation from space and serve as a reference standard to unify precipitation measurements
+         from a constellation of research and operational satellites. Through improved measurements of
+         precipitation globally, the GPM mission is helping to advance our understanding of Earth''\''s
+         water and energy cycle, improve forecasting of extreme events that cause natural hazards and
+         disasters, and extend current capabilities in using accurate and timely information of
+         precipitation to directly benefit society. GPM, initiated by NASA and the Japan Aerospace
+         Exploration Agency (JAXA) as a global successor to TRMM, comprises a consortium of international
+         space agencies, including the Centre National d’Études Spatiales (CNES), the Indian Space
+         Research Organization (ISRO), the National Oceanic and Atmospheric Administration (NOAA),
+         the European Organization for the Exploitation of Meteorological Satellites (EUMETSAT), and others.'
+      websites:
+        - 'https://pmm.gsfc.nasa.gov/GPM'
+        - 'https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDF_06/summary?keywords=GPM'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'get'
+      ftypes:
+        - 'NetCDF'
+      versions:
+        - 'v2.1'
+      datasets:
+        - 'Evapotranspiration'
+      datatypes:
+        - 'three_hourly'
+        - 'monthly'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'

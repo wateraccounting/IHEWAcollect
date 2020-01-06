@@ -32,19 +32,19 @@ import numpy as np
 import pandas as pd
 
 try:
-    from .exception import \
+    from .base.exception import \
         IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 except ImportError:
     from src.IHEWAcollect.base.exception \
         import IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 
 try:
-    from .accounts import Accounts
+    from .base.accounts import Accounts
 except ImportError:
     from src.IHEWAcollect.base.accounts import Accounts
 
 try:
-    from .gis import GIS
+    from .base.gis import GIS
 except ImportError:
     from src.IHEWAcollect.base.gis import GIS
 
@@ -381,21 +381,14 @@ def main():
         os.path.dirname(
             inspect.getfile(
                 inspect.currentframe())),
-        '../', '../', '../'
+        '../', '../',
     )
-    # download = Download(path,
-    #                     product='ALEXI',
-    #                     version='v1',
-    #                     parameter='Evaporation',
-    #                     resolution='daily',
-    #                     variable='ETa',
-    #                     is_status=False)
-    download = Download(path,
+    download = Download(workspace=path,
                         product='ALEXI',
                         version='v1',
-                        parameter='Evaporation',
+                        parameter='evapotranspiration',
                         resolution='daily',
-                        variable='ETa',
+                        variable='ETA',
                         is_status=False)
     # 'Copernicus', is_status=False)
 
@@ -420,8 +413,8 @@ def main():
 
     # Download attributes
     print('\ndownload._Download__conf()\n=====')
-    pprint(download._Download__conf.keys())
-    # pprint(download._Download__conf)
+    # pprint(download._Download__conf.keys())
+    pprint(download._Download__conf)
 
     # Download methods
     print('\ndownload.get_status()\n=====')

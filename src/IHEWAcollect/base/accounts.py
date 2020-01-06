@@ -406,7 +406,7 @@ class Accounts(Base):
             ...
             KeyError:
         """
-        fun_name =inspect.currentframe().f_code.co_name
+        fun_name = inspect.currentframe().f_code.co_name
         if key in self.__conf:
             self.__stcode = 0
         else:

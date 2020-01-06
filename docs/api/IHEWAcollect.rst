@@ -60,6 +60,22 @@ IHEWAcollect.DEM module
    :undoc-members:
    :show-inheritance:
 
+IHEWAcollect.ECMWF module
+-------------------------
+
+.. automodule:: IHEWAcollect.ECMWF
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IHEWAcollect.download module
+----------------------------
+
+.. automodule:: IHEWAcollect.download
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 IHEWAcollect.skeleton module
 ----------------------------
 

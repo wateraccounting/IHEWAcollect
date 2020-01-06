@@ -20,14 +20,6 @@ IHEWAcollect.base.base module
    :undoc-members:
    :show-inheritance:
 
-IHEWAcollect.base.download module
----------------------------------
-
-.. automodule:: IHEWAcollect.base.download
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 IHEWAcollect.base.exception module
 ----------------------------------
 

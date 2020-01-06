@@ -112,7 +112,7 @@ class Base(object):
 
         This function open collect.cfg configuration file.
         """
-        fun_name =inspect.currentframe().f_code.co_name
+        fun_name = inspect.currentframe().f_code.co_name
         f_in = os.path.join(self.__conf['path'],
                             self.__conf['file'])
 
@@ -285,7 +285,9 @@ def main():
     base = Base(is_status=True)
 
     # Base attributes
+    key = 'GLDAS'
     print(base._Base__conf['data']['products'].keys())
+    print(key, base._Base__conf['data']['products'][key])
     # pprint(base._Base__conf)
 
     # # Base methods

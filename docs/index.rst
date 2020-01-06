@@ -4,6 +4,7 @@ IHEWAcollect
 
 This is the documentation of **IHEWAcollect**.
 
+
 Products
 ========
 
@@ -31,6 +32,12 @@ Products
 |            |    :height: 40pt                |                                     |
 +------------+---------------------------------+-------------------------------------+
 | FEWS       | .. image:: ./img/FEWS.png       | https://earlywarning.usgs.gov/fews  |
+|            |    :height: 40pt                |                                     |
++------------+---------------------------------+-------------------------------------+
+| GLDAS      | .. image:: ./img/GLDAS.png      | https://ldas.gsfc.nasa.gov/gldas    |
+|            |    :height: 40pt                |                                     |
++------------+---------------------------------+-------------------------------------+
+| GLEAM      | .. image:: ./img/GLEAM.png      | http://www.gleam.eu                 |
 |            |    :height: 40pt                |                                     |
 +------------+---------------------------------+-------------------------------------+
 
@@ -84,6 +91,17 @@ PyPI upload, run ``setup.py``::
 .. warning::
 
     Must contain **accounts.yml-credential** and **accounts.yml-encrypted** file.
+
+
+Code of Conduct
+===============
+
+  - Be friendly and patient
+  - Be welcoming
+  - Be considerate
+  - Be respectful
+  - Be careful in the words that you choose
+  - When we disagree, try to understand why
 
 
 Contents
