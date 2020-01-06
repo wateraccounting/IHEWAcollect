@@ -3390,3 +3390,29 @@ products:
               dem:
                 w: 43200
                 h: 21600
+
+  JRC:
+    account: 'FTP_WA'
+    meta:
+      owner: 'IHE Delft'
+      description:
+        ''
+      websites:
+        - 'https://www.wateraccounting.org'
+      protocols:
+        - 'FTP'
+      methods:
+        - 'get'
+      ftypes:
+        - 'gz'
+        - 'GTiff'
+      versions:
+        - 'v1'
+      datasets:
+        - 'Water'
+      datatypes:
+        - 'daily'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
+    v1:
+      water:
