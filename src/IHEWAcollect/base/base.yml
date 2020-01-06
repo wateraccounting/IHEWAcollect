@@ -3320,3 +3320,73 @@ products:
               dem:
                 w: 3600
                 h: 1800
+
+  HiHydroSoil:
+    account: 'FTP_WA'
+    meta:
+      owner: 'IHE Delft'
+      description:
+        ''
+      websites:
+        - 'https://www.wateraccounting.org'
+        - 'https://www.futurewater.eu/2015/07/soil-hydraulic-properties/'
+      protocols:
+        - 'FTP'
+      methods:
+        - 'get'
+      ftypes:
+        - 'GTiff'
+      versions:
+        - 'v1'
+      datasets:
+        - 'Soil'
+      datatypes:
+        - '30s'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
+    v1:
+      soil:
+        30s:
+          url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
+          method: 'get'
+          freq: null
+          variables:
+            wcsat_topsoil:
+              variable: null
+              name: 'HiHydroSoil'
+              description:
+                ''
+              dfmt: null
+              rfmt: null
+              tfmt: null
+              dir: '/WaterAccounting/Data_GIS/Soil_Characteristics/World/HiHydroSoil_FutureWater/'
+              fname:
+                r: 'BDRICM_depth_to_bedrock.tif'
+                t: null
+                l: 'HiHydroSoil_v1_index.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t: null
+                l: 'uint8'
+              units:
+                r: '.'
+                l: '.'
+                m: 1.0
+              lat:
+                s: -90.0
+                n: 90.0
+                r: 0.008333333333333300258
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.008333333333333300258
+              time:
+                s: null
+                e: null
+              dem:
+                w: 43200
+                h: 21600
