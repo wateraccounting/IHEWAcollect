@@ -49,7 +49,10 @@ Products
 | JRC        | .. image:: ./img/JRC.png        | https://global-surface-water.appspot.com     |
 |            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+
-| MCD43      | .. image:: ./img/MCD43.png      | https://lpdaac.usgs.gov/products/mcd43a3v006 |
+| MCD43A3    | .. image:: ./img/MCD43A3.png    | https://lpdaac.usgs.gov/products/mcd43a3v006 |
+|            |    :height: 40pt                |                                              |
++------------+---------------------------------+----------------------------------------------+
+| MOD09GQ    | .. image:: ./img/MOD09GQ.png    | https://lpdaac.usgs.gov/products/mod09gqv006 |
 |            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+
 

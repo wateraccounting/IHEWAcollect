@@ -3466,7 +3466,7 @@ products:
                 w: 1440000
                 h: 560000
 
-  MCD43:
+  MCD43A3:
     # soup = BeautifulSoup(f, "lxml")
     # for i in soup.findAll('a', attrs = {'href': re.compile('(?i)(hdf)$')}):
     #     y = requests.get(x.headers['location'], auth = (username, password))
@@ -3515,9 +3515,9 @@ products:
               tfmt: null
               dir: '/MOTA/MCD43A3.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MCD43A3.A{dtime:%Y%j}'
+                r: 'MCD43A3.A{dtime:%Y%j}.{latlon}.006.*.hdf'
                 t: null
-                l: 'GPM_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MCD43A3_v6_._D-{dtime:%Y%m%d}.tif'
               ftype:
                 r: 'NetCDF.MOD_Grid_BRDF.Data_Fields'
                 t: null
@@ -3540,7 +3540,83 @@ products:
                 r: 463.3127165279165069
               time:
                 s: 2000-02-24
-                e: 2019-12-29
+                e: null
+              dem:
+                w: 86400
+                h: 43200
+
+  MOD09GQ:
+    account: 'NASA'
+    meta:
+      owner: 'National Aeronautics and Space Administration'
+      description:
+        'The MOD09GQ Version 6 product provides an estimate of the surface spectral reflectance of
+         Terra Moderate Resolution Imaging Spectroradiometer (MODIS) 250 meter (m) bands 1 and 2,
+         corrected for atmospheric conditions such as gasses, aerosols, and Rayleigh scattering.
+         Along with the 250 m surface reflectance bands are the Quality Assurance (QA) layer and
+         five observation layers. This product is intended to be used in conjunction with the quality
+         and viewing geometry information of the 500 m product (MOD09GA).'
+      websites:
+        - 'https://lpdaac.usgs.gov/products/mod09gqv006'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'crawl.get'
+      ftypes:
+        - 'HDF'
+      versions:
+        - 'v6'
+      datasets:
+        - 'Vegetation'
+      resolutions:
+        - 'daily'
+      projection:
+        - 'USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected'
+    v6:
+      vegetation:
+        daily:
+          url: 'https://e4ftl01.cr.usgs.gov'
+          method: 'get'
+          freq: 'D'
+          variables:
+            NDVI:
+              variable:
+                - 'sur_refl_b01_1'
+                - 'sur_refl_b02_1'
+              name: 'Daily NDVI'
+              description:
+                ''
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/MOLT/MOD09GQ.006/{dtime:%Y.%m.%d}/'
+              fname:
+                r: 'MOD09GQ.A{dtime:%Y%j}.{latlon}.006.*.hdf'
+                t: null
+                l: 'MOD09GQ_v6_._D-{dtime:%Y%m%d}.tif'
+              ftype:
+                r: 'NetCDF.MODIS_Grid.Data_Fields'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t: null
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 1.0
+              lat:
+                s: -10007554.677
+                n: 10007554.677
+                r: 463.3127165274999015
+              lon:
+                w: -20015109.354
+                e: 20015109.354
+                r: 463.3127165279165069
+              time:
+                s: 2000-02-24
+                e: null
               dem:
                 w: 86400
                 h: 43200
