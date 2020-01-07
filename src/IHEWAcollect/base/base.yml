@@ -3324,9 +3324,12 @@ products:
   HiHydroSoil:
     account: 'FTP_WA'
     meta:
-      owner: 'IHE Delft'
+      owner: 'FutureWater'
       description:
-        ''
+        'FutureWater has developed global maps of soil hydraulic properties to support hydrological
+         modelling. The maps, at a resolution of 1 km world-wide, are now available. The maps are
+         produced by combining the best soil information at global scale and most up-to-date
+         pedo-transfer functions currently available.'
       websites:
         - 'https://www.wateraccounting.org'
         - 'https://www.futurewater.eu/2015/07/soil-hydraulic-properties/'
@@ -3353,7 +3356,7 @@ products:
           variables:
             wcsat_topsoil:
               variable: null
-              name: 'HiHydroSoil'
+              name: 'Theta Saturated Topsoil'
               description:
                 ''
               dfmt: null
@@ -3392,27 +3395,72 @@ products:
                 h: 21600
 
   JRC:
-    account: 'FTP_WA'
+    account: null
     meta:
-      owner: 'IHE Delft'
+      owner: 'European Commission\''s Joint Research Centre'
       description:
-        ''
+        'A virtual time machine that maps the location and temporal distribution of water surfaces
+         at the global scale over the past 3.5 decades, and provides statistics on their extent and
+         change to support better informed water-management decision-making.'
       websites:
-        - 'https://www.wateraccounting.org'
+        - 'https://global-surface-water.appspot.com/'
       protocols:
-        - 'FTP'
+        - 'HTTPS'
       methods:
         - 'get'
       ftypes:
-        - 'gz'
         - 'GTiff'
       versions:
         - 'v1'
       datasets:
         - 'Water'
       datatypes:
-        - 'daily'
+        - '1s'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
     v1:
       water:
+        1s:
+          url: 'https://storage.googleapis.com'
+          method: 'get'
+          freq: null
+          variables:
+            occurrence:
+              variable: null
+              name: 'Water Occureence'
+              description:
+                ''
+              dfmt: null
+              rfmt: 'latlon'
+              tfmt: null
+              dir: '/global-surface-water/downloads2/occurrence/'
+              fname:
+                r: 'occurrence_{lon}_{lat}_v1_1.tif'
+                t: null
+                l: 'JRC_v1_percent.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t: null
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 1.0
+              lat:
+                s: -60.0
+                n: 80.0
+                r: 0.00025
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.00025
+              time:
+                s: null
+                e: null
+              dem:
+                w: 1440000
+                h: 560000
