@@ -3491,23 +3491,23 @@ products:
       versions:
         - 'v6'
       datasets:
-        - 'Vegetation'
+        - 'Land'
       resolutions:
         - 'daily'
       projection:
         - 'USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected'
     v6:
-      vegetation:
+      land:
         daily:
           url: 'https://e4ftl01.cr.usgs.gov'
           method: 'get'
           freq: 'D'
           variables:
-            NDVI:
+            Albedo:
               variable:
                 - 'Albedo_BSA_shortwave'
                 - 'Albedo_WSA_shortwave'
-              name: 'Daily NDVI'
+              name: 'Daily Albedo'
               description:
                 ''
               dfmt: 'dtime'
@@ -3567,23 +3567,23 @@ products:
       versions:
         - 'v6'
       datasets:
-        - 'Vegetation'
+        - 'Land'
       resolutions:
         - 'daily'
       projection:
         - 'USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected'
     v6:
-      vegetation:
+      land:
         daily:
           url: 'https://e4ftl01.cr.usgs.gov'
           method: 'get'
           freq: 'D'
           variables:
-            NDVI:
+            REF:
               variable:
                 - 'sur_refl_b01_1'
                 - 'sur_refl_b02_1'
-              name: 'Daily NDVI'
+              name: 'Daily Reflectance'
               description:
                 ''
               dfmt: 'dtime'
@@ -3644,25 +3644,25 @@ products:
       versions:
         - 'v6'
       datasets:
-        - 'Snow'
+        - 'Land'
       resolutions:
         - 'daily'
       projection:
         - 'USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected'
     v6:
-      snow:
+      land:
         daily:
           url: 'https://n5eil01u.ecs.nsidc.org'
           method: 'get'
           freq: 'D'
           variables:
-            NDSI:
+            SnowFrac:
               variable:
                 # chronology bit flags
                 # https://nsidc.org/data/MOD10A2/versions/6#title10
                 - 'Eight_Day_Snow_Cover'
                 - 'Maximum_Snow_Extent'
-              name: 'Daily NDVI'
+              name: 'Daily Snow Fraction'
               description:
                 ''
               dfmt: 'dtime'
