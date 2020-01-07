@@ -41,7 +41,7 @@ products:
         - 'v1'
       datasets:
         - 'Evapotranspiration'
-      datatypes:
+      resolutions:
         - 'daily'
         - 'weekly'
       projection:
@@ -160,7 +160,7 @@ products:
         - 'v3.1.1'
       datasets:
         - 'Soil Water Index'
-      datatypes:
+      resolutions:
         - 'daily'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
@@ -240,7 +240,7 @@ products:
         - 'v2'
       datasets:
         - 'Radiation'
-      datatypes:
+      resolutions:
         - 'daily'
       projection:
         - 'USER:100022 - * Generated CRS (+proj=longlat +R=6371229 +no_defs) - Projected'
@@ -624,7 +624,7 @@ products:
         - 'v2.0'
       datasets:
         - 'Precipitation'
-      datatypes:
+      resolutions:
         - 'daily'
         - 'monthly'
       projection:
@@ -738,7 +738,7 @@ products:
         - 'v1'
       datasets:
         - 'Evapotranspiration'
-      datatypes:
+      resolutions:
         - 'monthly'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
@@ -813,7 +813,7 @@ products:
       datasets:
         - 'Digital Elevation Model'
         - 'Drainage Direction Model'
-      datatypes:
+      resolutions:
         - '3s'
         - '15s'
         - '30s'
@@ -2518,7 +2518,7 @@ products:
         - ''
       datasets:
         - ''
-      datatypes:
+      resolutions:
         - ''
       projection:
         - 'WGS84'
@@ -2543,7 +2543,7 @@ products:
         - 'v1'
       datasets:
         - 'Evapotranspiration'
-      datatypes:
+      resolutions:
         - 'monthly'
       projection:
         - 'USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected'
@@ -2811,7 +2811,7 @@ products:
         - 'v4'
       datasets:
         - 'Evapotranspiration'
-      datatypes:
+      resolutions:
         - 'daily'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
@@ -2888,7 +2888,7 @@ products:
         - 'v2.1'
       datasets:
         - 'Evapotranspiration'
-      datatypes:
+      resolutions:
         - 'three_hourly'
         - 'monthly'
       projection:
@@ -3007,7 +3007,7 @@ products:
         - 'v3.3b'
       datasets:
         - 'Evapotranspiration'
-      datatypes:
+      resolutions:
         - 'daily'
         - 'monthly'
       projection:
@@ -3221,11 +3221,12 @@ products:
         - 'get'
       ftypes:
         - 'NetCDF'
+        - 'HDF5'
       versions:
         - 'v6'
       datasets:
         - 'Precipitation'
-      datatypes:
+      resolutions:
         - 'daily'
         - 'monthly'
       projection:
@@ -3343,7 +3344,7 @@ products:
         - 'v1'
       datasets:
         - 'Soil'
-      datatypes:
+      resolutions:
         - '30s'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
@@ -3414,7 +3415,7 @@ products:
         - 'v1'
       datasets:
         - 'Water'
-      datatypes:
+      resolutions:
         - '1s'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
@@ -3464,3 +3465,82 @@ products:
               dem:
                 w: 1440000
                 h: 560000
+
+  MCD43:
+    # soup = BeautifulSoup(f, "lxml")
+    # for i in soup.findAll('a', attrs = {'href': re.compile('(?i)(hdf)$')}):
+    #     y = requests.get(x.headers['location'], auth = (username, password))
+    account: 'NASA'
+    meta:
+      owner: 'National Aeronautics and Space Administration'
+      description:
+        'The Moderate Resolution Imaging Spectroradiometer (MODIS) MCD43A3 Version 6 Albedo Model
+         dataset is produced daily using 16 days of Terra and Aqua MODIS data at 500 meter (m) resolution.
+         Data are temporally weighted to the ninth day of the 16 day which is reflected in the
+         Julian date in the file name.'
+      websites:
+        - 'https://lpdaac.usgs.gov/products/mcd43a3v006'
+        - 'https://www.umb.edu/spectralmass/terra_aqua_modis/v006'
+        - 'https://ladsweb.modaps.eosdis.nasa.gov/filespec/MODIS/6'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'crawl.get'
+      ftypes:
+        - 'HDF'
+      versions:
+        - 'v6'
+      datasets:
+        - 'Vegetation'
+      resolutions:
+        - 'daily'
+      projection:
+        - 'USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected'
+    v6:
+      vegetation:
+        daily:
+          url: 'https://e4ftl01.cr.usgs.gov'
+          method: 'get'
+          freq: 'D'
+          variables:
+            NDVI:
+              variable:
+                - 'Albedo_BSA_shortwave'
+                - 'Albedo_WSA_shortwave'
+              name: 'Daily NDVI'
+              description:
+                ''
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/MOTA/MCD43A3.006/{dtime:%Y.%m.%d}/'
+              fname:
+                r: 'MCD43A3.A{dtime:%Y%j}'
+                t: null
+                l: 'GPM_v6_._D-{dtime:%Y%m%d}.tif'
+              ftype:
+                r: 'NetCDF.MOD_Grid_BRDF.Data_Fields'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t: null
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 1.0
+              lat:
+                s: 0.0
+                n: 0.0
+                r: 463.3127165274999015
+              lon:
+                w: 0.0
+                e: 0.0
+                r: 463.3127165279165069
+              time:
+                s: 2000-02-24
+                e: 2019-12-29
+              dem:
+                w: 2400
+                h: 2400
