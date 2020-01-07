@@ -55,6 +55,9 @@ Products
 | MOD09GQ    | .. image:: ./img/MOD09GQ.png    | https://lpdaac.usgs.gov/products/mod09gqv006 |
 |            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+
+| MOD10A2    | .. image:: ./img/MOD10A2.png    | https://nsidc.org/data/MOD10A2/versions/6    |
+|            |    :height: 40pt                |                                              |
++------------+---------------------------------+----------------------------------------------+
 
 
 Development
