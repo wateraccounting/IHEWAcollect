@@ -58,6 +58,9 @@ Products
 | MOD10A2    | .. image:: ./img/MOD10A2.png    | https://nsidc.org/data/MOD10A2/versions/6    |
 |            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+
+| MOD11A2    | .. image:: ./img/MOD11A2.png    | https://lpdaac.usgs.gov/products/mod11a2v006 |
+|            |    :height: 40pt                |                                              |
++------------+---------------------------------+----------------------------------------------+
 
 
 Development

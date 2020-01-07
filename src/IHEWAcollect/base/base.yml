@@ -3609,17 +3609,17 @@ products:
               lat:
                 s: -10007554.677
                 n: 10007554.677
-                r: 463.31271653
+                r: 231.65635826
               lon:
                 w: -20015109.354
                 e: 20015109.354
-                r: 463.31271653
+                r: 231.65635826
               time:
                 s: 2000-02-24
                 e: null
               dem:
-                w: 86400
-                h: 43200
+                w: 172800
+                h: 86400
 
   MOD10A2:
     account: 'NASA'
@@ -3694,9 +3694,87 @@ products:
                 e: 20015109.354
                 r: 463.31271653
               time:
-                s: 2000-02-24
+                s: 2000-02-18
                 e: null
               dem:
                 w: 86400
                 h: 43200
+
+  MOD11A2:
+    account: 'NASA'
+    meta:
+      owner: 'United States Geological Survey'
+      description:
+        'The MOD11A2 Version 6 product provides an average 8-day per-pixel Land Surface Temperature
+         and Emissivity (LST&E) with a 1 kilometer (km) spatial resolution in a 1,200 by 1,200 km
+         grid. Each pixel value in the MOD11A2 is a simple average of all the corresponding MOD11A1
+         LST pixels collected within that 8-day period. The 8-day compositing period was chosen because
+         twice that period is the exact ground track repeat period of the Terra and Aqua platforms.
+         Provided along with the daytime and nighttime surface temperature bands are associated quality
+         control assessments, observation times, view zenith angles, and clear-sky coverages along with
+         bands 31 and 32 emissivities from land cover types.'
+      websites:
+        - 'https://lpdaac.usgs.gov/products/mod11a2v006'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'crawl.get'
+      ftypes:
+        - 'HDF'
+      versions:
+        - 'v6'
+      datasets:
+        - 'Land'
+      resolutions:
+        - 'daily'
+      projection:
+        - 'USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected'
+    v6:
+      land:
+        daily:
+          url: 'https://e4ftl01.cr.usgs.gov'
+          method: 'get'
+          freq: 'D'
+          variables:
+            LST:
+              variable:
+                - 'LST_Day_1km'
+                - 'LST_Night_1km'
+              name: 'Daily Land Surface Temperature'
+              description:
+                ''
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/MOLT/MOD11A2.006/{dtime:%Y.%m.%d}/'
+              fname:
+                r: 'MOD11A2.A{dtime:%Y%j}.{latlon}.006.*.hdf'
+                t: null
+                l: 'MOD11A2_v6_._D-{dtime:%Y%m%d}.tif'
+              ftype:
+                r: 'NetCDF.MODIS_Grid_8Day_1km_LST.Data_Fields'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'uint16'
+                t: null
+                l: 'float32'
+              units:
+                r: 'K'
+                l: 'K'
+                m: 1.0
+              lat:
+                s: -10007554.677
+                n: 10007554.677
+                r: 926.62543314
+              lon:
+                w: -20015109.354
+                e: 20015109.354
+                r: 926.62543314
+              time:
+                s: 2000-02-24
+                e: null
+              dem:
+                w: 43200
+                h: 21600
 
