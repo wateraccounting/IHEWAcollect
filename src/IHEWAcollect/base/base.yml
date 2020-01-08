@@ -3933,3 +3933,77 @@ products:
               dem:
                 w: 172800
                 h: 86400
+
+  MOD15A2H:
+    account: 'NASA'
+    meta:
+      owner: 'National Snow and Ice Data Center'
+      description:
+        'The MOD15A2H Version 6 Moderate Resolution Imaging Spectroradiometer (MODIS) combined Leaf
+         Area Index (LAI) and Fraction of Photosynthetically Active Radiation (FPAR) product is an
+         8-day composite dataset with 500 meter (m) pixel size. The algorithm chooses the “best”
+         pixel available from all the acquisitions of the Terra sensor from within the 8-day period.'
+      websites:
+        - 'https://lpdaac.usgs.gov/products/mod15a2hv006'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'crawl.get'
+      ftypes:
+        - 'HDF'
+      versions:
+        - 'v6'
+      datasets:
+        - 'Land'
+      resolutions:
+        - 'eight_daily'
+      projection:
+        - 'USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected'
+    v6:
+      land:
+        eight_daily:
+          url: 'https://e4ftl01.cr.usgs.gov'
+          method: 'get'
+          freq: '8D'
+          variables:
+            Fpar:
+              variable:
+                - 'Fpar_500m'
+                - 'Lai_500m'
+              name: 'Eight Daily Fraction of Photosynthetically Active Radiation'
+              description:
+                ''
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/MOLT/MOD15A2H.006/{dtime:%Y.%m.%d}/'
+              fname:
+                r: 'MOD15A2H.A{dtime:%Y%j}.{latlon}.006.*.hdf'
+                t: null
+                l: 'MOD15A2H_v6_._D-{dtime:%Y%m%d}.tif'
+              ftype:
+                r: 'NetCDF.MOD_Grid_MOD15A2H.Data_Fields'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t: null
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 1.0
+              lat:
+                s: -10007554.677
+                n: 10007554.677
+                r: 463.31271653
+              lon:
+                w: -20015109.354
+                e: 20015109.354
+                r: 463.31271653
+              time:
+                s: 2000-02-18
+                e: null
+              dem:
+                w: 86400
+                h: 43200

@@ -67,6 +67,9 @@ Products
 | MOD13Q1    | .. image:: ./img/MOD13Q1.png    | https://lpdaac.usgs.gov/products/mod13q1v006 |
 |            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+
+| MOD15A2H   | .. image:: ./img/MOD15A2H.png   | https://lpdaac.usgs.gov/products/mod15a2hv006|
+|            |    :height: 40pt                |                                              |
++------------+---------------------------------+----------------------------------------------+
 
 
 Development
