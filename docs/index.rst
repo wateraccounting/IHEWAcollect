@@ -49,6 +49,9 @@ Products
 | JRC        | .. image:: ./img/JRC.png        | https://global-surface-water.appspot.com     |
 |            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+
+| MCD12Q1    | .. image:: ./img/MCD12Q1.png    | https://lpdaac.usgs.gov/products/mcd12q1v006 |
+|            |    :height: 40pt                |                                              |
++------------+---------------------------------+----------------------------------------------+
 | MCD43A3    | .. image:: ./img/MCD43A3.png    | https://lpdaac.usgs.gov/products/mcd43a3v006 |
 |            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+

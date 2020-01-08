@@ -3466,6 +3466,84 @@ products:
                 w: 1440000
                 h: 560000
 
+  MCD12Q1:
+    account: 'NASA'
+    meta:
+      owner: 'United States Geological Survey'
+      description:
+        'The Terra and Aqua combined Moderate Resolution Imaging Spectroradiometer (MODIS) Land Cover
+         Type (MCD12Q1) Version 6 data product provides global land cover types at yearly intervals
+         (2001-2018), derived from six different classification schemes listed in the User Guide.
+         The MCD12Q1 Version 6 data product is derived using supervised classifications of MODIS Terra
+         and Aqua reflectance data. The supervised classifications then undergo additional post-processing
+         that incorporate prior knowledge and ancillary information to further refine specific classes.'
+      websites:
+        - 'https://lpdaac.usgs.gov/products/mcd12q1v006'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'crawl.get'
+      ftypes:
+        - 'HDF'
+      versions:
+        - 'v6'
+      datasets:
+        - 'Land'
+      resolutions:
+        - 'yearly'
+      projection:
+        - 'USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected'
+    v6:
+      land:
+        yearly:
+          url: 'https://e4ftl01.cr.usgs.gov'
+          method: 'get'
+          freq: 'Y'
+          variables:
+            LC:
+              variable:
+                - 'LC_Type3'
+                - 'LC_Prop1'
+                - 'LC_Prop2'
+                - 'LC_Prop3'
+              name: 'Daily Land Cover'
+              description:
+                ''
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/MOTA/MCD12Q1.006/{dtime:%Y.%m.%d}/'
+              fname:
+                r: 'MCD12Q1.A{dtime:%Y%j}.{latlon}.006.*.hdf'
+                t: null
+                l: 'MCD12Q1_v6_._D-{dtime:%Y%m%d}.tif'
+              ftype:
+                r: 'NetCDF.MCD12Q1.Data_Fields'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t: null
+                l: 'uint8'
+              units:
+                r: '.'
+                l: '.'
+                m: 1.0
+              lat:
+                s: -10007554.677
+                n: 10007554.677
+                r: 463.31271653
+              lon:
+                w: -20015109.354
+                e: 20015109.354
+                r: 463.31271653
+              time:
+                s: 2001-01-01
+                e: 2018-12-31
+              dem:
+                w: 43200
+                h: 21600
+
   MCD43A3:
     # soup = BeautifulSoup(f, "lxml")
     # for i in soup.findAll('a', attrs = {'href': re.compile('(?i)(hdf)$')}):
@@ -3622,6 +3700,8 @@ products:
                 h: 86400
 
   MOD10A2:
+    # chronology bit flags
+    # https://nsidc.org/data/MOD10A2/versions/6#title10
     account: 'NASA'
     meta:
       owner: 'National Snow and Ice Data Center'
@@ -3633,7 +3713,7 @@ products:
          for all eight days in the period. Each cell''s snow/no snow chronology is recorded using bit
          flags and provided as a separate variable.'
       websites:
-        - 'https://nsidc.org/'
+        - 'https://nsidc.org'
         - 'https://nsidc.org/data/MOD10A2/versions/6'
       protocols:
         - 'HTTPS'
@@ -3658,8 +3738,6 @@ products:
           variables:
             SnowFrac:
               variable:
-                # chronology bit flags
-                # https://nsidc.org/data/MOD10A2/versions/6#title10
                 - 'Eight_Day_Snow_Cover'
                 - 'Maximum_Snow_Extent'
               name: 'Daily Snow Fraction'
@@ -3750,7 +3828,7 @@ products:
               fname:
                 r: 'MOD11A2.A{dtime:%Y%j}.{latlon}.006.*.hdf'
                 t: null
-                l: 'MOD11A2_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MOD11A2_v6_K_D-{dtime:%Y%m%d}.tif'
               ftype:
                 r: 'NetCDF.MODIS_Grid_8Day_1km_LST.Data_Fields'
                 t: null
@@ -3777,4 +3855,3 @@ products:
               dem:
                 w: 43200
                 h: 21600
-
