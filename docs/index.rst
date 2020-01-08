@@ -76,9 +76,12 @@ Products
 | MOD17A2H   | .. image:: ./img/MOD17A2H.png   | https://lpdaac.usgs.gov/products/mod17a2hv006|
 |            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+
-| MOD17A3H   | Unavailable                     | https://lpdaac.usgs.gov/products/mod17a2hv006|
+| MOD17A3H   | Unavailable                     | https://lpdaac.usgs.gov/products/mod17a3hv006|
 +------------+---------------------------------+----------------------------------------------+
 | MSWEP      | Not Free                        | https://princetonclimate.com                 |
++------------+---------------------------------+----------------------------------------------+
+| PROBAV     | .. image:: ./img/PROBAV.png     | http://proba-v.vgt.vito.be/en                |
+|            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+
 
 

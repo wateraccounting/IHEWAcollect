@@ -4238,8 +4238,8 @@ products:
                 w: 86400
                 h: 43200
 
+#  MSWEP: Not free, https://princetonclimate.com/products
   MSWEP:
-    # Not free, https://princetonclimate.com/products
     account: 'MSWEP'
     meta:
       owner: 'Princeton Climate Analytics, Inc'
@@ -4309,3 +4309,112 @@ products:
               dem:
                 w: 0
                 h: 0
+
+#  MYD13: Same as MOD13Q1
+  MYD13:
+    account: 'NASA'
+    meta:
+      owner: 'United States Geological Survey'
+      description:
+        'The Terra Moderate Resolution Imaging Spectroradiometer (MODIS) Vegetation Indices (MOD13Q1)
+         Version 6 data are generated every 16 days at 250 meter (m) spatial resolution as a Level 3
+         product. The MOD13Q1 product provides two primary vegetation layers. The first is the
+         Normalized Difference Vegetation Index (NDVI) which is referred to as the continuity index
+         to the existing National Oceanic and Atmospheric Administration-Advanced Very High Resolution
+         Radiometer (NOAA-AVHRR) derived NDVI. The second vegetation layer is the Enhanced Vegetation
+         Index (EVI), which has improved sensitivity over high biomass regions. The algorithm chooses
+         the best available pixel value from all the acquisitions from the 16 day period. The criteria
+         used is low clouds, low view angle, and the highest NDVI/EVI value.'
+      websites:
+        - 'https://lpdaac.usgs.gov/products/mod13q1v006'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'crawl.get'
+      ftypes:
+        - 'HDF'
+      versions:
+        - 'v6'
+      datasets:
+        - 'Land'
+      resolutions:
+        - 'sixteen_daily'
+      projection:
+        - 'USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected'
+    v6:
+      land:
+        sixteen_daily:
+          url: 'https://e4ftl01.cr.usgs.gov'
+          method: 'get'
+          freq: '16D'
+          variables:
+            NDVI:
+              variable:
+                - '250m_16_days_NDVI'
+              name: 'Sixteen Daily NDVI'
+              description:
+                ''
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/MOLT/MOD13Q1.006/{dtime:%Y.%m.%d}/'
+              fname:
+                r: 'MOD13Q1.A{dtime:%Y%j}.{latlon}.006.*.hdf'
+                t: null
+                l: 'MOD13Q1_v6_._D-{dtime:%Y%m%d}.tif'
+              ftype:
+                r: 'NetCDF.MODIS_Grid_16DAY_250m_500m_VI.Data_Fields'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t: null
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 1.0
+              lat:
+                s: -10007554.677
+                n: 10007554.677
+                r: 231.65635826
+              lon:
+                w: -20015109.354
+                e: 20015109.354
+                r: 231.65635826
+              time:
+                s: 2000-02-24
+                e: null
+              dem:
+                w: 172800
+                h: 86400
+
+  PROBAV:
+    account: 'VITO'
+    meta:
+      owner: 'Princeton Climate Analytics, Inc'
+      description:
+        'PROBA-V was developed as both a follow-up to the 15-year SPOT-VEGETATION mission, as well
+         as a preparation for the recently launched ESA Sentinel-3 land and ocean observation satellite
+         mission. The SPOT-VEGETATION mission provided essential information on e.g. crop yields,
+         droughts, and deforestation to a broad user community.'
+      websites:
+        - 'http://proba-v.vgt.vito.be/en'
+        - 'http://proba-v.vgt.vito.be/en/product-types'
+        - 'http://proba-v.vgt.vito.be/en/product-access'
+        - 'https://www.vito-eodata.be/collections/srv/eng/main.home'
+        - 'http://proba-v.vgt.vito.be/en/data-policy'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'get'
+      ftypes:
+        - ''
+      versions:
+        - 'v2.1'
+      datasets:
+        - 'Precipitation'
+      resolutions:
+        - 'daily'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
