@@ -4007,3 +4007,79 @@ products:
               dem:
                 w: 86400
                 h: 43200
+
+  MOD16A2:
+    account: 'NASA'
+    meta:
+      owner: 'National Snow and Ice Data Center'
+      description:
+        'The MOD16A2 Version 6 Evapotranspiration/Latent Heat Flux product is an 8-day composite
+         dataset produced at 500 meter (m) pixel resolution. The algorithm used for the MOD16 data
+         product collection is based on the logic of the Penman-Monteith equation, which includes
+         inputs of daily meteorological reanalysis data along with Moderate Resolution Imaging
+         Spectroradiometer (MODIS) remotely sensed data products such as vegetation property dynamics,
+         albedo, and land cover.'
+      websites:
+        - 'https://lpdaac.usgs.gov/products/mod16a2v006'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'crawl.get'
+      ftypes:
+        - 'HDF'
+      versions:
+        - 'v6'
+      datasets:
+        - 'Evapotranspiration'
+      resolutions:
+        - 'eight_daily'
+      projection:
+        - 'USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected'
+    v6:
+      evapotranspiration:
+        eight_daily:
+          url: 'https://e4ftl01.cr.usgs.gov'
+          method: 'get'
+          freq: '8D'
+          variables:
+            ET:
+              variable:
+                - 'ET_500m'
+                - 'PET_500m'
+              name: 'Eight Daily Evapotranspiration'
+              description:
+                ''
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/MOLT/MOD16A2.006/{dtime:%Y.%m.%d}/'
+              fname:
+                r: 'MOD16A2.A{dtime:%Y%j}.{latlon}.006.*.hdf'
+                t: null
+                l: 'MOD16A2_v6_._D-{dtime:%Y%m%d}.tif'
+              ftype:
+                r: 'NetCDF.MOD_Grid_MOD16A2.Data_Fields'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t: null
+                l: 'float32'
+              units:
+                r: 'kg.m2.8d'
+                l: 'mm.d'
+                m: 0.125
+              lat:
+                s: -10007554.677
+                n: 10007554.677
+                r: 463.31271653
+              lon:
+                w: -20015109.354
+                e: 20015109.354
+                r: 463.31271653
+              time:
+                s: 2001-01-01
+                e: null
+              dem:
+                w: 86400
+                h: 43200
