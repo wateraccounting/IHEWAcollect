@@ -64,6 +64,9 @@ Products
 | MOD11A2    | .. image:: ./img/MOD11A2.png    | https://lpdaac.usgs.gov/products/mod11a2v006 |
 |            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+
+| MOD13Q1    | .. image:: ./img/MOD13Q1.png    | https://lpdaac.usgs.gov/products/mod13q1v006 |
+|            |    :height: 40pt                |                                              |
++------------+---------------------------------+----------------------------------------------+
 
 
 Development
