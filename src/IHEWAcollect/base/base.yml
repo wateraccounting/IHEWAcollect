@@ -3467,6 +3467,9 @@ products:
                 h: 560000
 
   MCD12Q1:
+    # soup = BeautifulSoup(f, "lxml")
+    # for i in soup.findAll('a', attrs = {'href': re.compile('(?i)(hdf)$')}):
+    #     y = requests.get(x.headers['location'], auth = (username, password))
     account: 'NASA'
     meta:
       owner: 'United States Geological Survey'
@@ -4234,3 +4237,75 @@ products:
               dem:
                 w: 86400
                 h: 43200
+
+  MSWEP:
+    # Not free, https://princetonclimate.com/products
+    account: 'MSWEP'
+    meta:
+      owner: 'Princeton Climate Analytics, Inc'
+      description:
+        'Multi-Source Weighted-Ensemble Precipitation (MSWEP) is a new fully global historic
+         precipitation dataset (1979–2017) with a 3‑hourly temporal and 0.1° spatial resolution.'
+      websites:
+        - 'http://www.gloh2o.org'
+        - 'https://princetonclimate.com/products'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'get'
+      ftypes:
+        - ''
+      versions:
+        - 'v2.1'
+      datasets:
+        - 'Precipitation'
+      resolutions:
+        - 'daily'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
+    v2.1:
+      precipitation:
+        daily:
+          url: ''
+          method: 'get'
+          freq: 'D'
+          variables:
+            PCP:
+              variable: null
+              name: 'Daily Precipitation'
+              description:
+                ''
+              dfmt: ''
+              rfmt: ''
+              tfmt: null
+              dir: '/{dtime:%Y.%m.%d}/'
+              fname:
+                r: ''
+                t: null
+                l: 'MSWEP_v2.1_mm.d_D-{dtime:%Y%m%d}.tif'
+              ftype:
+                r: ''
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: ''
+                t: null
+                l: 'float32'
+              units:
+                r: ''
+                l: 'mm.d'
+                m:
+              lat:
+                s: -90.0
+                n: 90.0
+                r: 0.1
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.1
+              time:
+                s: 1979-01-01
+                e: 2017-10-31
+              dem:
+                w: 0
+                h: 0

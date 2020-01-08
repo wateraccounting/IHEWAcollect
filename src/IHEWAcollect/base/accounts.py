@@ -476,8 +476,10 @@ def main():
     # pprint(accounts._Base__conf)
 
     # Accounts attributes
+    key = 'FTP_WA_GUESS'
     print('\naccounts._Accounts__conf\n=====')
     print(accounts._Accounts__conf['data']['accounts'].keys())
+    print(key, accounts._Accounts__conf['data']['accounts'][key])
     # pprint(accounts._Accounts__conf)
 
     # Accounts methods
