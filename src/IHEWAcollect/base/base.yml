@@ -4159,3 +4159,78 @@ products:
               dem:
                 w: 86400
                 h: 43200
+
+  MOD17A3H:
+    # Terra MODIS Net Primary Production Yearly L4 Global 500 m SIN Grid products are currently
+    # unavailable due to unexpected errors in the input data.
+    account: 'NASA'
+    meta:
+      owner: 'National Snow and Ice Data Center'
+      description:
+        'The MOD17A3H Version 6 product provides information about annual Net Primary Production (NPP)
+         at 500 meter (m) pixel resolution. Annual NPP is derived from the sum of all 8-day Net
+         Photosynthesis (PSN) products (MOD17A2H) from the given year. The PSN value is the difference
+         of the Gross Primary Productivity (GPP) and the Maintenance Respiration (MR).'
+      websites:
+        - 'https://lpdaac.usgs.gov/products/mod17a3hv006'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'crawl.get'
+      ftypes:
+        - 'HDF'
+      versions:
+        - 'v6'
+      datasets:
+        - 'Land'
+      resolutions:
+        - 'eight_daily'
+      projection:
+        - 'USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected'
+    v6:
+      land:
+        eight_daily:
+          url: 'https://e4ftl01.cr.usgs.gov'
+          method: 'get'
+          freq: '8D'
+          variables:
+            NPP:
+              variable:
+                - 'Gpp_500m'
+              name: 'Eight Daily Net Primary Production'
+              description:
+                ''
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/MOLT/MOD17A3H.006/{dtime:%Y.%m.%d}/'
+              fname:
+                r: 'MOD17A3H.A{dtime:%Y%j}.{latlon}.006.*.hdf'
+                t: null
+                l: 'MOD17A3H_v6_kgC.m2_D-{dtime:%Y%m%d}.tif'
+              ftype:
+                r: 'NetCDF.MOD_Grid_MOD17A3H.Data_Fields'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t: null
+                l: 'float32'
+              units:
+                r: 'kgC.m2'
+                l: 'kgC.m2'
+                m: 0.125
+              lat:
+                s: -10007554.677
+                n: 10007554.677
+                r: 463.31271653
+              lon:
+                w: -20015109.354
+                e: 20015109.354
+                r: 463.31271653
+              time:
+                s: 2000-02-18
+                e: null
+              dem:
+                w: 86400
+                h: 43200

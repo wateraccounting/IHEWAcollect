@@ -26,7 +26,7 @@ Products
 | DEM        | .. image:: ./img/DEM.png        | http://earlywarning.usgs.gov                 |
 |            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+
-| ECMWF      |                                 | https://www.ecmwf.int                        |
+| ECMWF      | API Required                    | https://www.ecmwf.int                        |
 +------------+---------------------------------+----------------------------------------------+
 | ETmonitor  | .. image:: ./img/ETmonitor.png  | https://www.wateraccounting.org              |
 |            |    :height: 40pt                |                                              |
@@ -75,6 +75,8 @@ Products
 +------------+---------------------------------+----------------------------------------------+
 | MOD17A2H   | .. image:: ./img/MOD17A2H.png   | https://lpdaac.usgs.gov/products/mod17a2hv006|
 |            |    :height: 40pt                |                                              |
++------------+---------------------------------+----------------------------------------------+
+| MOD17A3H   | Unavailable                     | https://lpdaac.usgs.gov/products/mod17a2hv006|
 +------------+---------------------------------+----------------------------------------------+
 
 
