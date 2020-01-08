@@ -73,6 +73,9 @@ Products
 | MOD16A2    | .. image:: ./img/MOD16A2.png    | https://lpdaac.usgs.gov/products/mod16a2v006 |
 |            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+
+| MOD17A2H   | .. image:: ./img/MOD17A2H.png   | https://lpdaac.usgs.gov/products/mod17a2hv006|
+|            |    :height: 40pt                |                                              |
++------------+---------------------------------+----------------------------------------------+
 
 
 Development
