@@ -3726,12 +3726,12 @@ products:
       datasets:
         - 'Land'
       resolutions:
-        - 'daily'
+        - 'eight_daily'
       projection:
         - 'USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected'
     v6:
       land:
-        daily:
+        eight_daily:
           url: 'https://n5eil01u.ecs.nsidc.org'
           method: 'get'
           freq: 'D'
@@ -3740,7 +3740,7 @@ products:
               variable:
                 - 'Eight_Day_Snow_Cover'
                 - 'Maximum_Snow_Extent'
-              name: 'Daily Snow Fraction'
+              name: 'Eight Daily Snow Fraction'
               description:
                 ''
               dfmt: 'dtime'
