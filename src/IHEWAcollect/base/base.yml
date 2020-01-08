@@ -3734,7 +3734,7 @@ products:
         eight_daily:
           url: 'https://n5eil01u.ecs.nsidc.org'
           method: 'get'
-          freq: 'D'
+          freq: '8D'
           variables:
             SnowFrac:
               variable:
@@ -3804,21 +3804,21 @@ products:
       datasets:
         - 'Land'
       resolutions:
-        - 'daily'
+        - 'eight_daily'
       projection:
         - 'USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected'
     v6:
       land:
-        daily:
+        eight_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
           method: 'get'
-          freq: 'D'
+          freq: '8D'
           variables:
             LST:
               variable:
                 - 'LST_Day_1km'
                 - 'LST_Night_1km'
-              name: 'Daily Land Surface Temperature'
+              name: 'Eight Daily Land Surface Temperature'
               description:
                 ''
               dfmt: 'dtime'
@@ -3850,7 +3850,7 @@ products:
                 e: 20015109.354
                 r: 926.62543314
               time:
-                s: 2000-02-24
+                s: 2000-02-18
                 e: null
               dem:
                 w: 43200
@@ -3891,7 +3891,7 @@ products:
         sixteen_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
           method: 'get'
-          freq: 'D'
+          freq: '16D'
           variables:
             NDVI:
               variable:
