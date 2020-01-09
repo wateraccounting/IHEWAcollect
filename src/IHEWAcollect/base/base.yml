@@ -115,7 +115,7 @@ products:
                 t: null
                 l: 'GTiff'
               dtype:
-                r: 'binary'
+                r: 'float64'
                 t: null
                 l: 'float32'
               units:
@@ -4472,3 +4472,76 @@ products:
               dem:
                 w: 362880
                 h: 141120
+
+  # Rainfall Estimator
+  RFE:
+    account: null
+    meta:
+      owner: 'National Oceanic and Atmospheric Administration'
+      description:
+        'As of January 1, 2001, RFE version 2.0 has been implemented by NOAA''s Climate Prediction
+         Center. Created by Ping-Ping Xie, this replaces RFE 1.0 the previous rainfall estimation
+         algorithm that was operational from 1995 through 2000 (Herman et al., 1997).'
+      websites:
+        - 'https://data.noaa.gov/dataset'
+        - 'https://data.noaa.gov/dataset/dataset/climate-prediction-center-cpc-rainfall-estimator-rfe-for-africa'
+      protocols:
+        - 'FTP'
+      methods:
+        - 'get'
+      ftypes:
+        - 'zip'
+      versions:
+        - 'v2'
+      datasets:
+        - 'Precipitation'
+      resolutions:
+        - 'daily'
+      projection:
+        - 'EPSG:4047 - Unspecified datum based upon the GRS 1980 Authalic Sphere - Geographic'
+    v2:
+      precipitation:
+        daily:
+          url: 'ftp://ftp.cpc.ncep.noaa.gov/'
+          method: 'get'
+          freq: 'D'
+          variables:
+            PCP:
+              variable: null
+              name: 'Daily Precipitation'
+              description:
+                ''
+              dfmt: null
+              rfmt: 'dtime'
+              tfmt: 'dtime'
+              dir: '/fews/fewsdata/africa/rfe2/geotiff/'
+              fname:
+                r: 'africa_rfe.{dtime:%Y%m%d}.tif.zip'
+                t: 'africa_rfe.{dtime:%Y%m%d}.tif'
+                l: 'RFE_v2_mm_D-{dtime:%Y%m%d}.tif'
+              ftype:
+                r: 'zip'
+                t: 'GTiff'
+                l: 'GTiff'
+              dtype:
+                r: 'binary'
+                t: 'float32'
+                l: 'float32'
+              units:
+                r: 'mm'
+                l: 'mm'
+                m: 1.0
+              lat:
+                s: -40.05
+                n: 40.05
+                r: 0.1
+              lon:
+                w: -20.05
+                e: 55.05
+                r: 0.1
+              time:
+                s: 2001-01-01
+                e: null
+              dem:
+                w: 751
+                h: 801

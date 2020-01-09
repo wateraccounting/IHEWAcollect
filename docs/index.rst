@@ -86,6 +86,9 @@ Products
 | PROBAV     | .. image:: ./img/PROBAV.png     | http://proba-v.vgt.vito.be/en                |
 |            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+
+| RFE        | .. image:: ./img/RFE.png        | https://data.noaa.gov/dataset                |
+|            |    :height: 40pt                |                                              |
++------------+---------------------------------+----------------------------------------------+
 
 
 Development
