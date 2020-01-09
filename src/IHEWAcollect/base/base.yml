@@ -4238,7 +4238,7 @@ products:
                 w: 86400
                 h: 43200
 
-#  MSWEP: Not free, https://princetonclimate.com/products
+#  MSWEP: Commercial, https://princetonclimate.com/products
   MSWEP:
     account: 'MSWEP'
     meta:
