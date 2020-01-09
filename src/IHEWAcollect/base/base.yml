@@ -137,6 +137,7 @@ products:
                 w: 7200
                 h: 3000
 
+  # VITO, land.copernicus.vgt
   ASCAT:
     account: 'Copernicus'
     meta:
@@ -168,7 +169,7 @@ products:
       soil_water_index:
         daily:
           # 2019-10-22, before: https://land.copernicus.vgt.vito.be/PDF/datapool/Vegetation/Soil_Water/SWI_V3/
-          url: 'https://land.copernicus.vgt.vito.be/PDF/datapool'
+          url: 'https://land.copernicus.vgt.vito.be'
           method: 'get'
           freq: 'D'
           variables:
@@ -180,7 +181,7 @@ products:
               dfmt: 'dtime'
               rfmt: 'dtime'
               tfmt: null
-              dir: '/Vegetation/Soil_Water_Index/Daily_SWI_12.5km_Global_V3/{dtime:%Y/%m/%d}/SWI_{dtime:%Y/%m/%d}1200_GLOBE_ASCAT_V3.1.1/'
+              dir: '/PDF/datapool/Vegetation/Soil_Water_Index/Daily_SWI_12.5km_Global_V3/{dtime:%Y/%m/%d}/SWI_{dtime:%Y/%m/%d}1200_GLOBE_ASCAT_V3.1.1/'
               fname:
                 r: 'c_gls_SWI_{dtime:%Y/%m/%d}1200_GLOBE_ASCAT_V3.1.1.nc'
                 t: null
@@ -2490,6 +2491,7 @@ products:
                 w: 7320
                 h: 8520
 
+  # API
   ECMWF:
     # http://apps.ecmwf.int/codes/grib/format/mars/type/
     # http://apps.ecmwf.int/codes/grib/format/mars/class/
@@ -2789,6 +2791,7 @@ products:
                 w: 31200
                 h: 18000
 
+  # Invoke SSEBop
   FEWS:
     account: null
     meta:
@@ -2862,6 +2865,7 @@ products:
                 w: 360
                 h: 181
 
+  # List
   GLDAS:
     account: 'NASA'
     meta:
@@ -2984,7 +2988,7 @@ products:
                 w: 1440
                 h: 600
 
-# ET
+  # ET
   GLEAM:
     account: 'GLEAM'
     meta:
@@ -4239,7 +4243,7 @@ products:
                 w: 86400
                 h: 43200
 
-#  MSWEP: Commercial, https://princetonclimate.com/products
+  # Commercial, https://princetonclimate.com/products
   MSWEP:
     account: 'MSWEP'
     meta:
@@ -4311,7 +4315,7 @@ products:
                 w: 0
                 h: 0
 
-#  MYD13: Same as MOD13Q1
+  # Same as MOD13Q1
   MYD13:
     account: 'NASA'
     meta:
@@ -4390,8 +4394,9 @@ products:
                 w: 172800
                 h: 86400
 
+  # VITO, proba-v.vgt
+  # GTiff, HDF5:NetCDF.Group
   PROBAV:
-    # GTiff, HDF5:NetCDF.Group
     account: 'VITO'
     meta:
       owner: 'Princeton Climate Analytics, Inc'
@@ -4411,12 +4416,59 @@ products:
       methods:
         - 'get'
       ftypes:
-        - ''
+        - 'GTiff'
+        - 'HDF5'
       versions:
-        - 'v2.1'
+        - 'v1.01'
       datasets:
-        - 'Precipitation'
+        - 'Land'
       resolutions:
         - 'daily'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
+    v1.01:
+      land:
+        daily:
+          url: 'https://www.vito-eodata.be'
+          method: 'get'
+          freq: 'D'
+          variables:
+            NDVI:
+              variable: null
+              name: 'Daily NDVI'
+              description:
+                ''
+              dfmt: 'dtime'
+              rfmt: 'dtime.latlon'
+              tfmt: null
+              dir: '/PDF/datapool/Free_Data/PROBA-V_100m/S1_TOC_100_m_C1/{dtime:%Y/%m/%d}/PV_S1_TOC-{dtime:%Y%m%d}_100M_V101/'
+              fname:
+                r: 'PROBAV_S1_TOC_{latlon}_{dtime:%Y%m%d}_100M_V101_NDVI.tif'
+                t: null
+                l: 'PROBAV_v1.01_._D-{dtime:%Y%m%d}.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 1.0
+              lat:
+                s: -64.9995039682490017
+                n: 75.0004960317460245
+                r: 0.0009920634920630
+              lon:
+                w: -180.0004960317460245
+                e: 179.9995039682490301
+                r: 0.0009920634920630
+              time:
+                s: 2014-03-12
+                e: null
+              dem:
+                w: 362880
+                h: 141120
