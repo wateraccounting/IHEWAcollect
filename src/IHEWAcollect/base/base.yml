@@ -4390,6 +4390,7 @@ products:
                 h: 86400
 
   PROBAV:
+    # GTiff, HDF5:NetCDF.Group
     account: 'VITO'
     meta:
       owner: 'Princeton Climate Analytics, Inc'

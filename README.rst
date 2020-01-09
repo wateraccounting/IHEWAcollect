@@ -31,15 +31,15 @@ Collect
 +============+==========================================+
 | NASA       | https://www.nasa.gov                     |
 +------------+------------------------------------------+
-| GLEAM      | https://www.wateraccounting.org/         |
+| GLEAM      | http://www.gleam.eu                      |
 +------------+------------------------------------------+
-| FTP_WA     | https://www.wateraccounting.org/         |
+| FTP_WA     | https://www.wateraccounting.org          |
 +------------+------------------------------------------+
-| MSWEP      | https://www.wateraccounting.org/         |
+| MSWEP      | https://princetonclimate.com             |
 +------------+------------------------------------------+
-| Copernicus | https://land.copernicus.vgt.vito.be/     |
+| Copernicus | https://www.copernicus.eu/en             |
 +------------+------------------------------------------+
-| VITO       | https://www.vito-eodata.be/PDF/datapool/ |
+| VITO       | https://www.vito-eodata.be/PDF/datapool  |
 +------------+------------------------------------------+
 
 Products
