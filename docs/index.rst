@@ -43,6 +43,9 @@ Products
 | GPM        | .. image:: ./img/GPM.png        | https://pmm.gsfc.nasa.gov/GPM                |
 |            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+
+| GPM, nc4   | .. image:: ./img/GPM-lonlat.png | https://pmm.gsfc.nasa.gov/GPM                |
+|            |    :height: 40pt                |                                              |
++------------+---------------------------------+----------------------------------------------+
 | HiHydroSoil| .. image:: ./img/HiHydroSoil.png| https://www.wateraccounting.org              |
 |            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+
