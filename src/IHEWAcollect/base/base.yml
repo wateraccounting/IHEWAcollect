@@ -23,7 +23,7 @@ messages:
 
 products:
   ALEXI:
-    account: 'FTP_WA'
+    account: 'IHEWA'
     meta:
       owner: 'IHE Delft'
       description:
@@ -721,7 +721,7 @@ products:
                 h: 2000
 
   CMRSET:
-    account: 'FTP_WA'
+    account: 'IHEWA'
     meta:
       owner: 'IHE Delft'
       description:
@@ -2526,7 +2526,7 @@ products:
 
   ETmonitor:
     # https://www.mdpi.com/books/pdfview/book/1661
-    account: 'FTP_WA'
+    account: 'IHEWA'
     meta:
       owner: 'IHE Delft'
       description:
@@ -2984,6 +2984,7 @@ products:
                 w: 1440
                 h: 600
 
+# ET
   GLEAM:
     account: 'GLEAM'
     meta:
@@ -3323,7 +3324,7 @@ products:
                 h: 1800
 
   HiHydroSoil:
-    account: 'FTP_WA'
+    account: 'IHEWA'
     meta:
       owner: 'FutureWater'
       description:
