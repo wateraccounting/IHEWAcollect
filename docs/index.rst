@@ -89,6 +89,9 @@ Products
 | RFE        | .. image:: ./img/RFE.png        | https://data.noaa.gov/dataset                |
 |            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+
+| SEBS       | .. image:: ./img/SEBS.png       | https://www.wateraccounting.org              |
+|            |    :height: 40pt                |                                              |
++------------+---------------------------------+----------------------------------------------+
 
 
 Development

@@ -22,6 +22,7 @@ messages:
     level: 1
 
 products:
+  # ETA
   ALEXI:
     account: 'IHEWA'
     meta:
@@ -213,6 +214,7 @@ products:
                 w: 3600
                 h: 1800
 
+  # Radiation
   CFSR:
     account: null
     meta:
@@ -604,6 +606,7 @@ products:
                 w: 1760
                 h: 880
 
+  # PCP
   CHIRPS:
     account: null
     meta:
@@ -721,6 +724,7 @@ products:
                 w: 7200
                 h: 2000
 
+  # ETA
   CMRSET:
     account: 'IHEWA'
     meta:
@@ -2526,6 +2530,7 @@ products:
         - 'WGS84'
     v1:
 
+  # ETA, ETP, ..., T
   ETmonitor:
     # https://www.mdpi.com/books/pdfview/book/1661
     account: 'IHEWA'
@@ -2791,7 +2796,7 @@ products:
                 w: 31200
                 h: 18000
 
-  # Invoke SSEBop
+  # ETP, Invoke SSEBop
   FEWS:
     account: null
     meta:
@@ -2865,7 +2870,7 @@ products:
                 w: 360
                 h: 181
 
-  # List
+  # E, ..., Variable list
   GLDAS:
     account: 'NASA'
     meta:
@@ -3197,6 +3202,7 @@ products:
                 w: 1440
                 h: 720
 
+  # PCP
   GPM:
     account: 'NASA'
     meta:
@@ -3327,6 +3333,7 @@ products:
                 w: 3600
                 h: 1800
 
+  # Theta Saturated Topsoil
   HiHydroSoil:
     account: 'IHEWA'
     meta:
@@ -3400,6 +3407,7 @@ products:
                 w: 43200
                 h: 21600
 
+  # Water occurrence
   JRC:
     account: null
     meta:
@@ -3471,6 +3479,7 @@ products:
                 w: 1440000
                 h: 560000
 
+  # Land cover
   MCD12Q1:
     # soup = BeautifulSoup(f, "lxml")
     # for i in soup.findAll('a', attrs = {'href': re.compile('(?i)(hdf)$')}):
@@ -3552,6 +3561,7 @@ products:
                 w: 43200
                 h: 21600
 
+  # Albedo
   MCD43A3:
     # soup = BeautifulSoup(f, "lxml")
     # for i in soup.findAll('a', attrs = {'href': re.compile('(?i)(hdf)$')}):
@@ -3631,6 +3641,7 @@ products:
                 w: 86400
                 h: 43200
 
+  # Reflectance
   MOD09GQ:
     account: 'NASA'
     meta:
@@ -3707,6 +3718,7 @@ products:
                 w: 172800
                 h: 86400
 
+  # Snow Fraction
   MOD10A2:
     # chronology bit flags
     # https://nsidc.org/data/MOD10A2/versions/6#title10
@@ -3786,6 +3798,7 @@ products:
                 w: 86400
                 h: 43200
 
+  # Land Surface Temperature
   MOD11A2:
     account: 'NASA'
     meta:
@@ -3864,6 +3877,7 @@ products:
                 w: 43200
                 h: 21600
 
+  # NDVI
   MOD13Q1:
     account: 'NASA'
     meta:
@@ -3942,6 +3956,7 @@ products:
                 w: 172800
                 h: 86400
 
+  # Fraction of Photosynthetically Active Radiation
   MOD15A2H:
     account: 'NASA'
     meta:
@@ -4016,6 +4031,7 @@ products:
                 w: 86400
                 h: 43200
 
+  # ET
   MOD16A2:
     account: 'NASA'
     meta:
@@ -4092,6 +4108,7 @@ products:
                 w: 86400
                 h: 43200
 
+  # Gross Primary Production
   MOD17A2H:
     account: 'NASA'
     meta:
@@ -4168,6 +4185,7 @@ products:
                 w: 86400
                 h: 43200
 
+  # Net Primary Production
   MOD17A3H:
     # Terra MODIS Net Primary Production Yearly L4 Global 500 m SIN Grid products are currently
     # unavailable due to unexpected errors in the input data.
@@ -4243,7 +4261,7 @@ products:
                 w: 86400
                 h: 43200
 
-  # Commercial, https://princetonclimate.com/products
+  # PCP, Commercial, https://princetonclimate.com/products
   MSWEP:
     account: 'MSWEP'
     meta:
@@ -4315,7 +4333,7 @@ products:
                 w: 0
                 h: 0
 
-  # Same as MOD13Q1
+  # NDVI, Same as MOD13Q1
   MYD13:
     account: 'NASA'
     meta:
@@ -4394,8 +4412,7 @@ products:
                 w: 172800
                 h: 86400
 
-  # VITO, proba-v.vgt
-  # GTiff, HDF5:NetCDF.Group
+  # NDVI, VITO, proba-v.vgt
   PROBAV:
     account: 'VITO'
     meta:
@@ -4545,3 +4562,75 @@ products:
               dem:
                 w: 751
                 h: 801
+
+  # Enhanced Thematic Mapper, Surface Energy Balance System
+  SEBS:
+    account: 'IHEWA'
+    meta:
+      owner: 'IHE Delft'
+      description:
+        ''
+      websites:
+        - 'https://www.wateraccounting.org'
+        - 'https://earth.esa.int/web/guest/missions/3rd-party-missions/historical-missions/landsat-tmetm'
+        - 'https://landsat.gsfc.nasa.gov/the-enhanced-thematic-mapper-plus/'
+      protocols:
+        - 'FTP'
+      methods:
+        - 'get'
+      ftypes:
+        - 'Matlab'
+      versions:
+        - 'v1'
+      datasets:
+        - 'Energy'
+      resolutions:
+        - 'monthly'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
+    v1:
+      Energy:
+        monthly:
+          url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
+          method: 'get'
+          freq: 'MS'
+          variables:
+            ETM:
+              variable: null
+              name: 'Monthly Enhanced Thematic Mapper'
+              description:
+                ''
+              dfmt: null
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/WaterAccounting_Guest/SEBS/Global_land_ET_V1/'
+              fname:
+                r: 'ETm{dtime:%Y%m}.mat'
+                t: null
+                l: 'ETM_v1_._D-{dtime:%Y%m}.tif'
+              ftype:
+                r: 'Matlab'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.1
+              lat:
+                s: -90.0
+                n: 90.0
+                r: 0.05
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.05
+              time:
+                s: 2000-04-01
+                e: 2017-06-30
+              dem:
+                w: 7200
+                h: 3600
