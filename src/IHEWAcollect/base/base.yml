@@ -4674,9 +4674,135 @@ products:
           method: 'get'
           freq: null
           variables:
+            BDRICM:
+              variable: null
+              name: 'Depth to bedrock (R horizon)'
+              description:
+                'Depth to bedrock (R horizon) up to 200 cm predicted using the global compilation of
+                 soil ground observations. Accuracy assessement of the maps is availble in Hengl et at.
+                 (2017) DOI: 10.1371/journal.pone.0169748. Data provided as GeoTIFFs with internal
+                 compression (co=''COMPRESS=DEFLATE''). Measurement units: cm.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'BDRICM_M_250m_ll.tif'
+                t: null
+                l: 'BDRICM_v1_m.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: 'cm'
+                l: 'm'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            BDRLOG:
+              variable: null
+              name: 'Probability of occurrence of R horizon'
+              description:
+                'Probability of occurrence of R horizon predicted using the global compilation of soil
+                 ground observations. Accuracy assessement of the maps is availble in Hengl et at.
+                 (2017) DOI: 10.1371/journal.pone.0169748. Data provided as GeoTIFFs with internal
+                 compression (co=''COMPRESS=DEFLATE''). Measurement units: probability.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'BDRLOG_M_250m_ll.tif'
+                t: null
+                l: 'BDRLOG_v1_percent.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            BDTICM:
+              variable: null
+              name: 'Absolute depth to bedrock'
+              description:
+                'Absolute depth to bedrock (in cm) predicted using the global compilation of soil
+                 ground observations. Accuracy assessement of the maps is availble in Hengl et at.
+                 (2017) DOI: 10.1371/journal.pone.0169748. Data provided as GeoTIFFs with internal
+                 compression (co=''COMPRESS=DEFLATE''). Measurement units: cm.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'BDTICM_M_250m_ll.tif'
+                t: null
+                l: 'BDTICM_v1_m.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int32'
+                t:
+                l: 'float32'
+              units:
+                r: 'cm'
+                l: 'm'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
             BLDFIE0:
               variable: null
-              name: 'Bulk density at depth 0 cm'
+              name: 'Bulk density (fine earth) at depth 0 cm'
               description:
                 'Bulk density (fine earth) in kg / cubic-meter at 7 standard depths predicted using
                  the global compilation of soil ground observations. Accuracy assessement of the maps
@@ -4690,7 +4816,7 @@ products:
               fname:
                 r: 'BLDFIE_M_sl1_250m_ll.tif'
                 t: null
-                l: 'BLDFIE_v1_kg.m3.tif'
+                l: 'BLDFIE_v1_kg.m3-0cm.tif'
               ftype:
                 r: 'GTiff'
                 t: null
@@ -4712,8 +4838,941 @@ products:
                 e: 180.0
                 r: 0.0020833330000009
               time:
-                s: 2000-04-01
-                e: 2017-06-30
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            BLDFIE5:
+              variable: null
+              name: 'Bulk density (fine earth) at depth 5 cm'
+              description:
+                'Bulk density (fine earth) in kg / cubic-meter at 7 standard depths predicted using
+                 the global compilation of soil ground observations. Accuracy assessement of the maps
+                 is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided
+                 as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement units:
+                 kg / m3.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'BLDFIE_M_sl2_250m_ll.tif'
+                t: null
+                l: 'BLDFIE_v1_kg.m3-5cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 'kg.m3'
+                l: 'kg.m3'
+                m: 1.0
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            BLDFIE15:
+              variable: null
+              name: 'Bulk density (fine earth) at depth 15 cm'
+              description:
+                'Bulk density (fine earth) in kg / cubic-meter at 7 standard depths predicted using
+                 the global compilation of soil ground observations. Accuracy assessement of the maps
+                 is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided
+                 as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement units:
+                 kg / m3.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'BLDFIE_M_sl3_250m_ll.tif'
+                t: null
+                l: 'BLDFIE_v1_kg.m3-15cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 'kg.m3'
+                l: 'kg.m3'
+                m: 1.0
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            BLDFIE30:
+              variable: null
+              name: 'Bulk density (fine earth) at depth 30 cm'
+              description:
+                'Bulk density (fine earth) in kg / cubic-meter at 7 standard depths predicted using
+                 the global compilation of soil ground observations. Accuracy assessement of the maps
+                 is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided
+                 as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement units:
+                 kg / m3.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'BLDFIE_M_sl4_250m_ll.tif'
+                t: null
+                l: 'BLDFIE_v1_kg.m3-30cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 'kg.m3'
+                l: 'kg.m3'
+                m: 1.0
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            BLDFIE60:
+              variable: null
+              name: 'Bulk density (fine earth) at depth 60 cm'
+              description:
+                'Bulk density (fine earth) in kg / cubic-meter at 7 standard depths predicted using
+                 the global compilation of soil ground observations. Accuracy assessement of the maps
+                 is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided
+                 as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement units:
+                 kg / m3.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'BLDFIE_M_sl5_250m_ll.tif'
+                t: null
+                l: 'BLDFIE_v1_kg.m3-60cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 'kg.m3'
+                l: 'kg.m3'
+                m: 1.0
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            BLDFIE100:
+              variable: null
+              name: 'Bulk density (fine earth) at depth 100 cm'
+              description:
+                'Bulk density (fine earth) in kg / cubic-meter at 7 standard depths predicted using
+                 the global compilation of soil ground observations. Accuracy assessement of the maps
+                 is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided
+                 as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement units:
+                 kg / m3.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'BLDFIE_M_sl6_250m_ll.tif'
+                t: null
+                l: 'BLDFIE_v1_kg.m3-100cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 'kg.m3'
+                l: 'kg.m3'
+                m: 1.0
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            BLDFIE200:
+              variable: null
+              name: 'Bulk density (fine earth) at depth 200 cm'
+              description:
+                'Bulk density (fine earth) in kg / cubic-meter at 7 standard depths predicted using
+                 the global compilation of soil ground observations. Accuracy assessement of the maps
+                 is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided
+                 as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement units:
+                 kg / m3.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'BLDFIE_M_sl7_250m_ll.tif'
+                t: null
+                l: 'BLDFIE_v1_kg.m3-200cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 'kg.m3'
+                l: 'kg.m3'
+                m: 1.0
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            CLYPPT0:
+              variable: null
+              name: 'Clay content (0-2 micro meter) mass fraction at depth 0 cm'
+              description:
+                'Clay content (0-2 micro meter) mass fraction in % at 7 standard depths predicted using
+                 the global compilation of soil ground observations. Accuracy assessement of the maps
+                 is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided
+                 as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'CLYPPT_M_sl1_250m_ll.tif'
+                t: null
+                l: 'CLYPPT_v1_percent-0cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            CLYPPT5:
+              variable: null
+              name: 'Clay content (0-2 micro meter) mass fraction at depth 5 cm'
+              description:
+                'Clay content (0-2 micro meter) mass fraction in % at 7 standard depths predicted using
+                 the global compilation of soil ground observations. Accuracy assessement of the maps
+                 is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided
+                 as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'CLYPPT_M_sl2_250m_ll.tif'
+                t: null
+                l: 'CLYPPT_v1_percent-5cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            CLYPPT15:
+              variable: null
+              name: 'Clay content (0-2 micro meter) mass fraction at depth 15 cm'
+              description:
+                'Clay content (0-2 micro meter) mass fraction in % at 7 standard depths predicted using
+                 the global compilation of soil ground observations. Accuracy assessement of the maps
+                 is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided
+                 as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'CLYPPT_M_sl3_250m_ll.tif'
+                t: null
+                l: 'CLYPPT_v1_percent-15cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            CLYPPT30:
+              variable: null
+              name: 'Clay content (0-2 micro meter) mass fraction at depth 30 cm'
+              description:
+                'Clay content (0-2 micro meter) mass fraction in % at 7 standard depths predicted using
+                 the global compilation of soil ground observations. Accuracy assessement of the maps
+                 is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided
+                 as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'CLYPPT_M_sl4_250m_ll.tif'
+                t: null
+                l: 'CLYPPT_v1_percent-30cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            CLYPPT60:
+              variable: null
+              name: 'Clay content (0-2 micro meter) mass fraction at depth 60 cm'
+              description:
+                'Clay content (0-2 micro meter) mass fraction in % at 7 standard depths predicted using
+                 the global compilation of soil ground observations. Accuracy assessement of the maps
+                 is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided
+                 as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'CLYPPT_M_sl5_250m_ll.tif'
+                t: null
+                l: 'CLYPPT_v1_percent-60cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            CLYPPT100:
+              variable: null
+              name: 'Clay content (0-2 micro meter) mass fraction at depth 100 cm'
+              description:
+                'Clay content (0-2 micro meter) mass fraction in % at 7 standard depths predicted using
+                 the global compilation of soil ground observations. Accuracy assessement of the maps
+                 is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided
+                 as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'CLYPPT_M_sl6_250m_ll.tif'
+                t: null
+                l: 'CLYPPT_v1_percent-100cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            CLYPPT200:
+              variable: null
+              name: 'Clay content (0-2 micro meter) mass fraction at depth 200 cm'
+              description:
+                'Clay content (0-2 micro meter) mass fraction in % at 7 standard depths predicted using
+                 the global compilation of soil ground observations. Accuracy assessement of the maps
+                 is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided
+                 as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'CLYPPT_M_sl7_250m_ll.tif'
+                t: null
+                l: 'CLYPPT_v1_percent-200cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            CRFVOL0:
+              variable: null
+              name: 'Coarse fragments volumetric at depth 0 cm'
+              description:
+                'Coarse fragments volumetric in % at 7 standard depths predicted using the global
+                 compilation of soil ground observations. Accuracy assessement of the maps is availble
+                 in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided as GeoTIFFs
+                 with internal compression (co=''COMPRESS=DEFLATE''). Measurement units: v%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'CRFVOL_M_sl1_250m_ll.tif'
+                t: null
+                l: 'CRFVOL_v1_percent-0cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            CRFVOL5:
+              variable: null
+              name: 'Coarse fragments volumetric at depth 5 cm'
+              description:
+                'Coarse fragments volumetric in % at 7 standard depths predicted using the global
+                 compilation of soil ground observations. Accuracy assessement of the maps is availble
+                 in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided as GeoTIFFs
+                 with internal compression (co=''COMPRESS=DEFLATE''). Measurement units: v%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'CRFVOL_M_sl2_250m_ll.tif'
+                t: null
+                l: 'CRFVOL_v1_percent-5cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            CRFVOL15:
+              variable: null
+              name: 'Coarse fragments volumetric at depth 15 cm'
+              description:
+                'Coarse fragments volumetric in % at 7 standard depths predicted using the global
+                 compilation of soil ground observations. Accuracy assessement of the maps is availble
+                 in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided as GeoTIFFs
+                 with internal compression (co=''COMPRESS=DEFLATE''). Measurement units: v%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'CRFVOL_M_sl3_250m_ll.tif'
+                t: null
+                l: 'CRFVOL_v1_percent-15cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            CRFVOL30:
+              variable: null
+              name: 'Coarse fragments volumetric at depth 30 cm'
+              description:
+                'Coarse fragments volumetric in % at 7 standard depths predicted using the global
+                 compilation of soil ground observations. Accuracy assessement of the maps is availble
+                 in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided as GeoTIFFs
+                 with internal compression (co=''COMPRESS=DEFLATE''). Measurement units: v%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'CRFVOL_M_sl4_250m_ll.tif'
+                t: null
+                l: 'CRFVOL_v1_percent-30cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            CRFVOL60:
+              variable: null
+              name: 'Coarse fragments volumetric at depth 60 cm'
+              description:
+                'Coarse fragments volumetric in % at 7 standard depths predicted using the global
+                 compilation of soil ground observations. Accuracy assessement of the maps is availble
+                 in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided as GeoTIFFs
+                 with internal compression (co=''COMPRESS=DEFLATE''). Measurement units: v%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'CRFVOL_M_sl5_250m_ll.tif'
+                t: null
+                l: 'CRFVOL_v1_percent-60cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            CRFVOL100:
+              variable: null
+              name: 'Coarse fragments volumetric at depth 100 cm'
+              description:
+                'Coarse fragments volumetric in % at 7 standard depths predicted using the global
+                 compilation of soil ground observations. Accuracy assessement of the maps is availble
+                 in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided as GeoTIFFs
+                 with internal compression (co=''COMPRESS=DEFLATE''). Measurement units: v%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'CRFVOL_M_sl6_250m_ll.tif'
+                t: null
+                l: 'CRFVOL_v1_percent-100cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            CRFVOL200:
+              variable: null
+              name: 'Coarse fragments volumetric at depth 200 cm'
+              description:
+                'Coarse fragments volumetric in % at 7 standard depths predicted using the global
+                 compilation of soil ground observations. Accuracy assessement of the maps is availble
+                 in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided as GeoTIFFs
+                 with internal compression (co=''COMPRESS=DEFLATE''). Measurement units: v%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'CRFVOL_M_sl7_250m_ll.tif'
+                t: null
+                l: 'CRFVOL_v1_percent-200cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+
+            OCSTHA0_5:
+              variable: null
+              name: 'Soil organic carbon stock at depth 0-5 cm'
+              description:
+                'Soil organic carbon stock in tons per ha for 6 standard depth intervals predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748.
+                 Data provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE'').
+                 Measurement units: t / ha.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'OCSTHA_M_sd1_250m_ll.tif'
+                t: null
+                l: 'OCSTHA_v1_percent-0_5cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 't.ha'
+                l: 'kg.m2'
+                m: 0.1
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            ORCDRC0:
+              variable: null
+              name: 'Soil organic carbon content (fine earth fraction) at depth 0 cm'
+              description:
+                'Soil organic carbon content (fine earth fraction) in g per kg at 7 standard depths
+                 predicted using the global compilation of soil ground observations. Accuracy assessement
+                 of the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748.
+                 Data provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE'').
+                 Measurement units: g / kg'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'ORCDRC_M_sl1_250m_ll.tif'
+                t: null
+                l: 'ORCDRC_v1_percent-0cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 'g.kg'
+                l: '.'
+                m: 0.001
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
               dem:
                 w: 172800
                 h: 67200
