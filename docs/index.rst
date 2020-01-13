@@ -92,6 +92,9 @@ Products
 | SEBS       | .. image:: ./img/SEBS.png       | https://www.wateraccounting.org              |
 |            |    :height: 40pt                |                                              |
 +------------+---------------------------------+----------------------------------------------+
+| SoilGrids  | .. image:: ./img/SoilGrids.png  | https://www.isric.org                        |
+|            |    :height: 40pt                |                                              |
++------------+---------------------------------+----------------------------------------------+
 
 
 Development

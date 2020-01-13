@@ -794,6 +794,7 @@ products:
                 w: 7200
                 h: 3600
 
+  # Spatial resolution
   DEM:
     account: null'
     meta:
@@ -3333,7 +3334,7 @@ products:
                 w: 3600
                 h: 1800
 
-  # Theta Saturated Topsoil
+  # Theta Saturated Topsoil, Spatial resolution
   HiHydroSoil:
     account: 'IHEWA'
     meta:
@@ -3407,7 +3408,7 @@ products:
                 w: 43200
                 h: 21600
 
-  # Water occurrence
+  # Water occurrence, Spatial resolution
   JRC:
     account: null
     meta:
@@ -4589,7 +4590,7 @@ products:
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
     v1:
-      Energy:
+      energy:
         monthly:
           url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
           method: 'get'
@@ -4634,3 +4635,85 @@ products:
               dem:
                 w: 7200
                 h: 3600
+
+  # Soil, Spatial resolution
+  SoilGrids:
+    account: null'
+    meta:
+      owner: 'ISRIC - World Soil Information'
+      description:
+        'ISRIC has a mission to "serve the international community with information about the world''s
+         soil resources to help addressing major global issues." This process involves all stages of
+         the data life cycle from data sampling in the field and laboratory analyses to collation into
+         quality-assessed databases followed by data standardisation, analysis, modelling, and publication
+         of the data. With partners, we are working towards the maintenance and development of new,
+         internationally, recognised standards for handling soil data.'
+      websites:
+        - 'https://www.isric.org'
+        - 'https://soilgrids.org'
+        - 'https://data.isric.org/geonetwork/srv/eng/catalog.search#/home'
+        - 'https://www.isric.org/explore/wosis/accessing-wosis-derived-datasets'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'get'
+      ftypes:
+        - 'GTiff'
+      versions:
+        - 'v1'
+      datasets:
+        - 'Soil'
+      resolutions:
+        - '9s'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
+    v1:
+      soil:
+        9s:
+          url: 'https://files.isric.org'
+          method: 'get'
+          freq: null
+          variables:
+            BLDFIE0:
+              variable: null
+              name: 'Bulk density at depth 0 cm'
+              description:
+                'Bulk density (fine earth) in kg / cubic-meter at 7 standard depths predicted using
+                 the global compilation of soil ground observations. Accuracy assessement of the maps
+                 is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data provided
+                 as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement units:
+                 kg / m3.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'BLDFIE_M_sl1_250m_ll.tif'
+                t: null
+                l: 'BLDFIE_v1_kg.m3.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 'kg.m3'
+                l: 'kg.m3'
+                m: 1.0
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: 2000-04-01
+                e: 2017-06-30
+              dem:
+                w: 172800
+                h: 67200
