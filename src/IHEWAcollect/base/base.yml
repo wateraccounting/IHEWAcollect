@@ -4800,7 +4800,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            BLDFIE0:
+            BLDFIE1:
               variable: null
               name: 'Bulk density (fine earth) at depth 0 cm'
               description:
@@ -4843,7 +4843,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            BLDFIE5:
+            BLDFIE2:
               variable: null
               name: 'Bulk density (fine earth) at depth 5 cm'
               description:
@@ -4886,7 +4886,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            BLDFIE15:
+            BLDFIE3:
               variable: null
               name: 'Bulk density (fine earth) at depth 15 cm'
               description:
@@ -4929,7 +4929,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            BLDFIE30:
+            BLDFIE4:
               variable: null
               name: 'Bulk density (fine earth) at depth 30 cm'
               description:
@@ -4972,7 +4972,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            BLDFIE60:
+            BLDFIE5:
               variable: null
               name: 'Bulk density (fine earth) at depth 60 cm'
               description:
@@ -5015,7 +5015,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            BLDFIE100:
+            BLDFIE6:
               variable: null
               name: 'Bulk density (fine earth) at depth 100 cm'
               description:
@@ -5058,7 +5058,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            BLDFIE200:
+            BLDFIE7:
               variable: null
               name: 'Bulk density (fine earth) at depth 200 cm'
               description:
@@ -5101,7 +5101,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            CLYPPT0:
+            CLYPPT1:
               variable: null
               name: 'Clay content (0-2 micro meter) mass fraction at depth 0 cm'
               description:
@@ -5143,7 +5143,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            CLYPPT5:
+            CLYPPT2:
               variable: null
               name: 'Clay content (0-2 micro meter) mass fraction at depth 5 cm'
               description:
@@ -5185,7 +5185,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            CLYPPT15:
+            CLYPPT3:
               variable: null
               name: 'Clay content (0-2 micro meter) mass fraction at depth 15 cm'
               description:
@@ -5227,7 +5227,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            CLYPPT30:
+            CLYPPT4:
               variable: null
               name: 'Clay content (0-2 micro meter) mass fraction at depth 30 cm'
               description:
@@ -5269,7 +5269,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            CLYPPT60:
+            CLYPPT5:
               variable: null
               name: 'Clay content (0-2 micro meter) mass fraction at depth 60 cm'
               description:
@@ -5311,7 +5311,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            CLYPPT100:
+            CLYPPT6:
               variable: null
               name: 'Clay content (0-2 micro meter) mass fraction at depth 100 cm'
               description:
@@ -5353,7 +5353,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            CLYPPT200:
+            CLYPPT7:
               variable: null
               name: 'Clay content (0-2 micro meter) mass fraction at depth 200 cm'
               description:
@@ -5395,7 +5395,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            CRFVOL0:
+            CRFVOL1:
               variable: null
               name: 'Coarse fragments volumetric at depth 0 cm'
               description:
@@ -5437,7 +5437,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            CRFVOL5:
+            CRFVOL2:
               variable: null
               name: 'Coarse fragments volumetric at depth 5 cm'
               description:
@@ -5479,7 +5479,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            CRFVOL15:
+            CRFVOL3:
               variable: null
               name: 'Coarse fragments volumetric at depth 15 cm'
               description:
@@ -5521,7 +5521,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            CRFVOL30:
+            CRFVOL4:
               variable: null
               name: 'Coarse fragments volumetric at depth 30 cm'
               description:
@@ -5563,7 +5563,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            CRFVOL60:
+            CRFVOL5:
               variable: null
               name: 'Coarse fragments volumetric at depth 60 cm'
               description:
@@ -5605,7 +5605,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            CRFVOL100:
+            CRFVOL6:
               variable: null
               name: 'Coarse fragments volumetric at depth 100 cm'
               description:
@@ -5647,7 +5647,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            CRFVOL200:
+            CRFVOL7:
               variable: null
               name: 'Coarse fragments volumetric at depth 200 cm'
               description:
@@ -5689,8 +5689,7 @@ products:
               dem:
                 w: 172800
                 h: 67200
-
-            OCSTHA0_5:
+            OCSTHA1:
               variable: null
               name: 'Soil organic carbon stock at depth 0-5 cm'
               description:
@@ -5733,7 +5732,222 @@ products:
               dem:
                 w: 172800
                 h: 67200
-            ORCDRC0:
+            OCSTHA2:
+              variable: null
+              name: 'Soil organic carbon stock at depth 5-15 cm'
+              description:
+                'Soil organic carbon stock in tons per ha for 6 standard depth intervals predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748.
+                 Data provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE'').
+                 Measurement units: t / ha.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'OCSTHA_M_sd2_250m_ll.tif'
+                t: null
+                l: 'OCSTHA_v1_percent-5_15cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 't.ha'
+                l: 'kg.m2'
+                m: 0.1
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            OCSTHA3:
+              variable: null
+              name: 'Soil organic carbon stock at depth 15-30 cm'
+              description:
+                'Soil organic carbon stock in tons per ha for 6 standard depth intervals predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748.
+                 Data provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE'').
+                 Measurement units: t / ha.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'OCSTHA_M_sd3_250m_ll.tif'
+                t: null
+                l: 'OCSTHA_v1_percent-15_30cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 't.ha'
+                l: 'kg.m2'
+                m: 0.1
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            OCSTHA4:
+              variable: null
+              name: 'Soil organic carbon stock at depth 30-60 cm'
+              description:
+                'Soil organic carbon stock in tons per ha for 6 standard depth intervals predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748.
+                 Data provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE'').
+                 Measurement units: t / ha.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'OCSTHA_M_sd4_250m_ll.tif'
+                t: null
+                l: 'OCSTHA_v1_percent-30_60cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 't.ha'
+                l: 'kg.m2'
+                m: 0.1
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            OCSTHA5:
+              variable: null
+              name: 'Soil organic carbon stock at depth 60-100 cm'
+              description:
+                'Soil organic carbon stock in tons per ha for 6 standard depth intervals predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748.
+                 Data provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE'').
+                 Measurement units: t / ha.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'OCSTHA_M_sd5_250m_ll.tif'
+                t: null
+                l: 'OCSTHA_v1_percent-60_100cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 't.ha'
+                l: 'kg.m2'
+                m: 0.1
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            OCSTHA6:
+              variable: null
+              name: 'Soil organic carbon stock at depth 100-200 cm'
+              description:
+                'Soil organic carbon stock in tons per ha for 6 standard depth intervals predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748.
+                 Data provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE'').
+                 Measurement units: t / ha.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'OCSTHA_M_sd6_250m_ll.tif'
+                t: null
+                l: 'OCSTHA_v1_percent-100_200cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 't.ha'
+                l: 'kg.m2'
+                m: 0.1
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            ORCDRC1:
               variable: null
               name: 'Soil organic carbon content (fine earth fraction) at depth 0 cm'
               description:
@@ -5762,6 +5976,866 @@ products:
                 r: 'g.kg'
                 l: '.'
                 m: 0.001
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            ORCDRC2:
+              variable: null
+              name: 'Soil organic carbon content (fine earth fraction) at depth 5 cm'
+              description:
+                'Soil organic carbon content (fine earth fraction) in g per kg at 7 standard depths
+                 predicted using the global compilation of soil ground observations. Accuracy assessement
+                 of the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748.
+                 Data provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE'').
+                 Measurement units: g / kg'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'ORCDRC_M_sl2_250m_ll.tif'
+                t: null
+                l: 'ORCDRC_v1_percent-5cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 'g.kg'
+                l: '.'
+                m: 0.001
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            ORCDRC3:
+              variable: null
+              name: 'Soil organic carbon content (fine earth fraction) at depth 15 cm'
+              description:
+                'Soil organic carbon content (fine earth fraction) in g per kg at 7 standard depths
+                 predicted using the global compilation of soil ground observations. Accuracy assessement
+                 of the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748.
+                 Data provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE'').
+                 Measurement units: g / kg'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'ORCDRC_M_sl3_250m_ll.tif'
+                t: null
+                l: 'ORCDRC_v1_percent-15cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 'g.kg'
+                l: '.'
+                m: 0.001
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            ORCDRC4:
+              variable: null
+              name: 'Soil organic carbon content (fine earth fraction) at depth 30 cm'
+              description:
+                'Soil organic carbon content (fine earth fraction) in g per kg at 7 standard depths
+                 predicted using the global compilation of soil ground observations. Accuracy assessement
+                 of the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748.
+                 Data provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE'').
+                 Measurement units: g / kg'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'ORCDRC_M_sl4_250m_ll.tif'
+                t: null
+                l: 'ORCDRC_v1_percent-30cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 'g.kg'
+                l: '.'
+                m: 0.001
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            ORCDRC5:
+              variable: null
+              name: 'Soil organic carbon content (fine earth fraction) at depth 60 cm'
+              description:
+                'Soil organic carbon content (fine earth fraction) in g per kg at 7 standard depths
+                 predicted using the global compilation of soil ground observations. Accuracy assessement
+                 of the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748.
+                 Data provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE'').
+                 Measurement units: g / kg'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'ORCDRC_M_sl5_250m_ll.tif'
+                t: null
+                l: 'ORCDRC_v1_percent-60cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 'g.kg'
+                l: '.'
+                m: 0.001
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            ORCDRC6:
+              variable: null
+              name: 'Soil organic carbon content (fine earth fraction) at depth 100 cm'
+              description:
+                'Soil organic carbon content (fine earth fraction) in g per kg at 7 standard depths
+                 predicted using the global compilation of soil ground observations. Accuracy assessement
+                 of the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748.
+                 Data provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE'').
+                 Measurement units: g / kg'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'ORCDRC_M_sl6_250m_ll.tif'
+                t: null
+                l: 'ORCDRC_v1_percent-100cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 'g.kg'
+                l: '.'
+                m: 0.001
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            ORCDRC7:
+              variable: null
+              name: 'Soil organic carbon content (fine earth fraction) at depth 200 cm'
+              description:
+                'Soil organic carbon content (fine earth fraction) in g per kg at 7 standard depths
+                 predicted using the global compilation of soil ground observations. Accuracy assessement
+                 of the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748.
+                 Data provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE'').
+                 Measurement units: g / kg'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'ORCDRC_M_sl7_250m_ll.tif'
+                t: null
+                l: 'ORCDRC_v1_percent-200cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t:
+                l: 'float32'
+              units:
+                r: 'g.kg'
+                l: '.'
+                m: 0.001
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            SLTPPT1:
+              variable: null
+              name: 'Silt content (2-50 micro meter) mass fraction at depth 0 cm'
+              description:
+                'Silt content (2-50 micro meter) mass fraction in % at 7 standard depths predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data
+                 provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement
+                 units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'SLTPPT_M_sl1_250m_ll.tif'
+                t: null
+                l: 'SLTPPT_v1_percent-0cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            SLTPPT2:
+              variable: null
+              name: 'Silt content (2-50 micro meter) mass fraction at depth 5 cm'
+              description:
+                'Silt content (2-50 micro meter) mass fraction in % at 7 standard depths predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data
+                 provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement
+                 units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'SLTPPT_M_sl2_250m_ll.tif'
+                t: null
+                l: 'SLTPPT_v1_percent-5cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            SLTPPT3:
+              variable: null
+              name: 'Silt content (2-50 micro meter) mass fraction at depth 15 cm'
+              description:
+                'Silt content (2-50 micro meter) mass fraction in % at 7 standard depths predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data
+                 provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement
+                 units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'SLTPPT_M_sl3_250m_ll.tif'
+                t: null
+                l: 'SLTPPT_v1_percent-15cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            SLTPPT4:
+              variable: null
+              name: 'Silt content (2-50 micro meter) mass fraction at depth 30 cm'
+              description:
+                'Silt content (2-50 micro meter) mass fraction in % at 7 standard depths predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data
+                 provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement
+                 units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'SLTPPT_M_sl4_250m_ll.tif'
+                t: null
+                l: 'SLTPPT_v1_percent-30cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            SLTPPT5:
+              variable: null
+              name: 'Silt content (2-50 micro meter) mass fraction at depth 60 cm'
+              description:
+                'Silt content (2-50 micro meter) mass fraction in % at 7 standard depths predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data
+                 provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement
+                 units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'SLTPPT_M_sl5_250m_ll.tif'
+                t: null
+                l: 'SLTPPT_v1_percent-60cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            SLTPPT6:
+              variable: null
+              name: 'Silt content (2-50 micro meter) mass fraction at depth 100 cm'
+              description:
+                'Silt content (2-50 micro meter) mass fraction in % at 7 standard depths predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data
+                 provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement
+                 units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'SLTPPT_M_sl6_250m_ll.tif'
+                t: null
+                l: 'SLTPPT_v1_percent-100cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            SLTPPT7:
+              variable: null
+              name: 'Silt content (2-50 micro meter) mass fraction at depth 200 cm'
+              description:
+                'Silt content (2-50 micro meter) mass fraction in % at 7 standard depths predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data
+                 provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement
+                 units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'SLTPPT_M_sl7_250m_ll.tif'
+                t: null
+                l: 'SLTPPT_v1_percent-200cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            SNDPPT1:
+              variable: null
+              name: 'Sand content (50-2000 micro meter) mass fraction at depth 0 cm'
+              description:
+                'Sand content (50-2000 micro meter) mass fraction in % at 7 standard depths predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data
+                 provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement
+                 units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'SNDPPT_M_sl1_250m_ll.tif'
+                t: null
+                l: 'SNDPPT_v1_percent-0cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            SNDPPT2:
+              variable: null
+              name: 'Sand content (50-2000 micro meter) mass fraction at depth 5 cm'
+              description:
+                'Sand content (50-2000 micro meter) mass fraction in % at 7 standard depths predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data
+                 provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement
+                 units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'SNDPPT_M_sl2_250m_ll.tif'
+                t: null
+                l: 'SNDPPT_v1_percent-5cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            SNDPPT3:
+              variable: null
+              name: 'Sand content (50-2000 micro meter) mass fraction at depth 15 cm'
+              description:
+                'Sand content (50-2000 micro meter) mass fraction in % at 7 standard depths predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data
+                 provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement
+                 units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'SNDPPT_M_sl3_250m_ll.tif'
+                t: null
+                l: 'SNDPPT_v1_percent-15cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            SNDPPT4:
+              variable: null
+              name: 'Sand content (50-2000 micro meter) mass fraction at depth 30 cm'
+              description:
+                'Sand content (50-2000 micro meter) mass fraction in % at 7 standard depths predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data
+                 provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement
+                 units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'SNDPPT_M_sl4_250m_ll.tif'
+                t: null
+                l: 'SNDPPT_v1_percent-30cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            SNDPPT5:
+              variable: null
+              name: 'Sand content (50-2000 micro meter) mass fraction at depth 60 cm'
+              description:
+                'Sand content (50-2000 micro meter) mass fraction in % at 7 standard depths predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data
+                 provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement
+                 units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'SNDPPT_M_sl5_250m_ll.tif'
+                t: null
+                l: 'SNDPPT_v1_percent-60cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            SNDPPT6:
+              variable: null
+              name: 'Sand content (50-2000 micro meter) mass fraction at depth 100 cm'
+              description:
+                'Sand content (50-2000 micro meter) mass fraction in % at 7 standard depths predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data
+                 provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement
+                 units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'SNDPPT_M_sl6_250m_ll.tif'
+                t: null
+                l: 'SNDPPT_v1_percent-100cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
+              lat:
+                s: -56.0
+                n: 84.0
+                r: 0.0020833330000009
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0020833330000009
+              time:
+                s: null
+                e: null
+              dem:
+                w: 172800
+                h: 67200
+            SNDPPT7:
+              variable: null
+              name: 'Sand content (50-2000 micro meter) mass fraction at depth 200 cm'
+              description:
+                'Sand content (50-2000 micro meter) mass fraction in % at 7 standard depths predicted
+                 using the global compilation of soil ground observations. Accuracy assessement of
+                 the maps is availble in Hengl et at. (2017) DOI: 10.1371/journal.pone.0169748. Data
+                 provided as GeoTIFFs with internal compression (co=''COMPRESS=DEFLATE''). Measurement
+                 units: w%.'
+              dfmt: null
+              rfmt: null'
+              tfmt: null
+              dir: '/soilgrids/data/recent/'
+              fname:
+                r: 'SNDPPT_M_sl7_250m_ll.tif'
+                t: null
+                l: 'SNDPPT_v1_percent-200cm.tif'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t:
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 0.01
               lat:
                 s: -56.0
                 n: 84.0
