@@ -23,8 +23,8 @@ messages:
 
 products:
   # ETA
-  # lpdaac.usgs.gov
   # ftp.wateraccounting.unesco-ihe.org
+  # lpdaac.usgs.gov
   ALEXI:
     account: 'IHEWA'
     meta:
@@ -4603,8 +4603,9 @@ products:
                 w: 751
                 h: 801
 
-  # Surface Energy Balance System
+  # Surface Energy Balance System ETM
   # ftp.wateraccounting.unesco-ihe.org
+  # earthexplorer.usgs.gov
   SEBS:
     account: 'IHEWA'
     meta:
@@ -4614,7 +4615,8 @@ products:
       websites:
         - 'https://www.wateraccounting.org'
         - 'https://earth.esa.int/web/guest/missions/3rd-party-missions/historical-missions/landsat-tmetm'
-        - 'https://landsat.gsfc.nasa.gov/the-enhanced-thematic-mapper-plus/'
+        - 'https://landsat.gsfc.nasa.gov/the-enhanced-thematic-mapper-plus'
+        - 'https://www.usgs.gov/centers/eros/science/usgs-eros-archive-landsat-archives-landsat-7-enhanced-thematic-mapper-plus-etm?qt-science_center_objects=0#qt-science_center_objects'
       protocols:
         - 'FTP'
       methods:
@@ -7029,6 +7031,7 @@ products:
 
   # GWF WPL
   # ftp.wateraccounting.unesco-ihe.org
+  # waterfootprint.org
   TWC:
     account: 'IHEWA'
     meta:
