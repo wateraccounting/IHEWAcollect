@@ -23,6 +23,7 @@ messages:
 
 products:
   # ETA
+  # ftp.wateraccounting.unesco-ihe.org
   ALEXI:
     account: 'IHEWA'
     meta:
@@ -138,7 +139,8 @@ products:
                 w: 7200
                 h: 3000
 
-  # VITO, land.copernicus.vgt
+  # SWI, VITO
+  # land.copernicus.vgt.vito.be
   ASCAT:
     account: 'Copernicus'
     meta:
@@ -215,6 +217,7 @@ products:
                 h: 1800
 
   # Radiation
+  # nomads.ncdc.noaa.gov
   CFSR:
     account: null
     meta:
@@ -607,6 +610,7 @@ products:
                 h: 880
 
   # PCP
+  # chg-ftpout.geog.ucsb.edu
   CHIRPS:
     account: null
     meta:
@@ -725,6 +729,7 @@ products:
                 h: 2000
 
   # ETA
+  # ftp.wateraccounting.unesco-ihe.org
   CMRSET:
     account: 'IHEWA'
     meta:
@@ -795,6 +800,8 @@ products:
                 h: 3600
 
   # Spatial resolution
+  # DEM, DIR
+  # edcintl.cr.usgs.gov
   DEM:
     account: null'
     meta:
@@ -2532,6 +2539,7 @@ products:
     v1:
 
   # ETA, ETP, ..., T
+  # ftp.wateraccounting.unesco-ihe.org
   ETmonitor:
     # https://www.mdpi.com/books/pdfview/book/1661
     account: 'IHEWA'
@@ -2798,6 +2806,7 @@ products:
                 h: 18000
 
   # ETP, Invoke SSEBop
+  # edcintl.cr.usgs.gov
   FEWS:
     account: null
     meta:
@@ -2872,6 +2881,7 @@ products:
                 h: 181
 
   # E, ..., Variable list
+  # hydro1.gesdisc.eosdis.nasa.gov
   GLDAS:
     account: 'NASA'
     meta:
@@ -2995,6 +3005,7 @@ products:
                 h: 600
 
   # ET
+  # SSH: hydras.ugent.be:2225
   GLEAM:
     account: 'GLEAM'
     meta:
@@ -3204,6 +3215,7 @@ products:
                 h: 720
 
   # PCP
+  # gpm1.gesdisc.eosdis.nasa.gov
   GPM:
     account: 'NASA'
     meta:
@@ -3334,7 +3346,9 @@ products:
                 w: 3600
                 h: 1800
 
-  # Theta Saturated Topsoil, Spatial resolution
+  # Spatial resolution
+  # Theta Saturated Topsoil
+  # ftp.wateraccounting.unesco-ihe.org
   HiHydroSoil:
     account: 'IHEWA'
     meta:
@@ -3408,7 +3422,9 @@ products:
                 w: 43200
                 h: 21600
 
-  # Water occurrence, Spatial resolution
+  # Spatial resolution
+  # Water occurrence
+  # storage.googleapis.com
   JRC:
     account: null
     meta:
@@ -3481,6 +3497,7 @@ products:
                 h: 560000
 
   # Land cover
+  # e4ftl01.cr.usgs.gov
   MCD12Q1:
     # soup = BeautifulSoup(f, "lxml")
     # for i in soup.findAll('a', attrs = {'href': re.compile('(?i)(hdf)$')}):
@@ -3563,6 +3580,7 @@ products:
                 h: 21600
 
   # Albedo
+  # e4ftl01.cr.usgs.gov
   MCD43A3:
     # soup = BeautifulSoup(f, "lxml")
     # for i in soup.findAll('a', attrs = {'href': re.compile('(?i)(hdf)$')}):
@@ -3643,6 +3661,7 @@ products:
                 h: 43200
 
   # Reflectance
+  # e4ftl01.cr.usgs.gov
   MOD09GQ:
     account: 'NASA'
     meta:
@@ -3720,6 +3739,7 @@ products:
                 h: 86400
 
   # Snow Fraction
+  # n5eil01u.ecs.nsidc.org
   MOD10A2:
     # chronology bit flags
     # https://nsidc.org/data/MOD10A2/versions/6#title10
@@ -3800,6 +3820,7 @@ products:
                 h: 43200
 
   # Land Surface Temperature
+  # e4ftl01.cr.usgs.gov
   MOD11A2:
     account: 'NASA'
     meta:
@@ -3879,6 +3900,7 @@ products:
                 h: 21600
 
   # NDVI
+  # e4ftl01.cr.usgs.gov
   MOD13Q1:
     account: 'NASA'
     meta:
@@ -3958,6 +3980,7 @@ products:
                 h: 86400
 
   # Fraction of Photosynthetically Active Radiation
+  # e4ftl01.cr.usgs.gov
   MOD15A2H:
     account: 'NASA'
     meta:
@@ -4033,6 +4056,7 @@ products:
                 h: 43200
 
   # ET
+  # e4ftl01.cr.usgs.gov
   MOD16A2:
     account: 'NASA'
     meta:
@@ -4110,6 +4134,7 @@ products:
                 h: 43200
 
   # Gross Primary Production
+  # e4ftl01.cr.usgs.gov
   MOD17A2H:
     account: 'NASA'
     meta:
@@ -4187,6 +4212,7 @@ products:
                 h: 43200
 
   # Net Primary Production
+  # e4ftl01.cr.usgs.gov
   MOD17A3H:
     # Terra MODIS Net Primary Production Yearly L4 Global 500 m SIN Grid products are currently
     # unavailable due to unexpected errors in the input data.
@@ -4262,7 +4288,8 @@ products:
                 w: 86400
                 h: 43200
 
-  # PCP, Commercial, https://princetonclimate.com/products
+  # PCP, Commercial
+  # princetonclimate.com
   MSWEP:
     account: 'MSWEP'
     meta:
@@ -4335,6 +4362,7 @@ products:
                 h: 0
 
   # NDVI, Same as MOD13Q1
+  # e4ftl01.cr.usgs.gov
   MYD13:
     account: 'NASA'
     meta:
@@ -4413,7 +4441,8 @@ products:
                 w: 172800
                 h: 86400
 
-  # NDVI, VITO, proba-v.vgt
+  # NDVI, VITO
+  # www.vito-eodata.be
   PROBAV:
     account: 'VITO'
     meta:
@@ -4492,6 +4521,7 @@ products:
                 h: 141120
 
   # Rainfall Estimator
+  # ftp.cpc.ncep.noaa.gov
   RFE:
     account: null
     meta:
@@ -4520,7 +4550,7 @@ products:
     v2:
       precipitation:
         daily:
-          url: 'ftp://ftp.cpc.ncep.noaa.gov/'
+          url: 'ftp://ftp.cpc.ncep.noaa.gov'
           method: 'get'
           freq: 'D'
           variables:
@@ -4564,7 +4594,8 @@ products:
                 w: 751
                 h: 801
 
-  # Enhanced Thematic Mapper, Surface Energy Balance System
+  # Surface Energy Balance System
+  # ftp.wateraccounting.unesco-ihe.org
   SEBS:
     account: 'IHEWA'
     meta:
@@ -4636,7 +4667,9 @@ products:
                 w: 7200
                 h: 3600
 
-  # Soil, Spatial resolution
+  # Spatial resolution
+  # Soil
+  # files.isric.org
   SoilGrids:
     account: null'
     meta:
@@ -6850,3 +6883,93 @@ products:
               dem:
                 w: 172800
                 h: 67200
+
+  # https://pmm.nasa.gov/TRMM
+  # https://disc.gsfc.nasa.gov/datasets/TRMM_3B43_7/summary?keywords=TRMM_3B43_7
+  #
+  # disc2.gesdisc.eosdis.nasa.gov
+  TRMM:
+    account: 'NASA'
+    meta:
+      owner: 'National Aeronautics and Space Administration'
+      description:
+        'The Global Precipitation Measurement (GPM) mission is an international network of satellites
+         that provide the next-generation global observations of rain and snow. Building upon the
+         success of the Tropical Rainfall Measuring Mission (TRMM), the GPM concept centers on the
+         deployment of a “Core” satellite carrying an advanced radar / radiometer system to measure
+         precipitation from space and serve as a reference standard to unify precipitation measurements
+         from a constellation of research and operational satellites. Through improved measurements of
+         precipitation globally, the GPM mission is helping to advance our understanding of Earth''s
+         water and energy cycle, improve forecasting of extreme events that cause natural hazards and
+         disasters, and extend current capabilities in using accurate and timely information of
+         precipitation to directly benefit society. GPM, initiated by NASA and the Japan Aerospace
+         Exploration Agency (JAXA) as a global successor to TRMM, comprises a consortium of international
+         space agencies, including the Centre National d’Études Spatiales (CNES), the Indian Space
+         Research Organization (ISRO), the National Oceanic and Atmospheric Administration (NOAA),
+         the European Organization for the Exploitation of Meteorological Satellites (EUMETSAT), and others.'
+      websites:
+        - 'https://pmm.nasa.gov/trmm'
+        - 'https://disc.gsfc.nasa.gov/datasets/TRMM_3B43_7/summary?keywords=TRMM_3B43_7'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'get'
+      ftypes:
+        - 'HDF4'
+      versions:
+        - 'v7'
+        - 'v7a'
+      datasets:
+        - 'Precipitation'
+      resolutions:
+        - 'monthly'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
+    v7:
+      precipitation:
+        monthly:
+          url: 'https://disc2.gesdisc.eosdis.nasa.gov'
+          method: 'get'
+          freq: 'MS'
+          variables:
+            PCP:
+              variable: 'precipitation'
+              name: 'Monthly Precipitation'
+              description:
+                'This product is created using TRMM-adjusted merged microwave-infrared precipitation
+                 rate (in mm/hr) and root-mean-square (RMS) precipitation-error estimates.'
+              dfmt: 'dtime'
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/data/TRMM_L3/TRMM_3B43.7/{dtime:%Y}/'
+              fname:
+                r: '3B43.{dtime:%Y%m01}.7.HDF'
+                t: null
+                l: 'TRMM_v7_mm.d_MS-{dtime:%Y%m}.tif'
+              ftype:
+                r: 'NetCDF.Grid'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'mm.hr'
+                l: 'mm.d'
+                m: 24.0
+              lat:
+                s: -50.0
+                n: 50.0
+                r: 0.25
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.25
+              time:
+                s: 1980-01-01
+                e: 2019-09-30
+              dem:
+                w: 1440
+                h: 400
+    v7a:
