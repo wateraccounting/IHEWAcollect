@@ -17,7 +17,13 @@ in the ``IHEWAcollect/accounts.yml`` file.
 
     import os
     from IHEWAcollect.base.download import Download
-    download = Download(os.getcwd(), 'FTP_WA_GUESS', is_status=True)
+    download = Download(workspace=os.getcwd(),
+                        product='ALEXI',
+                        version='v1',
+                        parameter='evapotranspiration',
+                        resolution='daily',
+                        variable='ETA',
+                        is_status=False)
 
 """
 import os
@@ -27,9 +33,8 @@ import inspect
 # import yaml
 # from datetime import datetime
 
-import gzip
-import numpy as np
-import pandas as pd
+# import numpy as np
+# import pandas as pd
 
 try:
     from .base.exception import \
@@ -91,6 +96,7 @@ class Download(Accounts, GIS):
         'parameter': '',
         'resolution': '',
         'variable': '',
+        'template': '',
         'data': {}
     }
 
@@ -177,83 +183,16 @@ class Download(Accounts, GIS):
                                    self.__status['code'],
                                    fun, prt, ext)
 
-    def check_latlon_lim(self, latlim, lonlim):
-        if latlim[0] < self.latlim.s or latlim[1] > self.latlim.n:
-            print(
-                'Latitude above 70N or below 60S is not possible. Value set to maximum')
-            latlim[0] = np.max(latlim[0], self.latlim.s)
-            latlim[1] = np.min(latlim[1], self.latlim.n)
-        if lonlim[0] < self.lonlim.w or lonlim[1] > self.lonlim.e:
-            print(
-                'Longitude must be between 180E and 180W. Now value is set to maximum')
-            lonlim[0] = np.max(lonlim[0], self.lonlim.w)
-            lonlim[1] = np.min(lonlim[1], self.lonlim.e)
-
-    def cal_latlon_index(self):
-        # # Define IDs
-        # yID = 3000 - np.int16(
-        #     np.array([np.ceil((latlim[1] + 60) * 20), np.floor((latlim[0] + 60) * 20)]))
-        # xID = np.int16(
-        # np.array([np.floor((lonlim[0]) * 20), np.ceil((lonlim[1]) * 20)]) +
-        # 3600)
-        pass
-
-    def check_time_lim(self, Startdate, Enddate, TimeStep='daily'):
-        # Check Startdate and Enddate
-        if not Startdate:
-            if TimeStep == 'weekly':
-                Startdate = pd.Timestamp(self.timlim.s)
-            if TimeStep == 'daily':
-                Startdate = pd.Timestamp(self.timlim.s)
-        if not Enddate:
-            if TimeStep == 'weekly':
-                Enddate = pd.Timestamp(self.timlim.e)
-            if TimeStep == 'daily':
-                Enddate = pd.Timestamp(self.timlim.e)
-
-        # Make a panda timestamp of the date
-        try:
-            Enddate = pd.Timestamp(Enddate)
-        except BaseException:
-            Enddate = Enddate
-
-    def cal_time_range(self):
-        # if TimeStep == 'daily':
-        #     # Define Dates
-        #     Dates = pd.date_range(Startdate, Enddate, freq='D')
-        #
-        # if TimeStep == 'weekly':
-        #     # Define the Startdate of ALEXI
-        #     DOY = datetime.datetime.strptime(Startdate,
-        #                                      '%Y-%m-%d').timetuple().tm_yday
-        #     Year = datetime.datetime.strptime(Startdate,
-        #                                       '%Y-%m-%d').timetuple().tm_year
-        #
-        #     # Change the startdate so it includes an ALEXI date
-        #     DOYstart = int(math.ceil(DOY / 7.0) * 7 + 1)
-        #     DOYstart = str('%s-%s' % (DOYstart, Year))
-        #     Day = datetime.datetime.strptime(DOYstart, '%j-%Y')
-        #     Month = '%02d' % Day.month
-        #     Day = '%02d' % Day.day
-        #     Date = (str(Year) + '-' + str(Month) + '-' + str(Day))
-        #     DOY = datetime.datetime.strptime(Date,
-        #                                      '%Y-%m-%d').timetuple().tm_yday
-        #     # The new Startdate
-        #     Date = pd.Timestamp(Date)
-        #
-        #     # amount of Dates weekly
-        #     Dates = pd.date_range(Date, Enddate, freq='7D')
-        pass
-
-    def check_product(self, product=''):
-        if product == 'ALEXI':
+    def check_template(self, account=''):
+        if account == 'IHEWA':
+            self.__status['template'] = {'IHEWA': 'dat'}
             pass
-        elif product == 'ASCAT':
+        elif account == 'ASCAT':
             pass
-        elif product == 'CFSR':
+        elif account == 'CFSR':
             pass
         else:
-            raise ValueError('Unknown product: {v}'.format(v=product))
+            raise ValueError('Unknown account: {v}'.format(v=account))
         pass
 
     def check_method(self, Protocol='', method=''):
@@ -344,29 +283,6 @@ class Download(Accounts, GIS):
         # for f in re:
         #     os.remove(os.path.join(output_folder, f))
         pass
-
-    def unzip_gz(self, file, outfile):
-        """Extract zip file
-
-        This function extract zip file as gz file.
-
-        Args:
-          file (str): Name of the file that must be unzipped.
-          outfile (str): Directory where the unzipped data must be stored.
-
-        :Example:
-
-            >>> import os
-            >>> from IHEWAcollect.base.download import Download
-        """
-
-        with gzip.GzipFile(file, 'rb') as zf:
-            file_content = zf.read()
-            save_file_content = open(outfile, 'wb')
-            save_file_content.write(file_content)
-        save_file_content.close()
-        zf.close()
-        os.remove(file)
 
 
 def main():
