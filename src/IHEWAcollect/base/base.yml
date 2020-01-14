@@ -23,6 +23,7 @@ messages:
 
 products:
   # ETA
+  # lpdaac.usgs.gov
   # ftp.wateraccounting.unesco-ihe.org
   ALEXI:
     account: 'IHEWA'
@@ -32,6 +33,9 @@ products:
         ''
       websites:
         - 'https://www.wateraccounting.org'
+        - 'https://ceres.larc.nasa.gov/order_data.php'
+        - 'https://eosweb.larc.nasa.gov/project/ceres/ceres_table'
+        - 'https://lpdaac.usgs.gov/products/eco3etalexiuv001/'
       protocols:
         - 'FTP'
       methods:
@@ -67,7 +71,7 @@ products:
               fname:
                 r: 'EDAY_CERES_{dtime:%Y%j}.dat.gz'
                 t: 'EDAY_CERES_{dtime:%Y%j}.dat'
-                l: 'ALEXI_v1_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'ALEXI_v1_mm.d_D-{dtime:%Y%m%d}.tif'
               ftype:
                 r: 'gz'
                 t: 'dat'
@@ -79,7 +83,7 @@ products:
               units:
                 r: 'MJ.m2.d'
                 l: 'mm'
-                m: 2.45
+                m: 0.408
               lat:
                 s: -60.0
                 n: 70.0
@@ -111,7 +115,7 @@ products:
               fname:
                 r: 'ALEXI_weekly_mm_{dtime:%j_%Y}.tif'
                 t: null
-                l: 'ALEXI_v1_mm_7D-{dtime:%Y%m%d}.tif'
+                l: 'ALEXI_v1_mm.d_7D-{dtime:%Y%m%d}.tif'
               ftype:
                 r: 'GTiff'
                 t: null
@@ -123,7 +127,7 @@ products:
               units:
                 r: 'MJ.m2.d'
                 l: 'mm.d'
-                m: 2.45
+                m: 0.408
               lat:
                 s: -60.0
                 n: 90.0
@@ -738,6 +742,8 @@ products:
         ''
       websites:
         - 'https://www.wateraccounting.org'
+        - 'http://remote-sensing.nci.org.au/u39/public/html/wirada/index.shtml'
+        - 'http://remote-sensing.nci.org.au/u39/public/data/wirada/cmrset'
       protocols:
         - 'FTP'
       methods:
@@ -763,7 +769,10 @@ products:
               variable: null
               name: 'Monthly Evaporation'
               description:
-                ''
+                'The CMRSET product provides estimates of actual (not potential) evapotranspiration
+                 based on MODIS reflectance and short wave infra-red data, and gridded meteorological
+                 surfaces. User''s are cautioned that these data products are still under test and
+                 may change with little notice.'
               dfmt: null
               rfmt: 'dtime'
               tfmt: null
@@ -771,7 +780,7 @@ products:
               fname:
                 r: 'M01CMRSETGlobal{dtime:Y%YM%m}.tif'
                 t: null
-                l: 'CMRSET_v1_mm_MS-{dtime:%Y%m}.tif'
+                l: 'CMRSET_v1_mm.d_MS-{dtime:%Y%m}.tif'
               ftype:
                 r: 'GTiff'
                 t: null
@@ -2932,7 +2941,7 @@ products:
               fname:
                 r: 'GLDAS_NOAH025_3H.A{dtime:%y%m%d.%H%M}.021.nc4'
                 t: null
-                l: 'GLDAS_v2.1_mm_3H-{dtime:%Y%m%d_%H%M}.tif'
+                l: 'GLDAS_v2.1_mm.d_3H-{dtime:%Y%m%d_%H%M}.tif'
               ftype:
                 r: 'NetCDF'
                 t: null
@@ -2943,7 +2952,7 @@ products:
                 l: 'float32'
               units:
                 r: 'kg.m2.s'
-                l: 'mm'
+                l: 'mm.d'
                 m: 86400.0
               lat:
                 s: -60.0
@@ -2976,7 +2985,7 @@ products:
               fname:
                 r: 'GLDAS_NOAH025_M.A{dtime:%y%m}.021.nc4'
                 t: null
-                l: 'GLDAS_v2.1_mm_MS-{dtime:%Y%m}.tif'
+                l: 'GLDAS_v2.1_mm.d_MS-{dtime:%Y%m}.tif'
               ftype:
                 r: 'NetCDF'
                 t: null
@@ -2987,7 +2996,7 @@ products:
                 l: 'float32'
               units:
                 r: 'kg.m2.s'
-                l: 'mm'
+                l: 'mm.d'
                 m: 86400.0
               lat:
                 s: -60.0
@@ -3053,7 +3062,7 @@ products:
               fname:
                 r: 'Et_{dtime:%Y}_GLEAM_v3.3a.nc'
                 t: null
-                l: 'GLEAM_v3.3a_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'GLEAM_v3.3a_mm.d_D-{dtime:%Y%m%d}.tif'
               ftype:
                 r: 'NetCDF'
                 t: null
@@ -3097,7 +3106,7 @@ products:
               fname:
                 r: 'Et_1980_2018_GLEAM_v3.3a_MO.nc'
                 t: null
-                l: 'GLEAM_v3.3a_mm_D-{dtime:%Y%m}.tif'
+                l: 'GLEAM_v3.3a_mm.d_D-{dtime:%Y%m}.tif'
               ftype:
                 r: 'NetCDF'
                 t: null
@@ -3186,7 +3195,7 @@ products:
               fname:
                 r: 'Et_2003_2018_GLEAM_v3.3b_MO.nc'
                 t: null
-                l: 'GLEAM_v3.3b_mm_D-{dtime:%Y%m}.tif'
+                l: 'GLEAM_v3.3b_mm.d_D-{dtime:%Y%m}.tif'
               ftype:
                 r: 'NetCDF'
                 t: null
@@ -6884,7 +6893,7 @@ products:
                 w: 172800
                 h: 67200
 
-  # Rainfall
+  # PCP
   # disc2.gesdisc.eosdis.nasa.gov
   TRMM:
     account: 'NASA'
@@ -7017,3 +7026,82 @@ products:
               dem:
                 w: 1440
                 h: 400
+
+  # GWF WPL
+  # ftp.wateraccounting.unesco-ihe.org
+  TWC:
+    account: 'IHEWA'
+    meta:
+      owner: 'IHE Delft'
+      description:
+        ''
+      websites:
+        - 'https://www.wateraccounting.org'
+        - 'https://waterfootprint.org/en'
+        - 'https://waterfootprint.org/en/resources/waterstat/water-pollution-level-statistics'
+      protocols:
+        - 'FTP'
+      methods:
+        - 'get'
+      ftypes:
+        - 'GTiff'
+      versions:
+        - 'v1'
+      datasets:
+        - 'Water'
+      resolutions:
+        - '5m'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
+    v1:
+      water:
+        5m:
+          url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
+          method: 'get'
+          freq: null
+          variables:
+            WPL:
+              variable: null
+              name: 'Water Pollution Levels'
+              description:
+                'The grey water footprint of a product is an indicator of freshwater pollution that
+                 can be associated with the production of a product over its full supply chain. It
+                 is defined as the volume of freshwater that is required to assimilate the load of
+                 pollutants based on natural background concentrations and existing ambient water
+                 quality standards. It is calculated as the volume of water that is required to dilute
+                 pollutants to such an extent that the quality of the water remains above agreed water
+                 quality standards.'
+              dfmt: null
+              rfmt: 'dtime'
+              tfmt: null
+              dir: '/WaterAccounting/Data_GIS/Grey water/'
+              fname:
+                r: 'WPL.tif'
+                t: null
+                l: 'TWC_v1_mm_D-WPL.tif'
+              ftype:
+                r: 'GTiff'
+                t:
+                l: 'GTiff'
+              dtype:
+                r: 'float64'
+                t: null
+                l: 'float32'
+              units:
+                r: 'volume/time'
+                l: '.'
+                m: 1.0
+              lat:
+                s: -55.9949999833333578
+                n: 83.6716666833327309
+                r: 0.0833333333333333
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.0833333333333333
+              time:
+                s: 2005-01-01
+                e: 2016-12-31
+              dem:
+                w: 4320
+                h: 1676
