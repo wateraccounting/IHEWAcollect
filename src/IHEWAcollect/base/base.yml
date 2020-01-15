@@ -56,6 +56,7 @@ products:
       evapotranspiration:
         daily:
           url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
+          protocol: 'FTP'
           method: 'get'
           freq: 'D'
           variables:
@@ -177,6 +178,7 @@ products:
         daily:
           # 2019-10-22, before: https://land.copernicus.vgt.vito.be/PDF/datapool/Vegetation/Soil_Water/SWI_V3/
           url: 'https://land.copernicus.vgt.vito.be'
+          protocol: 'HTTPS'
           method: 'get'
           freq: 'D'
           variables:
@@ -258,6 +260,7 @@ products:
       radiation:
         daily:
           url: 'https://nomads.ncdc.noaa.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: 'D'
           variables:
@@ -437,6 +440,7 @@ products:
       Radiation:
         daily:
           url: 'https://nomads.ncdc.noaa.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: 'D'
           variables:
@@ -645,6 +649,7 @@ products:
       precipitation:
         daily:
           url: 'ftp://chg-ftpout.geog.ucsb.edu'
+          protocol: 'FTP'
           method: 'get'
           freq: 'D'
           variables:
@@ -689,6 +694,7 @@ products:
                 h: 2000
         monthly:
           url: 'ftp://chg-ftpout.geog.ucsb.edu'
+          protocol: 'FTP'
           method: 'get'
           freq: 'MS'
           variables:
@@ -762,6 +768,7 @@ products:
       evapotranspiration:
         monthly:
           url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
+          protocol: 'FTP'
           method: 'get'
           freq: 'MS'
           variables:
@@ -845,6 +852,7 @@ products:
       digital_elevation_model:
         3s:
           url: 'https://edcintl.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: null
           variables:
@@ -1123,6 +1131,7 @@ products:
                 h: 85200
         15s:
           url: 'https://edcintl.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: null
           variables:
@@ -1401,6 +1410,7 @@ products:
                 h: 17040
         30s:
           url: 'https://edcintl.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: null
           variables:
@@ -1680,6 +1690,7 @@ products:
       drainage_direction_model:
         3s:
           url: 'https://edcintl.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: null
           variables:
@@ -1957,6 +1968,7 @@ products:
                 h: 85200
         15s:
           url: 'https://edcintl.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: null
           variables:
@@ -2235,6 +2247,7 @@ products:
                 h: 17040
         30s:
           url: 'https://edcintl.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: null
           variables:
@@ -2576,6 +2589,7 @@ products:
       evapotranspiration:
         monthly:
           url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
+          protocol: 'FTP'
           method: 'get'
           freq: 'MS'
           variables:
@@ -2846,6 +2860,7 @@ products:
       evapotranspiration:
         daily:
           url: 'https://edcintl.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: 'D'
           variables:
@@ -2926,6 +2941,7 @@ products:
       evapotranspiration:
         three_hourly:
           url: 'https://hydro1.gesdisc.eosdis.nasa.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: '3H'
           variables:
@@ -2970,6 +2986,7 @@ products:
                 h: 600
         monthly:
           url: 'https://hydro1.gesdisc.eosdis.nasa.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: 'MS'
           variables:
@@ -3047,6 +3064,7 @@ products:
       evapotranspiration:
         daily:
           url: 'hydras.ugent.be:2225'
+          protocol: 'SFTP'
           method: 'get'
           freq: 'D'
           variables:
@@ -3091,6 +3109,7 @@ products:
                 h: 720
         monthly:
           url: 'hydras.ugent.be:2225'
+          protocol: 'SFTP'
           method: 'get'
           freq: 'MS'
           variables:
@@ -3268,6 +3287,7 @@ products:
       precipitation:
         daily:
           url: 'https://gpm1.gesdisc.eosdis.nasa.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: 'D'
           variables:
@@ -3312,6 +3332,7 @@ products:
                 h: 1800
         monthly:
           url: 'https://gpm1.gesdisc.eosdis.nasa.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: 'MS'
           variables:
@@ -3388,6 +3409,7 @@ products:
       soil:
         30s:
           url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
+          protocol: 'FTP'
           method: 'get'
           freq: null
           variables:
@@ -3462,6 +3484,7 @@ products:
       water:
         1s:
           url: 'https://storage.googleapis.com'
+          protocol: 'HTTPS'
           method: 'get'
           freq: null
           variables:
@@ -3541,6 +3564,7 @@ products:
       land:
         yearly:
           url: 'https://e4ftl01.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: 'Y'
           variables:
@@ -3624,6 +3648,7 @@ products:
       land:
         daily:
           url: 'https://e4ftl01.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: 'D'
           variables:
@@ -3702,6 +3727,7 @@ products:
       land:
         daily:
           url: 'https://e4ftl01.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: 'D'
           variables:
@@ -3783,6 +3809,7 @@ products:
       land:
         eight_daily:
           url: 'https://n5eil01u.ecs.nsidc.org'
+          protocol: 'HTTPS'
           method: 'get'
           freq: '8D'
           variables:
@@ -3863,6 +3890,7 @@ products:
       land:
         eight_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: '8D'
           variables:
@@ -3944,6 +3972,7 @@ products:
       land:
         sixteen_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: '16D'
           variables:
@@ -4019,6 +4048,7 @@ products:
       land:
         eight_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: '8D'
           variables:
@@ -4097,6 +4127,7 @@ products:
       evapotranspiration:
         eight_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: '8D'
           variables:
@@ -4176,6 +4207,7 @@ products:
       land:
         eight_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: '8D'
           variables:
@@ -4253,6 +4285,7 @@ products:
       land:
         eight_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: '8D'
           variables:
@@ -4327,6 +4360,7 @@ products:
       precipitation:
         daily:
           url: ''
+          protocol: 'HTTPS'
           method: 'get'
           freq: 'D'
           variables:
@@ -4406,6 +4440,7 @@ products:
       land:
         sixteen_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: '16D'
           variables:
@@ -4486,6 +4521,7 @@ products:
       land:
         daily:
           url: 'https://www.vito-eodata.be'
+          protocol: 'HTTPS'
           method: 'get'
           freq: 'D'
           variables:
@@ -4560,6 +4596,7 @@ products:
       precipitation:
         daily:
           url: 'ftp://ftp.cpc.ncep.noaa.gov'
+          protocol: 'FTP'
           method: 'get'
           freq: 'D'
           variables:
@@ -4635,6 +4672,7 @@ products:
       energy:
         monthly:
           url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
+          protocol: 'FTP'
           method: 'get'
           freq: 'MS'
           variables:
@@ -4715,6 +4753,7 @@ products:
       soil:
         9s:
           url: 'https://files.isric.org'
+          protocol: 'HTTPS'
           method: 'get'
           freq: null
           variables:
@@ -6938,6 +6977,7 @@ products:
       precipitation:
         monthly:
           url: 'https://disc2.gesdisc.eosdis.nasa.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: 'MS'
           variables:
@@ -6985,6 +7025,7 @@ products:
       precipitation:
         monthly:
           url: 'https://disc2.gesdisc.eosdis.nasa.gov'
+          protocol: 'HTTPS'
           method: 'get'
           freq: 'MS'
           variables:
@@ -7060,6 +7101,7 @@ products:
       water:
         5m:
           url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
+          protocol: 'FTP'
           method: 'get'
           freq: null
           variables:

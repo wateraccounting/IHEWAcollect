@@ -31,10 +31,6 @@ import os
 import inspect
 # import shutil
 # import yaml
-# from datetime import datetime
-
-# import numpy as np
-# import pandas as pd
 
 try:
     from .base.exception import \
@@ -52,6 +48,16 @@ try:
     from .base.gis import GIS
 except ImportError:
     from src.IHEWAcollect.base.gis import GIS
+
+try:
+    from .base.dtime import Dtime
+except ImportError:
+    from src.IHEWAcollect.base.dtime import Dtime
+
+try:
+    from .base.util import Extract
+except ImportError:
+    from src.IHEWAcollect.base.util import Extract
 
 
 class Download(Accounts, GIS):
@@ -96,7 +102,16 @@ class Download(Accounts, GIS):
         'parameter': '',
         'resolution': '',
         'variable': '',
-        'template': '',
+        'template': {
+            'name': '',
+            'lib': '',
+            'folder': {
+                'r': '',
+                't': '',
+                'l': ''
+            },
+        },
+        'account': {},
         'data': {}
     }
 
@@ -163,6 +178,7 @@ class Download(Accounts, GIS):
             raise IHEKeyError(variable, keys) from None
         self.var = self._Base__conf['data']['products'][
             product][version][parameter][resolution]['variables'][variable]
+
         self.latlim = self.var['lat']
         self.lonlim = self.var['lon']
         self.timlim = self.var['time']
@@ -183,75 +199,77 @@ class Download(Accounts, GIS):
                                    self.__status['code'],
                                    fun, prt, ext)
 
-    def check_template(self, account=''):
+    def get_template(self, account):
+        template = ''
+
         if account == 'IHEWA':
-            self.__status['template'] = {'IHEWA': 'dat'}
-            pass
+            template = 'IHEWA'
         elif account == 'ASCAT':
-            pass
+            template = 'IHEWA'
         elif account == 'CFSR':
-            pass
+            template = 'IHEWA'
         else:
             raise ValueError('Unknown account: {v}'.format(v=account))
+
+        self.__conf['template']['name'] = template
+        return template
+
+    def get_lib(self, protocol, method):
+        lib = ''
+
+        # Define library, "protocol" and "method"
+        if method == 'get':
+            lib = '.'.join(protocol, method)
+        elif method == 'post':
+            lib = '.'.join(protocol, method)
+        else:
+            raise ValueError('Unknown method: {v}'.format(v=method))
+
+        # Load library
+
+        self.__conf['template']['lib'] = lib
+        return lib
+
+    def load_lib(self, name):
         pass
 
-    def check_method(self, Protocol='', method=''):
-        py_lib = 'requests'
-        py_method = 'requests.get'
+    def get_folder(self, path):
+        folder = {
+            'r': '',
+            't': '',
+            'l': ''
+        }
+        # Define folder
 
-        if Protocol == '':
-            pass
-        elif Protocol == 'FTP':
-            py_lib = 'ftp'
+        # # Define directory and create it if not exists
+        # output_folder = os.path.join(Dir, 'Evaporation', 'ALEXI', 'Weekly')
+        # if not os.path.exists(output_folder):
+        #     os.makedirs(output_folder)
 
-            if method == 'get':
-                py_method = '.'.join(py_lib, method)
-            elif method == 'post':
-                py_method = '.'.join(py_lib, method)
-            else:
-                raise ValueError('Unknown method: {v}'.format(v=method))
-        elif Protocol == 'HTTP':
-            py_lib = 'requests'
-            # py_lib = 'urllib'
-            # py_lib = 'pycurl'
+        # Create folder
 
-            if method == 'get':
-                py_method = '.'.join(py_lib, method)
-            elif method == 'post':
-                py_method = '.'.join(py_lib, method)
-            else:
-                raise ValueError('Unknown method: {v}'.format(v=method))
-        elif Protocol == 'HTTPS':
-            py_lib = 'requests'
-            # py_lib = 'urllib'
-            # py_lib = 'pycurl'
+        # Clean folder
 
-            if method == 'get':
-                py_method = '.'.join(py_lib, method)
-            elif method == 'post':
-                py_method = '.'.join(py_lib, method)
-            else:
-                raise ValueError('Unknown method: {v}'.format(v=method))
-        elif Protocol == 'TDS':
-            py_lib = 'pytds'
+        self.__conf['template']['folder'] = folder
+        return folder
 
-            if method == 'get':
-                py_method = '.'.join(py_lib, method)
-            elif method == 'post':
-                py_method = '.'.join(py_lib, method)
-            else:
-                raise ValueError('Unknown method: {v}'.format(v=method))
-        elif Protocol == 'ECMWF':
-            py_lib = 'ecmwfapi'
+    def create_folder(self, name):
+        # # Define directory and create it if not exists
+        # output_folder = os.path.join(Dir, 'Evaporation', 'ALEXI', 'Weekly')
+        # if not os.path.exists(output_folder):
+        #     os.makedirs(output_folder)
 
-            if method == 'retrieve':
-                py_method = '.'.join(py_lib, method)
-            else:
-                raise ValueError('Unknown method: {v}'.format(v=method))
-        else:
-            raise ValueError('Unknown method: {v}'.format(v=Protocol))
+        # output_folder = os.path.join(Dir, 'Evaporation', 'ALEXI', 'Daily')
+        # if not os.path.exists(output_folder):
+        #     os.makedirs(output_folder)
+        pass
 
-        return py_method
+    def clean_folder(self, name):
+        # os.chdir(output_folder)
+        # re = glob.glob("*.dat")
+        # for f in re:
+        #     os.remove(os.path.join(output_folder, f))
+        pass
 
     def check_version(self, version=''):
         if version == '':
@@ -266,22 +284,7 @@ class Download(Accounts, GIS):
             raise ValueError('Unknown version: {v}'.format(v=version))
         pass
 
-    def create_folder(self):
-        # # Define directory and create it if not exists
-        # output_folder = os.path.join(Dir, 'Evaporation', 'ALEXI', 'Weekly')
-        # if not os.path.exists(output_folder):
-        #     os.makedirs(output_folder)
-
-        # output_folder = os.path.join(Dir, 'Evaporation', 'ALEXI', 'Daily')
-        # if not os.path.exists(output_folder):
-        #     os.makedirs(output_folder)
-        pass
-
-    def clean_folder(self):
-        # os.chdir(output_folder)
-        # re = glob.glob("*.dat")
-        # for f in re:
-        #     os.remove(os.path.join(output_folder, f))
+    def start(self, freq):
         pass
 
 

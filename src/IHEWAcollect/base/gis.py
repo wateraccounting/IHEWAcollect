@@ -60,7 +60,7 @@ except ImportError:
 class GIS(Base):
     """This GIS class
 
-    Description
+    GIS process. Standard CRS is "EPSG:4326 - WGS 84 - Geographic".
 
     Args:
       workspace (str): Directory to accounts.yml.
@@ -120,7 +120,54 @@ class GIS(Base):
                                    self.__status['code'],
                                    fun, prt, ext)
 
-    def get_tif(self, file='', band=1):
+    def check_latlon_continent(self, lat, lon, conf_lat, conf_lon):
+        """Check latlon located in continent, based on HydroSHEDS
+
+        HydroSHEDS:
+
+          - af: Africa,          lat [s:-35.0, n: 38.0], lon [w: -19.0, e:  55.0].
+          - as: Asia,            lat [s:-12.0, n: 61.0], lon [w:  57.0, e: 180.0].
+          - au: Australia,       lat [s:-56.0, n:-10.0], lon [w: 112.0, e: 180.0].
+          - ca: Central America, lat [s:  5.0, n: 39.0], lon [w:-119.0, e: -60.0].
+          - eu: Europe,          lat [s: 12.0, n: 62.0], lon [w: -14.0, e:  70.0].
+          - na: North America,   lat [s: 24.0, n: 60.0], lon [w:-138.0, e: -52.0].
+          - sa: South America,   lat [s:-56.0, n: 15.0], lon [w: -93.0, e: -32.0].
+        """
+        pass
+
+    def check_latlon_limit(self, lat, lon, conf_lat, conf_lon):
+        """
+        """
+        latlim, lonlim = [], []
+
+        if lat[0] < conf_lat.s or lat[1] > conf_lat.n:
+            print(
+                'Latitude above 70N or below 60S is not possible. Value set to maximum')
+            latlim[0] = np.max(lat[0], conf_lat.s)
+            latlim[1] = np.min(lat[1], conf_lat.n)
+
+        if lon[0] < conf_lon.w or lon[1] > conf_lon.e:
+            print(
+                'Longitude must be between 180E and 180W. Now value is set to maximum')
+            lonlim[0] = np.max(lon[0], conf_lon.w)
+            lonlim[1] = np.min(lon[1], conf_lon.e)
+
+        return latlim, lonlim
+
+    def get_latlon_index(self, lat, lon, conf_dem):
+        latid, lonid = np.ndarray, np.ndarray
+
+        # # Define IDs
+        # latid = 3000 - np.int16(
+        #     np.array(
+        #         [np.ceil((latlim[1] + 60) * 20), np.floor((latlim[0] + 60) * 20)]))
+        # lonid = np.int16(
+        #     np.array(
+        #         [np.floor((lonlim[0]) * 20), np.ceil((lonlim[1]) * 20)]) + 3600)
+
+        return latid, lonid
+
+    def load_file(self, file='', band=1):
         """Get tif band data
 
         This function get tif band as numpy.ndarray.
@@ -140,7 +187,7 @@ class GIS(Base):
             >>> gis = GIS(os.getcwd(), is_status=False)
             >>> path = os.path.join(os.getcwd(), 'tests', 'data', 'BigTIFF')
             >>> file = os.path.join(path, 'Classic.tif')
-            >>> data = gis.get_tif(file, 1)
+            >>> data = gis.load_file(file, 1)
 
             >>> type(data)
             <class 'numpy.ndarray'>
@@ -157,7 +204,7 @@ class GIS(Base):
                    [  0,   0,   0, ...,   0,   0,   0],
                    [  0,   0,   0, ...,   0,   0,   0]], dtype=uint8)
         """
-        Data = np.ndarray
+        data = np.ndarray
 
         if band == '':
             band = 1
@@ -165,7 +212,7 @@ class GIS(Base):
         fp = gdal.Open(file)
         if fp is not None:
             try:
-                Data = fp.GetRasterBand(band).ReadAsArray()
+                data = fp.GetRasterBand(band).ReadAsArray()
             except AttributeError:
                 raise IHEKeyError('Band {b}'.format(b=band), file) from None
                 # raise AttributeError('Band {band} not found.'.format(band=band))
@@ -173,9 +220,15 @@ class GIS(Base):
             raise IHEFileError(file)from None
             # raise IOError('{} not found.'.format(file))
 
-        return Data
+        return data
 
-    def save_tif(self, name='', data='', geo='', projection=''):
+    def merge_data(self, data):
+        pass
+
+    def clip_data(self, data):
+        pass
+
+    def save_GTiff(self, name='', data='', geo='', projection=''):
         """Save as tif
 
         This function save the array as a geotiff.
@@ -195,7 +248,7 @@ class GIS(Base):
             >>> file = os.path.join(path, 'Classic.tif')
             >>> test = os.path.join(path, 'test.tif')
 
-            >>> data = gis.get_tif(file, 1)
+            >>> data = gis.load_file(file, 1)
             >>> data
             array([[255, 255, 255, ...   0,   0,   0],
                    [255, 255, 255, ...   0,   0,   0],
@@ -205,8 +258,8 @@ class GIS(Base):
                    [  0,   0,   0, ...,   0,   0,   0],
                    [  0,   0,   0, ...,   0,   0,   0]], dtype=uint8)
 
-            >>> gis.save_tif(test, data, [0, 1, 0, 0, 1, 0], "WGS84")
-            >>> data = gis.get_tif(test, 1)
+            >>> gis.save_GTiff(test, data, [0, 1, 0, 0, 1, 0], "WGS84")
+            >>> data = gis.load_file(test, 1)
             >>> data
             array([[255., 255., 255., ...   0.,   0.,   0.],
                    [255., 255., 255., ...   0.,   0.,   0.],
@@ -216,7 +269,6 @@ class GIS(Base):
                    [  0.,   0.,   0., ...,   0.,   0.,   0.],
                    [  0.,   0.,   0., ...,   0.,   0.,   0.]], dtype=float32)
         """
-        # save as a geotiff
         driver = gdal.GetDriverByName("GTiff")
         dst_ds = driver.Create(name,
                                int(data.shape[1]), int(data.shape[0]),
@@ -252,9 +304,7 @@ class GIS(Base):
         dst_ds.GetRasterBand(1).WriteArray(data)
         dst_ds = None
 
-        return
-
-    def save_netcdf(self):
+    def save_NetCDF(self):
         pass
 
 
