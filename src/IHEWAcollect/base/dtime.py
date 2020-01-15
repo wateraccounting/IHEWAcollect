@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+import os
+# import sys
+import inspect
+
 import datetime
 import pandas as pd
 
@@ -30,7 +34,7 @@ class Dtime(object):
         'data': {}
     }
 
-    def __init__(self, is_status):
+    def __init__(self, workspace, is_status, **kwargs):
         """Class instantiation
         """
         # # IHEStringError, IHEFileError, IHEKeyError, IHETypeError
@@ -98,3 +102,37 @@ class Dtime(object):
         #     dtime_r = pd.date_range(Date, Enddate, freq='7D')
 
         return dtime_r
+
+
+def main():
+    from pprint import pprint
+
+    # @classmethod
+
+    # Dtime __init__
+    print('\nDtime\n=====')
+    path = os.path.join(
+        os.getcwd(),
+        os.path.dirname(
+            inspect.getfile(
+                inspect.currentframe())),
+        '../', '../', '../', 'tests'
+    )
+    dtime = Dtime(path, is_status=True)
+
+    # Base attributes
+    print('\ndtime._Base__conf\n=====')
+    # pprint(dtime._Base__conf)
+
+    # Dtime attributes
+    print('\ndtime._Dtime__conf:\n=====')
+    print(dtime._Dtime__conf['data'].keys())
+    # pprint(dtime._Dtime__conf)
+
+    # Dtime methods
+    # print('\ndtime.Base.get_status()\n=====')
+    # pprint(dtime.get_status())
+
+
+if __name__ == "__main__":
+    main()

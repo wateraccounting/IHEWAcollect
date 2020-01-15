@@ -94,6 +94,11 @@ class Download(Accounts, GIS):
 
     __conf = {
         'now': '%Y%m%d%H%M%S%f',
+        'log': {
+            'fname': 'log.txt',
+            'file': '',
+            'status': -1,  # -1: not found, 0: closed, 1: opened
+        },
         'path': '',
         'file': '',
         'product': '',
@@ -111,12 +116,7 @@ class Download(Accounts, GIS):
             },
         },
         'account': {},
-        'data': {},
-        'log': {
-            'fname': 'log.txt',
-            'file': '',
-            'status': -1,  # -1: not found, 0: closed, 1: opened
-        }
+        'data': {}
     }
 
     def __init__(self, workspace='',

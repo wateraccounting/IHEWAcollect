@@ -320,7 +320,7 @@ def main():
         os.path.dirname(
             inspect.getfile(
                 inspect.currentframe())),
-        '../', '../', '../'
+        '../', '../', '../', 'tests'
     )
     gis = GIS(path, is_status=True)
 

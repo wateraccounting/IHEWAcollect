@@ -467,7 +467,7 @@ def main():
         os.path.dirname(
             inspect.getfile(
                 inspect.currentframe())),
-        '../', '../', '../'
+        '../', '../', '../', 'tests'
     )
     accounts = Accounts(path, 'ALEXI', is_status=True)
 
