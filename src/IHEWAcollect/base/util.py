@@ -28,32 +28,32 @@ except ImportError:
         import IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 
 
-class Log(object):
-    """This util.Log class
-
-    Log files.
-
-    Args:
-      is_save (bool): Is to clean all files in the folder.
-    """
-    __conf = {
-        'file': {
-            'i': '',
-            'o': ''
-        },
-        'folder': {
-            'i': '',
-            'o': ''
-        },
-        'is_save': False,
-        'is_show': False
-    }
-
-    def __init__(self, file, folder, is_save, is_show):
-        self.__conf['file'] = file
-        self.__conf['folder'] = folder
-        self.__conf['is_save'] = is_save
-        self.__conf['is_show'] = is_show
+# class Log(object):
+#     """This util.Log class
+#
+#     Log files.
+#
+#     Args:
+#       is_save (bool): Is to clean all files in the folder.
+#     """
+#     __conf = {
+#         'file': {
+#             'i': '',
+#             'o': ''
+#         },
+#         'folder': {
+#             'i': '',
+#             'o': ''
+#         },
+#         'is_save': False,
+#         'is_show': False
+#     }
+#
+#     def __init__(self, file, folder, is_save, is_show):
+#         self.__conf['file'] = file
+#         self.__conf['folder'] = folder
+#         self.__conf['is_save'] = is_save
+#         self.__conf['is_show'] = is_show
 
 
 class Extract(object):

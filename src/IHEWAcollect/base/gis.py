@@ -120,8 +120,8 @@ class GIS(Base):
                                    self.__status['code'],
                                    fun, prt, ext)
 
-    def check_latlon_continent(self, lat, lon, conf_lat, conf_lon):
-        """Check latlon located in continent, based on HydroSHEDS
+    def check_continent(self, lat, lon, conf_lat, conf_lon):
+        """Check area located in continent or continents, based on HydroSHEDS
 
         HydroSHEDS:
 

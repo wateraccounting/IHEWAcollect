@@ -31,6 +31,7 @@ import os
 import inspect
 # import shutil
 # import yaml
+import datetime
 
 try:
     from .base.exception import \
@@ -41,22 +42,13 @@ except ImportError:
 
 try:
     from .base.accounts import Accounts
-except ImportError:
-    from src.IHEWAcollect.base.accounts import Accounts
-
-try:
     from .base.gis import GIS
-except ImportError:
-    from src.IHEWAcollect.base.gis import GIS
-
-try:
     from .base.dtime import Dtime
-except ImportError:
-    from src.IHEWAcollect.base.dtime import Dtime
-
-try:
     from .base.util import Extract
 except ImportError:
+    from src.IHEWAcollect.base.accounts import Accounts
+    from src.IHEWAcollect.base.gis import GIS
+    from src.IHEWAcollect.base.dtime import Dtime
     from src.IHEWAcollect.base.util import Extract
 
 
@@ -65,11 +57,17 @@ class Download(Accounts, GIS):
 
     Description
 
-    - product = 'ALEXI',
-    - version = 'v1',
-    - parameter = 'Evaporation',
-    - resolution = 'daily',
-    - variable = 'ETa',
+    - product = 'ALEXI'
+    - version = 'v1'
+    - parameter = 'Evaporation'
+    - resolution = 'daily'
+    - variable = 'ETa'
+
+    Download
+
+    - prepare()
+    - start()
+    - finish()
 
     Args:
       workspace (str): Directory to accounts.yml.
@@ -95,6 +93,7 @@ class Download(Accounts, GIS):
     }
 
     __conf = {
+        'now': '%Y%m%d%H%M%S%f',
         'path': '',
         'file': '',
         'product': '',
@@ -112,7 +111,12 @@ class Download(Accounts, GIS):
             },
         },
         'account': {},
-        'data': {}
+        'data': {},
+        'log': {
+            'fname': 'log.txt',
+            'file': '',
+            'status': -1,  # -1: not found, 0: closed, 1: opened
+        }
     }
 
     def __init__(self, workspace='',
@@ -120,6 +124,7 @@ class Download(Accounts, GIS):
                  is_status=True, **kwargs):
         """Class instantiation
         """
+        str_now = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
         wa_args = {
             'product': product,
             'version': version,
@@ -127,6 +132,9 @@ class Download(Accounts, GIS):
             'resolution': resolution,
             'variable': variable
         }
+
+        self.__conf['now'] = str_now
+        self.__conf['log']['fname'] = 'log-{t}.txt'.format(t=str_now)
 
         vname, rtype, vdata = 'is_status', bool, is_status
         if self.check_input(vname, rtype, vdata):
@@ -187,6 +195,11 @@ class Download(Accounts, GIS):
             # self._conf()
             self.__status['message'] = ''
 
+        # TODO, 20200115, QPan, delete
+        self.prepare()
+        self.start()
+        self.finish()
+
     def set_status(self, fun='', prt=False, ext=''):
         """Set status
 
@@ -198,6 +211,26 @@ class Download(Accounts, GIS):
         self.status = self._status(self.__status['messages'],
                                    self.__status['code'],
                                    fun, prt, ext)
+
+    # 1.Download.prepare()
+    def prepare(self):
+        self.get_log()
+        # get_template
+        # get_lib
+        # get_folder
+        pass
+
+    def get_log(self):
+        self.__conf['log']['file'] = os.path.join(
+            self.__conf['path'],
+            self.__conf['log']['fname']
+        )
+
+    def write_log(self, text):
+        pass
+
+    def close_log(self):
+        pass
 
     def get_template(self, account):
         template = ''
@@ -264,27 +297,37 @@ class Download(Accounts, GIS):
         #     os.makedirs(output_folder)
         pass
 
+    # 2.Download.start()
+    def start(self):
+        # get_url
+        # get_auth
+        pass
+
+    def get_url(self):
+        pass
+
+    def get_auth(self):
+        pass
+
+    def get_rfile(self):
+        pass
+
+    def get_tfile(self):
+        pass
+
+    def get_lfile(self):
+        pass
+
+    # 3.Download.finish()
+    def finish(self):
+        # clean_folder
+        pass
+
     def clean_folder(self, name):
         # os.chdir(output_folder)
         # re = glob.glob("*.dat")
         # for f in re:
         #     os.remove(os.path.join(output_folder, f))
-        pass
-
-    def check_version(self, version=''):
-        if version == '':
-            pass
-        elif version == 'v1':
-            pass
-        elif version == 'v2':
-            pass
-        elif version == 'v3':
-            pass
-        else:
-            raise ValueError('Unknown version: {v}'.format(v=version))
-        pass
-
-    def start(self, freq):
         pass
 
 
@@ -300,8 +343,9 @@ def main():
         os.path.dirname(
             inspect.getfile(
                 inspect.currentframe())),
-        '../', '../',
+        '../', '../', 'tests'
     )
+    print(path)
     download = Download(workspace=path,
                         product='ALEXI',
                         version='v1',
@@ -309,18 +353,10 @@ def main():
                         resolution='daily',
                         variable='ETA',
                         is_status=False)
-    # 'Copernicus', is_status=False)
 
     # # Base attributes
     # print('\ndownload._Base__conf\n=====')
     # pprint(download._Base__conf)
-    #
-    # print('\n\n=====')
-    # for key, val in download._Base__conf['data']['products'].items():
-    #     print(key)
-    #     print('-----')
-    #     pprint(val['meta'])
-    #     pprint(val[val['meta']['versions'][0]])
     #
     # # Accounts attributes
     # print('\ndownload._Accounts__conf\n=====')

@@ -126,16 +126,16 @@ before_install:
   - export PATH=$GDALINST/gdal-$GDALVERSION/bin:$PATH
   - export LD_LIBRARY_PATH=$GDALINST/gdal-$GDALVERSION/lib:$LD_LIBRARY_PATH
   # Install test tools
-  - . ./tests/travis_proj_install.sh
+  - . ./ci/travis_proj_install.sh
   # Install GDAL
-  - travis_wait 30 . ./tests/travis_gdal_install.sh
+  - travis_wait 30 . ./ci/travis_gdal_install.sh
   # Export GDAL_DATA, PROJ_LIB
   - export GDAL_DATA=$GDALINST/gdal-$GDALVERSION/share/gdal
   - export PROJ_LIB=$GDALINST/gdal-$GDALVERSION/share/proj
 
 # PyScaffold
 #install:
-  #- source tests/travis_install.sh
+  #- source ci/travis_install.sh
   #- pip install -r requirements.txt
   ## ^  DEPRECATION WARNING:
   ## The automatic creation of a `requirements.txt` file is deprecated.
