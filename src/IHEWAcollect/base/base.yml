@@ -27,6 +27,7 @@ products:
   # lpdaac.usgs.gov
   ALEXI:
     account: 'IHEWA'
+    template: 'IHE'
     meta:
       owner: 'IHE Delft'
       description:
@@ -148,6 +149,7 @@ products:
   # land.copernicus.vgt.vito.be
   ASCAT:
     account: 'Copernicus'
+    template: 'VITO'
     meta:
       owner: 'Copernicus'
       description:
@@ -226,6 +228,7 @@ products:
   # nomads.ncdc.noaa.gov
   CFSR:
     account: null
+    template: 'NOAA'
     meta:
       owner: 'National Oceanic and Atmospheric Administration'
       description:
@@ -621,6 +624,7 @@ products:
   # chg-ftpout.geog.ucsb.edu
   CHIRPS:
     account: null
+    template: 'USGS'
     meta:
       owner: 'University of California at Santa Barbara'
       description:
@@ -742,6 +746,7 @@ products:
   # ftp.wateraccounting.unesco-ihe.org
   CMRSET:
     account: 'IHEWA'
+    template: 'IHE'
     meta:
       owner: 'IHE Delft'
       description:
@@ -820,6 +825,7 @@ products:
   # edcintl.cr.usgs.gov
   DEM:
     account: null'
+    template: 'HydroSHEDS'
     meta:
       owner: 'WWF'
       description:
@@ -2530,6 +2536,7 @@ products:
     # http://apps.ecmwf.int/codes/grib/format/mars/type/
     # http://apps.ecmwf.int/codes/grib/format/mars/class/
     account: 'ECMWF'
+    template: 'ECMWF'
     meta:
       owner: 'European Centre for Medium-Range Weather Forecasts'
       description:
@@ -2565,6 +2572,7 @@ products:
   ETmonitor:
     # https://www.mdpi.com/books/pdfview/book/1661
     account: 'IHEWA'
+    template: 'IHE'
     meta:
       owner: 'IHE Delft'
       description:
@@ -2832,6 +2840,7 @@ products:
   # edcintl.cr.usgs.gov
   FEWS:
     account: null
+    template: 'USGS'
     meta:
       owner: 'United States Agency for International Development'
       description:
@@ -2908,6 +2917,7 @@ products:
   # hydro1.gesdisc.eosdis.nasa.gov
   GLDAS:
     account: 'NASA'
+    template: 'NASA'
     meta:
       owner: 'National Aeronautics and Space Administration'
       description:
@@ -3034,6 +3044,7 @@ products:
   # SSH: hydras.ugent.be:2225
   GLEAM:
     account: 'GLEAM'
+    template: 'ESA'
     meta:
       owner: 'ESA, Universiteit Gent'
       description:
@@ -3246,6 +3257,7 @@ products:
   # gpm1.gesdisc.eosdis.nasa.gov
   GPM:
     account: 'NASA'
+    template: 'NASA'
     meta:
       owner: 'National Aeronautics and Space Administration'
       description:
@@ -3381,6 +3393,7 @@ products:
   # ftp.wateraccounting.unesco-ihe.org
   HiHydroSoil:
     account: 'IHEWA'
+    template: 'IHE'
     meta:
       owner: 'FutureWater'
       description:
@@ -3458,6 +3471,7 @@ products:
   # storage.googleapis.com
   JRC:
     account: null
+    template: 'GoogleStorage'
     meta:
       owner: 'European Commission Joint Research Centre'
       description:
@@ -3535,6 +3549,7 @@ products:
     # for i in soup.findAll('a', attrs = {'href': re.compile('(?i)(hdf)$')}):
     #     y = requests.get(x.headers['location'], auth = (username, password))
     account: 'NASA'
+    template: 'USGS'
     meta:
       owner: 'United States Geological Survey'
       description:
@@ -3619,6 +3634,7 @@ products:
     # for i in soup.findAll('a', attrs = {'href': re.compile('(?i)(hdf)$')}):
     #     y = requests.get(x.headers['location'], auth = (username, password))
     account: 'NASA'
+    template: 'USGS'
     meta:
       owner: 'United States Geological Survey'
       description:
@@ -3698,6 +3714,7 @@ products:
   # e4ftl01.cr.usgs.gov
   MOD09GQ:
     account: 'NASA'
+    template: 'USGS'
     meta:
       owner: 'United States Geological Survey'
       description:
@@ -3779,6 +3796,7 @@ products:
     # chronology bit flags
     # https://nsidc.org/data/MOD10A2/versions/6#title10
     account: 'NASA'
+    template: 'USGS'
     meta:
       owner: 'National Snow and Ice Data Center'
       description:
@@ -3859,6 +3877,7 @@ products:
   # e4ftl01.cr.usgs.gov
   MOD11A2:
     account: 'NASA'
+    template: 'USGS'
     meta:
       owner: 'United States Geological Survey'
       description:
@@ -3940,6 +3959,7 @@ products:
   # e4ftl01.cr.usgs.gov
   MOD13Q1:
     account: 'NASA'
+    template: 'USGS'
     meta:
       owner: 'United States Geological Survey'
       description:
@@ -4021,8 +4041,9 @@ products:
   # e4ftl01.cr.usgs.gov
   MOD15A2H:
     account: 'NASA'
+    template: 'USGS'
     meta:
-      owner: 'National Snow and Ice Data Center'
+      owner: 'United States Geological Survey'
       description:
         'The MOD15A2H Version 6 Moderate Resolution Imaging Spectroradiometer (MODIS) combined Leaf
          Area Index (LAI) and Fraction of Photosynthetically Active Radiation (FPAR) product is an
@@ -4098,8 +4119,9 @@ products:
   # e4ftl01.cr.usgs.gov
   MOD16A2:
     account: 'NASA'
+    template: 'USGS'
     meta:
-      owner: 'National Snow and Ice Data Center'
+      owner: 'United States Geological Survey'
       description:
         'The MOD16A2 Version 6 Evapotranspiration/Latent Heat Flux product is an 8-day composite
          dataset produced at 500 meter (m) pixel resolution. The algorithm used for the MOD16 data
@@ -4177,8 +4199,9 @@ products:
   # e4ftl01.cr.usgs.gov
   MOD17A2H:
     account: 'NASA'
+    template: 'USGS'
     meta:
-      owner: 'National Snow and Ice Data Center'
+      owner: 'United States Geological Survey'
       description:
         'The MOD17A2H Version 6 Gross Primary Productivity (GPP) product is a cumulative 8-day composite
          of values with 500 meter (m) pixel size based on the radiation use efficiency concept that can
@@ -4258,8 +4281,9 @@ products:
     # Terra MODIS Net Primary Production Yearly L4 Global 500 m SIN Grid products are currently
     # unavailable due to unexpected errors in the input data.
     account: 'NASA'
+    template: 'USGS'
     meta:
-      owner: 'National Snow and Ice Data Center'
+      owner: 'United States Geological Survey'
       description:
         'The MOD17A3H Version 6 product provides information about annual Net Primary Production (NPP)
          at 500 meter (m) pixel resolution. Annual NPP is derived from the sum of all 8-day Net
@@ -4334,6 +4358,7 @@ products:
   # princetonclimate.com
   MSWEP:
     account: 'MSWEP'
+    template: 'MSWEP'
     meta:
       owner: 'Princeton Climate Analytics, Inc'
       description:
@@ -4408,6 +4433,7 @@ products:
   # e4ftl01.cr.usgs.gov
   MYD13:
     account: 'NASA'
+    template: 'USGS'
     meta:
       owner: 'United States Geological Survey'
       description:
@@ -4489,6 +4515,7 @@ products:
   # www.vito-eodata.be
   PROBAV:
     account: 'VITO'
+    template: 'VITO'
     meta:
       owner: 'Princeton Climate Analytics, Inc'
       description:
@@ -4569,6 +4596,7 @@ products:
   # ftp.cpc.ncep.noaa.gov
   RFE:
     account: null
+    template: 'NOAA'
     meta:
       owner: 'National Oceanic and Atmospheric Administration'
       description:
@@ -4645,6 +4673,7 @@ products:
   # earthexplorer.usgs.gov
   SEBS:
     account: 'IHEWA'
+    template: 'IHE'
     meta:
       owner: 'IHE Delft'
       description:
@@ -4721,6 +4750,7 @@ products:
   # files.isric.org
   SoilGrids:
     account: null'
+    template: 'ISRIC'
     meta:
       owner: 'ISRIC - World Soil Information'
       description:
@@ -6938,6 +6968,7 @@ products:
   # disc2.gesdisc.eosdis.nasa.gov
   TRMM:
     account: 'NASA'
+    template: 'NASA'
     meta:
       owner: 'National Aeronautics and Space Administration'
       description:
@@ -7075,6 +7106,7 @@ products:
   # waterfootprint.org
   TWC:
     account: 'IHEWA'
+    template: 'IHE'
     meta:
       owner: 'IHE Delft'
       description:

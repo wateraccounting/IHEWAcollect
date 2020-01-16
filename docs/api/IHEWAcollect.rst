@@ -20,6 +20,14 @@ IHEWAcollect.ALEXI module
    :undoc-members:
    :show-inheritance:
 
+IHEWAcollect.DEM module
+-----------------------
+
+.. automodule:: IHEWAcollect.DEM
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 IHEWAcollect.ECMWF module
 -------------------------
 
@@ -32,14 +40,6 @@ IHEWAcollect.download module
 ----------------------------
 
 .. automodule:: IHEWAcollect.download
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-IHEWAcollect.skeleton module
-----------------------------
-
-.. automodule:: IHEWAcollect.skeleton
    :members:
    :undoc-members:
    :show-inheritance:

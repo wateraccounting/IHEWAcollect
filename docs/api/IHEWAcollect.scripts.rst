@@ -20,6 +20,14 @@ IHEWAcollect.scripts.main module
    :undoc-members:
    :show-inheritance:
 
+IHEWAcollect.scripts.skeleton module
+------------------------------------
+
+.. automodule:: IHEWAcollect.scripts.skeleton
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------

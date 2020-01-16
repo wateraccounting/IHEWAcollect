@@ -1,4 +1,4 @@
 # -*- coding: utf-8 -*-
-class USGS(object):
+class IHE(object):
     def __init__(self):
         pass

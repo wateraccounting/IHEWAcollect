@@ -285,7 +285,7 @@ def main():
     base = Base(is_status=True)
 
     # Base attributes
-    key = 'GPM'
+    key = 'GLEAM'
     print(base._Base__conf['data']['products'].keys())
     print(key, base._Base__conf['data']['products'][key])
     # pprint(base._Base__conf)

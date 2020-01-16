@@ -1,6 +1,9 @@
 # Configuration yaml
 tests/accounts.yml
 
+# Log files
+tests/log-*
+
 # tests download
 tests/data/Products/
 tests/data/Download/

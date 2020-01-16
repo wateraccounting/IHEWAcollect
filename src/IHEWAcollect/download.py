@@ -93,19 +93,28 @@ class Download(Accounts, GIS):
     }
 
     __conf = {
-        'now': '%Y%m%d%H%M%S%f',
+        'time': {
+            'start': None,
+            'now': None,
+            'end': None
+        },
+
         'log': {
-            'fname': 'log.txt',
-            'file': '',
+            'fname': 'log-{t}.txt',
+            'file': '{path}/log-{t}.txt',
+            'fp': None,
             'status': -1,  # -1: not found, 0: closed, 1: opened
         },
+
         'path': '',
         'file': '',
+
         'product': '',
         'version': '',
         'parameter': '',
         'resolution': '',
         'variable': '',
+
         'template': {
             'name': '',
             'lib': '',
@@ -115,6 +124,7 @@ class Download(Accounts, GIS):
                 'l': ''
             },
         },
+
         'account': {},
         'data': {}
     }
@@ -124,7 +134,11 @@ class Download(Accounts, GIS):
                  is_status=True, **kwargs):
         """Class instantiation
         """
-        str_now = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
+        time_s = datetime.datetime.now()
+        self.__conf['time']['start'] = time_s
+        self.__conf['log']['fname'] = 'log-{t}.txt'.format(
+            t=time_s.strftime('%Y%m%d%H%M%S%f'))
+
         wa_args = {
             'product': product,
             'version': version,
@@ -133,25 +147,22 @@ class Download(Accounts, GIS):
             'variable': variable
         }
 
-        self.__conf['now'] = str_now
-        self.__conf['log']['fname'] = 'log-{t}.txt'.format(t=str_now)
-
         vname, rtype, vdata = 'is_status', bool, is_status
         if self.check_input(vname, rtype, vdata):
-            self.__status['is_print'] = vname
+            self.__status['is_print'] = vdata
         else:
             self.__status['code'] = 1
 
         vname, rtype, vdata = 'workspace', str, workspace
         if self.check_input(vname, rtype, vdata):
-            self.__conf['path'] = vname
+            self.__conf['path'] = vdata
         else:
             self.__status['code'] = 1
 
         rtype = str
         for vname, vdata in wa_args.items():
             if self.check_input(vname, rtype, vdata):
-                self.__conf[vname] = vname
+                self.__conf[vname] = vdata
             else:
                 self.__status['code'] = 1
 
@@ -212,43 +223,78 @@ class Download(Accounts, GIS):
                                    self.__status['code'],
                                    fun, prt, ext)
 
-    # 1.Download.prepare()
-    def prepare(self):
+    def prepare(self, ):
         self.get_log()
         # get_template
         # get_lib
         # get_folder
-        pass
+
+    def start(self):
+        # get_url
+        # get_auth
+        self.write_log(msg='msg')
+
+    def finish(self):
+        self.close_log()
+        # clean_folder
 
     def get_log(self):
-        self.__conf['log']['file'] = os.path.join(
-            self.__conf['path'],
-            self.__conf['log']['fname']
-        )
+        status = -1
+        time_s = self.__conf['time']['start']
 
-    def write_log(self, text):
-        pass
+        path = self.__conf['path']
+        fname = self.__conf['log']['fname']
+        file = os.path.join(path, fname)
+
+        # TODO, 20200115, QPan, code
+        # -1: not found, 0: closed, 1: opened
+        if os.path.isfile(file):
+            status = 0
+        else:
+            print('Create log file: {f}'.format(f=fname))
+            txt = 'IHEWAcollect created on {t}'.format(
+                t=time_s.strftime('%Y-%m-%d %H:%M:%S.%f'))
+
+            fp = open(file, 'w+')
+            fp.write('{}\n'.format(txt))
+            status = 0
+
+        self.__conf['log']['file'] = file
+        self.__conf['log']['fp'] = fp
+        self.__conf['log']['status'] = status
+        return file
+
+    def write_log(self, msg=''):
+        time_n = datetime.datetime.now()
+        time_n_str = time_n.strftime('%Y-%m-%d %H:%M:%S.%f')
+        self.__conf['time']['now'] = time_n
+
+        fp = self.__conf['log']['fp']
+
+        txt = '{t}: {msg}'.format(t=time_n_str, msg=msg)
+        fp.write('{}\n'.format(txt))
 
     def close_log(self):
-        pass
+        time_e = datetime.datetime.now()
+        time_e_str = time_e.strftime('%Y-%m-%d %H:%M:%S.%f')
+        self.__conf['time']['end'] = time_e
+
+        fp = self.__conf['log']['fp']
+
+        txt = 'IHEWAcollect finished on {t}'.format(t=time_e_str)
+        fp.write('{}\n'.format(txt))
+        fp.close()
+        self.__conf['log']['fp'] = None
 
     def get_template(self, account):
+        # get template from 'template'
         template = ''
-
-        if account == 'IHEWA':
-            template = 'IHEWA'
-        elif account == 'ASCAT':
-            template = 'IHEWA'
-        elif account == 'CFSR':
-            template = 'IHEWA'
-        else:
-            raise ValueError('Unknown account: {v}'.format(v=account))
 
         self.__conf['template']['name'] = template
         return template
 
-    def get_lib(self, protocol, method):
-        lib = ''
+    def load_lib(self, protocol, method):
+        lib = None
 
         # Define library, "protocol" and "method"
         if method == 'get':
@@ -259,12 +305,8 @@ class Download(Accounts, GIS):
             raise ValueError('Unknown method: {v}'.format(v=method))
 
         # Load library
-
         self.__conf['template']['lib'] = lib
         return lib
-
-    def load_lib(self, name):
-        pass
 
     def get_folder(self, path):
         folder = {
@@ -297,12 +339,6 @@ class Download(Accounts, GIS):
         #     os.makedirs(output_folder)
         pass
 
-    # 2.Download.start()
-    def start(self):
-        # get_url
-        # get_auth
-        pass
-
     def get_url(self):
         pass
 
@@ -316,11 +352,6 @@ class Download(Accounts, GIS):
         pass
 
     def get_lfile(self):
-        pass
-
-    # 3.Download.finish()
-    def finish(self):
-        # clean_folder
         pass
 
     def clean_folder(self, name):
