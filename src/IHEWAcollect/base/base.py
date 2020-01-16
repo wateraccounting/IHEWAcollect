@@ -55,17 +55,18 @@ import yaml
 # OK
 
 try:
-    from .exception import \
+    from .base.exception import IHEClassInitError,\
         IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 except ImportError:
-    from src.IHEWAcollect.base.exception \
-        import IHEStringError, IHETypeError, IHEKeyError, IHEFileError
+    from src.IHEWAcollect.base.exception import IHEClassInitError,\
+        IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 
 
 class Base(object):
     """This Base class
 
     Args:
+      product (str): Product name of data products.
       is_status (bool): Is to print status message.
     """
     status = 'Global status.'
@@ -82,32 +83,46 @@ class Base(object):
     }
 
     __conf = {
+        'file': 'base.yml',
         'path': os.path.join(
             os.getcwd(),
             os.path.dirname(
                 inspect.getfile(
                     inspect.currentframe()))),
-        'file': 'base.yml',
         'data': {
             'messages': {},
             'products': {}
+        },
+        'product': {
+            'name': '',
+            'data': {}
         }
     }
 
-    def __init__(self, is_status):
+    def __init__(self, product, is_status):
         """Class instantiation
         """
-        # IHEStringError, IHEFileError, IHEKeyError, IHETypeError
+        # Class self.__status['is_print']
         vname, rtype, vdata = 'is_status', bool, is_status
         if self.check_input(vname, rtype, vdata):
             self.__status['is_print'] = vdata
         else:
             self.__status['code'] = 1
 
+        # Class self.__conf['product']['name']
+        self.__conf['product']['name'] = product
+
+        # Class self.__conf['data']
+        # Class self.__conf['product']['data']
         if self.__status['code'] == 0:
             self._conf()
+            self.__status['message'] = '"{f}" product is: "{v}"'.format(
+                f=self.__conf['file'],
+                v=self.__conf['product']['name'])
+        else:
+            raise IHEClassInitError('Base') from None
 
-    def _conf(self):
+    def _conf(self,):
         """Get configuration
 
         This function open collect.cfg configuration file.
@@ -116,6 +131,7 @@ class Base(object):
         f_in = os.path.join(self.__conf['path'],
                             self.__conf['file'])
 
+        # self.__conf['data']
         if os.path.exists(f_in):
             conf = yaml.load(open(f_in, 'r'), Loader=yaml.FullLoader)
             # try:
@@ -136,6 +152,21 @@ class Base(object):
         else:
             self.__status['code'] = 1
             raise IHEFileError(f_in)from None
+
+        # self.__conf['product']['data']
+        product = self.__conf['product']['name']
+
+        vname, rtype, vdata = 'product', str, product
+        if self.check_input(vname, rtype, vdata):
+            if vdata in self.__conf['data']['products'].keys():
+                self.__conf['product']['data'] = \
+                    self.__conf['data']['products'][vdata]
+            else:
+                self.__status['code'] = 1
+                raise IHEKeyError(vdata,
+                                  self.__conf['data']['products'].keys()) from None
+        else:
+            self.__status['code'] = 1
 
         self.__status['message'] = self._status(
             self.__status['messages'],
@@ -282,12 +313,12 @@ def main():
 
     # Base __init__
     print('\nBase\n=====')
-    base = Base(is_status=True)
+    product = 'GLEAM'
+    base = Base(product, is_status=True)
 
     # Base attributes
-    key = 'GLEAM'
-    print(base._Base__conf['data']['products'].keys())
-    print(key, base._Base__conf['data']['products'][key])
+    print(product, base._Base__conf['product'])
+    # print(base._Base__conf['data']['products'].keys())
     # pprint(base._Base__conf)
 
     # # Base methods

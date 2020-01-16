@@ -34,25 +34,26 @@ import inspect
 import datetime
 
 try:
-    from .base.exception import \
+    from .base.exception import IHEClassInitError,\
         IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 except ImportError:
-    from src.IHEWAcollect.base.exception \
-        import IHEStringError, IHETypeError, IHEKeyError, IHEFileError
+    from src.IHEWAcollect.base.exception import IHEClassInitError,\
+        IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 
 try:
-    from .base.accounts import Accounts
+    from .base.user import User
     from .base.gis import GIS
     from .base.dtime import Dtime
     from .base.util import Extract
 except ImportError:
-    from src.IHEWAcollect.base.accounts import Accounts
+    from src.IHEWAcollect.base.user import User
     from src.IHEWAcollect.base.gis import GIS
     from src.IHEWAcollect.base.dtime import Dtime
     from src.IHEWAcollect.base.util import Extract
 
 
-class Download(Accounts, GIS):
+class Download(User, GIS, Dtime,
+               Extract):
     """This Download class
 
     Description
@@ -98,7 +99,6 @@ class Download(Accounts, GIS):
             'now': None,
             'end': None
         },
-
         'log': {
             'fname': 'log-{t}.txt',
             'file': '{path}/log-{t}.txt',
@@ -107,26 +107,22 @@ class Download(Accounts, GIS):
         },
 
         'path': '',
-        'file': '',
-
-        'product': '',
-        'version': '',
-        'parameter': '',
-        'resolution': '',
-        'variable': '',
-
+        'account': {
+            'name': '',
+            'data': {}
+        },
+        'product': {
+            'name': '',
+            'version': '',
+            'parameter': '',
+            'resolution': '',
+            'variable': '',
+            'data': {}
+        },
         'template': {
             'name': '',
-            'lib': '',
-            'folder': {
-                'r': '',
-                't': '',
-                'l': ''
-            },
-        },
-
-        'account': {},
-        'data': {}
+            'data': {}
+        }
     }
 
     def __init__(self, workspace='',
@@ -134,25 +130,21 @@ class Download(Accounts, GIS):
                  is_status=True, **kwargs):
         """Class instantiation
         """
-        time_s = datetime.datetime.now()
-        self.__conf['time']['start'] = time_s
-        self.__conf['log']['fname'] = 'log-{t}.txt'.format(
-            t=time_s.strftime('%Y%m%d%H%M%S%f'))
-
-        wa_args = {
-            'product': product,
+        tmp_product_conf = {
             'version': version,
             'parameter': parameter,
             'resolution': resolution,
             'variable': variable
         }
 
+        # Class self.__status['is_print']
         vname, rtype, vdata = 'is_status', bool, is_status
         if self.check_input(vname, rtype, vdata):
             self.__status['is_print'] = vdata
         else:
             self.__status['code'] = 1
 
+        # Class self.__conf['path']
         vname, rtype, vdata = 'workspace', str, workspace
         if self.check_input(vname, rtype, vdata):
             self.__conf['path'] = vdata
@@ -160,56 +152,38 @@ class Download(Accounts, GIS):
             self.__status['code'] = 1
 
         rtype = str
-        for vname, vdata in wa_args.items():
+        for vname, vdata in tmp_product_conf.items():
             if self.check_input(vname, rtype, vdata):
-                self.__conf[vname] = vdata
+                self.__conf['product'][vname] = vdata
             else:
                 self.__status['code'] = 1
 
-        Accounts.__init__(self, workspace, product, is_status, **kwargs)
-        GIS.__init__(self, workspace, is_status, **kwargs)
         # super(Download, self).__init__(workspace, account, is_status, **kwargs)
-
-        keys = self._Base__conf['data'][
-            'products'].keys()
-        if product not in keys:
-            self.__status['code'] = 1
-            raise IHEKeyError(product, keys) from None
-        keys = self._Base__conf['data'][
-            'products'][product].keys()
-        if version not in keys:
-            self.__status['code'] = 1
-            raise IHEKeyError(version, keys) from None
-        keys = self._Base__conf['data'][
-            'products'][product][version].keys()
-        if parameter not in keys:
-            self.__status['code'] = 1
-            raise IHEKeyError(parameter, keys) from None
-        keys = self._Base__conf['data'][
-            'products'][product][version][parameter].keys()
-        if resolution not in keys:
-            self.__status['code'] = 1
-            raise IHEKeyError(resolution, keys) from None
-        keys = self._Base__conf['data'][
-            'products'][product][version][parameter][resolution]['variables'].keys()
-        if variable not in keys:
-            self.__status['code'] = 1
-            raise IHEKeyError(variable, keys) from None
-        self.var = self._Base__conf['data']['products'][
-            product][version][parameter][resolution]['variables'][variable]
-
-        self.latlim = self.var['lat']
-        self.lonlim = self.var['lon']
-        self.timlim = self.var['time']
-
         if self.__status['code'] == 0:
-            # self._conf()
-            self.__status['message'] = ''
+            User.__init__(self, workspace, product, is_status, **kwargs)
+            GIS.__init__(self, workspace, is_status, **kwargs)
+            Dtime.__init__(self, workspace, is_status, **kwargs)
+        else:
+            raise IHEClassInitError('Download') from None
 
-        # TODO, 20200115, QPan, delete
-        self.prepare()
-        self.start()
-        self.finish()
+
+        # Class GIS
+        # self.latlim = self.var['lat']
+        # self.lonlim = self.var['lon']
+        # self.timlim = self.var['time']
+
+        # Class Dtime
+
+        # Class Download
+        if self.__status['code'] == 0:
+            # TODO, 20200115, QPan, delete
+            self.prepare()
+            self.start()
+            self.finish()
+
+            self.__status['message'] = ''
+        else:
+            raise IHEClassInitError('Download') from None
 
     def set_status(self, fun='', prt=False, ext=''):
         """Set status
@@ -223,10 +197,12 @@ class Download(Accounts, GIS):
                                    self.__status['code'],
                                    fun, prt, ext)
 
-    def prepare(self, ):
+    def prepare(self):
+        self.get_time()
         self.get_log()
-        # get_template
-        # get_lib
+        self.get_account()
+        self.get_product()
+        self.get_template()
         # get_folder
 
     def start(self):
@@ -238,31 +214,49 @@ class Download(Accounts, GIS):
         self.close_log()
         # clean_folder
 
+    def get_time(self):
+        # Class self.__conf['time']
+        time = self.__conf['time']
+
+        if self.__status['code'] == 0:
+            now = datetime.datetime.now()
+
+            self.__conf['time']['start'] = now
+            self.__conf['time']['now'] = now
+            self.__conf['time']['end'] = now
+        return time
+
     def get_log(self):
+        # Class self.__conf['log']
         status = -1
-        time_s = self.__conf['time']['start']
+        log = self.__conf['log']
 
-        path = self.__conf['path']
-        fname = self.__conf['log']['fname']
-        file = os.path.join(path, fname)
+        if self.__status['code'] == 0:
+            time_s = self.__conf['time']['start']
+            time_s_str = time_s.strftime('%Y-%m-%d %H:%M:%S.%f')
 
-        # TODO, 20200115, QPan, code
-        # -1: not found, 0: closed, 1: opened
-        if os.path.isfile(file):
-            status = 0
-        else:
-            print('Create log file: {f}'.format(f=fname))
-            txt = 'IHEWAcollect created on {t}'.format(
-                t=time_s.strftime('%Y-%m-%d %H:%M:%S.%f'))
+            fname = 'log-{t}.txt'.format(t=time_s.strftime('%Y%m%d%H%M%S%f'))
 
-            fp = open(file, 'w+')
-            fp.write('{}\n'.format(txt))
-            status = 0
+            path = self.__conf['path']
+            file = os.path.join(path, fname)
 
-        self.__conf['log']['file'] = file
-        self.__conf['log']['fp'] = fp
-        self.__conf['log']['status'] = status
-        return file
+            # TODO, 20200115, QPan, code
+            # -1: not found, 0: closed, 1: opened
+            if os.path.isfile(file):
+                status = 0
+            else:
+                print('Create log file: {f}'.format(f=fname))
+                txt = 'IHEWAcollect created on {t}'.format(t=time_s_str)
+
+                fp = open(file, 'w+')
+                fp.write('{}\n'.format(txt))
+                status = 0
+
+            self.__conf['log']['fname'] = fname
+            self.__conf['log']['file'] = file
+            self.__conf['log']['fp'] = fp
+            self.__conf['log']['status'] = status
+        return log
 
     def write_log(self, msg=''):
         time_n = datetime.datetime.now()
@@ -286,11 +280,67 @@ class Download(Accounts, GIS):
         fp.close()
         self.__conf['log']['fp'] = None
 
-    def get_template(self, account):
-        # get template from 'template'
-        template = ''
+    def get_account(self):
+        # Class self.__conf['account'] <- User.account
+        account = self.__conf['account']
 
-        self.__conf['template']['name'] = template
+        if self.__status['code'] == 0:
+            account['name'] = self._User__conf['account']['name']
+            account['data'] = self._User__conf['account']['data']
+
+            self.__conf['account']['name'] = account['name']
+            self.__conf['account']['data'] = account['data']
+        return account
+
+    def get_product(self):
+        # Class self.__conf['product'] <- Base.product
+        product = self.__conf['product']
+        version = product['version']
+        parameter = product['parameter']
+        resolution = product['resolution']
+        variable = product['variable']
+
+        if self.__status['code'] == 0:
+            product['name'] = self._Base__conf['product']['name']
+            product['data'] = self._Base__conf['product']['data']
+
+            keys = product['data'].keys()
+            if version not in keys:
+                self.__status['code'] = 1
+                raise IHEKeyError(version, keys) from None
+
+            keys = product['data'][
+                version].keys()
+            if parameter not in keys:
+                self.__status['code'] = 1
+                raise IHEKeyError(parameter, keys) from None
+
+            keys = product['data'][
+                version][parameter].keys()
+            if resolution not in keys:
+                self.__status['code'] = 1
+                raise IHEKeyError(resolution, keys) from None
+
+            keys = product['data'][
+                version][parameter][resolution]['variables'].keys()
+            if variable not in keys:
+                self.__status['code'] = 1
+                raise IHEKeyError(variable, keys) from None
+
+            self.__conf['product']['name'] = product['name']
+            self.__conf['product']['data'] = product['data'][
+                version][parameter][resolution]['variables'][variable]
+        return product
+
+    def get_template(self):
+        # Class self.__conf['template'] <- Base.product
+        template = self.__conf['template']
+
+        if self.__status['code'] == 0:
+            template['name'] = self._Base__conf['product']['name']
+            # template['data'] = self._Base__conf['product']['data']
+
+            self.__conf['template']['name'] = template['name']
         return template
 
     def load_lib(self, protocol, method):
@@ -376,9 +426,9 @@ def main():
                 inspect.currentframe())),
         '../', '../', 'tests'
     )
-    print(path)
+    product = 'ALEXI'
     download = Download(workspace=path,
-                        product='ALEXI',
+                        product=product,
                         version='v1',
                         parameter='evapotranspiration',
                         resolution='daily',
@@ -388,14 +438,18 @@ def main():
     # # Base attributes
     # print('\ndownload._Base__conf\n=====')
     # pprint(download._Base__conf)
-    #
-    # # Accounts attributes
-    # print('\ndownload._Accounts__conf\n=====')
-    # pprint(download._Accounts__conf)
-    #
+
+    # User attributes
+    print('\ndownload._User__conf\n=====')
+    pprint(download._User__conf['account'])
+
     # # GIS attributes
     # print('\ndownload._GIS__conf:\n=====')
     # pprint(download._GIS__conf)
+
+    # # Dtime attributes
+    # print('\ndownload._Dtime__conf:\n=====')
+    # pprint(download._Dtime__conf)
 
     # Download attributes
     print('\ndownload._Download__conf()\n=====')

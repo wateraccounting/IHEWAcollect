@@ -7,11 +7,11 @@ import datetime
 import pandas as pd
 
 try:
-    from .exception import \
+    from .base.exception import IHEClassInitError,\
         IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 except ImportError:
-    from src.IHEWAcollect.base.exception \
-        import IHEStringError, IHETypeError, IHEKeyError, IHEFileError
+    from src.IHEWAcollect.base.exception import IHEClassInitError,\
+        IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 
 
 class Dtime(object):
@@ -29,24 +29,22 @@ class Dtime(object):
     }
 
     __conf = {
-        'path': '',
         'file': '',
+        'path': '',
         'data': {}
     }
 
     def __init__(self, workspace, is_status, **kwargs):
         """Class instantiation
         """
-        # # IHEStringError, IHEFileError, IHEKeyError, IHETypeError
-        # vname, rtype, vdata = 'is_status', bool, is_status
-        # if self.check_input(vname, rtype, vdata):
-        #     self.__status['is_print'] = vdata
-        # else:
-        #     self.__status['code'] = 1
-        #
-        # if self.__status['code'] == 0:
-        #     self._conf()
-        pass
+        # # super(Dtime, self).__init__(is_status)
+        # Base.__init__(self, is_status)
+
+        # Class self.__status['is_print']
+        self.__status['is_print'] = is_status
+
+        # Class self.__conf['path']
+        self.__conf['path'] = workspace
 
     def check_time_limit(self, dtime_s, dtime_e, conf_time, arg_resolution):
         # Check Startdate and Enddate
@@ -120,14 +118,10 @@ def main():
     )
     dtime = Dtime(path, is_status=True)
 
-    # Base attributes
-    print('\ndtime._Base__conf\n=====')
-    # pprint(dtime._Base__conf)
-
     # Dtime attributes
     print('\ndtime._Dtime__conf:\n=====')
-    print(dtime._Dtime__conf['data'].keys())
-    # pprint(dtime._Dtime__conf)
+    pprint(dtime._Dtime__conf)
+    # print(dtime._Dtime__conf['data'].keys())
 
     # Dtime methods
     # print('\ndtime.Base.get_status()\n=====')

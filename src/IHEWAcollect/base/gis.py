@@ -45,19 +45,14 @@ except ImportError:
     import gdalconst
 
 try:
-    from .exception import \
+    from .base.exception import IHEClassInitError,\
         IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 except ImportError:
-    from src.IHEWAcollect.base.exception \
-        import IHEStringError, IHETypeError, IHEKeyError, IHEFileError
-
-try:
-    from .base import Base
-except ImportError:
-    from src.IHEWAcollect.base.base import Base
+    from src.IHEWAcollect.base.exception import IHEClassInitError,\
+        IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 
 
-class GIS(Base):
+class GIS(object):
     """This GIS class
 
     GIS process. Standard CRS is "EPSG:4326 - WGS 84 - Geographic".
@@ -81,32 +76,22 @@ class GIS(Base):
     }
 
     __conf = {
-        'path': '',
         'file': '',
+        'path': '',
         'data': {}
     }
 
     def __init__(self, workspace, is_status, **kwargs):
         """Class instantiation
         """
-        Base.__init__(self, is_status)
-        # super(GIS, self).__init__(is_status)
+        # # super(GIS, self).__init__(is_status)
+        # Base.__init__(self, is_status)
 
-        vname, rtype, vdata = 'is_status', bool, is_status
-        if self.check_input(vname, rtype, vdata):
-            self.__status['is_print'] = vdata
-        else:
-            self.__status['code'] = 1
+        # Class self.__status['is_print']
+        self.__status['is_print'] = is_status
 
-        vname, rtype, vdata = 'workspace', str, workspace
-        if self.check_input(vname, rtype, vdata):
-            self.__conf['path'] = vdata
-        else:
-            self.__status['code'] = 1
-
-        if self.__status['code'] == 0:
-            # self._conf()
-            self.__status['message'] = ''
+        # Class self.__conf['path']
+        self.__conf['path'] = workspace
 
     def set_status(self, fun='', prt=False, ext=''):
         """Set status
@@ -324,18 +309,14 @@ def main():
     )
     gis = GIS(path, is_status=True)
 
-    # Base attributes
-    print('\ngis._Base__conf\n=====')
-    # pprint(gis._Base__conf)
-
     # GIS attributes
     print('\ngis._GIS__conf:\n=====')
-    print(gis._GIS__conf['data'].keys())
-    # pprint(gis._GIS__conf)
+    pprint(gis._GIS__conf)
+    # print(gis._GIS__conf['data'].keys())
 
-    # GIS methods
-    print('\ngis.Base.get_status()\n=====')
-    pprint(gis.get_status())
+    # # GIS methods
+    # print('\ngis.Base.get_status()\n=====')
+    # pprint(gis.get_status())
 
 
 if __name__ == "__main__":

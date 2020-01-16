@@ -64,6 +64,17 @@ class Extract(object):
     Args:
       is_clean (bool): Is to clean all files in the folder.
     """
+    __status = {
+        'messages': {
+            0: 'S: WA.Extract  {f:>20} : status {c}, {m}',
+            1: 'E: WA.Extract  {f:>20} : status {c}: {m}',
+            2: 'W: WA.Extract  {f:>20} : status {c}: {m}',
+        },
+        'code': 0,
+        'message': '',
+        'is_print': True
+    }
+
     __conf = {
         'file': {
             'i': '',
@@ -136,6 +147,17 @@ class Plot(object):
     Args:
       is_save (bool): Is to clean all files in the folder.
     """
+    __status = {
+        'messages': {
+            0: 'S: WA.Plot     {f:>20} : status {c}, {m}',
+            1: 'E: WA.Plot     {f:>20} : status {c}: {m}',
+            2: 'W: WA.Plot     {f:>20} : status {c}: {m}',
+        },
+        'code': 0,
+        'message': '',
+        'is_print': True
+    }
+
     __conf = {
         'name': '',
         'data': np.ndarray,
@@ -167,6 +189,17 @@ class Waitbar(object):
     Args:
       is_save (bool): Is to clean all files in the folder.
     """
+    __status = {
+        'messages': {
+            0: 'S: WA.Waitbar  {f:>20} : status {c}, {m}',
+            1: 'E: WA.Waitbar  {f:>20} : status {c}: {m}',
+            2: 'W: WA.Waitbar  {f:>20} : status {c}: {m}',
+        },
+        'code': 0,
+        'message': '',
+        'is_print': True
+    }
+
     __conf = {
         'statue': {
             's': 0,

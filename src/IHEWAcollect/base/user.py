@@ -42,11 +42,11 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 try:
-    from .exception import \
+    from .base.exception import IHEClassInitError,\
         IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 except ImportError:
-    from src.IHEWAcollect.base.exception \
-        import IHEStringError, IHETypeError, IHEKeyError, IHEFileError
+    from src.IHEWAcollect.base.exception import IHEClassInitError,\
+        IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 
 try:
     from .base import Base
@@ -54,8 +54,8 @@ except ImportError:
     from src.IHEWAcollect.base.base import Base
 
 
-class Accounts(Base):
-    """This Accounts class
+class User(Base):
+    """This User class
 
     Description
 
@@ -79,76 +79,62 @@ class Accounts(Base):
     }
 
     __conf = {
-        'path': os.path.join(
-            os.getcwd(),
-            os.path.dirname(
-                inspect.getfile(
-                    inspect.currentframe())),
-            '../', '../', '../'),
+        'credential': {
+            'file': 'accounts.yml-credential',
+            'password': b'',
+            'length': 32,
+            'iterations': 100000,
+            'salt': b'WaterAccounting_',
+            'key': b''
+        },
         'file': 'accounts.yml-encrypted',
-        'product': {},
-        'account': {},
+        'path': '',
         'data': {
-            'credential': {
-                'file': 'accounts.yml-credential',
-                'password': b'',
-                'length': 32,
-                'iterations': 100000,
-                'salt': b'WaterAccounting_',
-                'key': b''
-            },
-            'accounts': {
-                'NASA': {},
-                'GLEAM': {},
-                'FTP_WA': {},
-                'FTP_WA_GUESS': {},
-                'MSWEP': {},
-                'Copernicus': {},
-                'VITO': {}
-            },
+            'accounts': {},
+        },
+        'account': {
+            'name': '',
+            'data': {}
         }
     }
 
     def __init__(self, workspace, product, is_status, **kwargs):
         """Class instantiation
         """
-        Base.__init__(self, is_status)
         # super(Accounts, self).__init__(is_status)
+        Base.__init__(self, product, is_status)
+        tmp_product = self._Base__conf['product']
 
         for argkey, argval in kwargs.items():
             if argkey == 'others':
                 self.argkey = argval
 
+        # Class self.__status['is_print']
         vname, rtype, vdata = 'is_status', bool, is_status
         if self.check_input(vname, rtype, vdata):
             self.__status['is_print'] = vdata
         else:
             self.__status['code'] = 1
 
+        # Class self.__conf['path']
         vname, rtype, vdata = 'workspace', str, workspace
         if self.check_input(vname, rtype, vdata):
             self.__conf['path'] = vdata
         else:
             self.__status['code'] = 1
 
-        vname, rtype, vdata = 'product', str, product
-        if self.check_input(vname, rtype, vdata):
-            if vdata not in self._Base__conf['data']['products'].keys():
-                self.__status['code'] = 1
-                raise IHEKeyError(vdata,
-                                  self._Base__conf['data']['products'].keys()) from None
-            else:
-                account = self._Base__conf['data']['products'][vdata]['account']
-                self.__conf['account'][account] = {}
-                self.__conf['product'] = self._Base__conf['data']['products'][vdata]
-        else:
-            self.__status['code'] = 1
+        # Class self.__conf['account']['name']
+        self.__conf['account']['name'] = tmp_product['data']['account']
 
+        # Class self.__conf['data']
+        # Class self.__conf['account']['data']
         if self.__status['code'] == 0:
             self._user()
             self.__status['message'] = '"{f}" key is: "{v}"'.format(
                 f=self.__conf['file'],
-                v=self.__conf['data']['credential']['key'])
+                v=self.__conf['credential']['key'])
+        else:
+            raise IHEClassInitError('Accounts') from None
 
     def _user(self):
         """Get user information
@@ -185,13 +171,17 @@ class Accounts(Base):
                     self.__status['code'] = 1
                     raise IHEKeyError(key, fname_enc) from None
                 else:
-                    for subkey in self.__conf['account']:
+                    subkey = self.__conf['account']['name']
+                    if subkey is not None:
                         try:
-                            self.__conf['account'][subkey] = conf_enc[key][subkey]
+                            self.__conf['account']['data'] = conf_enc[key][subkey]
                         except KeyError:
                             raise IHEKeyError(subkey, fname_enc) from None
                         else:
                             self.__status['code'] = 0
+                    else:
+                        self.__conf['account']['name'] = ''
+                        self.__status['code'] = 0
         else:
             self.__status['code'] = 1
             raise IHEFileError(f_cfg_enc) from None
@@ -244,7 +234,7 @@ class Accounts(Base):
             else:
                 raise IHEStringError('password') from None
         finally:
-            self.__conf['data']['credential']['password'] = str.encode(pswd)
+            self.__conf['credential']['password'] = str.encode(pswd)
 
         # key, Yaml load/Python input/Python generate
         try:
@@ -263,11 +253,11 @@ class Accounts(Base):
             else:
                 raise IHEKeyError('key', conf.keys()) from None
         finally:
-            self.__conf['data']['credential']['key'] = str.encode(key)
+            self.__conf['credential']['key'] = str.encode(key)
 
         # Final check
         key_from_pswd = str.encode(self._user_key_generator())
-        key_from_conf = self.__conf['data']['credential']['key']
+        key_from_conf = self.__conf['credential']['key']
         if key_from_pswd == key_from_conf:
             return is_renew
         else:
@@ -292,10 +282,10 @@ class Accounts(Base):
         # from cryptography.fernet import Fernet
         # key = Fernet.generate_key()
 
-        length = self.__conf['data']['credential']['length']
-        iterations = self.__conf['data']['credential']['iterations']
-        salt = self.__conf['data']['credential']['salt']
-        pswd = self.__conf['data']['credential']['password']
+        length = self.__conf['credential']['length']
+        iterations = self.__conf['credential']['iterations']
+        salt = self.__conf['credential']['salt']
+        pswd = self.__conf['credential']['password']
 
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
@@ -316,8 +306,8 @@ class Accounts(Base):
         Args:
           file (str): Encrypted file name.
         """
-        pswd = self.__conf['data']['credential']['password']
-        key = self.__conf['data']['credential']['key']
+        pswd = self.__conf['credential']['password']
+        key = self.__conf['credential']['key']
 
         file_org = file
         file_enc = file_org + '-encrypted'
@@ -350,7 +340,7 @@ class Accounts(Base):
         Returns:
           str: Decrypted Yaml data by utf-8.
         """
-        key = self.__conf['data']['credential']['key']
+        key = self.__conf['credential']['key']
 
         if os.path.exists(file):
             with open(file, 'rb') as fp_in:
@@ -460,8 +450,8 @@ def main():
     # print('\nAccounts.check_conf()\n=====')
     # pprint(Accounts.check_conf('data', is_status=False))
 
-    # Accounts __init__
-    print('\nAccounts\n=====')
+    # User __init__
+    print('\nUser\n=====')
     path = os.path.join(
         os.getcwd(),
         os.path.dirname(
@@ -469,22 +459,23 @@ def main():
                 inspect.currentframe())),
         '../', '../', '../', 'tests'
     )
-    accounts = Accounts(path, 'ALEXI', is_status=True)
+    product = 'ALEXI'
+    # product = 'ECMWF'
+    user = User(path, product, is_status=True)
 
     # Base attributes
     print('\naccounts._Base__conf\n=====')
     # pprint(accounts._Base__conf)
 
-    # Accounts attributes
-    key = 'IHEWA_GUESS'
-    print('\naccounts._Accounts__conf\n=====')
-    print(accounts._Accounts__conf['data']['accounts'].keys())
-    print(key, accounts._Accounts__conf['data']['accounts'][key])
-    # pprint(accounts._Accounts__conf)
+    # User attributes
+    print('\naccounts._User__conf\n=====')
+    print(product, user._User__conf['account'])
+    # print(user._User__conf['data']['accounts'].keys())
+    # pprint(user._User__conf)
 
-    # Accounts methods
+    # User methods
     print('\naccounts.get_status()\n=====')
-    pprint(accounts.get_status())
+    pprint(user.get_status())
 
 
 if __name__ == "__main__":

@@ -43,7 +43,7 @@ __path_data = os.path.join(__path, 'data')
 
 
 def test_Accounts():
-    path = os.path.join(__path, '../')
+    path = os.path.join(__path)
     product = 'ALEXI'
 
     accounts = Accounts(path, product, is_status=True)

@@ -14,6 +14,18 @@ https://julien.danjou.info/python-exceptions-guide/
 import os
 
 
+class IHEClassInitError(Exception):
+    def __init__(self, mod, msg=None):
+        if msg is None:
+            self.msg = 'Class "{m}" init error.'.format(
+                m=mod)
+
+    def __str__(self):
+        # __str__() obviously expects a string to be returned,
+        # so make sure not to send any other data types
+        return repr(self.msg)
+
+
 class IHEFileError(Exception):
     def __init__(self, file, msg=None):
         fpath, fname = os.path.split(file)
