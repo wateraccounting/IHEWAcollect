@@ -17,7 +17,7 @@ in the ``WaterAccounting/accounts.yml`` file.
 
     import os
     from IHEWAcollect.base.gis import GIS
-    gis = GIS(os.getcwd(), is_status=True)
+    gis = GIS(os.getcwd(), is_print=True)
 
 .. note::
 
@@ -31,9 +31,10 @@ in the ``WaterAccounting/accounts.yml`` file.
 import os
 # import sys
 import inspect
+
 # import shutil
 # import yaml
-# from datetime import datetime
+import datetime
 
 import numpy as np
 
@@ -59,7 +60,7 @@ class GIS(object):
 
     Args:
       workspace (str): Directory to accounts.yml.
-      is_status (bool): Is to print status message.
+      is_print (bool): Is to print status message.
       kwargs (dict): Other arguments.
     """
     status = 'Global status.'
@@ -81,14 +82,11 @@ class GIS(object):
         'data': {}
     }
 
-    def __init__(self, workspace, is_status, **kwargs):
+    def __init__(self, workspace, is_print, **kwargs):
         """Class instantiation
         """
-        # # super(GIS, self).__init__(is_status)
-        # Base.__init__(self, is_status)
-
         # Class self.__status['is_print']
-        self.__status['is_print'] = is_status
+        self.__status['is_print'] = is_print
 
         # Class self.__conf['path']
         self.__conf['path'] = workspace
@@ -169,7 +167,7 @@ class GIS(object):
 
             >>> import os
             >>> from IHEWAcollect.base.gis import GIS
-            >>> gis = GIS(os.getcwd(), is_status=False)
+            >>> gis = GIS(os.getcwd(), is_print=False)
             >>> path = os.path.join(os.getcwd(), 'tests', 'data', 'BigTIFF')
             >>> file = os.path.join(path, 'Classic.tif')
             >>> data = gis.load_file(file, 1)
@@ -207,10 +205,10 @@ class GIS(object):
 
         return data
 
-    def merge_data(self, data):
+    def merge_map(self, data):
         pass
 
-    def clip_data(self, data):
+    def clip_map(self, data):
         pass
 
     def save_GTiff(self, name='', data='', geo='', projection=''):
@@ -228,7 +226,7 @@ class GIS(object):
         :Example:
 
             >>> from IHEWAcollect.base.gis import GIS
-            >>> gis = GIS(os.getcwd(), is_status=False)
+            >>> gis = GIS(os.getcwd(), is_print=False)
             >>> path = os.path.join(os.getcwd(), 'tests', 'data', 'BigTIFF')
             >>> file = os.path.join(path, 'Classic.tif')
             >>> test = os.path.join(path, 'test.tif')
@@ -307,7 +305,7 @@ def main():
                 inspect.currentframe())),
         '../', '../', '../', 'tests'
     )
-    gis = GIS(path, is_status=True)
+    gis = GIS(path, is_print=True)
 
     # GIS attributes
     print('\ngis._GIS__conf:\n=====')

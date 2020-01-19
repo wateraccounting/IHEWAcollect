@@ -17,6 +17,7 @@ import gzip
 import zipfile
 import tarfile
 
+# import datetime
 import numpy as np
 
 
@@ -26,34 +27,6 @@ try:
 except ImportError:
     from src.IHEWAcollect.base.exception \
         import IHEStringError, IHETypeError, IHEKeyError, IHEFileError
-
-
-# class Log(object):
-#     """This util.Log class
-#
-#     Log files.
-#
-#     Args:
-#       is_save (bool): Is to clean all files in the folder.
-#     """
-#     __conf = {
-#         'file': {
-#             'i': '',
-#             'o': ''
-#         },
-#         'folder': {
-#             'i': '',
-#             'o': ''
-#         },
-#         'is_save': False,
-#         'is_show': False
-#     }
-#
-#     def __init__(self, file, folder, is_save, is_show):
-#         self.__conf['file'] = file
-#         self.__conf['folder'] = folder
-#         self.__conf['is_save'] = is_save
-#         self.__conf['is_show'] = is_show
 
 
 class Extract(object):
@@ -83,16 +56,13 @@ class Extract(object):
         'folder': {
             'i': '',
             'o': ''
-        },
-        'is_clean': False,
-        'is_show': False
+        }
     }
 
-    def __init__(self, file, folder, is_clean, is_show):
+    def __init__(self, file, folder, is_print):
+        self.__status['is_print'] = is_print
         self.__conf['file'] = file
         self.__conf['folder'] = folder
-        self.__conf['is_clean'] = is_clean
-        self.__conf['is_show'] = is_show
 
     def zip(self):
         """Extract zip file
@@ -173,7 +143,8 @@ class Plot(object):
         'is_show': False
     }
 
-    def __init__(self, data, file, folder, is_save, is_show):
+    def __init__(self, data, file, folder, is_print, is_save, is_show):
+        self.__status['is_print'] = is_print
         self.__conf['data'] = data
         self.__conf['file'] = file
         self.__conf['folder'] = folder
@@ -205,10 +176,20 @@ class Waitbar(object):
             's': 0,
             'e': 100,
             'i': 0,
-        },
-        'is_show': False
+        }
     }
 
-    def __init__(self, is_show):
-        self.__conf['is_show'] = is_show
+    def __init__(self, is_print):
+        self.__status['is_print'] = is_print
 
+
+class Log(object):
+    __conf = {}
+    data = {}
+
+    def __init__(self, config, **kwargs):
+        self.__conf = config
+
+    def write(self, time, msg=''):
+        txt = '{t}: {msg}'.format(t=time.strftime('%Y-%m-%d %H:%M:%S.%f'), msg=msg)
+        self.__conf['fp'].write('{}\n'.format(txt))

@@ -1,3 +1,0 @@
-"""
-IHEWAcollect template modules
-"""

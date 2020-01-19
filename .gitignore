@@ -1,13 +1,11 @@
 # Configuration yaml
 tests/accounts.yml
 
-# Log files
-tests/log-*
-
 # tests download
 tests/data/Products/
 tests/data/Download/
 tests/data/Notebooks/
+tests/IHEWAcollect/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

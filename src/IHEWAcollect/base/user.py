@@ -17,7 +17,7 @@ in the ``accounts.yml`` file.
 
     import os
     from IHEWAcollect.base.accounts import Accounts
-    accounts = Accounts(os.getcwd(), 'FTP_WA_GUESS', is_status=True)
+    accounts = Accounts(os.getcwd(), 'FTP_WA_GUESS', is_print=True)
 
 .. note::
 
@@ -31,6 +31,7 @@ in the ``accounts.yml`` file.
 import os
 import sys
 import inspect
+
 # import shutil
 import yaml
 # from datetime import datetime
@@ -62,7 +63,7 @@ class User(Base):
     Args:
       workspace (str): Directory to accounts.yml.
       product (str): Product name of data products.
-      is_status (bool): Is to print status message.
+      is_print (bool): Is to print status message.
       kwargs (dict): Other arguments.
     """
     status = 'Global status.'
@@ -98,11 +99,12 @@ class User(Base):
         }
     }
 
-    def __init__(self, workspace, product, is_status, **kwargs):
+    def __init__(self, workspace, product, is_print, **kwargs):
         """Class instantiation
         """
-        # super(Accounts, self).__init__(is_status)
-        Base.__init__(self, product, is_status)
+        # super(User, self).__init__(workspace, product, is_print, **kwargs)
+        Base.__init__(self, product, is_print)
+
         tmp_product = self._Base__conf['product']
 
         for argkey, argval in kwargs.items():
@@ -110,7 +112,7 @@ class User(Base):
                 self.argkey = argval
 
         # Class self.__status['is_print']
-        vname, rtype, vdata = 'is_status', bool, is_status
+        vname, rtype, vdata = 'is_print', bool, is_print
         if self.check_input(vname, rtype, vdata):
             self.__status['is_print'] = vdata
         else:
@@ -387,7 +389,7 @@ class User(Base):
 
             >>> import os
             >>> from IHEWAcollect.base.accounts import Accounts
-            >>> accounts = Accounts(os.getcwd(), 'FTP_WA_GUESS', is_status=False)
+            >>> accounts = Accounts(os.getcwd(), 'FTP_WA_GUESS', is_print=False)
             >>> account = accounts.get_user('account')
             >>> account['FTP_WA_GUESS']
             {'username': 'wateraccountingguest', 'password': 'W@t3r@ccounting', ...
@@ -448,7 +450,7 @@ def main():
 
     # @classmethod
     # print('\nAccounts.check_conf()\n=====')
-    # pprint(Accounts.check_conf('data', is_status=False))
+    # pprint(Accounts.check_conf('data', is_print=False))
 
     # User __init__
     print('\nUser\n=====')
@@ -461,7 +463,7 @@ def main():
     )
     product = 'ALEXI'
     # product = 'ECMWF'
-    user = User(path, product, is_status=True)
+    user = User(path, product, is_print=True)
 
     # Base attributes
     print('\naccounts._Base__conf\n=====')

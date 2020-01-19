@@ -3580,7 +3580,7 @@ products:
         yearly:
           url: 'https://e4ftl01.cr.usgs.gov'
           protocol: 'HTTPS'
-          method: 'get'
+          method: 'crawl.get'
           freq: 'Y'
           variables:
             LC:
@@ -3665,7 +3665,7 @@ products:
         daily:
           url: 'https://e4ftl01.cr.usgs.gov'
           protocol: 'HTTPS'
-          method: 'get'
+          method: 'crawl.get'
           freq: 'D'
           variables:
             Albedo:
@@ -3745,7 +3745,7 @@ products:
         daily:
           url: 'https://e4ftl01.cr.usgs.gov'
           protocol: 'HTTPS'
-          method: 'get'
+          method: 'crawl.get'
           freq: 'D'
           variables:
             REF:
@@ -3828,7 +3828,7 @@ products:
         eight_daily:
           url: 'https://n5eil01u.ecs.nsidc.org'
           protocol: 'HTTPS'
-          method: 'get'
+          method: 'crawl.get'
           freq: '8D'
           variables:
             SnowFrac:
@@ -3910,7 +3910,7 @@ products:
         eight_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
           protocol: 'HTTPS'
-          method: 'get'
+          method: 'crawl.get'
           freq: '8D'
           variables:
             LST:
@@ -3993,7 +3993,7 @@ products:
         sixteen_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
           protocol: 'HTTPS'
-          method: 'get'
+          method: 'crawl.get'
           freq: '16D'
           variables:
             NDVI:
@@ -4070,7 +4070,7 @@ products:
         eight_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
           protocol: 'HTTPS'
-          method: 'get'
+          method: 'crawl.get'
           freq: '8D'
           variables:
             Fpar:
@@ -4150,7 +4150,7 @@ products:
         eight_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
           protocol: 'HTTPS'
-          method: 'get'
+          method: 'crawl.get'
           freq: '8D'
           variables:
             ET:
@@ -4231,7 +4231,7 @@ products:
         eight_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
           protocol: 'HTTPS'
-          method: 'get'
+          method: 'crawl.get'
           freq: '8D'
           variables:
             GPP:
@@ -4310,7 +4310,7 @@ products:
         eight_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
           protocol: 'HTTPS'
-          method: 'get'
+          method: 'crawl.get'
           freq: '8D'
           variables:
             NPP:
@@ -4467,7 +4467,7 @@ products:
         sixteen_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
           protocol: 'HTTPS'
-          method: 'get'
+          method: 'crawl.get'
           freq: '16D'
           variables:
             NDVI:

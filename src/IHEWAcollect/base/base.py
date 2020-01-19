@@ -16,7 +16,7 @@ in the ``IHEWAcollect/accounts.yml`` file.
 ::
 
     from IHEWAcollect.base.base import Base
-    base = Base(is_status=True)
+    base = Base(is_print=True)
 
 .. todo::
 
@@ -25,6 +25,7 @@ in the ``IHEWAcollect/accounts.yml`` file.
 import os
 import sys
 import inspect
+
 # import shutil
 import yaml
 # from datetime import datetime
@@ -67,7 +68,7 @@ class Base(object):
 
     Args:
       product (str): Product name of data products.
-      is_status (bool): Is to print status message.
+      is_print (bool): Is to print status message.
     """
     status = 'Global status.'
 
@@ -99,11 +100,11 @@ class Base(object):
         }
     }
 
-    def __init__(self, product, is_status):
+    def __init__(self, product, is_print):
         """Class instantiation
         """
         # Class self.__status['is_print']
-        vname, rtype, vdata = 'is_status', bool, is_status
+        vname, rtype, vdata = 'is_print', bool, is_print
         if self.check_input(vname, rtype, vdata):
             self.__status['is_print'] = vdata
         else:
@@ -227,7 +228,7 @@ class Base(object):
 
             >>> import os
             >>> from IHEWAcollect.base.base import Base
-            >>> base = Base(is_status=False)
+            >>> base = Base(is_print=False)
             >>> file = base.get_conf('file')
             >>> print(file)
             base.yml
@@ -260,7 +261,7 @@ class Base(object):
             raise IHETypeError(vname, rtype, vdata) from None
 
     @classmethod
-    def check_conf(cls, key, is_status) -> dict:
+    def check_conf(cls, key, is_print) -> dict:
         """Check configuration information
 
         This is the function to get user's configuration data.
@@ -278,12 +279,12 @@ class Base(object):
         :Example:
 
             >>> from IHEWAcollect.base.base import Base
-            >>> conf = Base.check_conf('data', is_status=False)
+            >>> conf = Base.check_conf('data', is_print=False)
             >>> conf['messages'][0]
             {'msg': 'No error', 'level': 0}
         """
-        # this_class = cls(is_status)
-        return cls(is_status).get_conf(key)
+        # this_class = cls(is_print)
+        return cls(is_print).get_conf(key)
 
 
 def main():
@@ -314,7 +315,7 @@ def main():
     # Base __init__
     print('\nBase\n=====')
     product = 'GLEAM'
-    base = Base(product, is_status=True)
+    base = Base(product, is_print=True)
 
     # Base attributes
     print(product, base._Base__conf['product'])

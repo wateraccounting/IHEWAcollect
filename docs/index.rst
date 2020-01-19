@@ -103,6 +103,22 @@ Products
 +------------+---------------------------------+----------------------------------------------+------------+
 
 
+Installation
+============
+
+Install from source codes.
+
+.. code-block:: console
+
+    $ python setup.py install
+
+Uninstall IHEWAcollect.
+
+.. code-block:: console
+
+    $ pip uninstall IHEWAcollect
+
+
 Development
 ===========
 

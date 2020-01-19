@@ -8,7 +8,8 @@ import pytest
 
 from IHEWAcollect.base.exception import \
     IHEStringError, IHETypeError, IHEKeyError, IHEFileError
-from IHEWAcollect.base.accounts import Accounts
+
+from IHEWAcollect.base.user import User
 # from IHEWAcollect.base.gis import GIS
 
 # import IHEWAcollect.ALEXI as ALEXI
@@ -42,16 +43,15 @@ __path_data = os.path.join(__path, 'data')
 #     #     credential.encrypt_cfg('', 'config.yml', 'WaterAccounting')
 
 
-def test_Accounts():
+def test_User():
     path = os.path.join(__path)
     product = 'ALEXI'
 
-    accounts = Accounts(path, product, is_status=True)
+    user = User(path, product, is_status=True)
 
-    assert accounts.get_conf('file') == 'base.yml'
-
-    with pytest.raises(IHEKeyError, match=r".* not .*"):
-        accounts.get_conf('test')
+    assert user.get_conf('file') == 'base.yml'
+    # with pytest.raises(IHEKeyError, match=r".* IHEKeyError .*"):
+    #     user.get_conf('test')
 
 
 # def test_GIS_get_tiff():

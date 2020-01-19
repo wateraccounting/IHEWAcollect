@@ -34,14 +34,11 @@ class Dtime(object):
         'data': {}
     }
 
-    def __init__(self, workspace, is_status, **kwargs):
+    def __init__(self, workspace, is_print, **kwargs):
         """Class instantiation
         """
-        # # super(Dtime, self).__init__(is_status)
-        # Base.__init__(self, is_status)
-
         # Class self.__status['is_print']
-        self.__status['is_print'] = is_status
+        self.__status['is_print'] = is_print
 
         # Class self.__conf['path']
         self.__conf['path'] = workspace
@@ -116,7 +113,7 @@ def main():
                 inspect.currentframe())),
         '../', '../', '../', 'tests'
     )
-    dtime = Dtime(path, is_status=True)
+    dtime = Dtime(path, is_print=True)
 
     # Dtime attributes
     print('\ndtime._Dtime__conf:\n=====')

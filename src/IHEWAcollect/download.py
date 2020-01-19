@@ -29,6 +29,8 @@ in the ``IHEWAcollect/accounts.yml`` file.
 import os
 # import sys
 import inspect
+import importlib
+
 # import shutil
 # import yaml
 import datetime
@@ -42,18 +44,11 @@ except ImportError:
 
 try:
     from .base.user import User
-    from .base.gis import GIS
-    from .base.dtime import Dtime
-    from .base.util import Extract
 except ImportError:
     from src.IHEWAcollect.base.user import User
-    from src.IHEWAcollect.base.gis import GIS
-    from src.IHEWAcollect.base.dtime import Dtime
-    from src.IHEWAcollect.base.util import Extract
 
 
-class Download(User, GIS, Dtime,
-               Extract):
+class Download(User):
     """This Download class
 
     Description
@@ -77,6 +72,8 @@ class Download(User, GIS, Dtime,
       parameter (str): Parameter name.
       resolution (str): Resolution name.
       variable (str): Variable name.
+      bbox (dict): Spatial range, {'w':, 's':, 'e':, 'n':}.
+      period (dict): Time range, {'s':, 'e':}.
       is_status (bool): Is to print status message.
       kwargs (dict): Other arguments.
     """
@@ -94,19 +91,12 @@ class Download(User, GIS, Dtime,
     }
 
     __conf = {
+        'path': '',
         'time': {
             'start': None,
             'now': None,
             'end': None
         },
-        'log': {
-            'fname': 'log-{t}.txt',
-            'file': '{path}/log-{t}.txt',
-            'fp': None,
-            'status': -1,  # -1: not found, 0: closed, 1: opened
-        },
-
-        'path': '',
         'account': {
             'name': '',
             'data': {}
@@ -117,16 +107,40 @@ class Download(User, GIS, Dtime,
             'parameter': '',
             'resolution': '',
             'variable': '',
+            'bbox': [],
+            'period': [],
             'data': {}
         },
-        'template': {
+        'folder': {
+            'r': '',
+            't': '',
+            'l': ''
+        },
+        'log': {
+            'name': 'log.txt',
+            'file': '{path}/log-.txt',
+            'fp': None,
+            'status': -1,  # -1: not found, 0: closed, 1: opened
+        },
+        'downloader': {
             'name': '',
+            'url': '',
+            'protocol': '',
+            'method': '',
+            'freq': '',
+            'module': None,
             'data': {}
         }
+    }
+    __tmp = {
+        'name': '',
+        'module': None,
+        'data': {}
     }
 
     def __init__(self, workspace='',
                  product='', version='', parameter='', resolution='', variable='',
+                 bbox={}, period={},
                  is_status=True, **kwargs):
         """Class instantiation
         """
@@ -147,7 +161,10 @@ class Download(User, GIS, Dtime,
         # Class self.__conf['path']
         vname, rtype, vdata = 'workspace', str, workspace
         if self.check_input(vname, rtype, vdata):
-            self.__conf['path'] = vdata
+            path = os.path.join(vdata, 'IHEWAcollect')
+            if not os.path.exists(path):
+                os.makedirs(path)
+            self.__conf['path'] = path
         else:
             self.__status['code'] = 1
 
@@ -157,24 +174,22 @@ class Download(User, GIS, Dtime,
                 self.__conf['product'][vname] = vdata
             else:
                 self.__status['code'] = 1
+        self.__conf['product']['bbox'] = bbox
+        self.__conf['product']['period'] = period
 
-        # super(Download, self).__init__(workspace, account, is_status, **kwargs)
+        # super(Download, self).__init__(**kwargs)
         if self.__status['code'] == 0:
             User.__init__(self, workspace, product, is_status, **kwargs)
-            GIS.__init__(self, workspace, is_status, **kwargs)
-            Dtime.__init__(self, workspace, is_status, **kwargs)
         else:
             raise IHEClassInitError('Download') from None
 
-
-        # Class GIS
-        # self.latlim = self.var['lat']
-        # self.lonlim = self.var['lon']
-        # self.timlim = self.var['time']
-
-        # Class Dtime
-
         # Class Download
+        if self.__status['code'] == 0:
+            self._time()
+            self._account()
+            self._product()
+            self._folder()
+
         if self.__status['code'] == 0:
             # TODO, 20200115, QPan, delete
             self.prepare()
@@ -197,24 +212,47 @@ class Download(User, GIS, Dtime,
                                    self.__status['code'],
                                    fun, prt, ext)
 
-    def prepare(self):
-        self.get_time()
-        self.get_log()
-        self.get_account()
-        self.get_product()
-        self.get_template()
-        # get_folder
+    def prepare(self) -> int:
+        """
 
-    def start(self):
-        # get_url
-        # get_auth
-        self.write_log(msg='msg')
+        Returns:
+          int: Status.
+        """
+        status = -1
+        self._log()
+        self._downloader()
+        self._template()
+        return status
 
-    def finish(self):
+    def start(self) -> int:
+        """
+
+        Returns:
+          int: Status.
+        """
+        status = -1
+        self.__tmp['module'].download()
+        self.__tmp['module'].convert()
+        self.__tmp['module'].saveas()
+        return status
+
+    def finish(self) -> int:
+        """
+
+        Returns:
+          int: Status.
+        """
+        status = -1
         self.close_log()
         # clean_folder
+        return status
 
-    def get_time(self):
+    def _time(self) -> dict:
+        """
+
+        Returns:
+          int: Status.
+        """
         # Class self.__conf['time']
         time = self.__conf['time']
 
@@ -226,61 +264,12 @@ class Download(User, GIS, Dtime,
             self.__conf['time']['end'] = now
         return time
 
-    def get_log(self):
-        # Class self.__conf['log']
-        status = -1
-        log = self.__conf['log']
+    def _account(self) -> dict:
+        """
 
-        if self.__status['code'] == 0:
-            time_s = self.__conf['time']['start']
-            time_s_str = time_s.strftime('%Y-%m-%d %H:%M:%S.%f')
-
-            fname = 'log-{t}.txt'.format(t=time_s.strftime('%Y%m%d%H%M%S%f'))
-
-            path = self.__conf['path']
-            file = os.path.join(path, fname)
-
-            # TODO, 20200115, QPan, code
-            # -1: not found, 0: closed, 1: opened
-            if os.path.isfile(file):
-                status = 0
-            else:
-                print('Create log file: {f}'.format(f=fname))
-                txt = 'IHEWAcollect created on {t}'.format(t=time_s_str)
-
-                fp = open(file, 'w+')
-                fp.write('{}\n'.format(txt))
-                status = 0
-
-            self.__conf['log']['fname'] = fname
-            self.__conf['log']['file'] = file
-            self.__conf['log']['fp'] = fp
-            self.__conf['log']['status'] = status
-        return log
-
-    def write_log(self, msg=''):
-        time_n = datetime.datetime.now()
-        time_n_str = time_n.strftime('%Y-%m-%d %H:%M:%S.%f')
-        self.__conf['time']['now'] = time_n
-
-        fp = self.__conf['log']['fp']
-
-        txt = '{t}: {msg}'.format(t=time_n_str, msg=msg)
-        fp.write('{}\n'.format(txt))
-
-    def close_log(self):
-        time_e = datetime.datetime.now()
-        time_e_str = time_e.strftime('%Y-%m-%d %H:%M:%S.%f')
-        self.__conf['time']['end'] = time_e
-
-        fp = self.__conf['log']['fp']
-
-        txt = 'IHEWAcollect finished on {t}'.format(t=time_e_str)
-        fp.write('{}\n'.format(txt))
-        fp.close()
-        self.__conf['log']['fp'] = None
-
-    def get_account(self):
+        Returns:
+          dict: account.
+        """
         # Class self.__conf['account'] <- User.account
         account = self.__conf['account']
 
@@ -292,7 +281,12 @@ class Download(User, GIS, Dtime,
             self.__conf['account']['data'] = account['data']
         return account
 
-    def get_product(self):
+    def _product(self) -> dict:
+        """
+
+        Returns:
+          dict: product.
+        """
         # Class self.__conf['product'] <- Base.product
         product = self.__conf['product']
         version = product['version']
@@ -332,84 +326,175 @@ class Download(User, GIS, Dtime,
                 version][parameter][resolution]['variables'][variable]
         return product
 
-    def get_template(self):
-        # Class self.__conf['template'] <- Base.product
-        template = self.__conf['template']
+    def _folder(self) -> dict:
+        folder = self.__conf['folder']
 
-        if self.__status['code'] == 0:
-            template['name'] = self._Base__conf['product']['name']
-            # template['data'] = self._Base__conf['product']['data']
-
-            self.__conf['template']['name'] = template['name']
-        return template
-
-    def load_lib(self, protocol, method):
-        lib = None
-
-        # Define library, "protocol" and "method"
-        if method == 'get':
-            lib = '.'.join(protocol, method)
-        elif method == 'post':
-            lib = '.'.join(protocol, method)
-        else:
-            raise ValueError('Unknown method: {v}'.format(v=method))
-
-        # Load library
-        self.__conf['template']['lib'] = lib
-        return lib
-
-    def get_folder(self, path):
-        folder = {
-            'r': '',
-            't': '',
-            'l': ''
-        }
         # Define folder
+        if self.__status['code'] == 0:
+            workspace = self.__conf['path']
 
-        # # Define directory and create it if not exists
-        # output_folder = os.path.join(Dir, 'Evaporation', 'ALEXI', 'Weekly')
-        # if not os.path.exists(output_folder):
-        #     os.makedirs(output_folder)
+            variable = self.__conf['product']['variable']
 
-        # Create folder
+            #  _parameter_ / _resolution_ / _variable_ / _product_ \_ _version_
+            path = os.path.join(workspace, variable)
+            folder = {
+                'r': os.path.join(path, 'remote'),
+                't': os.path.join(path, 'temporary'),
+                'l': os.path.join(path, 'download')
+            }
 
-        # Clean folder
+            for key, value in folder.items():
+                if not os.path.exists(value):
+                    os.makedirs(value)
 
-        self.__conf['template']['folder'] = folder
+            self.__conf['folder'] = folder
         return folder
 
-    def create_folder(self, name):
-        # # Define directory and create it if not exists
-        # output_folder = os.path.join(Dir, 'Evaporation', 'ALEXI', 'Weekly')
-        # if not os.path.exists(output_folder):
-        #     os.makedirs(output_folder)
-
-        # output_folder = os.path.join(Dir, 'Evaporation', 'ALEXI', 'Daily')
-        # if not os.path.exists(output_folder):
-        #     os.makedirs(output_folder)
-        pass
-
-    def get_url(self):
-        pass
-
-    def get_auth(self):
-        pass
-
-    def get_rfile(self):
-        pass
-
-    def get_tfile(self):
-        pass
-
-    def get_lfile(self):
-        pass
-
     def clean_folder(self, name):
+        statue = 1
+
         # os.chdir(output_folder)
         # re = glob.glob("*.dat")
         # for f in re:
         #     os.remove(os.path.join(output_folder, f))
-        pass
+        return statue
+
+    def _log(self) -> dict:
+        """
+
+        Returns:
+          dict: log.
+        """
+        # Class self.__conf['log']
+        status = -1
+        log = self.__conf['log']
+
+        if self.__status['code'] == 0:
+            path = self.__conf['path']
+            time = self.__conf['time']['start']
+            time_str = time.strftime('%Y-%m-%d %H:%M:%S.%f')
+
+            fname = log['name']
+            file = os.path.join(path, fname)
+
+            # -1: not found, 0: closed, 1: opened
+            fp = self.create_log(file)
+
+            self.__conf['log']['fname'] = fname
+            self.__conf['log']['file'] = file
+            self.__conf['log']['fp'] = fp
+            self.__conf['log']['status'] = status
+        return log
+
+    def create_log(self, file):
+        time = datetime.datetime.now()
+        time_str = time.strftime('%Y-%m-%d %H:%M:%S.%f')
+        self.__conf['time']['now'] = time
+
+        print('Create log file: {f}'.format(f=file))
+        txt = '{t}: IHEWAcollect created.'.format(t=time_str)
+        fp = open(file, 'w+')
+        fp.write('{}\n'.format(txt))
+
+        return fp
+
+    def close_log(self):
+        time = datetime.datetime.now()
+        time_str = time.strftime('%Y-%m-%d %H:%M:%S.%f')
+        self.__conf['time']['now'] = time
+
+        file = self.__conf['log']['file']
+        fp = self.__conf['log']['fp']
+
+        print('Close log file: {f}'.format(f=file))
+        txt = '{t}: IHEWAcollect finished.'.format(t=time_str)
+        fp.write('{}\n'.format(txt))
+        fp.close()
+        self.__conf['log']['fp'] = None
+
+    def _downloader(self) -> dict:
+        # ['FTP', 'SFTP', 'HTTP', 'TDS', 'API']
+        downloader = self.__conf['downloader']
+
+        if self.__status['code'] == 0:
+            module_obj = None
+            product = self._Base__conf['product']['data']
+
+            version = self.__conf['product']['version']
+            parameter = self.__conf['product']['parameter']
+            resolution = self.__conf['product']['resolution']
+
+            url = product[version][parameter][resolution]['url']
+            protocol = product[version][parameter][resolution]['protocol']
+            method = product[version][parameter][resolution]['method']
+            freq = product[version][parameter][resolution]['freq']
+
+            downloader['url'] = url
+            downloader['protocol'] = protocol
+            downloader['method'] = method.split('.')
+            downloader['freq'] = freq
+            # Load module
+            # variable = self.__conf['product']['data']
+            if protocol == 'FTP':
+                downloader['name'] = 'ftplib'
+            elif protocol == 'SFTP':
+                downloader['name'] = 'paramiko'
+            elif protocol == 'HTTP':
+                downloader['name'] = 'requests'
+            elif protocol == 'HTTPS':
+                downloader['name'] = 'requests'
+            elif protocol == 'API':
+                downloader['name'] = 'api'
+            else:
+                downloader['name'] = ''
+                raise IHEClassInitError('Download') from None
+
+        self.__conf['downloader']['name'] = downloader['name']
+        self.__conf['downloader']['url'] = downloader['url']
+        self.__conf['downloader']['protocol'] = downloader['protocol']
+        self.__conf['downloader']['method'] = downloader['method']
+        self.__conf['downloader']['freq'] = downloader['freq']
+        self.__conf['downloader']['data'] = downloader['data']
+        return downloader
+
+    def _template(self) -> dict:
+        """
+
+        Returns:
+          dict: template.
+        """
+        # Class self.__tmp <- Base.product
+        template = self.__tmp
+
+        if self.__status['code'] == 0:
+            module_obj = None
+            template['name'] = self._Base__conf['product']['data']['template']
+
+            # Load module
+            try:
+                # def template_load(self) -> dict:
+                module_obj = \
+                    importlib.import_module('.{m}'.format(m=template['name']),
+                                            'IHEWAcollect.templates')
+                print('Loaded module from IHEWAcollect'
+                      '.{m}'.format(m=template['name']))
+            except ImportError:
+                module_obj = \
+                    importlib.import_module('src.IHEWAcollect.templates'
+                                            '.{m}'.format(m=template['name']))
+                print('Loaded module from src.IHEWAcollect'
+                      '.{m}'.format(m=template['name']))
+            finally:
+                # def template_init(self) -> dict:
+                if module_obj is not None:
+                    template['module'] = module_obj.Template(self.__status, self.__conf)
+                else:
+                    template['module'] = None
+                    raise IHEClassInitError('Download') from None
+
+            self.__tmp['name'] = template['name']
+            self.__tmp['module'] = template['module']
+        return template
 
 
 def main():
@@ -427,38 +512,61 @@ def main():
         '../', '../', 'tests'
     )
     product = 'ALEXI'
+    version = 'v1'
+    parameter = 'evapotranspiration'
+    resolution = 'daily'
+    variable = 'ETA'
+
+    # product = 'ECMWF'
+
+    # product = 'TRMM'
+    # version = 'v7'
+    # parameter = 'precipitation'
+    # resolution = 'monthly'
+    # variable = 'PCP'
+
     download = Download(workspace=path,
                         product=product,
-                        version='v1',
-                        parameter='evapotranspiration',
-                        resolution='daily',
-                        variable='ETA',
+                        version=version,
+                        parameter=parameter,
+                        resolution=resolution,
+                        variable=variable,
+                        bbox={
+                            'n':  1.0,
+                            's': -1.0,
+                            'w': -1.0,
+                            'e': 1.0
+                        },
+                        period={
+                            's': datetime.datetime(2000, 1, 1),
+                            'e': datetime.datetime(2000, 3, 31)
+                        },
                         is_status=False)
 
-    # # Base attributes
-    # print('\ndownload._Base__conf\n=====')
-    # pprint(download._Base__conf)
-
-    # User attributes
-    print('\ndownload._User__conf\n=====')
-    pprint(download._User__conf['account'])
-
-    # # GIS attributes
-    # print('\ndownload._GIS__conf:\n=====')
-    # pprint(download._GIS__conf)
-
-    # # Dtime attributes
-    # print('\ndownload._Dtime__conf:\n=====')
-    # pprint(download._Dtime__conf)
-
-    # Download attributes
-    print('\ndownload._Download__conf()\n=====')
-    # pprint(download._Download__conf.keys())
-    pprint(download._Download__conf)
-
-    # Download methods
-    print('\ndownload.get_status()\n=====')
-    pprint(download.get_status())
+    # # # Base attributes
+    # # print('\ndownload._Base__conf\n=====')
+    # # pprint(download._Base__conf)
+    #
+    # # User attributes
+    # print('\ndownload._User__conf\n=====')
+    # pprint(download._User__conf['account'])
+    #
+    # # # GIS attributes
+    # # print('\ndownload._GIS__conf:\n=====')
+    # # pprint(download._GIS__conf)
+    #
+    # # # Dtime attributes
+    # # print('\ndownload._Dtime__conf:\n=====')
+    # # pprint(download._Dtime__conf)
+    #
+    # # Download attributes
+    # print('\ndownload._Download__conf()\n=====')
+    # # pprint(download._Download__conf.keys())
+    # pprint(download._Download__conf)
+    #
+    # # Download methods
+    # print('\ndownload.get_status()\n=====')
+    # pprint(download.get_status())
 
 
 if __name__ == "__main__":
