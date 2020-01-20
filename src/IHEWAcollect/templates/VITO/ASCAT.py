@@ -23,11 +23,11 @@ try:
     # from ..dtime import Dtime
     from ..util import Log
 except ImportError:
-    from src.IHEWAcollect.templates.collect import \
+    from IHEWAcollect.templates.collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff
-    # from src.IHEWAcollect.templates.gis import GIS
-    # from src.IHEWAcollect.templates.dtime import Dtime
-    from src.IHEWAcollect.templates.util import Log
+    # from IHEWAcollect.templates.gis import GIS
+    # from IHEWAcollect.templates.dtime import Dtime
+    from IHEWAcollect.templates.util import Log
 
 
 __this = sys.modules[__name__]
@@ -76,14 +76,11 @@ def DownloadData(status, conf):
     if not Enddate:
         Enddate = pd.Timestamp.now()
 
-    # Make a panda timestamp of the date
-    try:
-        Enddate = pd.Timestamp(Enddate)
-    except:
-        Enddate = Enddate
-
-    # amount of Dates weekly
+    # Creates dates library
     Dates = pd.date_range(Startdate, Enddate, freq=freq)
+
+    # Define directory and create it if not exists
+    output_folder = folder['l']
 
     # Create Waitbar
     # if Waitbar == 1:
@@ -93,37 +90,52 @@ def DownloadData(status, conf):
     #     WaitbarConsole.printWaitBar(amount, total_amount, prefix='Progress:',
     #                                 suffix='Complete', length=50)
 
-    # Define directory and create it if not exists
-    output_folder = folder['l']
-    output_folder_temp = folder['t']
+    # Define IDs
+    xID = 1800 + np.int16(np.array([np.ceil((lonlim[0]) * 10),
+                                    np.floor((lonlim[1]) * 10)]))
 
-    # loop over dates
+    yID = np.int16(np.array([np.floor((-latlim[1]) * 10),
+                             np.ceil((-latlim[0]) * 10)])) + 900
+
     for Date in Dates:
 
+        # Date as printed in filename
+        Filename_out= os.path.join(output_folder,
+                                   __this.product['data']['fname']['l'].format(dtime=Date))
+
         # Define end filename
-        End_filename = os.path.join(output_folder,
-                                    'SWI_ASCAT_V3_Percentage_daily_%d.%02d.%02d.tif'
-                                    % (Date.year, Date.month, Date.day))
+        Filename_in = __this.product['data']['fname']['r'].format(dtime=Date)
 
-        # Define IDs
-        xID = 1800 + np.int16(np.array([np.ceil((lonlim[0])*10),
-                                       np.floor((lonlim[1])*10)]))
+         # Temporary filename for the downloaded global file
+        local_filename = os.path.join(output_folder, Filename_in)
 
-        yID = np.int16(np.array([np.floor((-latlim[1])*10),
-                                 np.ceil((-latlim[0])*10)])) + 900
-
-        # Download the data from FTP server if the file not exists
-        if not os.path.exists(End_filename):
-            data = Download_ASCAT_from_VITO(End_filename,
-                                            output_folder_temp, Date,
-                                            yID, xID)
+        # Download the data from server if the file not exists
+        if not os.path.exists(Filename_out):
             try:
-                # make geotiff file
+                Download_ASCAT_from_VITO(local_filename, Filename_in, Date)
+            except BaseException as err:
+                msg = "\nWas not able to download file with date %s" % Date
+                print('{}\n{}'.format(msg, str(err)))
+                __this.Log.write(datetime.datetime.now(),
+                                 msg='{}\n{}'.format(msg, str(err)))
+            else:
+                # Open nc file
+                fh = Dataset(local_filename)
+
+                # clip dataset to the given extent
+                dataset = fh.variables['SWI_010'][:, yID[0]:yID[1], xID[0]:xID[1]]
+                data = np.squeeze(dataset.data, axis=0)
+                data = data * 0.5
+                data[data > 100.] = -9999
+                fh.close()
+
+                # save dataset as geotiff file
                 geo = [lonlim[0], 0.1, 0, latlim[1], 0, -0.1]
-                Save_as_tiff(name=End_filename, data=data,
+                Save_as_tiff(name=Filename_out, data=data,
                              geo=geo, projection="WGS84")
-            except:
-                print("Was not able to download file with date %s" % Date)
+
+                # delete old tif file
+                os.remove(os.path.join(local_filename))
 
         # Adjust waitbar
         # if Waitbar == 1:
@@ -132,11 +144,8 @@ def DownloadData(status, conf):
         #                                 prefix='Progress:', suffix='Complete',
         #                                 length=50)
 
-    # remove the temporary folder
-    shutil.rmtree(output_folder_temp)
 
-
-def Download_ASCAT_from_VITO(End_filename, output_folder_temp, Date, yID, xID):
+def Download_ASCAT_from_VITO(local_filename, Filename_in, Date):
     """
     This function retrieves ALEXI data for a given date from the
     ftp.wateraccounting.unesco-ihe.org server.
@@ -149,30 +158,21 @@ def Download_ASCAT_from_VITO(End_filename, output_folder_temp, Date, yID, xID):
 
     """
 
-    # Define date
-    year_data = Date.year
-    month_data = Date.month
-    day_data = Date.day
-
     # Collect account and FTP information
     username = __this.account['data']['username']
     password = __this.account['data']['password']
-
-    # filename of ASCAT data on server
-    # ASCAT_date = "%d%02d%02d1200" % (year_data, month_data, day_data)
-    # ASCAT_name = 'SWI_%s_GLOBE_ASCAT_V3.1.1' % ASCAT_date
-    ASCAT_filename = __this.product['data']['fname']['r'].format(dtime=Date)
-    msg = 'Downloading "{f}"'.format(f=ASCAT_filename)
-    print('Downloading {f}'.format(f=ASCAT_filename))
-    __this.Log.write(datetime.datetime.now(), msg=msg)
 
     # URL = "https://land.copernicus.vgt.vito.be/PDF/datapool/Vegetation/Soil_Water/SWI_V3/%s/%s/%s/%s/%s" % (year_data, month_data, day_data,
     #                                       ASCAT_name, ASCAT_filename)
     URL = '{}{}{}'.format(__this.product['url'],
                           __this.product['data']['dir'].format(dtime=Date),
-                          __this.product['data']['fname']['r'].format(dtime=Date))
-    # Output zipfile
-    output_ncfile_ASCAT = os.path.join(output_folder_temp, ASCAT_filename)
+                          Filename_in)
+
+    fname = os.path.split(local_filename)[-1]
+    msg = 'Downloading "{f}"'.format(f=fname)
+    print('Downloading {f}'.format(f=fname))
+    __this.Log.write(datetime.datetime.now(), msg=msg)
+
     # Download the ASCAT data
     try:
         y = requests.get(URL, auth=HTTPBasicAuth(username, password))
@@ -183,16 +183,8 @@ def Download_ASCAT_from_VITO(End_filename, output_folder_temp, Date, yID, xID):
         y = requests.get(URL, auth=(username, password), verify=False)
 
     # Write the file in system
-    z = open(output_ncfile_ASCAT, 'wb')
+    z = open(local_filename, 'wb')
     z.write(y.content)
     z.close()
 
-    # Open nc file
-    fh = Dataset(output_ncfile_ASCAT)
-    dataset = fh.variables['SWI_010'][:,yID[0]:yID[1], xID[0]:xID[1]]
-    data = np.squeeze(dataset.data, axis=0)
-    data = data * 0.5
-    data[data > 100.] = -9999
-    fh.close()
-
-    return(data)
+    return

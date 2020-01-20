@@ -44,12 +44,12 @@ try:
     # from ..dtime import Dtime
     from ..util import Log
 except ImportError:
-    from src.IHEWAcollect.templates.collect import \
+    from IHEWAcollect.templates.collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
         Clip_Dataset_GDAL
-    # from src.IHEWAcollect.templates.gis import GIS
-    # from src.IHEWAcollect.templates.dtime import Dtime
-    from src.IHEWAcollect.templates.util import Log
+    # from IHEWAcollect.templates.gis import GIS
+    # from IHEWAcollect.templates.dtime import Dtime
+    from IHEWAcollect.templates.util import Log
 
 
 __this = sys.modules[__name__]
@@ -103,6 +103,9 @@ def DownloadData(status, conf):
     # Creates dates library
     Dates = pd.date_range(Startdate, Enddate, freq=freq)
 
+    # Define directory and create it if not exists
+    output_folder = folder['l']
+
     # Create Waitbar
     # if Waitbar == 1:
     #     import watools.Functions.Start.WaitbarConsole as WaitbarConsole
@@ -110,14 +113,7 @@ def DownloadData(status, conf):
     #     amount = 0
     #     WaitbarConsole.printWaitBar(amount, total_amount, prefix = 'Progress:', suffix = 'Complete', length = 50)
 
-    # Define directory and create it if not exists
-    output_folder = folder['l']
-
     for Date in Dates:
-
-        # Define year and month
-        year = Date.year
-        month = Date.month
 
         # Date as printed in filename
         Filename_out= os.path.join(output_folder,
@@ -133,13 +129,16 @@ def DownloadData(status, conf):
         if not os.path.exists(Filename_out):
             try:
                 Download_CMRSET_from_WA_FTP(local_filename, Filename_in)
-
+            except BaseException as err:
+                msg = "\nWas not able to download file with date %s" % Date
+                print('{}\n{}'.format(msg, str(err)))
+                __this.Log.write(datetime.datetime.now(), msg='{}\n{}'.format(msg, str(err)))
+            else:
                 # Clip dataset
                 Clip_Dataset_GDAL(local_filename, Filename_out, latlim, lonlim)
-                os.remove(local_filename)
 
-            except:
-                print("Was not able to download file with date %s" %Date)
+                # delete old file
+                os.remove(local_filename)
 
         # Adjust waitbar
         # if Waitbar == 1:

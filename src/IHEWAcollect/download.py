@@ -39,13 +39,13 @@ try:
     from .base.exception import IHEClassInitError,\
         IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 except ImportError:
-    from src.IHEWAcollect.base.exception import IHEClassInitError,\
+    from IHEWAcollect.base.exception import IHEClassInitError,\
         IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 
 try:
     from .base.user import User
 except ImportError:
-    from src.IHEWAcollect.base.user import User
+    from IHEWAcollect.base.user import User
 
 
 class Download(User):
@@ -459,10 +459,10 @@ class Download(User):
                                         m=product['name']))
             except ImportError:
                 module_obj = \
-                    importlib.import_module('src.IHEWAcollect.templates'
+                    importlib.import_module('IHEWAcollect.templates'
                                             '.{p}.{m}'.format(p=product['template'],
                                                               m=product['name']))
-                print('Loaded module from src.IHEWAcollect.templates'
+                print('Loaded module from IHEWAcollect.templates'
                       '.{p}.{m}'.format(p=product['template'],
                                         m=product['name']))
             finally:
@@ -493,13 +493,12 @@ def main():
                 inspect.currentframe())),
         '../', '../', 'tests'
     )
-    ## Tests
 
     # product = 'ALEXI'
     # version = 'v1'
     # parameter = 'evapotranspiration'
-    # resolution = 'daily'
-    # # resolution = 'weekly'
+    # # resolution = 'daily'
+    # resolution = 'weekly'
     # variable = 'ETA'
     # bbox = {
     #     'w': -19.0,
@@ -530,27 +529,27 @@ def main():
 
     # Error
     # dec_jpeg2000: Unable to open JPEG2000 image within GRIB file.
-    product = 'CFSR'
-    version = 'v1'
-    parameter = 'radiation'
-    resolution = 'daily'
-    variable = 'dlwsfc'
-    bbox = {
-        'w': -19.0,
-        's': -35.0,
-        'e': 55.0,
-        'n': 38.0
-    }
-    period = {
-        's': '2007-01-01',
-        'e': '2007-01-31'
-    }
+    # product = 'CFSR'
+    # version = 'v1'
+    # parameter = 'radiation'
+    # resolution = 'daily'
+    # variable = 'dlwsfc'
+    # bbox = {
+    #     'w': -19.0,
+    #     's': -35.0,
+    #     'e': 55.0,
+    #     'n': 38.0
+    # }
+    # period = {
+    #     's': '2007-01-01',
+    #     'e': '2007-01-31'
+    # }
 
     # product = 'CHIRPS'
     # version = 'v2.0'
     # parameter = 'precipitation'
-    # # resolution = 'daily'
-    # resolution = 'monthly'
+    # resolution = 'daily'
+    # # resolution = 'monthly'
     # variable = 'PCP'
     # bbox = {
     #     'w': -19.0,
@@ -580,20 +579,68 @@ def main():
     # }
 
     # TODO
-    product = 'DEM'
+    # product = 'DEM'
 
     # TODO
-    product = 'ECMWF'
+    # product = 'ECMWF'
 
-    # Caution
-    # A 69618 pixels x 29007 lines x 1 bands Float32 image would be larger than 4GB
-    # but this is the largest size a TIFF can be, and BigTIFF is unavailable.
-    product = 'ETmonitor'
-    version = 'v1'
-    parameter = 'evapotranspiration'
-    resolution = 'monthly'
-    variable = 'ETA'
+    # # Caution
+    # # A 69618 pixels x 29007 lines x 1 bands Float32 image would be larger than 4GB
+    # # but this is the largest size a TIFF can be, and BigTIFF is unavailable.
+    # product = 'ETmonitor'
+    # version = 'v1'
+    # parameter = 'evapotranspiration'
+    # resolution = 'monthly'
+    # variable = 'ETA'
+    # # variable = 'ETP'
+    # bbox = {
+    #     'w': -19.0,
+    #     's': -35.0,
+    #     'e': 55.0,
+    #     'n': 38.0
+    # }
+    # period = {
+    #     's': '2008-01-01',
+    #     'e': '2008-01-31'
+    # }
+
+    # product = 'FEWS'
+    # version = 'v4'
+    # parameter = 'evapotranspiration'
+    # resolution = 'daily'
     # variable = 'ETP'
+    # bbox = {
+    #     'w': -19.0,
+    #     's': -35.0,
+    #     'e': 55.0,
+    #     'n': 38.0
+    # }
+    # period = {
+    #     's': '2008-01-01',
+    #     'e': '2008-01-31'
+    # }
+
+    # product = 'GLDAS'
+    # version = 'v2.1'
+    # parameter = 'evapotranspiration'
+    # resolution = 'three_hourly'
+    # variable = 'E'
+    # bbox = {
+    #     'w': -19.0,
+    #     's': -35.0,
+    #     'e': 55.0,
+    #     'n': 38.0
+    # }
+    # period = {
+    #     's': '2008-01-01',
+    #     'e': '2008-01-31'
+    # }
+
+    product = 'GLEAM'
+    version = 'v3.3a'
+    parameter = 'evapotranspiration'
+    resolution = 'daily'
+    variable = 'ET'
     bbox = {
         'w': -19.0,
         's': -35.0,
@@ -604,6 +651,7 @@ def main():
         's': '2008-01-01',
         'e': '2008-01-31'
     }
+
 
     # product = 'TRMM'
     # version = 'v7'

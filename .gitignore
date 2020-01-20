@@ -7,6 +7,9 @@ tests/data/Download/
 tests/data/Notebooks/
 tests/IHEWAcollect/
 
+# examples
+examples/IHEWAcollect/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -140,6 +140,22 @@ Run the image with Jupyter Notebook.
 
     $ docker run -it --name ihewacollect -p 8888:8888 -v /d/IHEWAcollect:/notebooks wateraccounting/ihewacollect
 
+Check running image (container). Open new cmd window.
+
+.. code-block:: console
+
+    $ docker container list
+
+Access to running image. In the new cmd window.
+
+.. code-block:: console
+
+    $ docker exec -it ihewacollect bash
+
+    $ cd /notebook/
+    $ python3 setup.py install
+    $ python3 ./examples/BigTIFF.py
+
 Clean running cache.
 
 .. code-block:: console
@@ -151,7 +167,6 @@ Remove image.
 .. code-block:: console
 
     $ docker rmi wateraccounting/ihewacollect
-
 
 
 Installation
@@ -172,6 +187,8 @@ Uninstall IHEWAcollect.
 
 Development
 ===========
+
+In the PyCharm, change "Project Structure -> Source Folders" to "src"
 
 .. code-block:: console
 

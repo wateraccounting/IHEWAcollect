@@ -53,11 +53,11 @@ try:
     # from ..dtime import Dtime
     from ..util import Log
 except ImportError:
-    from src.IHEWAcollect.templates.collect import \
+    from IHEWAcollect.templates.collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff
-    # from src.IHEWAcollect.templates.gis import GIS
-    # from src.IHEWAcollect.templates.dtime import Dtime
-    from src.IHEWAcollect.templates.util import Log
+    # from IHEWAcollect.templates.gis import GIS
+    # from IHEWAcollect.templates.dtime import Dtime
+    from IHEWAcollect.templates.util import Log
 
 
 __this = sys.modules[__name__]
@@ -144,8 +144,11 @@ def DownloadData(status, conf):
         # Define Dates
         Dates = pd.date_range(Startdate, Enddate, freq=freq)
 
-    total_amount = len(Dates)
+    # Define directory and create it if not exists
+    output_folder = folder['l']
+
     # Create Waitbar
+    total_amount = len(Dates)
     # if Waitbar == 1:
     #     amount = 0
     #     collect.WaitBar(amount, total_amount,
@@ -154,7 +157,7 @@ def DownloadData(status, conf):
 
     if TimeStep == 'weekly':
         ALEXI_weekly(Date, Enddate,
-                     folder['l'],
+                     output_folder,
                      latlim, lonlim,
                      Year,
                      Waitbar,
@@ -163,7 +166,7 @@ def DownloadData(status, conf):
 
     if TimeStep == 'daily':
         ALEXI_daily(Dates,
-                    folder['l'],
+                    output_folder,
                     latlim, lonlim,
                     Waitbar,
                     total_amount, TimeStep)
@@ -234,6 +237,13 @@ def Download_ALEXI_from_WA_FTP(local_filename, DirFile, filename,
 
 def ALEXI_daily(Dates, output_folder, latlim, lonlim, Waitbar, total_amount, TimeStep):
     amount = 0
+
+    # Define IDs
+    yID = 3000 - np.int16(
+        np.array([np.ceil((latlim[1] + 60) * 20), np.floor((latlim[0] + 60) * 20)]))
+    xID = np.int16(
+        np.array([np.floor((lonlim[0]) * 20), np.ceil((lonlim[1]) * 20)]) + 3600)
+
     for Date in Dates:
 
         # Date as printed in filename
@@ -242,26 +252,21 @@ def ALEXI_daily(Dates, output_folder, latlim, lonlim, Waitbar, total_amount, Tim
         DOY = Date.timetuple().tm_yday
 
         # Define end filename
-        filename = "EDAY_CERES_%d%03d.dat.gz" % (Date.year, DOY)
+        Filename_in = "EDAY_CERES_%d%03d.dat.gz" % (Date.year, DOY)
 
         # Temporary filename for the downloaded global file
-        local_filename = os.path.join(output_folder, filename)
-
-        # Define IDs
-        yID = 3000 - np.int16(
-            np.array([np.ceil((latlim[1] + 60) * 20), np.floor((latlim[0] + 60) * 20)]))
-        xID = np.int16(
-            np.array([np.floor((lonlim[0]) * 20), np.ceil((lonlim[1]) * 20)]) + 3600)
+        local_filename = os.path.join(output_folder, Filename_in)
 
         # Download the data from FTP server if the file not exists
         if not os.path.exists(DirFile):
             try:
-                Download_ALEXI_from_WA_FTP(local_filename, DirFile, filename, lonlim,
+                Download_ALEXI_from_WA_FTP(local_filename, DirFile, Filename_in, lonlim,
                                            latlim, yID, xID, TimeStep)
-            except BaseException:
+            except BaseException as err:
                 msg = "\nWas not able to download file with date %s" % Date
-                print(msg)
-                __this.Log.write(datetime.datetime.now(), msg=msg)
+                print('{}\n{}'.format(msg, str(err)))
+                __this.Log.write(datetime.datetime.now(),
+                                 msg='{}\n{}'.format(msg, str(err)))
 
         # # Adjust waitbar
         # if Waitbar == 1:
@@ -285,6 +290,13 @@ def ALEXI_weekly(Date, Enddate, output_folder, latlim, lonlim, Year, Waitbar,
     Stop = Enddate.toordinal()
     End_date = 0
     amount = 0
+
+    # Define IDs
+    yID = 3000 - np.int16(
+        np.array([np.ceil((latlim[1] + 60) * 20), np.floor((latlim[0] + 60) * 20)]))
+    xID = np.int16(
+        np.array([np.floor((lonlim[0]) * 20), np.ceil((lonlim[1]) * 20)]) + 3600)
+
     while End_date == 0:
 
         # Date as printed in filename
@@ -293,31 +305,26 @@ def ALEXI_weekly(Date, Enddate, output_folder, latlim, lonlim, Year, Waitbar,
                                __this.product['data']['fname']['l'].format(dtime=Date))
 
         # Define end filename
-        filename = "ALEXI_weekly_mm_%s_%s.tif" % (
+        Filename_in = "ALEXI_weekly_mm_%s_%s.tif" % (
             Date.strftime('%j'), Date.strftime('%Y'))
 
         # Temporary filename for the downloaded global file
-        local_filename = os.path.join(output_folder, filename)
+        local_filename = os.path.join(output_folder, Filename_in)
 
         # Create the new date for the next download
         Datename = (str(Date.strftime('%Y')) + '-' + str(
             Date.strftime('%m')) + '-' + str(Date.strftime('%d')))
 
-        # Define IDs
-        yID = 3000 - np.int16(
-            np.array([np.ceil((latlim[1] + 60) * 20), np.floor((latlim[0] + 60) * 20)]))
-        xID = np.int16(
-            np.array([np.floor((lonlim[0]) * 20), np.ceil((lonlim[1]) * 20)]) + 3600)
-
         # Download the data from FTP server if the file not exists
         if not os.path.exists(DirFile):
             try:
-                Download_ALEXI_from_WA_FTP(local_filename, DirFile, filename, lonlim,
+                Download_ALEXI_from_WA_FTP(local_filename, DirFile, Filename_in, lonlim,
                                            latlim, yID, xID, TimeStep)
-            except BaseException:
+            except BaseException as err:
                 msg = "\nWas not able to download file with date %s" % Date
                 print('{}\n{}'.format(msg, str(err)))
-                __this.Log.write(datetime.datetime.now(), msg='{}\n{}'.format(msg, str(err)))
+                __this.Log.write(datetime.datetime.now(),
+                                 msg='{}\n{}'.format(msg, str(err)))
 
         # Current DOY
         DOY = datetime.datetime.strptime(Datename,

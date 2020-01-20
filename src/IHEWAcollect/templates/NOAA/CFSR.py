@@ -32,12 +32,12 @@ try:
     # from ..dtime import Dtime
     from ..util import Log
 except ImportError:
-    from src.IHEWAcollect.templates.collect import \
+    from IHEWAcollect.templates.collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
         Convert_grb2_to_nc
-    # from src.IHEWAcollect.templates.gis import GIS
-    # from src.IHEWAcollect.templates.dtime import Dtime
-    from src.IHEWAcollect.templates.util import Log
+    # from IHEWAcollect.templates.gis import GIS
+    # from IHEWAcollect.templates.dtime import Dtime
+    from IHEWAcollect.templates.util import Log
 
 
 __this = sys.modules[__name__]
@@ -134,14 +134,15 @@ def RetrieveData(Date, args):
         version_name = 'CFSRv2'
 
     # Name of the outputfile
-    if Var == 'dlwsfc':
-        Outputname = 'DLWR_%s_W-m2_' %version_name + str(Date.strftime('%Y')) + '.' + str(Date.strftime('%m')) + '.' + str(Date.strftime('%d')) + '.tif'
-    if Var == 'dswsfc':
-        Outputname = 'DSWR_%s_W-m2_' %version_name + str(Date.strftime('%Y')) + '.' + str(Date.strftime('%m')) + '.' + str(Date.strftime('%d')) + '.tif'
-    if Var == 'ulwsfc':
-        Outputname = 'ULWR_%s_W-m2_' %version_name + str(Date.strftime('%Y')) + '.' + str(Date.strftime('%m')) + '.' + str(Date.strftime('%d')) + '.tif'
-    if Var == 'uswsfc':
-        Outputname = 'USWR_%s_W-m2_' %version_name + str(Date.strftime('%Y')) + '.' + str(Date.strftime('%m')) + '.' + str(Date.strftime('%d')) + '.tif'
+    Outputname = __this.product['data']['fname']['l'].format(dtime=Date)
+    # if Var == 'dlwsfc':
+    #     Outputname = 'DLWR_%s_W-m2_' %version_name + str(Date.strftime('%Y')) + '.' + str(Date.strftime('%m')) + '.' + str(Date.strftime('%d')) + '.tif'
+    # if Var == 'dswsfc':
+    #     Outputname = 'DSWR_%s_W-m2_' %version_name + str(Date.strftime('%Y')) + '.' + str(Date.strftime('%m')) + '.' + str(Date.strftime('%d')) + '.tif'
+    # if Var == 'ulwsfc':
+    #     Outputname = 'ULWR_%s_W-m2_' %version_name + str(Date.strftime('%Y')) + '.' + str(Date.strftime('%m')) + '.' + str(Date.strftime('%d')) + '.tif'
+    # if Var == 'uswsfc':
+    #     Outputname = 'USWR_%s_W-m2_' %version_name + str(Date.strftime('%Y')) + '.' + str(Date.strftime('%m')) + '.' + str(Date.strftime('%d')) + '.tif'
 
     msg = 'Downloading "{f}"'.format(f=Outputname)
     print('Downloading {f}'.format(f=Outputname))
@@ -157,7 +158,8 @@ def RetrieveData(Date, args):
 
         # convert grb2 to netcdf (wgrib2 module is needed)
         for i in range(0,4):
-            nameNC = 'Output' + str(Date.strftime('%Y')) + str(Date.strftime('%m')) + str(Date.strftime('%d')) + '-' + str(i+1) + '.nc'
+            nameNC = __this.product['data']['fname']['t'].format(dtime=Date, ipart=str(i+1))
+            # nameNC = 'Output' + str(Date.strftime('%Y')) + str(Date.strftime('%m')) + str(Date.strftime('%d')) + '-' + str(i+1) + '.nc'
 
             # Total path of the output
             FileNC6hour = os.path.join(output_folder, nameNC)

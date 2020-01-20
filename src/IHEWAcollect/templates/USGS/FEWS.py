@@ -5,21 +5,21 @@ Authors: Tim Hessels and Gonzalo Espinoza
 Contact: t.hessels@unesco-ihe.org
          g.espinoza@unesco-ihe.org
 Repository: https://github.com/wateraccounting/watools
-Module: Collect/ETmonitor
+Module: Collect/SSEBop
 
 Restrictions:
 The data and this python file may not be distributed to others without
-permission of the WA+ team due data restriction of the ETmonitor developers.
+permission of the WA+ team due data restriction of the SSEBop developers.
 
 Description:
-This script collects ETmonitor data from the UNESCO-IHE FTP server. The data has a
+This script collects SSEBop data from the UNESCO-IHE FTP server or from the web. The data has a
 monthly temporal resolution and a spatial resolution of 0.01 degree. The
 resulting tiff files are in the WGS84 projection.
-The data is available between 2008-01-01 till 2013-12-31.
+The data is available between 2003-01-01 till present.
 
 Example:
-from watools.Collect import ETmonitor
-ETmonitor.ET_monthly(Dir='C:/Temp/', Startdate='2003-02-24', Enddate='2003-03-09',
+from watools.Collect import SSEBop
+SSEBop.monthly(Dir='C:/Temp/', Startdate='2003-02-24', Enddate='2003-03-09',
                      latlim=[50,54], lonlim=[3,7])
 
 """
@@ -29,8 +29,10 @@ import sys
 
 import datetime
 
-from urllib.parse import urlparse
-from ftplib import FTP
+if sys.version_info[0] == 3:
+    import urllib.parse
+if sys.version_info[0] == 2:
+    import urllib
 
 import numpy as np
 import pandas as pd
@@ -39,14 +41,14 @@ import pandas as pd
 try:
     from ..collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
-        reproject_MODIS, Clip_Dataset_GDAL
+        Open_bil_array, Save_as_MEM, clip_data, Extract_Data_tar_gz
     # from ..gis import GIS
     # from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
-        reproject_MODIS, Clip_Dataset_GDAL
+        Open_bil_array, Save_as_MEM, clip_data, Extract_Data_tar_gz
     # from IHEWAcollect.templates.gis import GIS
     # from IHEWAcollect.templates.dtime import Dtime
     from IHEWAcollect.templates.util import Log
@@ -57,7 +59,7 @@ __this = sys.modules[__name__]
 
 def DownloadData(status, conf):
     """
-    This scripts downloads ETmonitor ET data from the UNESCO-IHE ftp server.
+    This scripts downloads SSEBop ET data from the UNESCO-IHE ftp server.
     The output files display the total ET in mm for a period of one month.
     The name of the file corresponds to the first day of the month.
 
@@ -76,7 +78,7 @@ def DownloadData(status, conf):
     Enddate = conf['product']['period']['e']
 
     TimeStep = conf['product']['resolution']
-    freq = conf['product']['freq']
+    freq_use = conf['product']['freq']
     latlim = conf['product']['data']['lat']
     lonlim = conf['product']['data']['lon']
 
@@ -97,96 +99,95 @@ def DownloadData(status, conf):
     if not Startdate:
         Startdate = pd.Timestamp(conf['product']['data']['time']['s'])
     if not Enddate:
-        Enddate = pd.Timestamp(conf['product']['data']['time']['e'])
+        Enddate = pd.Timestamp(datetime.datetime.now())
 
     # Creates dates library
-    Dates = pd.date_range(Startdate, Enddate, freq=freq)
+    Dates = pd.date_range(Startdate, Enddate, freq=freq_use)
 
     # Define directory and create it if not exists
     output_folder = folder['l']
+    remote_folder = folder['r']
+    temp_folder = folder['t']
 
     # Create Waitbar
     # if Waitbar == 1:
     #     import watools.Functions.Start.WaitbarConsole as WaitbarConsole
     #     total_amount = len(Dates)
     #     amount = 0
-    #     WaitbarConsole.printWaitBar(amount, total_amount, prefix = 'Progress:', suffix = 'Complete', length = 50)
+    #     WaitbarConsole.printWaitBar(amount, total_amount, prefix='Progress:',
+    #                                 suffix='Complete', length=50)
 
     for Date in Dates:
 
-        # Define year and month
-        year = Date.year
-        month = Date.month
-
-        # Define end filename and Date as printed in filename
-        Filename_in = __this.product['data']['fname']['r'].format(dtime=Date)
+        # Date as printed in filename
         Filename_out = os.path.join(output_folder,
                                     __this.product['data']['fname']['l'].format(dtime=Date))
 
+        # Define end filename
+        Filename_in = __this.product['data']['fname']['r'].format(dtime=Date)
+        Filename_tmp = __this.product['data']['fname']['t'].format(dtime=Date)
+
         # Temporary filename for the downloaded global file
         local_filename = os.path.join(output_folder, Filename_in)
+        temp_filename = os.path.join(temp_folder, Filename_tmp)
 
         # Download the data from FTP server if the file not exists
         if not os.path.exists(Filename_out):
             try:
-                Download_ETmonitor_from_WA_FTP(local_filename, Filename_in)
+                Download_SSEBop_from_Web(local_filename, Filename_in)
             except BaseException as err:
                 msg = "\nWas not able to download file with date %s" % Date
                 print('{}\n{}'.format(msg, str(err)))
-                __this.Log.write(datetime.datetime.now(), msg='{}\n{}'.format(msg, str(err)))
+                __this.Log.write(datetime.datetime.now(),
+                                 msg='{}\n{}'.format(msg, str(err)))
             else:
-                # Reproject dataset
-                epsg_to ='4326'
-                name_reprojected_ETmonitor = reproject_MODIS(local_filename, epsg_to)
+                # unzip the file
+                Extract_Data_tar_gz(local_filename, temp_folder)
 
                 # Clip dataset
-                Clip_Dataset_GDAL(name_reprojected_ETmonitor, Filename_out, latlim, lonlim)
+                Array_ETpot = Open_bil_array(temp_filename)
+                Array_ETpot = Array_ETpot / 100
+                Geo_out = tuple([-180.5, 1, 0, 90.5, 0, -1])
+                dest = Save_as_MEM(Array_ETpot, Geo_out, "WGS84")
+                data, Geo_out = clip_data(dest, latlim, lonlim)
+                Save_as_tiff(Filename_out, data, Geo_out, "WGS84")
 
-                # delete old file
-                os.remove(name_reprojected_ETmonitor)
+                # delete old tif file
                 os.remove(local_filename)
+                os.remove(temp_filename)
 
         # Adjust waitbar
         # if Waitbar == 1:
         #     amount += 1
-        #     WaitbarConsole.printWaitBar(amount, total_amount, prefix = 'Progress:', suffix = 'Complete', length = 50)
+        #     WaitbarConsole.printWaitBar(amount, total_amount, prefix='Progress:',
+        #                                 suffix='Complete', length=50)
 
     return
 
 
-def Download_ETmonitor_from_WA_FTP(local_filename, Filename_in):
+def Download_SSEBop_from_Web(local_filename, Filename_in):
     """
-    This function retrieves ETmonitor data for a given date from the
-    ftp.wateraccounting.unesco-ihe.org server.
-
-    Restrictions:
-    The data and this python file may not be distributed to others without
-    permission of the WA+ team due data restriction of the ETmonitor developers.
+    This function retrieves SSEBop data for a given date from the
+    https://edcintl.cr.usgs.gov server.
 
     Keyword arguments:
-     local_filename -- name of the temporary file which contains global ETmonitor data
-    Filename_in -- name of the end file with the weekly ETmonitor data
-     Type = Type of data ("act" or "pot")
+     local_filename -- name of the temporary file which contains global SSEBop data
+    Filename_dir -- name of the end directory to put in the extracted data
     """
-
-    # Collect account and FTP information
-    username = __this.account['data']['username']
-    password = __this.account['data']['password']
-
-    ftpserver = urlparse(__this.product['url']).netloc
-    directory = __this.product['data']['dir']
+    URL = '{}{}{}'.format(__this.product['url'],
+                          __this.product['data']['dir'],
+                          Filename_in)
 
     fname = os.path.split(local_filename)[-1]
     msg = 'Downloading "{f}"'.format(f=fname)
     print('Downloading {f}'.format(f=fname))
     __this.Log.write(datetime.datetime.now(), msg=msg)
 
-    # Download data from FTP
-    ftp=FTP(ftpserver)
-    ftp.login(username,password)
-    ftp.cwd(directory)
-    lf = open(local_filename, "wb")
-    ftp.retrbinary("RETR " + Filename_in, lf.write)
-    lf.close()
+    # Download the data
+    if sys.version_info[0] == 2:
+        urllib.urlretrieve(URL, local_filename)
+    if sys.version_info[0] == 3:
+        urllib.request.urlretrieve(URL, local_filename)
 
     return
+

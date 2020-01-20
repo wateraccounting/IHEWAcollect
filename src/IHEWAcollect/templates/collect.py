@@ -217,9 +217,9 @@ def Extract_Data_tar_gz(zip_filename, output_folder):
                            stored
     """
 
-    os.chdir(output_folder)
+    # os.chdir(output_folder)
     tar = tarfile.open(zip_filename, "r:gz")
-    tar.extractall()
+    tar.extractall(output_folder)
     tar.close()
 
 

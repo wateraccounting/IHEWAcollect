@@ -42,12 +42,12 @@ GDALOPTS="  --without-bsb \
             --with-geos \
             --with-geotiff=internal \
             --without-grass \
-            --without-grib \
-            --without-hdf4 \
+            --with-grib \
+            --with-hdf4 \
             --with-hdf5 \
             --without-ingres \
             --without-idb \
-            --without-jasper \
+            --with-jasper \
             --without-jp2mrsid \
             --with-jpeg=internal \
             --without-kakadu \

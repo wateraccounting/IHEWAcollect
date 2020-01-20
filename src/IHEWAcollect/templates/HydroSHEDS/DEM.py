@@ -29,11 +29,11 @@ try:
     # from ..dtime import Dtime
     from ..util import Log
 except ImportError:
-    from src.IHEWAcollect.templates.collect import \
+    from IHEWAcollect.templates.collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff
-    # from src.IHEWAcollect.templates.gis import GIS
-    # from src.IHEWAcollect.templates.dtime import Dtime
-    from src.IHEWAcollect.templates.util import Log
+    # from IHEWAcollect.templates.gis import GIS
+    # from IHEWAcollect.templates.dtime import Dtime
+    from IHEWAcollect.templates.util import Log
 
 
 __this = sys.modules[__name__]

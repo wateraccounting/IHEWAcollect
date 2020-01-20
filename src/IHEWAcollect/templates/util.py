@@ -25,7 +25,7 @@ try:
     from .exception import \
         IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 except ImportError:
-    from src.IHEWAcollect.base.exception \
+    from IHEWAcollect.base.exception \
         import IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 
 
