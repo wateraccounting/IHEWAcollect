@@ -87,27 +87,23 @@ def DownloadData(status, conf):
         Enddate = pd.Timestamp(conf['product']['data']['time']['e'])
 
     # Make an array of the days of which the ET is taken
+    Dates = pd.date_range(Startdate, Enddate, freq=TimeFreq)
+
     YearsDownloadstart = str(Startdate[0:4])
     YearsDownloadend = str(Enddate[0:4])
     Years = range(int(YearsDownloadstart), int(YearsDownloadend) + 1)
-
-    Dates = pd.date_range(Startdate, Enddate, freq=TimeFreq)
 
     # Define directory and create it if not exists
     output_folder = folder['l']
 
     # String Parameters
     if TimeCase == 'daily':
-        VarCode = '%s_GLEAM.V3.2b_mm-day-1_daily' % Product
-        FTPprefix = 'data/v3.2b/'
-        TimeFreq = 'D'
-        Folder_name = 'Daily'
+        VarCode = __this.product['data']['fname']['r']
+        FTPprefix = __this.product['data']['dir']
 
     elif TimeCase == 'monthly':
-        VarCode = '%s_GLEAM.V3.2b_mm-month-1_monthly' % Product
-        FTPprefix = 'data/v3.2b/'
-        TimeFreq = 'M'
-        Folder_name = 'Monthly'
+        VarCode = __this.product['data']['fname']['r']
+        FTPprefix = __this.product['data']['dir']
 
         # Get end of month for Enddate
         monthDownloadend = str(Enddate[5:7])
@@ -118,7 +114,7 @@ def DownloadData(status, conf):
 
     # Collect the data from the GLEAM webpage and returns the data and lat and long in meters of those tiles
     try:
-        Collect_data(FTPprefix, Years, output_folder, Waitbar, Product)
+        Collect_data(FTPprefix, Years, output_folder, Waitbar)
     except:
         print("Was not able to download the file")
 
@@ -132,7 +128,7 @@ def DownloadData(status, conf):
     #                                 suffix='Complete', length=50)
 
     # Pass variables to parallel function and run
-    args = [output_folder, latlim, lonlim, VarCode, TimeCase, Product]
+    args = [output_folder, latlim, lonlim, VarCode, TimeCase]
     if not cores:
         for Date in Dates:
             RetrieveData(Date, args)
@@ -164,7 +160,7 @@ def RetrieveData(Date, args):
     args -- A list of parameters defined in the DownloadData function.
     """
     # Argument
-    [output_folder, latlim, lonlim, VarCode, TimeCase, Product] = args
+    [output_folder, latlim, lonlim, VarCode, TimeCase] = args
 
     # Adjust latlim to GLEAM dataset
     latlim1 = [latlim[1] * -1, latlim[0] * -1]
@@ -241,12 +237,12 @@ def RetrieveData(Date, args):
     output_file = os.path.join(output_folder, dataset_name)
 
     # save data as tiff file
-    DC.Save_as_tiff(name=output_file, data=dataCor, geo=geo_in, projection="WGS84")
+    Save_as_tiff(name=output_file, data=dataCor, geo=geo_in, projection="WGS84")
 
     return True
 
 
-def Collect_data(FTPprefix, Years, output_folder, Waitbar, Product):
+def Collect_data(FTPprefix, Years, output_folder, Waitbar):
     '''
     This function downloads all the needed GLEAM files from hydras.ugent.be as a nc file.
 
@@ -256,41 +252,41 @@ def Collect_data(FTPprefix, Years, output_folder, Waitbar, Product):
     output_folder -- 'C:/file/to/path/'
     '''
     # account of the SFTP server (only password is missing)
-    server = 'hydras.ugent.be'
-    portnumber = 2225
-
-    username, password = WebAccounts.Accounts(Type='GLEAM')
+    username = __this.account['data']['username']
+    password = __this.account['data']['password']
+    ftpserver = __this.product['url'].split(':')[0]
+    ftpport = __this.product['url'].split(':')[-1]
+    directory = __this.product['data']['dir']
+    # server = 'hydras.ugent.be'
+    # portnumber = 2225
 
     # Create Waitbar
-    print('\nDownload GLEAM data')
-    if Waitbar == 1:
-        import watools.Functions.Start.WaitbarConsole as WaitbarConsole
-        total_amount2 = len(Years)
-        amount2 = 0
-        WaitbarConsole.printWaitBar(amount2, total_amount2, prefix='Progress:',
-                                    suffix='Complete', length=50)
+    # if Waitbar == 1:
+    #     import watools.Functions.Start.WaitbarConsole as WaitbarConsole
+    #     total_amount2 = len(Years)
+    #     amount2 = 0
+    #     WaitbarConsole.printWaitBar(amount2, total_amount2, prefix='Progress:',
+    #                                 suffix='Complete', length=50)
 
     for year in Years:
         directory = os.path.join(FTPprefix, '%d' % year)
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(server, port=portnumber, username=username, password=password)
+        ssh.connect(ftpserver, port=ftpport, username=username, password=password)
         ftp = ssh.open_sftp()
         ftp.chdir(directory)
 
-        if Product == "ET":
-            filename = 'E_' + str(year) + '_GLEAM_v3.2b.nc'
-        if Product == "ETpot":
-            filename = 'Ep_' + str(year) + '_GLEAM_v3.2b.nc'
+        filename = 'E_' + str(year) + '_GLEAM_v3.2b.nc'
+
         local_filename = os.path.join(output_folder, filename)
 
         if not os.path.exists(local_filename):
             ftp.get(filename, local_filename)
 
-        if Waitbar == 1:
-            amount2 += 1
-            WaitbarConsole.printWaitBar(amount2, total_amount2, prefix='Progress:',
-                                        suffix='Complete', length=50)
+        # if Waitbar == 1:
+        #     amount2 += 1
+        #     WaitbarConsole.printWaitBar(amount2, total_amount2, prefix='Progress:',
+        #                                 suffix='Complete', length=50)
 
     ftp.close()
     ssh.close()

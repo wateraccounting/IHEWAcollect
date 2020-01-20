@@ -584,7 +584,24 @@ def main():
     # TODO
     # product = 'ECMWF'
 
-    # # Caution
+    # TODO
+    product = 'GLEAM'
+    version = 'v3.3a'
+    parameter = 'evapotranspiration'
+    resolution = 'daily'
+    variable = 'ET'
+    bbox = {
+        'w': -19.0,
+        's': -35.0,
+        'e': 55.0,
+        'n': 38.0
+    }
+    period = {
+        's': '2008-01-01',
+        'e': '2008-01-31'
+    }
+
+    # Caution
     # # A 69618 pixels x 29007 lines x 1 bands Float32 image would be larger than 4GB
     # # but this is the largest size a TIFF can be, and BigTIFF is unavailable.
     # product = 'ETmonitor'
@@ -636,11 +653,11 @@ def main():
     #     'e': '2008-01-31'
     # }
 
-    product = 'GLEAM'
-    version = 'v3.3a'
-    parameter = 'evapotranspiration'
+    product = 'GPM'
+    version = 'v6'
+    parameter = 'precipitation'
     resolution = 'daily'
-    variable = 'ET'
+    variable = 'PCP'
     bbox = {
         'w': -19.0,
         's': -35.0,
@@ -651,7 +668,6 @@ def main():
         's': '2008-01-01',
         'e': '2008-01-31'
     }
-
 
     # product = 'TRMM'
     # version = 'v7'

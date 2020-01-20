@@ -105,6 +105,17 @@ Products
 Docker
 ======
 
+Downlaod source code.
+
+Set "System -> Base Memory" to max capacity in Virtual Machine.
+
+Set "Shared Folders" in Virtual Machine.
+
+- Folder Path: D:\\IHEProjects\\Public\\IHEWAcollect
+- Folder Name: d/IHEWAcollect
+- Auto-mount: Yes
+- Make Permanent: Yes
+
 Pull the image.
 
 .. code-block:: console
@@ -123,13 +134,6 @@ Check images.
 
     $ docker images
 
-Set "Shared Folders" in Virtual Machine.
-
-- Folder Path: D:\\IHEProjects\\Public\\IHEWAcollect
-- Folder Name: d/IHEWAcollect
-- Auto-mount: Yes
-- Make Permanent: Yes
-
 .. code-block:: console
 
     $ docker-machine restart
@@ -140,13 +144,13 @@ Run the image with Jupyter Notebook.
 
     $ docker run -it --name ihewacollect -p 8888:8888 -v /d/IHEWAcollect:/notebooks wateraccounting/ihewacollect
 
-Check running image (container). Open new cmd window.
+Check running image (container), in the new cmd window.
 
 .. code-block:: console
 
     $ docker container list
 
-Access to running image. In the new cmd window.
+Access to running image, in the new cmd window.
 
 .. code-block:: console
 
