@@ -30,27 +30,40 @@ the **total evaporation** in ``mm`` for the period of ``1 January - 7 January``.
 """
 # General modules
 import os
-# import sys
+import sys
 import glob
 # import shutil
 
 import math
 import datetime
 
+from urllib.parse import urlparse
 from ftplib import FTP
 
 import numpy as np
 import pandas as pd
+
 # from netCDF4 import Dataset
 
 # IHEWAcollect Modules
 try:
-    from .base.download import Download
+    from ..collect import \
+        Extract_Data_gz, Open_tiff_array, Save_as_tiff
+    # from ..gis import GIS
+    # from ..dtime import Dtime
+    from ..util import Log
 except ImportError:
-    from src.IHEWAcollect.base.download import Download
+    from src.IHEWAcollect.templates.collect import \
+        Extract_Data_gz, Open_tiff_array, Save_as_tiff
+    # from src.IHEWAcollect.templates.gis import GIS
+    # from src.IHEWAcollect.templates.dtime import Dtime
+    from src.IHEWAcollect.templates.util import Log
 
 
-def DownloadData(Dir, Startdate, Enddate, latlim, lonlim, TimeStep, Waitbar):
+__this = sys.modules[__name__]
+
+
+def DownloadData(status, conf):
     """Downloads ALEXI ET data
 
     This scripts downloads ALEXI ET data from the UNESCO-IHE ftp server.
@@ -58,44 +71,45 @@ def DownloadData(Dir, Startdate, Enddate, latlim, lonlim, TimeStep, Waitbar):
     The name of the file corresponds to the first day of the week.
 
     Args:
-      Dir (str): 'C:/file/to/path/'.
-      Startdate (str): 'yyyy-mm-dd'.
-      Enddate (str): 'yyyy-mm-dd'.
-      latlim (list): [ymin, ymax] (values must be between -60 and 70).
-      lonlim (list): [xmin, xmax] (values must be between -180 and 180).
-      TimeStep (str): 'daily' or 'weekly' (by using here monthly,
-        an older dataset will be used).
-      Waitbar (bool): Waitbar.
+      status (dict): Status.
+      conf (dict): Configuration.
 
     Returns:
       str: TimeStep, 'daily' or 'weekly'.
-
-    :Example:
-
-        >>> print('Example')
-        Example
     """
+    __this.account = conf['account']
+    __this.product = conf['product']
+    __this.Log = Log(conf['log'])
+
+    Waitbar = 0
+
+    bbox = conf['product']['bbox']
+    Startdate = conf['product']['period']['s']
+    Enddate = conf['product']['period']['e']
+
+    TimeStep = conf['product']['resolution']
+    freq = conf['product']['freq']
+    latlim = conf['product']['data']['lat']
+    lonlim = conf['product']['data']['lon']
+
+    folder = conf['folder']
+
     # Check the latitude and longitude and otherwise set lat or lon on greatest extent
-    if latlim[0] < -60 or latlim[1] > 70:
-        print('Latitude above 70N or below 60S is not possible. Value set to maximum')
-        latlim[0] = np.max(latlim[0], -60)
-        latlim[1] = np.min(latlim[1], 70)
-    if lonlim[0] < -180 or lonlim[1] > 180:
-        print('Longitude must be between 180E and 180W. Now value is set to maximum')
-        lonlim[0] = np.max(lonlim[0], -180)
-        lonlim[1] = np.min(lonlim[1], 180)
+    if bbox['s'] < latlim['s'] or bbox['n'] > latlim['n']:
+        bbox['s'] = np.max(bbox['s'], latlim['s'])
+        bbox['n'] = np.min(bbox['n'], latlim['n'])
+    if bbox['w'] < lonlim['w'] or bbox['e'] > lonlim['e']:
+        bbox['w'] = np.max(bbox['w'], lonlim['w'])
+        bbox['e'] = np.min(bbox['e'], lonlim['e'])
+
+    latlim = [bbox['s'], bbox['n']]
+    lonlim = [bbox['w'], bbox['e']]
 
     # Check Startdate and Enddate
     if not Startdate:
-        if TimeStep == 'weekly':
-            Startdate = pd.Timestamp('2003-01-01')
-        if TimeStep == 'daily':
-            Startdate = pd.Timestamp('2005-01-01')
+        Startdate = pd.Timestamp(conf['product']['data']['time']['s'])
     if not Enddate:
-        if TimeStep == 'weekly':
-            Enddate = pd.Timestamp('2015-12-31')
-        if TimeStep == 'daily':
-            Enddate = pd.Timestamp('2016-12-31')
+        Enddate = pd.Timestamp(conf['product']['data']['time']['e'])
 
     # Make a panda timestamp of the date
     try:
@@ -124,34 +138,24 @@ def DownloadData(Dir, Startdate, Enddate, latlim, lonlim, TimeStep, Waitbar):
         Date = pd.Timestamp(Date)
 
         # amount of Dates weekly
-        Dates = pd.date_range(Date, Enddate, freq='7D')
-
-        # Define directory and create it if not exists
-        output_folder = os.path.join(Dir, 'Evaporation', 'ALEXI', 'Weekly')
-        if not os.path.exists(output_folder):
-            os.makedirs(output_folder)
+        Dates = pd.date_range(Date, Enddate, freq=freq)
 
     if TimeStep == 'daily':
-
         # Define Dates
-        Dates = pd.date_range(Startdate, Enddate, freq='D')
+        Dates = pd.date_range(Startdate, Enddate, freq=freq)
 
-        # Define directory and create it if not exists
-        output_folder = os.path.join(Dir, 'Evaporation', 'ALEXI', 'Daily')
-        if not os.path.exists(output_folder):
-            os.makedirs(output_folder)
-
-    # Create Waitbar
     total_amount = len(Dates)
-    if Waitbar == 1:
-        amount = 0
-        collect.WaitBar(amount, total_amount,
-                        prefix='ALEXI:', suffix='Complete',
-                        length=50)
+    # Create Waitbar
+    # if Waitbar == 1:
+    #     amount = 0
+    #     collect.WaitBar(amount, total_amount,
+    #                     prefix='ALEXI:', suffix='Complete',
+    #                     length=50)
 
     if TimeStep == 'weekly':
         ALEXI_weekly(Date, Enddate,
-                     output_folder, latlim, lonlim,
+                     folder['l'],
+                     latlim, lonlim,
                      Year,
                      Waitbar,
                      total_amount, TimeStep)
@@ -159,7 +163,8 @@ def DownloadData(Dir, Startdate, Enddate, latlim, lonlim, TimeStep, Waitbar):
 
     if TimeStep == 'daily':
         ALEXI_daily(Dates,
-                    output_folder, latlim, lonlim,
+                    folder['l'],
+                    latlim, lonlim,
                     Waitbar,
                     total_amount, TimeStep)
         return 'daily'
@@ -182,32 +187,29 @@ def Download_ALEXI_from_WA_FTP(local_filename, DirFile, filename,
       xID (list): lonlim to index.
       TimeStep (str): 'daily' or 'weekly'  (by using here monthly,
         an older dataset will be used).
-
-    :Example:
-
-        >>> print('Example')
-        Example
     """
     # Collect account and FTP information
-    ftpserver = "ftp.wateraccounting.unesco-ihe.org"
-    user = collect.get_user('FTP_WA')
-    username = user['username']
-    password = user['password']
+    username = __this.account['data']['username']
+    password = __this.account['data']['password']
+
+    ftpserver = urlparse(__this.product['url']).netloc
+    directory = __this.product['data']['dir']
+
+    fname = os.path.split(local_filename)[-1]
+    msg = 'Downloading "{f}"'.format(f=fname)
+    print('Downloading {f}'.format(f=fname))
+    __this.Log.write(datetime.datetime.now(), msg=msg)
 
     # Download data from FTP
     ftp = FTP(ftpserver)
     ftp.login(username, password)
-    if TimeStep == "weekly":
-        directory = "/WaterAccounting/Data_Satellite/Evaporation/ALEXI/World/"
-    if TimeStep == "daily":
-        directory = "/WaterAccounting/Data_Satellite/Evaporation/ALEXI/World_05182018/"
     ftp.cwd(directory)
     lf = open(local_filename, "wb")
     ftp.retrbinary("RETR " + filename, lf.write)
     lf.close()
 
     if TimeStep == "daily":
-        collect.Extract_Data_gz(local_filename, os.path.splitext(local_filename)[0])
+        Extract_Data_gz(local_filename, os.path.splitext(local_filename)[0])
 
         raw_data = np.fromfile(os.path.splitext(local_filename)[0], dtype="<f4")
         dataset = np.flipud(np.resize(raw_data, [3000, 7200]))
@@ -217,7 +219,7 @@ def Download_ALEXI_from_WA_FTP(local_filename, DirFile, filename,
 
     if TimeStep == "weekly":
         # Open global ALEXI data
-        dataset = collect.Open_tiff_array(local_filename)
+        dataset = Open_tiff_array(local_filename)
 
         # Clip extend out of world data
         data = dataset[yID[0]:yID[1], xID[0]:xID[1]]
@@ -225,7 +227,8 @@ def Download_ALEXI_from_WA_FTP(local_filename, DirFile, filename,
 
     # make geotiff file
     geo = [lonlim[0], 0.05, 0, latlim[1], 0, -0.05]
-    collect.Save_as_tiff(name=DirFile, data=data, geo=geo, projection="WGS84")
+    Save_as_tiff(name=DirFile, data=data, geo=geo, projection="WGS84")
+
     return
 
 
@@ -235,8 +238,7 @@ def ALEXI_daily(Dates, output_folder, latlim, lonlim, Waitbar, total_amount, Tim
 
         # Date as printed in filename
         DirFile = os.path.join(output_folder,
-                               'ETa_ALEXI_CSFR_mm-day-1_daily_%d.%02d.%02d.tif' % (
-                                   Date.year, Date.month, Date.day))
+                               __this.product['data']['fname']['l'].format(dtime=Date))
         DOY = Date.timetuple().tm_yday
 
         # Define end filename
@@ -257,19 +259,24 @@ def ALEXI_daily(Dates, output_folder, latlim, lonlim, Waitbar, total_amount, Tim
                 Download_ALEXI_from_WA_FTP(local_filename, DirFile, filename, lonlim,
                                            latlim, yID, xID, TimeStep)
             except BaseException:
-                print("\nWas not able to download file with date %s" % Date)
+                msg = "\nWas not able to download file with date %s" % Date
+                print(msg)
+                __this.Log.write(datetime.datetime.now(), msg=msg)
 
-        # Adjust waitbar
-        if Waitbar == 1:
-            amount += 1
-            collect.WaitBar(amount, total_amount,
-                            prefix='ALEXI:', suffix='Complete',
-                            length=50)
+        # # Adjust waitbar
+        # if Waitbar == 1:
+        #     amount += 1
+        #     collect.WaitBar(amount, total_amount,
+        #                     prefix='ALEXI:', suffix='Complete',
+        #                     length=50)
 
-    os.chdir(output_folder)
-    re = glob.glob("*.dat")
-    for f in re:
-        os.remove(os.path.join(output_folder, f))
+        os.remove(local_filename)
+        os.remove(os.path.splitext(local_filename)[0])
+
+    # os.chdir(output_folder)
+    # re = glob.glob("*.dat")
+    # for f in re:
+    #     os.remove(os.path.join(output_folder, f))
 
 
 def ALEXI_weekly(Date, Enddate, output_folder, latlim, lonlim, Year, Waitbar,
@@ -283,9 +290,7 @@ def ALEXI_weekly(Date, Enddate, output_folder, latlim, lonlim, Year, Waitbar,
         # Date as printed in filename
         Datesname = Date + pd.DateOffset(days=-7)
         DirFile = os.path.join(output_folder,
-                               'ETa_ALEXI_CSFR_mm-week-1_weekly_%s.%02s.%02s.tif' % (
-                                   Datesname.strftime('%Y'), Datesname.strftime('%m'),
-                                   Datesname.strftime('%d')))
+                               __this.product['data']['fname']['l'].format(dtime=Date))
 
         # Define end filename
         filename = "ALEXI_weekly_mm_%s_%s.tif" % (
@@ -310,7 +315,9 @@ def ALEXI_weekly(Date, Enddate, output_folder, latlim, lonlim, Year, Waitbar,
                 Download_ALEXI_from_WA_FTP(local_filename, DirFile, filename, lonlim,
                                            latlim, yID, xID, TimeStep)
             except BaseException:
-                print("\nWas not able to download file with date %s" % Date)
+                msg = "\nWas not able to download file with date %s" % Date
+                print('{}\n{}'.format(msg, str(err)))
+                __this.Log.write(datetime.datetime.now(), msg='{}\n{}'.format(msg, str(err)))
 
         # Current DOY
         DOY = datetime.datetime.strptime(Datename,
@@ -327,14 +334,16 @@ def ALEXI_weekly(Date, Enddate, output_folder, latlim, lonlim, Year, Waitbar,
         Day = '%02d' % DayNext.day
         Date = (str(Year) + '-' + str(Month) + '-' + str(Day))
 
-        # Adjust waitbar
-        if Waitbar == 1:
-            amount += 1
-            collect.WaitBar(amount, total_amount,
-                            prefix='ALEXI:', suffix='Complete',
-                            length=50)
+        # # Adjust waitbar
+        # if Waitbar == 1:
+        #     amount += 1
+        #     collect.WaitBar(amount, total_amount,
+        #                     prefix='ALEXI:', suffix='Complete',
+        #                     length=50)
 
         # Check if this file must be downloaded
         Date = pd.Timestamp(Date)
         if Date.toordinal() > Stop:
             End_date = 1
+
+        os.remove(local_filename)

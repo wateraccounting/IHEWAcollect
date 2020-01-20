@@ -74,6 +74,7 @@ class Download(User):
       variable (str): Variable name.
       bbox (dict): Spatial range, {'w':, 's':, 'e':, 'n':}.
       period (dict): Time range, {'s':, 'e':}.
+      NaN (int): -9999.
       is_status (bool): Is to print status message.
       kwargs (dict): Other arguments.
     """
@@ -109,6 +110,12 @@ class Download(User):
             'variable': '',
             'bbox': [],
             'period': [],
+            'NaN': -9999,
+            'template': '',
+            'url': '',
+            'protocol': '',
+            'method': '',
+            'freq': '',
             'data': {}
         },
         'folder': {
@@ -121,15 +128,6 @@ class Download(User):
             'file': '{path}/log-.txt',
             'fp': None,
             'status': -1,  # -1: not found, 0: closed, 1: opened
-        },
-        'downloader': {
-            'name': '',
-            'url': '',
-            'protocol': '',
-            'method': '',
-            'freq': '',
-            'module': None,
-            'data': {}
         }
     }
     __tmp = {
@@ -140,7 +138,7 @@ class Download(User):
 
     def __init__(self, workspace='',
                  product='', version='', parameter='', resolution='', variable='',
-                 bbox={}, period={},
+                 bbox={}, period={}, NaN=-9999,
                  is_status=True, **kwargs):
         """Class instantiation
         """
@@ -176,6 +174,7 @@ class Download(User):
                 self.__status['code'] = 1
         self.__conf['product']['bbox'] = bbox
         self.__conf['product']['period'] = period
+        self.__conf['product']['NaN'] = NaN
 
         # super(Download, self).__init__(**kwargs)
         if self.__status['code'] == 0:
@@ -185,12 +184,7 @@ class Download(User):
 
         # Class Download
         if self.__status['code'] == 0:
-            self._time()
-            self._account()
-            self._product()
-            self._folder()
-
-        if self.__status['code'] == 0:
+            self.init()
             # TODO, 20200115, QPan, delete
             self.prepare()
             self.start()
@@ -212,6 +206,18 @@ class Download(User):
                                    self.__status['code'],
                                    fun, prt, ext)
 
+    def init(self) -> int:
+        """
+
+        Returns:
+          int: Status.
+        """
+        status = -1
+        self._time()
+        self._account()
+        self._product()
+        return status
+
     def prepare(self) -> int:
         """
 
@@ -219,8 +225,8 @@ class Download(User):
           int: Status.
         """
         status = -1
+        self._folder()
         self._log()
-        self._downloader()
         self._template()
         return status
 
@@ -231,9 +237,10 @@ class Download(User):
           int: Status.
         """
         status = -1
-        self.__tmp['module'].download()
-        self.__tmp['module'].convert()
-        self.__tmp['module'].saveas()
+        self.__tmp['module'].DownloadData(self.__status, self.__conf)
+        # self.__tmp['module'].download()
+        # self.__tmp['module'].convert()
+        # self.__tmp['module'].saveas()
         return status
 
     def finish(self) -> int:
@@ -297,6 +304,20 @@ class Download(User):
         if self.__status['code'] == 0:
             product['name'] = self._Base__conf['product']['name']
             product['data'] = self._Base__conf['product']['data']
+            product['template'] = \
+                self._Base__conf['product']['data']['template']
+            product['url'] = \
+                self._Base__conf['product']['data'][version][parameter][resolution][
+                    'url']
+            product['protocol'] = \
+                self._Base__conf['product']['data'][version][parameter][resolution][
+                    'protocol']
+            product['method'] = \
+                self._Base__conf['product']['data'][version][parameter][resolution][
+                    'method']
+            product['freq'] = \
+                self._Base__conf['product']['data'][version][parameter][resolution][
+                    'freq']
 
             keys = product['data'].keys()
             if version not in keys:
@@ -412,51 +433,6 @@ class Download(User):
         fp.close()
         self.__conf['log']['fp'] = None
 
-    def _downloader(self) -> dict:
-        # ['FTP', 'SFTP', 'HTTP', 'TDS', 'API']
-        downloader = self.__conf['downloader']
-
-        if self.__status['code'] == 0:
-            module_obj = None
-            product = self._Base__conf['product']['data']
-
-            version = self.__conf['product']['version']
-            parameter = self.__conf['product']['parameter']
-            resolution = self.__conf['product']['resolution']
-
-            url = product[version][parameter][resolution]['url']
-            protocol = product[version][parameter][resolution]['protocol']
-            method = product[version][parameter][resolution]['method']
-            freq = product[version][parameter][resolution]['freq']
-
-            downloader['url'] = url
-            downloader['protocol'] = protocol
-            downloader['method'] = method.split('.')
-            downloader['freq'] = freq
-            # Load module
-            # variable = self.__conf['product']['data']
-            if protocol == 'FTP':
-                downloader['name'] = 'ftplib'
-            elif protocol == 'SFTP':
-                downloader['name'] = 'paramiko'
-            elif protocol == 'HTTP':
-                downloader['name'] = 'requests'
-            elif protocol == 'HTTPS':
-                downloader['name'] = 'requests'
-            elif protocol == 'API':
-                downloader['name'] = 'api'
-            else:
-                downloader['name'] = ''
-                raise IHEClassInitError('Download') from None
-
-        self.__conf['downloader']['name'] = downloader['name']
-        self.__conf['downloader']['url'] = downloader['url']
-        self.__conf['downloader']['protocol'] = downloader['protocol']
-        self.__conf['downloader']['method'] = downloader['method']
-        self.__conf['downloader']['freq'] = downloader['freq']
-        self.__conf['downloader']['data'] = downloader['data']
-        return downloader
-
     def _template(self) -> dict:
         """
 
@@ -467,30 +443,36 @@ class Download(User):
         template = self.__tmp
 
         if self.__status['code'] == 0:
-            module_obj = None
+            product = self.__conf['product']
             template['name'] = self._Base__conf['product']['data']['template']
 
             # Load module
+            module_obj = None
             try:
                 # def template_load(self) -> dict:
                 module_obj = \
-                    importlib.import_module('.{m}'.format(m=template['name']),
-                                            'IHEWAcollect.templates')
-                print('Loaded module from IHEWAcollect'
-                      '.{m}'.format(m=template['name']))
+                    importlib.import_module('IHEWAcollect.templates'
+                                            '.{p}.{m}'.format(p=product['template'],
+                                                              m=product['name']))
+                print('Loaded module from IHEWAcollect.templates'
+                      '.{p}.{m}'.format(p=product['template'],
+                                        m=product['name']))
             except ImportError:
                 module_obj = \
                     importlib.import_module('src.IHEWAcollect.templates'
-                                            '.{m}'.format(m=template['name']))
-                print('Loaded module from src.IHEWAcollect'
-                      '.{m}'.format(m=template['name']))
+                                            '.{p}.{m}'.format(p=product['template'],
+                                                              m=product['name']))
+                print('Loaded module from src.IHEWAcollect.templates'
+                      '.{p}.{m}'.format(p=product['template'],
+                                        m=product['name']))
             finally:
                 # def template_init(self) -> dict:
                 if module_obj is not None:
-                    template['module'] = module_obj.Template(self.__status, self.__conf)
+                    template['module'] = module_obj
+                    # module_obj.DownloadData(self.__status, self.__conf)
                 else:
                     template['module'] = None
-                    raise IHEClassInitError('Download') from None
+                    raise IHEClassInitError('Templates') from None
 
             self.__tmp['name'] = template['name']
             self.__tmp['module'] = template['module']
@@ -511,13 +493,117 @@ def main():
                 inspect.currentframe())),
         '../', '../', 'tests'
     )
-    product = 'ALEXI'
+    ## Tests
+
+    # product = 'ALEXI'
+    # version = 'v1'
+    # parameter = 'evapotranspiration'
+    # resolution = 'daily'
+    # # resolution = 'weekly'
+    # variable = 'ETA'
+    # bbox = {
+    #     'w': -19.0,
+    #     's': -35.0,
+    #     'e': 55.0,
+    #     'n': 38.0
+    # }
+    # period = {
+    #     's': '2005-01-01',
+    #     'e': '2005-01-31'
+    # }
+
+    # product = 'ASCAT'
+    # version = 'v3.1.1'
+    # parameter = 'soil_water_index'
+    # resolution = 'daily'
+    # variable = 'SWI_010'
+    # bbox = {
+    #     'w': -19.0,
+    #     's': -35.0,
+    #     'e': 55.0,
+    #     'n': 38.0
+    # }
+    # period = {
+    #     's': '2007-01-01',
+    #     'e': '2007-01-31'
+    # }
+
+    # Error
+    # dec_jpeg2000: Unable to open JPEG2000 image within GRIB file.
+    product = 'CFSR'
+    version = 'v1'
+    parameter = 'radiation'
+    resolution = 'daily'
+    variable = 'dlwsfc'
+    bbox = {
+        'w': -19.0,
+        's': -35.0,
+        'e': 55.0,
+        'n': 38.0
+    }
+    period = {
+        's': '2007-01-01',
+        'e': '2007-01-31'
+    }
+
+    # product = 'CHIRPS'
+    # version = 'v2.0'
+    # parameter = 'precipitation'
+    # # resolution = 'daily'
+    # resolution = 'monthly'
+    # variable = 'PCP'
+    # bbox = {
+    #     'w': -19.0,
+    #     's': -35.0,
+    #     'e': 55.0,
+    #     'n': 38.0
+    # }
+    # period = {
+    #     's': '2007-01-01',
+    #     'e': '2007-01-31'
+    # }
+
+    # product = 'CMRSET'
+    # version = 'v1'
+    # parameter = 'evapotranspiration'
+    # resolution = 'monthly'
+    # variable = 'ETA'
+    # bbox = {
+    #     'w': -19.0,
+    #     's': -35.0,
+    #     'e': 55.0,
+    #     'n': 38.0
+    # }
+    # period = {
+    #     's': '2007-01-01',
+    #     'e': '2007-01-31'
+    # }
+
+    # TODO
+    product = 'DEM'
+
+    # TODO
+    product = 'ECMWF'
+
+    # Caution
+    # A 69618 pixels x 29007 lines x 1 bands Float32 image would be larger than 4GB
+    # but this is the largest size a TIFF can be, and BigTIFF is unavailable.
+    product = 'ETmonitor'
     version = 'v1'
     parameter = 'evapotranspiration'
-    resolution = 'daily'
+    resolution = 'monthly'
     variable = 'ETA'
-
-    # product = 'ECMWF'
+    # variable = 'ETP'
+    bbox = {
+        'w': -19.0,
+        's': -35.0,
+        'e': 55.0,
+        'n': 38.0
+    }
+    period = {
+        's': '2008-01-01',
+        'e': '2008-01-31'
+    }
 
     # product = 'TRMM'
     # version = 'v7'
@@ -531,42 +617,10 @@ def main():
                         parameter=parameter,
                         resolution=resolution,
                         variable=variable,
-                        bbox={
-                            'n':  1.0,
-                            's': -1.0,
-                            'w': -1.0,
-                            'e': 1.0
-                        },
-                        period={
-                            's': datetime.datetime(2000, 1, 1),
-                            'e': datetime.datetime(2000, 3, 31)
-                        },
+                        bbox=bbox,
+                        period=period,
+                        NaN=-9999,
                         is_status=False)
-
-    # # # Base attributes
-    # # print('\ndownload._Base__conf\n=====')
-    # # pprint(download._Base__conf)
-    #
-    # # User attributes
-    # print('\ndownload._User__conf\n=====')
-    # pprint(download._User__conf['account'])
-    #
-    # # # GIS attributes
-    # # print('\ndownload._GIS__conf:\n=====')
-    # # pprint(download._GIS__conf)
-    #
-    # # # Dtime attributes
-    # # print('\ndownload._Dtime__conf:\n=====')
-    # # pprint(download._Dtime__conf)
-    #
-    # # Download attributes
-    # print('\ndownload._Download__conf()\n=====')
-    # # pprint(download._Download__conf.keys())
-    # pprint(download._Download__conf)
-    #
-    # # Download methods
-    # print('\ndownload.get_status()\n=====')
-    # pprint(download.get_status())
 
 
 if __name__ == "__main__":

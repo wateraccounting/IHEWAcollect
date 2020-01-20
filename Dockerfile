@@ -1,8 +1,3 @@
-# docker pull wateraccounting/ihewacollect
-# docker build -t wateraccounting/ihewacollect .
-# docker run -it --name collect -p 8888:8888 -v /d/IHEWAcollect:/notebooks wateraccounting/ihewacollect
-# docker system prune -f && docker volume prune -f && docker container prune -f
-
 FROM osgeo/gdal:ubuntu-full-latest
 # /usr/bin
 # /usr/include

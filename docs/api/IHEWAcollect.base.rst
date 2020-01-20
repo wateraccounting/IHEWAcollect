@@ -1,23 +1,8 @@
 IHEWAcollect.base package
 =========================
 
-Subpackages
------------
-
-.. toctree::
-
-   IHEWAcollect.base.templates
-
 Submodules
 ----------
-
-IHEWAcollect.base.accounts module
----------------------------------
-
-.. automodule:: IHEWAcollect.base.accounts
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 IHEWAcollect.base.base module
 -----------------------------
@@ -47,6 +32,14 @@ IHEWAcollect.base.gis module
 ----------------------------
 
 .. automodule:: IHEWAcollect.base.gis
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IHEWAcollect.base.user module
+-----------------------------
+
+.. automodule:: IHEWAcollect.base.user
    :members:
    :undoc-members:
    :show-inheritance:

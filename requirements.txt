@@ -27,6 +27,7 @@ cryptography>=2.6
 cython>=0.29
 dask[complete]>=2.0
 ecmwf-api-client>=1.5
+jupyterlab==1.1.4
 netCDF4>=1.5
 numba>=0.40
 numpy>=1.10

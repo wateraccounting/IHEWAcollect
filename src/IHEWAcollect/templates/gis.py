@@ -34,9 +34,10 @@ import inspect
 
 # import shutil
 # import yaml
-import datetime
 
+# import datetime
 import numpy as np
+# import pandas as pd
 
 try:
     from osgeo import gdal, osr, gdalconst
@@ -58,6 +59,16 @@ class GIS(object):
 
     GIS process. Standard CRS is "EPSG:4326 - WGS 84 - Geographic".
 
+    HydroSHEDS:
+
+      - af: Africa,          lat [s:-35.0, n: 38.0], lon [w: -19.0, e:  55.0].
+      - as: Asia,            lat [s:-12.0, n: 61.0], lon [w:  57.0, e: 180.0].
+      - au: Australia,       lat [s:-56.0, n:-10.0], lon [w: 112.0, e: 180.0].
+      - ca: Central America, lat [s:  5.0, n: 39.0], lon [w:-119.0, e: -60.0].
+      - eu: Europe,          lat [s: 12.0, n: 62.0], lon [w: -14.0, e:  70.0].
+      - na: North America,   lat [s: 24.0, n: 60.0], lon [w:-138.0, e: -52.0].
+      - sa: South America,   lat [s:-56.0, n: 15.0], lon [w: -93.0, e: -32.0].
+
     Args:
       workspace (str): Directory to accounts.yml.
       is_print (bool): Is to print status message.
@@ -77,12 +88,37 @@ class GIS(object):
     }
 
     __conf = {
-        'file': '',
         'path': '',
-        'data': {}
+        'file': {
+            'i': '',
+            'o': ''
+        },
+        'latlim': {
+            's': 0.0,
+            'n': 0.0,
+            'r': 0.0
+        },
+        'lonlim': {
+            'w': 0.0,
+            'e': 0.0,
+            'r': 0.0
+        },
+        'dem': {
+            'w': 0,
+            'h': 0
+        },
+        'latlon': {
+            'w': 0.0,
+            's': 0.0,
+            'e': 0.0,
+            'n': 0.0
+        },
+        # 'dtype': {},
     }
+    product = {}
+    data = np.ndarray
 
-    def __init__(self, workspace, is_print, **kwargs):
+    def __init__(self, workspace, product, is_print, **kwargs):
         """Class instantiation
         """
         # Class self.__status['is_print']
@@ -90,6 +126,8 @@ class GIS(object):
 
         # Class self.__conf['path']
         self.__conf['path'] = workspace
+        self.product = product
+        self._latlon()
 
     def set_status(self, fun='', prt=False, ext=''):
         """Set status
@@ -103,52 +141,106 @@ class GIS(object):
                                    self.__status['code'],
                                    fun, prt, ext)
 
-    def check_continent(self, lat, lon, conf_lat, conf_lon):
-        """Check area located in continent or continents, based on HydroSHEDS
+    def _latlon(self):
+        latlim = self.__conf['latlim']
+        lonlim = self.__conf['lonlim']
+        dem = self.__conf['dem']
+        latlon = self.__conf['latlon']
 
-        HydroSHEDS:
+        if self.__status['code'] == 0:
+            latlim = self.product['data']['lat']
+            lonlim = self.product['data']['lon']
+            dem = self.product['data']['dem']
+            bbox = self.product['bbox']
 
-          - af: Africa,          lat [s:-35.0, n: 38.0], lon [w: -19.0, e:  55.0].
-          - as: Asia,            lat [s:-12.0, n: 61.0], lon [w:  57.0, e: 180.0].
-          - au: Australia,       lat [s:-56.0, n:-10.0], lon [w: 112.0, e: 180.0].
-          - ca: Central America, lat [s:  5.0, n: 39.0], lon [w:-119.0, e: -60.0].
-          - eu: Europe,          lat [s: 12.0, n: 62.0], lon [w: -14.0, e:  70.0].
-          - na: North America,   lat [s: 24.0, n: 60.0], lon [w:-138.0, e: -52.0].
-          - sa: South America,   lat [s:-56.0, n: 15.0], lon [w: -93.0, e: -32.0].
-        """
-        pass
+            self.__conf['latlim'] = latlim
+            self.__conf['lonlim'] = lonlim
+            self.__conf['dem'] = dem
 
-    def check_latlon_limit(self, lat, lon, conf_lat, conf_lon):
-        """
-        """
-        latlim, lonlim = [], []
+            if bbox['s'] < latlim['s']:
+                print('latlim: {}'.format(latlim))
+                raise IHEClassInitError('GIS') from None
+            if latlim['n'] < bbox['n']:
+                print('latlim: {}'.format(latlim))
+                raise IHEClassInitError('GIS') from None
+            if bbox['w'] < lonlim['w']:
+                print('lonlim: {}'.format(lonlim))
+                raise IHEClassInitError('GIS') from None
+            if lonlim['e'] < bbox['e']:
+                print('lonlim: {}'.format(latlim))
+                raise IHEClassInitError('GIS') from None
 
-        if lat[0] < conf_lat.s or lat[1] > conf_lat.n:
-            print(
-                'Latitude above 70N or below 60S is not possible. Value set to maximum')
-            latlim[0] = np.max(lat[0], conf_lat.s)
-            latlim[1] = np.min(lat[1], conf_lat.n)
-
-        if lon[0] < conf_lon.w or lon[1] > conf_lon.e:
-            print(
-                'Longitude must be between 180E and 180W. Now value is set to maximum')
-            lonlim[0] = np.max(lon[0], conf_lon.w)
-            lonlim[1] = np.min(lon[1], conf_lon.e)
-
-        return latlim, lonlim
+            self.__conf['latlon'] = latlon
+        return latlon
 
     def get_latlon_index(self, lat, lon, conf_dem):
         latid, lonid = np.ndarray, np.ndarray
+        latlim = self.__conf['latlim']
+        lonlim = self.__conf['lonlim']
 
-        # # Define IDs
-        # latid = 3000 - np.int16(
-        #     np.array(
-        #         [np.ceil((latlim[1] + 60) * 20), np.floor((latlim[0] + 60) * 20)]))
-        # lonid = np.int16(
-        #     np.array(
-        #         [np.floor((lonlim[0]) * 20), np.ceil((lonlim[1]) * 20)]) + 3600)
+        latid = 3000 - np.int16(np.array(
+            [np.ceil((latlim['s'] + 60) * 20), np.floor((latlim['n'] + 60) * 20)]))
+        lonid = np.int16(np.array(
+            [np.floor((lonlim['w']) * 20), np.ceil((lonlim['e']) * 20)]) + 3600)
+
+        # raw_data = np.fromfile(os.path.splitext(local_filename)[0], dtype="<f4")
+        # dataset = np.flipud(np.resize(raw_data, [3000, 7200]))
+        # data = dataset[yID[0]:yID[1],
+        #        xID[0]:xID[1]] / 2.45  # Values are in MJ/m2d so convert to mm/d
+        # data[data < 0] = -9999
 
         return latid, lonid
+
+    def check_continent(self, lat, lon, conf_lat, conf_lon):
+        """Check area located in continent or continents, based on HydroSHEDS
+        """
+        continents = {
+            'af': {
+                'w': -19.0,
+                's': -35.0,
+                'e': 55.0,
+                'n': 38.0
+            },
+            'as': {
+                'w': 57.0,
+                's': -12.0,
+                'e': 180.0,
+                'n': 61.0
+            },
+            'au': {
+                'w': 112.0,
+                's': -56.0,
+                'e': 180.0,
+                'n': -10.0
+            },
+            'ca': {
+                'w': -119.0,
+                's': 5.0,
+                'e': -60.0,
+                'n': 39.0
+            },
+            'eu': {
+                'w': -14.0,
+                's': 12.0,
+                'e': 70.0,
+                'n': 62.0
+            },
+            'na': {
+                'w': -138.0,
+                's': 24.0,
+                'e': -52.0,
+                'n': 60.0
+            },
+            'sa': {
+                'w': -93.0,
+                's': -56.0,
+                'e': -32.0,
+                'n': 15.0
+            },
+        }
+        continent = []
+
+        return continent
 
     def load_file(self, file='', band=1):
         """Get tif band data

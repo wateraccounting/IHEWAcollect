@@ -4,6 +4,7 @@ import os
 import inspect
 
 import datetime
+import numpy as np
 import pandas as pd
 
 try:
@@ -29,12 +30,25 @@ class Dtime(object):
     }
 
     __conf = {
-        'file': '',
         'path': '',
+        'file': {
+            'i': '',
+            'o': ''
+        },
+        'time': {
+            's': datetime.datetime.now(),
+            'e': datetime.datetime.now()
+        },
+        'dtime': {
+            'r': [],
+            'i': 0
+        },
         'data': {}
     }
+    product = {}
+    data = np.ndarray
 
-    def __init__(self, workspace, is_print, **kwargs):
+    def __init__(self, workspace, product, is_print, **kwargs):
         """Class instantiation
         """
         # Class self.__status['is_print']
@@ -42,30 +56,60 @@ class Dtime(object):
 
         # Class self.__conf['path']
         self.__conf['path'] = workspace
+        self.product = product
+        self._dtime()
 
-    def check_time_limit(self, dtime_s, dtime_e, conf_time, arg_resolution):
-        # Check Startdate and Enddate
-        dtime_s, dtime_e = None, None
+    def set_status(self, fun='', prt=False, ext=''):
+        """Set status
 
-        if not dtime_s:
-            if arg_resolution == 'weekly':
-                dtime_s = pd.Timestamp(conf_time.s)
-            if arg_resolution == 'daily':
-                dtime_s = pd.Timestamp(conf_time.s)
-        if not dtime_e:
-            if arg_resolution == 'weekly':
-                dtime_e = pd.Timestamp(conf_time.e)
-            if arg_resolution == 'daily':
-                dtime_e = pd.Timestamp(conf_time.e)
+        Args:
+          fun (str): Function name.
+          prt (bool): Is to print on screen?
+          ext (str): Extra message.
+        """
+        self.status = self._status(self.__status['messages'],
+                                   self.__status['code'],
+                                   fun, prt, ext)
 
-        # Make a panda timestamp of the date
-        try:
-            dtime_e = pd.Timestamp(dtime_e)
-        except BaseException:
-            dtime_e = dtime_e
+    def _dtime(self):
+        time = self.__conf['time']
+        dtime = self.__conf['dtime']
 
-        return dtime_s, dtime_e
+        if self.__status['code'] == 0:
+            time = self.product['data']['time']
+            perd = self.product['period']
+            freq = self.product['freq']
 
+            if isinstance(time['s'], datetime.date):
+                tmp_dtime = time['s']
+                time['s'] = \
+                    datetime.datetime(tmp_dtime.year, tmp_dtime.month, tmp_dtime.day)
+            if isinstance(time['e'], datetime.date):
+                tmp_dtime = time['e']
+                time['e'] = \
+                    datetime.datetime(tmp_dtime.year, tmp_dtime.month, tmp_dtime.day)
+            if isinstance(perd['s'], datetime.date):
+                tmp_dtime = perd['s']
+                perd['s'] = \
+                    datetime.datetime(tmp_dtime.year, tmp_dtime.month, tmp_dtime.day)
+            if isinstance(perd['e'], datetime.date):
+                tmp_dtime = perd['e']
+                perd['e'] = \
+                    datetime.datetime(tmp_dtime.year, tmp_dtime.month, tmp_dtime.day)
+
+            if perd['s'] < time['s']:
+                print('time: {} < {}'.format(perd['s'], time['s']))
+                raise IHEClassInitError('Dtime') from None
+            if perd['e'] > time['e']:
+                print('time: {} > {}'.format(perd['e'], time['e']))
+                raise IHEClassInitError('Dtime') from None
+
+            dtime['r'] = pd.date_range(perd['s'], perd['e'], freq=freq)
+            dtime['i'] = 0
+
+            self.__conf['time'] = time
+            self.__conf['dtime'] = dtime
+        return dtime
 
     def get_time_range(self, dtime_s, dtime_e, arg_resolution):
         dtime_r = None

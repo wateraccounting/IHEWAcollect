@@ -102,6 +102,57 @@ Products
 |            |    :height: 40pt                |                                              |            |
 +------------+---------------------------------+----------------------------------------------+------------+
 
+Docker
+======
+
+Pull the image.
+
+.. code-block:: console
+
+    $ docker pull wateraccounting/ihewacollect
+
+Or build from source code.
+
+.. code-block:: console
+
+    $ docker build -t wateraccounting/ihewacollect .
+
+Check images.
+
+.. code-block:: console
+
+    $ docker images
+
+Set "Shared Folders" in Virtual Machine.
+
+- Folder Path: D:\\IHEProjects\\Public\\IHEWAcollect
+- Folder Name: d/IHEWAcollect
+- Auto-mount: Yes
+- Make Permanent: Yes
+
+.. code-block:: console
+
+    $ docker-machine restart
+
+Run the image with Jupyter Notebook.
+
+.. code-block:: console
+
+    $ docker run -it --name ihewacollect -p 8888:8888 -v /d/IHEWAcollect:/notebooks wateraccounting/ihewacollect
+
+Clean running cache.
+
+.. code-block:: console
+
+    $ docker system prune -f && docker volume prune -f && docker container prune -f
+
+Remove image.
+
+.. code-block:: console
+
+    $ docker rmi wateraccounting/ihewacollect
+
+
 
 Installation
 ============
