@@ -107,13 +107,12 @@ Prepare
 
 Downlaod source code
 
-https://github.com/wateraccounting/IHEWAcollect.
+Github: https://github.com/wateraccounting/IHEWAcollect.
 
 Optional downlaod
 
-Test data ftp://ftp.wateraccounting.unesco-ihe.org/WaterAccounting_Guest/Products
-
-Save the test data to "IHEWAcollect/tests/data//Products"
+Test data: ftp://ftp.wateraccounting.unesco-ihe.org/WaterAccounting_Guest/Products
+, save the test data to "IHEWAcollect/tests/data/Products"
 
 Docker
 ======
@@ -127,7 +126,13 @@ Set "Shared Folders" in Virtual Machine.
 - Auto-mount: Yes
 - Make Permanent: Yes
 
-Pull the image.
+Restart Docker Virtual Machine image.
+
+.. code-block:: console
+
+    $ docker-machine restart
+
+Pull the ihewacollect image.
 
 .. code-block:: console
 
@@ -144,10 +149,6 @@ Check images.
 .. code-block:: console
 
     $ docker images
-
-.. code-block:: console
-
-    $ docker-machine restart
 
 Run the image with Jupyter Notebook.
 
@@ -186,6 +187,8 @@ Remove image.
 
 Installation
 ============
+
+GDAL library is required. Set gdal executable files to system "PATH".
 
 Install from source codes.
 
