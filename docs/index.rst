@@ -102,10 +102,21 @@ Products
 |            |    :height: 40pt                |                                              |            |
 +------------+---------------------------------+----------------------------------------------+------------+
 
+Prepare
+=======
+
+Downlaod source code
+
+https://github.com/wateraccounting/IHEWAcollect.
+
+Optional downlaod
+
+Test data ftp://ftp.wateraccounting.unesco-ihe.org/WaterAccounting_Guest/Products
+
+Save the test data to "IHEWAcollect/tests/data//Products"
+
 Docker
 ======
-
-Downlaod source code.
 
 Set "System -> Base Memory" to max capacity in Virtual Machine.
 
