@@ -5,7 +5,7 @@ from IHEWAcollect.download import Download
 
 
 def main():
-    # TODO, 20200120, QPan, Docker
+
     path = os.path.join(
         os.getcwd(),
         os.path.dirname(
@@ -13,11 +13,11 @@ def main():
                 inspect.currentframe()))
     )
 
-    product = 'ECMWF'
-    version = ''
-    parameter = ''
-    resolution = ''
-    variable = ''
+    product = 'GLDAS'
+    version = 'v2.1'
+    parameter = 'evapotranspiration'
+    resolution = 'three_hourly'
+    variable = 'ET'
     bbox = {
         'w': -19.0,
         's': -35.0,
@@ -25,8 +25,8 @@ def main():
         'n': 38.0
     }
     period = {
-        's': '2007-01-01',
-        'e': '2007-01-31'
+        's': '2008-01-01',
+        'e': '2008-01-31'
     }
 
     download = Download(workspace=path,

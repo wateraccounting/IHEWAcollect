@@ -35,7 +35,6 @@ except ImportError:
     # from IHEWAcollect.templates.dtime import Dtime
     from IHEWAcollect.templates.util import Log
 
-
 __this = sys.modules[__name__]
 
 
@@ -96,10 +95,10 @@ def DownloadData(status, conf):
     #     WaitbarConsole.printWaitBar(amount, total_amount, prefix = 'Progress:', suffix = 'Complete', length = 50)
 
     # Define IDs
-    yID = 2000 - np.int16(np.array([np.ceil((latlim[1] + 50)*20),
-                                    np.floor((latlim[0] + 50)*20)]))
-    xID = np.int16(np.array([np.floor((lonlim[0] + 180)*20),
-                             np.ceil((lonlim[1] + 180)*20)]))
+    yID = 2000 - np.int16(np.array([np.ceil((latlim[1] + 50) * 20),
+                                    np.floor((latlim[0] + 50) * 20)]))
+    xID = np.int16(np.array([np.floor((lonlim[0] + 180) * 20),
+                             np.ceil((lonlim[1] + 180) * 20)]))
 
     # Pass variables to parallel function and run
     args = [output_folder, TimeCase, xID, yID, lonlim, latlim]
@@ -145,7 +144,7 @@ def RetrieveData(Date, args):
 
     # create all the input name (filename) and output (outfilename, filetif, DiFileEnd) names
     Filename_out = os.path.join(output_folder,
-                              __this.product['data']['fname']['l'].format(dtime=Date))
+                                __this.product['data']['fname']['l'].format(dtime=Date))
 
     Filename_in = __this.product['data']['fname']['r'].format(dtime=Date)
     Filename_tmp = __this.product['data']['fname']['t'].format(dtime=Date)

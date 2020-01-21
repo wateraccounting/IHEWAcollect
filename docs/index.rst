@@ -158,7 +158,7 @@ Access to running image, in the new cmd window.
 
     $ cd /notebook/
     $ python3 setup.py install
-    $ python3 ./examples/BigTIFF.py
+    $ python3 ./examples/ex_ETmonitor_BigTIFF.py
 
 Clean running cache.
 

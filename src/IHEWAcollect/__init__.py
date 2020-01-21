@@ -138,7 +138,8 @@ except DistributionNotFound:
 finally:
     del get_distribution, DistributionNotFound
 
+# TODO, 20200116, QPan, __init__, decide IHEWAcollect.download.Download() OR IHEWAcollect(args)
 # import IHEWAcollect.download import Download
-# TODO, 20200116, QPan, code
+
 # import IHEWAcollect
-# IHEWAcollect.download(args)
+# IHEWAcollect(args)

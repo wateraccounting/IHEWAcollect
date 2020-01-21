@@ -108,41 +108,26 @@ def DownloadData(status, conf):
         results = Parallel(n_jobs=cores)(delayed(RetrieveData)(Date, args)
                                          for Date in Dates)
 
-    # Remove all .nc and .grb2 files
-    for f in os.listdir(output_folder):
-        if re.search(".nc", f):
-            os.remove(os.path.join(output_folder, f))
-    for f in os.listdir(output_folder):
-        if re.search(".grb2", f):
-            os.remove(os.path.join(output_folder, f))
-    for f in os.listdir(output_folder):
-        if re.search(".grib2", f):
-            os.remove(os.path.join(output_folder, f))
+    # # Remove all .nc and .grb2 files
+    # for f in os.listdir(output_folder):
+    #     if re.search(".nc", f):
+    #         os.remove(os.path.join(output_folder, f))
+    # for f in os.listdir(output_folder):
+    #     if re.search(".grb2", f):
+    #         os.remove(os.path.join(output_folder, f))
+    # for f in os.listdir(output_folder):
+    #     if re.search(".grib2", f):
+    #         os.remove(os.path.join(output_folder, f))
 
     return results
 
 
 def RetrieveData(Date, args):
-
     # unpack the arguments
     [output_folder, latlim, lonlim, Var, Version] = args
 
-    # Name of the model
-    if Version == 1:
-        version_name = 'CFSR'
-    if Version == 2:
-        version_name = 'CFSRv2'
-
     # Name of the outputfile
     Outputname = __this.product['data']['fname']['l'].format(dtime=Date)
-    # if Var == 'dlwsfc':
-    #     Outputname = 'DLWR_%s_W-m2_' %version_name + str(Date.strftime('%Y')) + '.' + str(Date.strftime('%m')) + '.' + str(Date.strftime('%d')) + '.tif'
-    # if Var == 'dswsfc':
-    #     Outputname = 'DSWR_%s_W-m2_' %version_name + str(Date.strftime('%Y')) + '.' + str(Date.strftime('%m')) + '.' + str(Date.strftime('%d')) + '.tif'
-    # if Var == 'ulwsfc':
-    #     Outputname = 'ULWR_%s_W-m2_' %version_name + str(Date.strftime('%Y')) + '.' + str(Date.strftime('%m')) + '.' + str(Date.strftime('%d')) + '.tif'
-    # if Var == 'uswsfc':
-    #     Outputname = 'USWR_%s_W-m2_' %version_name + str(Date.strftime('%Y')) + '.' + str(Date.strftime('%m')) + '.' + str(Date.strftime('%d')) + '.tif'
 
     msg = 'Downloading "{f}"'.format(f=Outputname)
     print('Downloading {f}'.format(f=Outputname))
@@ -157,9 +142,8 @@ def RetrieveData(Date, args):
         local_filename = Download_data(Date, Version, output_folder, Var)
 
         # convert grb2 to netcdf (wgrib2 module is needed)
-        for i in range(0,4):
+        for i in range(0, 4):
             nameNC = __this.product['data']['fname']['t'].format(dtime=Date, ipart=str(i+1))
-            # nameNC = 'Output' + str(Date.strftime('%Y')) + str(Date.strftime('%m')) + str(Date.strftime('%d')) + '-' + str(i+1) + '.nc'
 
             # Total path of the output
             FileNC6hour = os.path.join(output_folder, nameNC)
@@ -196,7 +180,7 @@ def RetrieveData(Date, args):
 
         # Open 4 times 6 hourly dataset
         for i in range(0, 4):
-            nameNC = 'Output' + str(Date.strftime('%Y')) + str(Date.strftime('%m')) + str(Date.strftime('%d')) + '-' + str(i + 1) + '.nc'
+            nameNC = __this.product['data']['fname']['t'].format(dtime=Date, ipart=str(i+1))
             FileNC6hour = os.path.join(output_folder, nameNC)
 
             f = Dataset(FileNC6hour, mode='r')
@@ -221,6 +205,12 @@ def RetrieveData(Date, args):
             pixel_size = 0.204545
         geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
         Save_as_tiff(data=np.flipud(DatasetEnd), name=outputnamePath, geo=geo, projection="WGS84")
+
+        os.remove(local_filename)
+        for i in range(0, 4):
+            nameNC = __this.product['data']['fname']['t'].format(dtime=Date, ipart=str(i+1))
+            FileNC6hour = os.path.join(output_folder, nameNC)
+            os.remove(FileNC6hour)
 
     return()
 

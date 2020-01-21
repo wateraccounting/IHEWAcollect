@@ -51,7 +51,6 @@ except ImportError:
     # from IHEWAcollect.templates.dtime import Dtime
     from IHEWAcollect.templates.util import Log
 
-
 __this = sys.modules[__name__]
 
 
@@ -116,13 +115,14 @@ def DownloadData(status, conf):
     for Date in Dates:
 
         # Date as printed in filename
-        Filename_out= os.path.join(output_folder,
-                                   __this.product['data']['fname']['l'].format(dtime=Date))
+        Filename_out = os.path.join(output_folder,
+                                    __this.product['data']['fname']['l'].format(
+                                        dtime=Date))
 
         # Define end filename
         Filename_in = __this.product['data']['fname']['r'].format(dtime=Date)
 
-         # Temporary filename for the downloaded global file
+        # Temporary filename for the downloaded global file
         local_filename = os.path.join(output_folder, Filename_in)
 
         # Download the data from FTP server if the file not exists
@@ -132,7 +132,8 @@ def DownloadData(status, conf):
             except BaseException as err:
                 msg = "\nWas not able to download file with date %s" % Date
                 print('{}\n{}'.format(msg, str(err)))
-                __this.Log.write(datetime.datetime.now(), msg='{}\n{}'.format(msg, str(err)))
+                __this.Log.write(datetime.datetime.now(),
+                                 msg='{}\n{}'.format(msg, str(err)))
             else:
                 # Clip dataset
                 Clip_Dataset_GDAL(local_filename, Filename_out, latlim, lonlim)
@@ -174,7 +175,7 @@ def Download_CMRSET_from_WA_FTP(local_filename, Filename_in):
     __this.Log.write(datetime.datetime.now(), msg=msg)
 
     # Download data from FTP
-    ftp=FTP(ftpserver)
+    ftp = FTP(ftpserver)
     ftp.login(username, password)
     ftp.cwd(directory)
     lf = open(local_filename, "wb")

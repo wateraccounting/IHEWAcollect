@@ -185,7 +185,7 @@ class Download(User):
         # Class Download
         if self.__status['code'] == 0:
             self.init()
-            # TODO, 20200115, QPan, delete
+
             self.prepare()
             self.start()
             self.finish()
@@ -527,8 +527,10 @@ def main():
     #     'e': '2007-01-31'
     # }
 
-    # Error
+    # Caution:
     # dec_jpeg2000: Unable to open JPEG2000 image within GRIB file.
+    # Docker, pass!
+    # TODO, 20200120, QPan, CFSR, replace some values
     # product = 'CFSR'
     # version = 'v1'
     # parameter = 'radiation'
@@ -578,32 +580,30 @@ def main():
     #     'e': '2007-01-31'
     # }
 
-    # TODO
+    # TODO, 20200120, QPan, DEM, replace some values, and re-design base.yml
     # product = 'DEM'
+    # version = 'v1'
+    # parameter = 'DEM'
+    # resolution = '30s'
+    # variable = 'af'
+    # bbox = {
+    #     'w': -19.0,
+    #     's': -35.0,
+    #     'e': 55.0,
+    #     'n': 38.0
+    # }
+    # period = {
+    #     's': '',
+    #     'e': ''
+    # }
 
-    # TODO
-    # product = 'ECMWF'
+    # TODO, ECMWF
+    # product = ''
 
-    # TODO
-    product = 'GLEAM'
-    version = 'v3.3a'
-    parameter = 'evapotranspiration'
-    resolution = 'daily'
-    variable = 'ET'
-    bbox = {
-        'w': -19.0,
-        's': -35.0,
-        'e': 55.0,
-        'n': 38.0
-    }
-    period = {
-        's': '2008-01-01',
-        'e': '2008-01-31'
-    }
-
-    # Caution
+    # Caution:
     # # A 69618 pixels x 29007 lines x 1 bands Float32 image would be larger than 4GB
     # # but this is the largest size a TIFF can be, and BigTIFF is unavailable.
+    # Docker, pass!
     # product = 'ETmonitor'
     # version = 'v1'
     # parameter = 'evapotranspiration'
@@ -637,11 +637,29 @@ def main():
     #     'e': '2008-01-31'
     # }
 
-    # product = 'GLDAS'
-    # version = 'v2.1'
+    # TODO, 20200120, QPan, GLDAS, replace download text to NetCDF
+    product = 'GLDAS'
+    version = 'v2.1'
+    parameter = 'evapotranspiration'
+    resolution = 'three_hourly'
+    variable = 'ET'
+    bbox = {
+        'w': -19.0,
+        's': -35.0,
+        'e': 55.0,
+        'n': 38.0
+    }
+    period = {
+        's': '2008-01-01',
+        'e': '2008-01-31'
+    }
+
+    # TODO, GLEAM
+    # product = 'GLEAM'
+    # version = 'v3.3a'
     # parameter = 'evapotranspiration'
-    # resolution = 'three_hourly'
-    # variable = 'E'
+    # resolution = 'daily'
+    # variable = 'ET'
     # bbox = {
     #     'w': -19.0,
     #     's': -35.0,
@@ -653,21 +671,22 @@ def main():
     #     'e': '2008-01-31'
     # }
 
-    product = 'GPM'
-    version = 'v6'
-    parameter = 'precipitation'
-    resolution = 'daily'
-    variable = 'PCP'
-    bbox = {
-        'w': -19.0,
-        's': -35.0,
-        'e': 55.0,
-        'n': 38.0
-    }
-    period = {
-        's': '2008-01-01',
-        'e': '2008-01-31'
-    }
+    # TODO, GPM
+    # product = 'GPM'
+    # version = 'v6'
+    # parameter = 'precipitation'
+    # resolution = 'daily'
+    # variable = 'PCP'
+    # bbox = {
+    #     'w': -19.0,
+    #     's': -35.0,
+    #     'e': 55.0,
+    #     'n': 38.0
+    # }
+    # period = {
+    #     's': '2008-01-01',
+    #     'e': '2008-01-31'
+    # }
 
     # product = 'TRMM'
     # version = 'v7'

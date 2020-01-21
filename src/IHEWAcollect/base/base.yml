@@ -853,7 +853,7 @@ products:
   # DEM, DIR
   # edcintl.cr.usgs.gov
   DEM:
-    account: null'
+    account: null
     template: 'HydroSHEDS'
     meta:
       owner: 'WWF'
@@ -884,7 +884,7 @@ products:
       projection:
         - 'WGS84'
     v1:
-      digital_elevation_model:
+      DEM:
         3s:
           url: 'https://edcintl.cr.usgs.gov'
           protocol: 'HTTPS'
@@ -900,7 +900,7 @@ products:
               fname:
                 r: '{lat}{lon}_dem_grid.zip'
                 t: 'DEM-af_3s_merged_{lat}{lon}.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-3s_af.tif'
               fmt:
                 d: null
                 r: 'latlon'
@@ -915,8 +915,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: -35.0
@@ -941,7 +941,7 @@ products:
               fname:
                 r: '{lat}{lon}_dem_grid.zip'
                 t: 'DEM-as_3s_merged_{lat}{lon}.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-3s_as.tif'
               fmt:
                 d: null
                 r: 'latlon'
@@ -956,8 +956,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: -12.0
@@ -982,7 +982,7 @@ products:
               fname:
                 r: '{lat}{lon}_dem_grid.zip'
                 t: 'DEM-au_3s_merged_{lat}{lon}.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-3s_au.tif'
               fmt:
                 d: null
                 r: 'latlon'
@@ -997,8 +997,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: -56.0
@@ -1023,7 +1023,7 @@ products:
               fname:
                 r: '{lat}{lon}_dem_grid.zip'
                 t: 'DEM-ca_3s_merged_{lat}{lon}.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-3s_ca.tif'
               fmt:
                 d: null
                 r: 'latlon'
@@ -1038,8 +1038,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: 5.0
@@ -1064,7 +1064,7 @@ products:
               fname:
                 r: '{lat}{lon}_dem_grid.zip'
                 t: 'DEM-eu_3s_merged_{lat}{lon}.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-3s_eu.tif'
               fmt:
                 d: null
                 r: 'latlon'
@@ -1079,8 +1079,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: '.'
+                l: '.'
                 m: 1.0
               lat:
                 s: 12.0
@@ -1105,7 +1105,7 @@ products:
               fname:
                 r: '{lat}{lon}_dem_grid.zip'
                 t: 'DEM-na_3s_merged_{lat}{lon}.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-3s_na.tif'
               fmt:
                 d: null
                 r: 'latlon'
@@ -1120,8 +1120,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: 24.0
@@ -1146,7 +1146,7 @@ products:
               fname:
                 r: '{lat}{lon}_dem_grid.zip'
                 t: 'DEM-sa_3s_merged_{lat}{lon}.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-3s_sa.tif'
               fmt:
                 d: null
                 r: 'latlon'
@@ -1161,8 +1161,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: -56.0
@@ -1193,7 +1193,7 @@ products:
               fname:
                 r: 'af_dem_15s_grid.zip'
                 t: 'DEM-af_15s_merged.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-15s_af.tif'
               fmt:
                 d: null
                 r: null
@@ -1208,8 +1208,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: '.'
+                l: '.'
                 m: 1.0
               lat:
                 s: -35.0
@@ -1234,7 +1234,7 @@ products:
               fname:
                 r: 'as_dem_15s_grid.zip'
                 t: 'DEM-as_15s_merged.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-15s_as.tif'
               fmt:
                 d: null
                 r: null
@@ -1249,8 +1249,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: -12.0
@@ -1275,7 +1275,7 @@ products:
               fname:
                 r: 'au_dem_15s_grid.zip'
                 t: 'DEM-au_15s_merged.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-15s_au.tif'
               fmt:
                 d: null
                 r: null
@@ -1290,8 +1290,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: -56.0
@@ -1316,7 +1316,7 @@ products:
               fname:
                 r: 'ca_dem_15s_grid.zip'
                 t: 'DEM-ca_15s_merged.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-15s_ca.tif'
               fmt:
                 d: null
                 r: null
@@ -1331,8 +1331,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: 5.0
@@ -1357,7 +1357,7 @@ products:
               fname:
                 r: 'eu_dem_15s_grid.zip'
                 t: 'DEM-eu_15s_merged.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-15s_eu.tif'
               fmt:
                 d: null
                 r: null
@@ -1372,8 +1372,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: 12.0
@@ -1398,7 +1398,7 @@ products:
               fname:
                 r: 'na_dem_15s_grid.zip'
                 t: 'DEM-na_15s_merged.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-15s_na.tif'
               fmt:
                 d: null
                 r: null
@@ -1413,8 +1413,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: 24.0
@@ -1439,7 +1439,7 @@ products:
               fname:
                 r: 'sa_dem_15s_grid.zip'
                 t: 'DEM-sa_15s_merged.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-15s_sa.tif'
               fmt:
                 d: null
                 r: null
@@ -1454,8 +1454,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: -56.0
@@ -1486,7 +1486,7 @@ products:
               fname:
                 r: 'af_dem_30s_bil.zip'
                 t: 'DEM-af_30s_merged.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-30s_af.tif'
               fmt:
                 d: null
                 r: null
@@ -1501,8 +1501,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: -35.0
@@ -1527,7 +1527,7 @@ products:
               fname:
                 r: 'as_dem_30s_bil.zip'
                 t: 'DEM-as_30s_merged.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-30s_as.tif'
               fmt:
                 d: null
                 r: null
@@ -1542,8 +1542,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: -12.0
@@ -1568,7 +1568,7 @@ products:
               fname:
                 r: 'au_dem_30s_bil.zip'
                 t: 'DEM-au_30s_merged.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-30s_au.tif'
               fmt:
                 d: null
                 r: null
@@ -1583,8 +1583,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: -56.0
@@ -1609,7 +1609,7 @@ products:
               fname:
                 r: 'ca_dem_30s_bil.zip'
                 t: 'DEM-ca_30s_merged.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-30s_ca.tif'
               fmt:
                 d: null
                 r: null
@@ -1624,8 +1624,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: 5.0
@@ -1650,7 +1650,7 @@ products:
               fname:
                 r: 'eu_dem_30s_bil.zip'
                 t: 'DEM-eu_30s_merged.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-30s_eu.tif'
               fmt:
                 d: null
                 r: null
@@ -1665,8 +1665,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: 12.0
@@ -1691,7 +1691,7 @@ products:
               fname:
                 r: 'na_dem_30s_bil.zip'
                 t: 'DEM-na_30s_merged.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-30s_na.tif'
               fmt:
                 d: null
                 r: null
@@ -1706,8 +1706,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: 24.0
@@ -1732,7 +1732,7 @@ products:
               fname:
                 r: 'sa_dem_30s_bil.zip'
                 t: 'DEM-sa_30s_merged.adf'
-                l: 'DEM_v1_degree.tif'
+                l: 'DEM_v1_m-30s_sa.tif'
               fmt:
                 d: null
                 r: null
@@ -1747,8 +1747,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: 'degree'
-                l: 'degree'
+                r: 'm'
+                l: 'm'
                 m: 1.0
               lat:
                 s: -56.0
@@ -1764,7 +1764,7 @@ products:
               dem:
                 w: 7320
                 h: 8520
-      drainage_direction_model:
+      DIR:
         3s:
           url: 'https://edcintl.cr.usgs.gov'
           protocol: 'HTTPS'
@@ -1780,7 +1780,7 @@ products:
               fname:
                 r: '{lat}{lon}_dir_grid.zip'
                 t: 'DIR-af_3s_merged_{lat}{lon}.adf'
-                l: 'DIR_v1_3s.tif'
+                l: 'DIR_v1_m-3s_af.tif'
               fmt:
                 d: null
                 r: 'latlon'
@@ -1795,8 +1795,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: null
-                l: null
+                r: 'degree'
+                l: 'degree'
                 m: 1.0
               lat:
                 s: -35.0
@@ -1820,7 +1820,7 @@ products:
               fname:
                 r: '{lat}{lon}_dir_grid.zip'
                 t: 'DIR-as_3s_merged_{lat}{lon}.adf'
-                l: 'DIR_v1_3s.tif'
+                l: 'DIR_v1_m-3s_as.tif'
               fmt:
                 d: null
                 r: 'latlon'
@@ -1861,7 +1861,7 @@ products:
               fname:
                 r: '{lat}{lon}_dir_grid.zip'
                 t: 'DIR-au_3s_merged_{lat}{lon}.adf'
-                l: 'DIR_v1_3s.tif'
+                l: 'DIR_v1_m-3s_au.tif'
               fmt:
                 d: null
                 r: 'latlon'
@@ -1902,7 +1902,7 @@ products:
               fname:
                 r: '{lat}{lon}_dir_grid.zip'
                 t: 'DIR-ca_3s_merged_{lat}{lon}.adf'
-                l: 'DIR_v1_3s.tif'
+                l: 'DIR_v1_m-3s_ca.tif'
               fmt:
                 d: null
                 r: 'latlon'
@@ -1943,7 +1943,7 @@ products:
               fname:
                 r: '{lat}{lon}_dir_grid.zip'
                 t: 'DIR-eu_3s_merged_{lat}{lon}.adf'
-                l: 'DIR_v1_3s.tif'
+                l: 'DIR_v1_m-3s_eu.tif'
               fmt:
                 d: null
                 r: 'latlon'
@@ -1984,7 +1984,7 @@ products:
               fname:
                 r: '{lat}{lon}_dir_grid.zip'
                 t: 'DIR-na_3s_merged_{lat}{lon}.adf'
-                l: 'DIR_v1_3s.tif'
+                l: 'DIR_v1_m-3s_na.tif'
               fmt:
                 d: null
                 r: 'latlon'
@@ -2025,7 +2025,7 @@ products:
               fname:
                 r: '{lat}{lon}_dir_grid.zip'
                 t: 'DIR-sa_3s_merged_{lat}{lon}.adf'
-                l: 'DIR_v1_3s.tif'
+                l: 'DIR_v1_m-3s_sa.tif'
               fmt:
                 d: null
                 r: 'latlon'
@@ -2072,7 +2072,7 @@ products:
               fname:
                 r: 'af_dir_15s_grid.zip'
                 t: 'DIR-af_15s_merged.adf'
-                l: 'DIR_v1_degree.tif'
+                l: 'DIR_v1_m-15s_af.tif'
               fmt:
                 d: null
                 r: null
@@ -2113,7 +2113,7 @@ products:
               fname:
                 r: 'as_dir_15s_grid.zip'
                 t: 'DIR-as_15s_merged.adf'
-                l: 'DIR_v1_degree.tif'
+                l: 'DIR_v1_m-15s_as.tif'
               fmt:
                 d: null
                 r: null
@@ -2154,7 +2154,7 @@ products:
               fname:
                 r: 'au_dir_15s_grid.zip'
                 t: 'DIR-au_15s_merged.adf'
-                l: 'DIR_v1_degree.tif'
+                l: 'DIR_v1_m-15s_au.tif'
               fmt:
                 d: null
                 r: null
@@ -2195,7 +2195,7 @@ products:
               fname:
                 r: 'ca_dir_15s_grid.zip'
                 t: 'DIR-ca_15s_merged.adf'
-                l: 'DIR_v1_degree.tif'
+                l: 'DIR_v1_m-15s_ca.tif'
               fmt:
                 d: null
                 r: null
@@ -2236,7 +2236,7 @@ products:
               fname:
                 r: 'eu_dir_15s_grid.zip'
                 t: 'DIR-eu_15s_merged.adf'
-                l: 'DIR_v1_degree.tif'
+                l: 'DIR_v1_m-15s_eu.tif'
               fmt:
                 d: null
                 r: null
@@ -2277,7 +2277,7 @@ products:
               fname:
                 r: 'na_dir_15s_grid.zip'
                 t: 'DIR-na_15s_merged.adf'
-                l: 'DIR_v1_degree.tif'
+                l: 'DIR_v1_m-15s_na.tif'
               fmt:
                 d: null
                 r: null
@@ -2318,7 +2318,7 @@ products:
               fname:
                 r: 'sa_dir_15s_grid.zip'
                 t: 'DIR-sa_15s_merged.adf'
-                l: 'DIR_v1_degree.tif'
+                l: 'DIR_v1_m-15s_sa.tif'
               fmt:
                 d: null
                 r: null
@@ -2365,7 +2365,7 @@ products:
               fname:
                 r: 'af_dir_30s_bil.zip'
                 t: 'DIR-af_30s_merged.adf'
-                l: 'DIR_v1_degree.tif'
+                l: 'DIR_v1_m-30s_af.tif'
               fmt:
                 d: null
                 r: null
@@ -2406,7 +2406,7 @@ products:
               fname:
                 r: 'as_dir_30s_bil.zip'
                 t: 'DIR-as_30s_merged.adf'
-                l: 'DIR_v1_degree.tif'
+                l: 'DIR_v1_m-30s_as.tif'
               fmt:
                 d: null
                 r: null
@@ -2447,7 +2447,7 @@ products:
               fname:
                 r: 'au_dir_30s_bil.zip'
                 t: 'DIR-au_30s_merged.adf'
-                l: 'DIR_v1_degree.tif'
+                l: 'DIR_v1_m-30s_au.tif'
               fmt:
                 d: null
                 r: null
@@ -2488,7 +2488,7 @@ products:
               fname:
                 r: 'ca_dir_30s_bil.zip'
                 t: 'DIR-ca_30s_merged.adf'
-                l: 'DIR_v1_degree.tif'
+                l: 'DIR_v1_m-30s_ca.tif'
               fmt:
                 d: null
                 r: null
@@ -2529,7 +2529,7 @@ products:
               fname:
                 r: 'eu_dir_30s_bil.zip'
                 t: 'DIR-eu_30s_merged.adf'
-                l: 'DIR_v1_degree.tif'
+                l: 'DIR_v1_m-30s_eu.tif'
               fmt:
                 d: null
                 r: null
@@ -2570,7 +2570,7 @@ products:
               fname:
                 r: 'na_dir_30s_bil.zip'
                 t: 'DIR-na_30s_merged.adf'
-                l: 'DIR_v1_degree.tif'
+                l: 'DIR_v1_m-30s_na.tif'
               fmt:
                 d: null
                 r: null
@@ -2611,7 +2611,7 @@ products:
               fname:
                 r: 'sa_dir_30s_bil.zip'
                 t: 'DIR-sa_30s_merged.adf'
-                l: 'DIR_v1_degree.tif'
+                l: 'DIR_v1_m-30s_sa.tif'
               fmt:
                 d: null
                 r: null
@@ -3082,7 +3082,7 @@ products:
           method: 'get'
           freq: '3H'
           variables:
-            E:
+            ET:
               variable: 'Evap_tavg'
               name: 'Three Hourly Evaporation'
               description:

@@ -1,48 +1,86 @@
 # -*- coding: utf-8 -*-
 
 # General modules
-import numpy as np
-import calendar
 import os
-import pandas as pd
-import requests
+import sys
+
+import datetime
+import calendar
+
 from joblib import Parallel, delayed
+import requests
 
-# Water Accounting modules
-from watools import WebAccounts
-import watools.General.data_conversions as DC
+import numpy as np
+import pandas as pd
+
+# IHEWAcollect Modules
+try:
+    from ..collect import \
+        Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
+        Clip_Dataset_GDAL
+    # from ..gis import GIS
+    # from ..dtime import Dtime
+    from ..util import Log
+except ImportError:
+    from IHEWAcollect.templates.collect import \
+        Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
+        Clip_Dataset_GDAL
+    # from IHEWAcollect.templates.gis import GIS
+    # from IHEWAcollect.templates.dtime import Dtime
+    from IHEWAcollect.templates.util import Log
+
+__this = sys.modules[__name__]
 
 
-def DownloadData(Dir, Var, Startdate, Enddate, latlim, lonlim, Waitbar, CaseParameters,
-                 cores, TimeCase):
+def DownloadData(status, conf):
     """
     This function downloads GLDAS CLSM daily data
 
-    Keyword arguments:
-    Dir -- 'C:/file/to/path/'
-    Var -- 'wind_f_inst' : (string) For all variable codes: VariablesInfo('day').descriptions.keys()
-    Startdate -- 'yyyy-mm-dd'
-    Enddate -- 'yyyy-mm-dd'
-    latlim -- [ymin, ymax]
-    lonlim -- [xmin, xmax]
-    cores -- 1....8
-    CaseParameters -- See files: three_hourly.py, daily.py, and monthly.py
+    Args:
+      status (dict): Status.
+      conf (dict): Configuration.
     """
+    # Check the latitude and longitude and otherwise set lat or lon on greatest extent
+    __this.account = conf['account']
+    __this.product = conf['product']
+    __this.Log = Log(conf['log'])
+
+    Waitbar = 0
+    cores = 1
+
+    bbox = conf['product']['bbox']
+    Startdate = conf['product']['period']['s']
+    Enddate = conf['product']['period']['e']
+
+    TimeCase = conf['product']['resolution']
+    TimeFreq = conf['product']['freq']
+    Var = conf['product']['data']['variable']
+    latlim = conf['product']['data']['lat']
+    lonlim = conf['product']['data']['lon']
+
+    folder = conf['folder']
 
     # Load factors / unit / type of variables / accounts
     VarInfo = VariablesInfo(TimeCase)
-    username, password = WebAccounts.Accounts(Type='NASA')
+    username = __this.account['data']['username']
+    password = __this.account['data']['password']
 
     # Set required data for the daily option
     # Set required data for the three hourly option
+    latlim = [bbox['s'], bbox['n']]
+    lonlim = [bbox['w'], bbox['e']]
+
+    CaseParameters = [1, 4, 5, 8]
+
     if TimeCase == 'three_hourly':
 
         # Define output folder and create this one if not exists
-        path = os.path.join(Dir, 'Weather_Data', 'Model', 'GLDAS',
-                            TimeCase, Var)
-
-        if not os.path.exists(path):
-            os.makedirs(path)
+        path = folder['l']
+        # path = os.path.join(Dir, 'Weather_Data', 'Model', 'GLDAS',
+        #                     TimeCase, Var)
+        #
+        # if not os.path.exists(path):
+        #     os.makedirs(path)
 
         # Startdate if not defined
         sd_date = '1979-01-02'
@@ -52,35 +90,36 @@ def DownloadData(Dir, Var, Startdate, Enddate, latlim, lonlim, Waitbar, CasePara
 
         # Define URL by using personal account
         # url = 'http://%s:%s@hydro1.gesdisc.eosdis.nasa.gov:80/dods/GLDAS_NOAH025SUBP_3H' %(username,password)
-        url = 'https://hydro1.gesdisc.eosdis.nasa.gov/dods/GLDAS_CLM10SUBP_3H'  # %(username,password)
+        url = 'https://hydro1.gesdisc.eosdis.nasa.gov/data/GLDAS/GLDAS_NOAH025_3H.2.1'  # %(username,password)
 
         # Name the definition that will be used to obtain the data
         RetrieveData_fcn = RetrieveData_three_hourly
 
         types = ['mean']
 
-    elif TimeCase == 'daily':
-
-        types = ['mean']
-
-        # Define output folder and create this one if not exists
-        path = {'mean': os.path.join(Dir, 'Weather_Data', 'Model', 'GLDAS_CLSM',
-                                     TimeCase, Var, 'mean')}
-        for i in range(len(types)):
-            if not os.path.exists(path[types[i]]):
-                os.makedirs(path[types[i]])
-
-        # Startdate if not defined
-        sd_date = '1948-01-01'
-
-        # Define Time frequency
-        TimeFreq = 'D'
-
-        # Define URL by using personal account
-        url = 'https://hydro1.gesdisc.eosdis.nasa.gov/dods/GLDAS_CLSM025_D.2.0'
-
-        # Name the definition that will be used to obtain the data
-        RetrieveData_fcn = RetrieveData_daily
+    # elif TimeCase == 'daily':
+    #
+    #     types = ['mean']
+    #
+    #     # Define output folder and create this one if not exists
+    #     path = folder['l']
+    #     # path = {'mean': os.path.join(Dir, 'Weather_Data', 'Model', 'GLDAS_CLSM',
+    #     #                              TimeCase, Var, 'mean')}
+    #     # for i in range(len(types)):
+    #     #     if not os.path.exists(path[types[i]]):
+    #     #         os.makedirs(path[types[i]])
+    #
+    #     # Startdate if not defined
+    #     sd_date = '1948-01-01'
+    #
+    #     # Define Time frequency
+    #     TimeFreq = 'D'
+    #
+    #     # Define URL by using personal account
+    #     url = 'https://hydro1.gesdisc.eosdis.nasa.gov/dods/GLDAS_CLSM025_D.2.0'
+    #
+    #     # Name the definition that will be used to obtain the data
+    #     RetrieveData_fcn = RetrieveData_daily
 
     # Set required data for the monthly option
     elif TimeCase == 'monthly':
@@ -88,11 +127,12 @@ def DownloadData(Dir, Var, Startdate, Enddate, latlim, lonlim, Waitbar, CasePara
         types = ['mean']
 
         # Define output folder and create this one if not exists
-        path = {'mean': os.path.join(Dir, 'Weather_Data', 'Model', 'GLDAS_CLSM',
-                                     TimeCase, Var, 'mean')}
-        for i in range(len(types)):
-            if not os.path.exists(path[types[i]]):
-                os.makedirs(path[types[i]])
+        path = folder['l']
+        # path = {'mean': os.path.join(Dir, 'Weather_Data', 'Model', 'GLDAS_CLSM',
+        #                              TimeCase, Var, 'mean')}
+        # for i in range(len(types)):
+        #     if not os.path.exists(path[types[i]]):
+        #         os.makedirs(path[types[i]])
 
         # Startdate if not defined
         sd_date = '1979-01-02'
@@ -101,7 +141,7 @@ def DownloadData(Dir, Var, Startdate, Enddate, latlim, lonlim, Waitbar, CasePara
         TimeFreq = 'MS'
 
         # Define URL by using personal account
-        url = 'https://hydro1.gesdisc.eosdis.nasa.gov/dods/GLDAS_CLSM025_D.2.0'
+        url = 'https://hydro1.gesdisc.eosdis.nasa.gov/data/GLDAS/GLDAS_NOAH025_M.2.1'
 
         # Name the definition that will be used to obtain the data
         RetrieveData_fcn = RetrieveData_monthly
@@ -134,12 +174,12 @@ def DownloadData(Dir, Var, Startdate, Enddate, latlim, lonlim, Waitbar, CasePara
     Dates = pd.date_range(Startdate, Enddate, freq=TimeFreq)
 
     # Create Waitbar
-    if Waitbar == 1:
-        import watools.Functions.Start.WaitbarConsole as WaitbarConsole
-        total_amount = len(Dates)
-        amount = 0
-        WaitbarConsole.printWaitBar(amount, total_amount, prefix='Progress:',
-                                    suffix='Complete', length=50)
+    # if Waitbar == 1:
+    #     import watools.Functions.Start.WaitbarConsole as WaitbarConsole
+    #     total_amount = len(Dates)
+    #     amount = 0
+    #     WaitbarConsole.printWaitBar(amount, total_amount, prefix='Progress:',
+    #                                 suffix='Complete', length=50)
 
     # Define the variable string name
     VarStr = VarInfo.names[Var]
@@ -152,10 +192,10 @@ def DownloadData(Dir, Var, Startdate, Enddate, latlim, lonlim, Waitbar, CasePara
     if not cores:
         for Date in Dates:
             RetrieveData_fcn(Date, args)
-            if Waitbar == 1:
-                amount += 1
-                WaitbarConsole.printWaitBar(amount, total_amount, prefix='Progress:',
-                                            suffix='Complete', length=50)
+            # if Waitbar == 1:
+            #     amount += 1
+            #     WaitbarConsole.printWaitBar(amount, total_amount, prefix='Progress:',
+            #                                 suffix='Complete', length=50)
         results = True
     else:
         results = Parallel(n_jobs=cores)(delayed(RetrieveData_fcn)(Date, args)
@@ -196,14 +236,18 @@ def RetrieveData_three_hourly(Date, args):
 
             while downloaded == 0:
                 try:
+                    fname = os.path.split(BasinDir)[-1]
+                    msg = 'Downloading "{f}"'.format(f=fname)
+                    print('Downloading {f}'.format(f=fname))
+                    __this.Log.write(datetime.datetime.now(), msg=msg)
 
                     # Define time
                     zID = int(((Date - pd.Timestamp("1979-1-2")).days) * 8) + (
-                                period - 1)
+                            period - 1)
 
                     # total URL
                     url_GLDAS = url + '.ascii?%s[%s][%s:1:%s][%s:1:%s]' % (
-                    Var, zID, yID[0], yID[1], xID[0], xID[1])
+                        Var, zID, yID[0], yID[1], xID[0], xID[1])
 
                     # open URL
                     try:
@@ -256,7 +300,8 @@ def RetrieveData_three_hourly(Date, args):
                     downloaded = 1
 
                 # If download was not succesfull
-                except:
+                except BaseException as err:
+
                     data = []
 
                     # Try another time
@@ -264,8 +309,10 @@ def RetrieveData_three_hourly(Date, args):
 
                     # Stop trying after 10 times
                     if N == 10:
-                        print('Data from ' + Date.strftime(
-                            '%Y-%m-%d') + ' is not available')
+                        msg = "\nWas not able to download file with date %s" % Date
+                        print('{}\n{}'.format(msg, str(err)))
+                        __this.Log.write(datetime.datetime.now(),
+                                         msg='{}\n{}'.format(msg, str(err)))
                         downloaded = 1
 
             # define geo
@@ -274,12 +321,11 @@ def RetrieveData_three_hourly(Date, args):
 
             # Save to geotiff file
             geo = [lonlimGLDAS, 1.0, 0, latlimGLDAS, 0, -1.0]
-            DC.Save_as_tiff(name=BasinDir, data=np.flipud(data[:, :]), geo=geo,
-                            projection="WGS84")
+            Save_as_tiff(name=BasinDir, data=np.flipud(data[:, :]), geo=geo, projection="WGS84")
 
             # Delete data and text file
             del data
-            os.remove(pathtext)
+            # os.remove(pathtext)
 
     return True
 
@@ -329,7 +375,7 @@ def RetrieveData_daily(Date, args):
 
             # define total url
             url_GLDAS = url + '.ascii?%s[%s:1:%s][%s:1:%s][%s:1:%s]' % (
-            Var, zID_start, zID_end, yID[0], yID[1], xID[0], xID[1])
+                Var, zID_start, zID_end, yID[0], yID[1], xID[0], xID[1])
 
             # if not downloaded try to download file
             while downloaded == 0:
@@ -371,7 +417,7 @@ def RetrieveData_daily(Date, args):
                                                skip_footer=6, delimiter=',')
                     data_list = np.asarray(data_start[:, 1:])
                     data_end = np.resize(data_list, (datashape[0], datashape[1]))
-                    os.remove(pathtext)
+                    # os.remove(pathtext)
 
                     # Add the VarFactor
                     if VarInfo.factors[Var] < 0:
@@ -408,7 +454,7 @@ def RetrieveData_daily(Date, args):
                     data = np.flipud(data_end)
 
                 geo = [lonlimGLDAS, 0.25, 0, latlimGLDAS, 0, -0.25]
-                DC.Save_as_tiff(name=BasinDir, data=data, geo=geo, projection="WGS84")
+                Save_as_tiff(name=BasinDir, data=data, geo=geo, projection="WGS84")
 
             except:
                 print('GLDAS map from ' + Date.strftime('%Y-%m-%d') + ' is not created')
@@ -465,7 +511,7 @@ def RetrieveData_monthly(Date, args):
 
             # define total url
             url_GLDAS = url + '.ascii?%s[%s:1:%s][%s:1:%s][%s:1:%s]' % (
-            Var, zID_start, zID_end, yID[0], yID[1], xID[0], xID[1])
+                Var, zID_start, zID_end, yID[0], yID[1], xID[0], xID[1])
 
             # if not downloaded try to download file
             while downloaded == 0:
@@ -507,7 +553,7 @@ def RetrieveData_monthly(Date, args):
                                                skip_footer=6, delimiter=',')
                     data_list = np.asarray(data_start[:, 1:])
                     data_end = np.resize(data_list, (Mday, datashape[1], datashape[2]))
-                    os.remove(pathtext)
+                    # os.remove(pathtext)
 
                     # Add the VarFactor
                     if VarInfo.factors[Var] < 0:
@@ -546,7 +592,7 @@ def RetrieveData_monthly(Date, args):
                     data = data * Mday
 
                 geo = [lonlimGLDAS, 0.25, 0, latlimGLDAS, 0, -0.25]
-                DC.Save_as_tiff(name=BasinDir, data=data, geo=geo, projection="WGS84")
+                Save_as_tiff(name=BasinDir, data=data, geo=geo, projection="WGS84")
 
             except:
                 print('GLDAS map from ' + Date.strftime('%Y-%m-%d') + ' is not created')
@@ -560,7 +606,7 @@ class VariablesInfo:
     """
     names = {'avgsurft_tavg': 'SurfaceTemperature',
              'canopint_tavg': 'TotCanopyWaterStorage',
-             'evap_tavg': 'ET',
+             'Evap_tavg': 'ET',
              'lwdown_f_tavg': 'LWdown',
              'lwnet_tavg': 'LWnet',
              'psurf_f_tavg': 'P',
@@ -604,7 +650,7 @@ class VariablesInfo:
              'wind': 'W'}
     descriptions = {'avgsurft_tavg': 'surface average surface temperature [k]',
                     'canopint_tavg': 'surface plant canopy surface water [kg/m^2]',
-                    'evap_tavg': 'surface total evapotranspiration [kg/m^2/s]',
+                    'Evap_tavg': 'surface total evapotranspiration [kg/m^2/s]',
                     'lwdown_f_tavg': 'surface surface incident longwave radiation'
                                      ' [w/m^2]',
                     'lwnet_tavg': 'surface net longwave radiation [w/m^2]',
@@ -652,7 +698,7 @@ class VariablesInfo:
                     'wind': 'surface near surface wind speed [m/s]'}
     factors = {'avgsurft_tavg': -273.15,
                'canopint_tavg': 1,
-               'evap_tavg': 86400,
+               'Evap_tavg': 86400,
                'lwdown_f_tavg': 1,
                'lwnet_tavg': 1,
                'psurf_f_tavg': 0.001,
@@ -696,7 +742,7 @@ class VariablesInfo:
                'wind': 1}
     types = {'avgsurft_tavg': 'state',
              'canopint_tavg': 'state',
-             'evap_tavg': 'flux',
+             'Evap_tavg': 'flux',
              'lwdown_f_tavg': 'state',
              'lwnet_tavg': 'state',
              'psurf_f_tavg': 'state',
@@ -743,7 +789,7 @@ class VariablesInfo:
         if step == 'three_hourly':
             self.units = {'avgsurft': 'C',
                           'canopint': 'mm',
-                          'evap': 'mm-3H-1',
+                          'Evap_tavg': 'mm-3H-1',
                           'lwdown': 'W-m-2',
                           'lwnet': 'W-m-2',
                           'psurf': 'kpa',
@@ -789,7 +835,7 @@ class VariablesInfo:
         elif step == 'monthly':
             self.units = {'avgsurft_tavg': 'C',
                           'canopint_tavg': 'mm',
-                          'evap_tavg': 'mm-month-1',
+                          'Evap_tavg': 'mm-month-1',
                           'lwdown_f_tavg': 'W-m-2',
                           'lwnet_tavg': 'W-m-2',
                           'psurf_f_tavg': 'kpa',

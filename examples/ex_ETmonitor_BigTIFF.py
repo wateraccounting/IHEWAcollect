@@ -5,7 +5,10 @@ from IHEWAcollect.download import Download
 
 
 def main():
-    # TODO, 20200120, QPan, Docker
+    # Caution:
+    # A 69618 pixels x 29007 lines x 1 bands Float32 image would be larger than 4GB
+    # but this is the largest size a TIFF can be, and BigTIFF is unavailable.
+    # Docker, pass!
 
     path = os.path.join(
         os.getcwd(),
@@ -14,11 +17,12 @@ def main():
                 inspect.currentframe()))
     )
 
-    product = 'GLDAS'
-    version = 'v2.1'
+    product = 'ETmonitor'
+    version = 'v1'
     parameter = 'evapotranspiration'
-    resolution = 'three_hourly'
-    variable = 'E'
+    resolution = 'monthly'
+    variable = 'ETA'
+    # variable = 'ETP'
     bbox = {
         'w': -19.0,
         's': -35.0,

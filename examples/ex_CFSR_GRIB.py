@@ -5,8 +5,10 @@ from IHEWAcollect.download import Download
 
 
 def main():
+    # Caution:
     # dec_jpeg2000: Unable to open JPEG2000 image within GRIB file.
-    # TODO, 20200120, QPan, Docker
+    # Docker, pass!
+
     path = os.path.join(
         os.getcwd(),
         os.path.dirname(
