@@ -1,93 +1,55 @@
 IHEWAcollect.templates package
 ==============================
 
+Subpackages
+-----------
+
+.. toctree::
+
+   IHEWAcollect.templates.ECMWF
+   IHEWAcollect.templates.ESA
+   IHEWAcollect.templates.FAO
+   IHEWAcollect.templates.Google
+   IHEWAcollect.templates.HydroSHEDS
+   IHEWAcollect.templates.IHE
+   IHEWAcollect.templates.ISRIC
+   IHEWAcollect.templates.MSWEP
+   IHEWAcollect.templates.NASA
+   IHEWAcollect.templates.NOAA
+   IHEWAcollect.templates.USGS
+   IHEWAcollect.templates.VITO
+
 Submodules
 ----------
 
-IHEWAcollect.templates.ECMWF module
------------------------------------
+IHEWAcollect.templates.collect module
+-------------------------------------
 
-.. automodule:: IHEWAcollect.templates.ECMWF
+.. automodule:: IHEWAcollect.templates.collect
    :members:
    :undoc-members:
    :show-inheritance:
 
-IHEWAcollect.templates.ESA module
+IHEWAcollect.templates.dtime module
+-----------------------------------
+
+.. automodule:: IHEWAcollect.templates.dtime
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IHEWAcollect.templates.gis module
 ---------------------------------
 
-.. automodule:: IHEWAcollect.templates.ESA
+.. automodule:: IHEWAcollect.templates.gis
    :members:
    :undoc-members:
    :show-inheritance:
 
-IHEWAcollect.templates.GoogleStorage module
--------------------------------------------
-
-.. automodule:: IHEWAcollect.templates.GoogleStorage
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-IHEWAcollect.templates.HydroSHEDS module
-----------------------------------------
-
-.. automodule:: IHEWAcollect.templates.HydroSHEDS
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-IHEWAcollect.templates.IHE module
----------------------------------
-
-.. automodule:: IHEWAcollect.templates.IHE
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-IHEWAcollect.templates.ISRIC module
------------------------------------
-
-.. automodule:: IHEWAcollect.templates.ISRIC
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-IHEWAcollect.templates.MSWEP module
------------------------------------
-
-.. automodule:: IHEWAcollect.templates.MSWEP
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-IHEWAcollect.templates.NASA module
+IHEWAcollect.templates.util module
 ----------------------------------
 
-.. automodule:: IHEWAcollect.templates.NASA
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-IHEWAcollect.templates.NOAA module
-----------------------------------
-
-.. automodule:: IHEWAcollect.templates.NOAA
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-IHEWAcollect.templates.USGS module
-----------------------------------
-
-.. automodule:: IHEWAcollect.templates.USGS
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-IHEWAcollect.templates.VITO module
-----------------------------------
-
-.. automodule:: IHEWAcollect.templates.VITO
+.. automodule:: IHEWAcollect.templates.util
    :members:
    :undoc-members:
    :show-inheritance:

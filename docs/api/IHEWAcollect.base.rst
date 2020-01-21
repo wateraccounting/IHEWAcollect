@@ -12,14 +12,6 @@ IHEWAcollect.base.base module
    :undoc-members:
    :show-inheritance:
 
-IHEWAcollect.base.dtime module
-------------------------------
-
-.. automodule:: IHEWAcollect.base.dtime
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 IHEWAcollect.base.exception module
 ----------------------------------
 
@@ -28,26 +20,10 @@ IHEWAcollect.base.exception module
    :undoc-members:
    :show-inheritance:
 
-IHEWAcollect.base.gis module
-----------------------------
-
-.. automodule:: IHEWAcollect.base.gis
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 IHEWAcollect.base.user module
 -----------------------------
 
 .. automodule:: IHEWAcollect.base.user
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-IHEWAcollect.base.util module
------------------------------
-
-.. automodule:: IHEWAcollect.base.util
    :members:
    :undoc-members:
    :show-inheritance:

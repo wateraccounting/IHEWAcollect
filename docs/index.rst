@@ -102,6 +102,7 @@ Products
 |            |    :height: 40pt                |                                              |            |
 +------------+---------------------------------+----------------------------------------------+------------+
 
+
 Prepare
 =======
 
@@ -112,7 +113,8 @@ Github: https://github.com/wateraccounting/IHEWAcollect.
 Optional downlaod
 
 Test data: ftp://ftp.wateraccounting.unesco-ihe.org/WaterAccounting_Guest/Products
-, save the test data to "IHEWAcollect/tests/data/Products"
+, save the downloaded data to "IHEWAcollect/tests/data/Products"
+
 
 Docker
 ======
@@ -150,7 +152,7 @@ Check images.
 
     $ docker images
 
-Run the image with Jupyter Notebook.
+Run the image with Jupyter Notebook. To access Jupyter http://192.168.99.100:8888/
 
 .. code-block:: console
 
