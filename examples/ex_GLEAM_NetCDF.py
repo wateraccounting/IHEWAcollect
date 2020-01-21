@@ -13,10 +13,10 @@ def main():
                 inspect.currentframe()))
     )
 
-    product = 'GLDAS'
-    version = 'v2.1'
+    product = 'GLEAM'
+    version = 'v3.3a'
     parameter = 'evapotranspiration'
-    resolution = 'three_hourly'
+    resolution = 'daily'
     variable = 'ET'
     bbox = {
         'w': -19.0,

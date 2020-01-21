@@ -13,6 +13,7 @@ import os
 import sys
 import glob
 
+import datetime
 import calendar
 
 from joblib import Parallel, delayed
@@ -98,11 +99,11 @@ def DownloadData(status, conf):
 
     # String Parameters
     if TimeCase == 'daily':
-        VarCode = __this.product['data']['fname']['r']
+        VarCode = __this.product['variable']
         FTPprefix = __this.product['data']['dir']
 
     elif TimeCase == 'monthly':
-        VarCode = __this.product['data']['fname']['r']
+        VarCode = __this.product['variable']
         FTPprefix = __this.product['data']['dir']
 
         # Get end of month for Enddate
@@ -114,9 +115,27 @@ def DownloadData(status, conf):
 
     # Collect the data from the GLEAM webpage and returns the data and lat and long in meters of those tiles
     try:
+        results = False
         Collect_data(FTPprefix, Years, output_folder, Waitbar)
-    except:
-        print("Was not able to download the file")
+    except BaseException as err:
+        msg = "\nWas not able to download file with date {}".format(Years)
+        print('{}\n{}'.format(msg, str(err)))
+        __this.Log.write(datetime.datetime.now(),
+                         msg='{}\n{}'.format(msg, str(err)))
+    else:
+        # Pass variables to parallel function and run
+        args = [output_folder, latlim, lonlim, VarCode, TimeCase]
+        if not cores:
+            for Date in Dates:
+                RetrieveData(Date, args)
+                # if Waitbar == 1:
+                #     amount += 1
+                #     WaitbarConsole.printWaitBar(amount, total_amount, prefix='Progress:',
+                #                                 suffix='Complete', length=50)
+            results = True
+        else:
+            results = Parallel(n_jobs=cores)(delayed(RetrieveData)(Date, args)
+                                             for Date in Dates)
 
     # Create Waitbar
     # print('\nProcess the GLEAM data')
@@ -127,25 +146,11 @@ def DownloadData(status, conf):
     #     WaitbarConsole.printWaitBar(amount, total_amount, prefix='Progress:',
     #                                 suffix='Complete', length=50)
 
-    # Pass variables to parallel function and run
-    args = [output_folder, latlim, lonlim, VarCode, TimeCase]
-    if not cores:
-        for Date in Dates:
-            RetrieveData(Date, args)
-            # if Waitbar == 1:
-            #     amount += 1
-            #     WaitbarConsole.printWaitBar(amount, total_amount, prefix='Progress:',
-            #                                 suffix='Complete', length=50)
-        results = True
-    else:
-        results = Parallel(n_jobs=cores)(delayed(RetrieveData)(Date, args)
-                                         for Date in Dates)
-
     # Remove all .hdf files
-    os.chdir(output_folder)
-    files = glob.glob("*.nc")
-    for f in files:
-        os.remove(os.path.join(output_folder, f))
+    # os.chdir(output_folder)
+    # files = glob.glob("*.nc")
+    # for f in files:
+    #     os.remove(os.path.join(output_folder, f))
 
     return (results)
 
@@ -174,10 +179,11 @@ def RetrieveData(Date, args):
     Year = Date.year
     Month = Date.month
 
-    if Product == "ET":
-        filename = 'E_' + str(Year) + '_GLEAM_v3.2b.nc'
-    if Product == "ETpot":
-        filename = 'Ep_' + str(Year) + '_GLEAM_v3.2b.nc'
+    filename = __this.product['data']['fname']['r'].format(dtime=Date)
+    # if Product == "ET":
+    #     filename = 'E_' + str(Year) + '_GLEAM_v3.2b.nc'
+    # if Product == "ETpot":
+    #     filename = 'Ep_' + str(Year) + '_GLEAM_v3.2b.nc'
 
     local_filename = os.path.join(output_folder, filename)
 
@@ -198,10 +204,8 @@ def RetrieveData(Date, args):
         DOYDownload = DOY - 1
         Day = 1
 
-        if Product == "ET":
-            Data = f.variables['E'][DOYDownload:DOYend, Xstart:Xend, Ystart:Yend]
-        if Product == "ETpot":
-            Data = f.variables['Ep'][DOYDownload:DOYend, Xstart:Xend, Ystart:Yend]
+        variable = __this.product['data']['variable']
+        Data = f.variables[variable][DOYDownload:DOYend, Xstart:Xend, Ystart:Yend]
 
         data = np.array(Data)
         f.close()
@@ -218,10 +222,8 @@ def RetrieveData(Date, args):
         DOY = int(Date.strftime('%j'))
         DOYDownload = DOY - 1
 
-        if Product == "ET":
-            Data = f.variables['E'][DOYDownload, Xstart:Xend, Ystart:Yend]
-        if Product == "ETpot":
-            Data = f.variables['Ep'][DOYDownload, Xstart:Xend, Ystart:Yend]
+        variable = __this.product['data']['variable']
+        Data = f.variables[variable][DOYDownload, Xstart:Xend, Ystart:Yend]
         data = np.array(Data)
         f.close()
 
@@ -232,8 +234,7 @@ def RetrieveData(Date, args):
     geo_in = [lonlim[0], 0.25, 0.0, latlim[1], 0.0, -0.25]
 
     # Name of the map
-    dataset_name = VarCode + '_' + str(Year) + '.' + str(Month).zfill(2) + '.' + str(
-        Day).zfill(2) + '.tif'
+    dataset_name = VarCode + '_' + str(Year) + '.' + str(Month).zfill(2) + '.' + str(Day).zfill(2) + '.tif'
     output_file = os.path.join(output_folder, dataset_name)
 
     # save data as tiff file
@@ -256,7 +257,6 @@ def Collect_data(FTPprefix, Years, output_folder, Waitbar):
     password = __this.account['data']['password']
     ftpserver = __this.product['url'].split(':')[0]
     ftpport = __this.product['url'].split(':')[-1]
-    directory = __this.product['data']['dir']
     # server = 'hydras.ugent.be'
     # portnumber = 2225
 
@@ -268,19 +268,27 @@ def Collect_data(FTPprefix, Years, output_folder, Waitbar):
     #     WaitbarConsole.printWaitBar(amount2, total_amount2, prefix='Progress:',
     #                                 suffix='Complete', length=50)
 
-    for year in Years:
-        directory = os.path.join(FTPprefix, '%d' % year)
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(ftpserver, port=ftpport, username=username, password=password)
-        ftp = ssh.open_sftp()
-        ftp.chdir(directory)
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(ftpserver, port=ftpport, username=username, password=password)
+    ftp = ssh.open_sftp()
 
-        filename = 'E_' + str(year) + '_GLEAM_v3.2b.nc'
+    for year in Years:
+        # directory = os.path.join(FTPprefix, '%d' % year)
+        # filename = 'E_' + str(year) + '_GLEAM_v3.2b.nc'
+        directory = __this.product['data']['dir'].format(dtime=pd.Timestamp('{}-01-01'.format(year)))
+        filename = __this.product['data']['fname']['r'].format(dtime=pd.Timestamp('{}-01-01'.format(year)))
 
         local_filename = os.path.join(output_folder, filename)
 
+        fname = os.path.split(local_filename)[-1]
+        msg = 'Downloading "{f}"'.format(f=fname)
+        print('Downloading {f}'.format(f=fname))
+        __this.Log.write(datetime.datetime.now(), msg=msg)
+
         if not os.path.exists(local_filename):
+            ftp.chdir(directory)
+
             ftp.get(filename, local_filename)
 
         # if Waitbar == 1:
