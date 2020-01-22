@@ -103,17 +103,42 @@ Products
 +------------+---------------------------------+----------------------------------------------+------------+
 
 
-Prepare
-=======
+Installation
+============
 
-Downlaod source code
+.. warning::
 
-Github: https://github.com/wateraccounting/IHEWAcollect.
+    GDAL library is required. Set gdal executable files to system "PATH".
 
-Optional downlaod
+    Must contain **accounts.yml-credential** and **accounts.yml-encrypted** file.
 
-Test data: ftp://ftp.wateraccounting.unesco-ihe.org/WaterAccounting_Guest/Products
+Install from pip.
+
+.. code-block:: console
+
+    $ pip install IHEWAcollect
+
+Install from source codes.
+
+Source code, Github: https://github.com/wateraccounting/IHEWAcollect.
+
+Optional test data, IHE FTP: ftp://ftp.wateraccounting.unesco-ihe.org/WaterAccounting_Guest/Products
 , save the downloaded data to "IHEWAcollect/tests/data/Products"
+
+Go to IHEWAcollect folder.
+
+.. code-block:: console
+
+    $ git clone https://github.com/wateraccounting/IHEWAcollect.git
+    $ cd IHEWAcollect
+
+    $ python setup.py install
+
+Uninstall IHEWAcollect.
+
+.. code-block:: console
+
+    $ pip uninstall IHEWAcollect
 
 
 Docker
@@ -123,7 +148,7 @@ Set "System -> Base Memory" to max capacity in Virtual Machine.
 
 Set "Shared Folders" in Virtual Machine.
 
-- Folder Path: D:\\IHEProjects\\Public\\IHEWAcollect
+- Folder Path: D:\\IHEWAcollect
 - Folder Name: d/IHEWAcollect
 - Auto-mount: Yes
 - Make Permanent: Yes
@@ -171,6 +196,10 @@ Access to running image, in the new cmd window.
     $ docker exec -it ihewacollect bash
 
     $ cd /notebook/
+
+    $ git clone https://github.com/wateraccounting/IHEWAcollect.git
+    $ cd IHEWAcollect
+
     $ python3 setup.py install
     $ python3 ./examples/ex_ETmonitor_BigTIFF.py
 
@@ -187,24 +216,6 @@ Remove image.
     $ docker rmi wateraccounting/ihewacollect
 
 
-Installation
-============
-
-GDAL library is required. Set gdal executable files to system "PATH".
-
-Install from source codes.
-
-.. code-block:: console
-
-    $ python setup.py install
-
-Uninstall IHEWAcollect.
-
-.. code-block:: console
-
-    $ pip uninstall IHEWAcollect
-
-
 Development
 ===========
 
@@ -213,6 +224,7 @@ In the PyCharm, change "Project Structure -> Source Folders" to "src"
 .. code-block:: console
 
     $ git clone https://github.com/wateraccounting/IHEWAcollect.git
+    $ cd IHEWAcollect
 
 From the root of the project
 
@@ -240,22 +252,22 @@ Read the Docs
 
     $ python setup.py docs
 
-PyPI upload, run ``setup.py``::
+upload to PyPI
 
-    1. Commit -> Git - tag - add - v0.0.1 -> ``setup.py`` -> push
-    2. Github - Release - new release v0.0.1
+1. In IDE, **commit** the changes
+2. In IDE, add version tag, select **VCS -> Git -> tag**
+3. In IDE, **Version Control -> Log**, select this commit
+4. In IDE, **Tag window -> Tag Name**, type "**v0.0.1**"
 
-.. code-block:: console
+5. In cmd, build package, type ``python setup.py sdist bdist_wheel``
+6. In cmd, validate build, type ``twine check dist/IHEWAcollect-0.0.1*``
+7. In cmd, upload build, type ``twine upload dist/IHEWAcollect-0.0.1*``
 
-    $ python setup.py sdist bdist_wheel
-
-    $ twine check dist/*
-
-    $ twine upload dist/*
-
-.. warning::
-
-    Must contain **accounts.yml-credential** and **accounts.yml-encrypted** file.
+8. In IDE, **push** the commit, with Tag label: "*HEAD*", "*master*", "*v0.0.1*"
+9. In Github, select **Release** to "create a new release" or "Draft a new release"
+10. In Github, **Tag version**, type "**v0.0.1**"
+11. In Github, **@ Target**, select this commit
+12. In Github, **Publish release**
 
 
 Code of Conduct

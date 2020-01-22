@@ -209,18 +209,15 @@ class User(Base):
         conf = yaml.load(open(file, 'r'), Loader=yaml.FullLoader)
 
         if conf is None:
+            is_renew = True
             print('W: {f} is empty.'.format(f=file))
             pswd = input('\33[91m'
                          'IHEWAcollect: Enter your password: '
                          '\33[0m')
             pswd = pswd.strip()
-            if pswd != '':
-                is_renew = True
-                conf = {
-                    'password': pswd,
-                }
-            else:
-                raise IHEKeyError('password', conf.keys()) from None
+            conf = {
+                'password': pswd
+            }
 
         # password, Yaml load/Python input
         try:
@@ -229,32 +226,32 @@ class User(Base):
             pswd = input('\33[91m'
                          'IHEWAcollect: Enter your password: '
                          '\33[0m')
-            pswd = pswd.strip()
-            if pswd != '':
-                # is_renew = True
-                pass
-            else:
-                raise IHEStringError('password') from None
-        finally:
+        pswd = pswd.strip()
+        if pswd == '' or pswd is None:
+            print(IHEStringError('password'))
+            sys.exit(1)
+        else:
             self.__conf['credential']['password'] = str.encode(pswd)
 
         # key, Yaml load/Python input/Python generate
         try:
             key = conf['key']
         except KeyError:
-            print('W: "{k}"'
-                  ' not found in "{f}".'
-                  .format(k='key', f=conf))
-
             is_key = input('\33[91m'
                            'IHEWAcollect: Generate your key (y/n): '
                            '\33[0m')
-            if is_key in ['Y', 'YES', 'y', 'Yes']:
-                key = self._user_key_generator()
-                is_renew = True
+            is_key = is_key.strip()
+            if is_key not in ['', 'Y', 'YES', 'y', 'Yes']:
+                print(IHEStringError('key'))
+                sys.exit(1)
             else:
-                raise IHEKeyError('key', conf.keys()) from None
-        finally:
+                is_renew = True
+                key = self._user_key_generator()
+        key = key.strip()
+        if key == '' or key is None:
+            print(IHEStringError('key'))
+            sys.exit(1)
+        else:
             self.__conf['credential']['key'] = str.encode(key)
 
         # Final check
@@ -263,7 +260,8 @@ class User(Base):
         if key_from_pswd == key_from_conf:
             return is_renew
         else:
-            raise Exception('E: "password" not match "key".')
+            print('E: "password" not correct.')
+            sys.exit(1)
 
     def _user_key_generator(self) -> str:
         """Getting a key

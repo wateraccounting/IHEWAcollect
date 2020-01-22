@@ -124,6 +124,10 @@ This module contains scripts used to download Level 1 data (data directly from w
     4. Estimate data size and tiff location to decided download or not
     5. Add unit test, and test datasets under "tests/data"
     6. read `__version__` from setup.py (git tag)
+
+    20200116, QPan, __init__
+
+    1. Decide IHEWAcollect.download.Download() OR IHEWAcollect(args)
 """
 
 
@@ -138,7 +142,6 @@ except DistributionNotFound:
 finally:
     del get_distribution, DistributionNotFound
 
-# TODO, 20200116, QPan, __init__, decide IHEWAcollect.download.Download() OR IHEWAcollect(args)
 # import IHEWAcollect.download import Download
 
 # import IHEWAcollect
