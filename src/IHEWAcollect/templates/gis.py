@@ -76,19 +76,10 @@ class GIS(object):
     """
     status = 'Global status.'
 
-    __status = {
-        'messages': {
-            0: 'S: WA.GIS      {f:>20} : status {c}, {m}',
-            1: 'E: WA.GIS      {f:>20} : status {c}: {m}',
-            2: 'W: WA.GIS      {f:>20} : status {c}: {m}',
-        },
-        'code': 0,
-        'message': '',
-        'is_print': True
-    }
+    __status = {}
+    __conf = {}
 
-    __conf = {
-        'path': '',
+    conf = {
         'file': {
             'i': '',
             'o': ''
@@ -114,20 +105,21 @@ class GIS(object):
             'n': 0.0
         },
         # 'dtype': {},
+        'data': {}
     }
-    product = {}
-    data = np.ndarray
 
-    def __init__(self, workspace, product, is_print, **kwargs):
+    def __init__(self, __status, __conf, **kwargs):
         """Class instantiation
         """
-        # Class self.__status['is_print']
-        self.__status['is_print'] = is_print
-
-        # Class self.__conf['path']
-        self.__conf['path'] = workspace
-        self.product = product
-        self._latlon()
+        self.__status = __status
+        self.__status = {
+            'messages': {
+                0: 'S: WA.GIS      {f:>20} : status {c}, {m}',
+                1: 'E: WA.GIS      {f:>20} : status {c}: {m}',
+                2: 'W: WA.GIS      {f:>20} : status {c}: {m}',
+            }
+        }
+        self.__conf = __conf
 
     def set_status(self, fun='', prt=False, ext=''):
         """Set status
@@ -141,7 +133,7 @@ class GIS(object):
                                    self.__status['code'],
                                    fun, prt, ext)
 
-    def _latlon(self):
+    def get_latlon(self):
         latlim = self.__conf['latlim']
         lonlim = self.__conf['lonlim']
         dem = self.__conf['dem']

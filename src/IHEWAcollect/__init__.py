@@ -142,7 +142,14 @@ except DistributionNotFound:
 finally:
     del get_distribution, DistributionNotFound
 
-# import IHEWAcollect.download import Download
+
+# Check: envorinment, dependeny, library!
+
 
 # import IHEWAcollect
-# IHEWAcollect(args)
+# IHEWAcollect.Download(args)
+try:
+    from .download import Download
+except ImportError:
+    from IHEWAcollect.download import Download
+__all__ = ['Download']

@@ -33,7 +33,6 @@ except ImportError:
     # from IHEWAcollect.templates.dtime import Dtime
     from IHEWAcollect.templates.util import Log
 
-
 __this = sys.modules[__name__]
 
 
@@ -79,23 +78,23 @@ def DownloadData(status, conf):
         Startdate = pd.Timestamp(conf['product']['data']['time']['s'])
     if not Enddate:
         Enddate = pd.Timestamp('Now')
-    Dates = pd.date_range(Startdate,  Enddate, freq=TimeFreq)
+    Dates = pd.date_range(Startdate, Enddate, freq=TimeFreq)
 
     # Define directory and create it if not exists
     output_folder = folder['l']
 
     # Create Waitbar
-       # if Waitbar == 1:
+    # if Waitbar == 1:
     #     import watools.Functions.Start.WaitbarConsole as WaitbarConsole
     #     total_amount = len(Dates)
     #     amount = 0
     #     WaitbarConsole.printWaitBar(amount, total_amount, prefix = 'Progress:', suffix = 'Complete', length = 50)
 
     # Define IDs
-    yID = np.int16(np.array([np.ceil((latlim[0] + 90)*10),
-                                   np.floor((latlim[1] + 90)*10)]))
-    xID = np.int16(np.array([np.floor((lonlim[0])*10),
-                             np.ceil((lonlim[1])*10)]) + 1800)
+    yID = np.int16(np.array([np.ceil((latlim[0] + 90) * 10),
+                             np.floor((latlim[1] + 90) * 10)]))
+    xID = np.int16(np.array([np.floor((lonlim[0]) * 10),
+                             np.ceil((lonlim[1]) * 10)]) + 1800)
 
     # Pass variables to parallel function and run
     args = [output_folder, TimeCase, xID, yID, lonlim, latlim]
@@ -127,7 +126,7 @@ def RetrieveData(Date, args):
     [output_folder, TimeCase, xID, yID, lonlim, latlim] = args
 
     year = Date.year
-    month= Date.month
+    month = Date.month
     day = Date.day
 
     username = __this.account['data']['username']
@@ -136,33 +135,41 @@ def RetrieveData(Date, args):
 
     # Create https
     if TimeCase == 'daily':
-        URL = 'https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.05/%d/%02d/3B-DAY.MS.MRG.3IMERG.%d%02d%02d-S000000-E235959.V05.nc4.ascii?precipitationCal[%d:1:%d][%d:1:%d]'  %(year, month, year, month, day, xID[0], xID[1]-1, yID[0], yID[1]-1)
-        DirFile = os.path.join(output_folder, "P_TRMM3B42.V7_mm-day-1_daily_%d.%02d.%02d.tif" %(year, month, day))
+        URL = 'https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.05/%d/%02d/3B-DAY.MS.MRG.3IMERG.%d%02d%02d-S000000-E235959.V05.nc4.ascii?precipitationCal[%d:1:%d][%d:1:%d]' % (
+        year, month, year, month, day, xID[0], xID[1] - 1, yID[0], yID[1] - 1)
+        DirFile = os.path.join(output_folder,
+                               "P_TRMM3B42.V7_mm-day-1_daily_%d.%02d.%02d.tif" % (
+                               year, month, day))
         Scaling = 1
 
     if TimeCase == 'monthly':
-        URL = 'https://gpm1.gesdisc.eosdis.nasa.gov/opendap/hyrax/GPM_L3/GPM_3IMERGM.05/%d/3B-MO.MS.MRG.3IMERG.%d%02d01-S000000-E235959.%02d.V05B.HDF5.ascii?precipitation[%d:1:%d][%d:1:%d]'  %(year, year, month, month, xID[0], xID[1]-1, yID[0], yID[1]-1)
-        Scaling = calendar.monthrange(year,month)[1] * 24
-        DirFile = os.path.join(output_folder, "P_GPM.IMERG_mm-month-1_monthly_%d.%02d.01.tif" %(year, month))
+        URL = 'https://gpm1.gesdisc.eosdis.nasa.gov/opendap/hyrax/GPM_L3/GPM_3IMERGM.05/%d/3B-MO.MS.MRG.3IMERG.%d%02d01-S000000-E235959.%02d.V05B.HDF5.ascii?precipitation[%d:1:%d][%d:1:%d]' % (
+        year, year, month, month, xID[0], xID[1] - 1, yID[0], yID[1] - 1)
+        Scaling = calendar.monthrange(year, month)[1] * 24
+        DirFile = os.path.join(output_folder,
+                               "P_GPM.IMERG_mm-month-1_monthly_%d.%02d.01.tif" % (
+                               year, month))
 
     if not os.path.isfile(DirFile):
-        dataset = requests.get(URL, allow_redirects=False,stream = True)
+        dataset = requests.get(URL, allow_redirects=False, stream=True)
         try:
-            get_dataset = requests.get(dataset.headers['location'], auth = (username,password),stream = True)
+            get_dataset = requests.get(dataset.headers['location'],
+                                       auth=(username, password), stream=True)
         except:
             from requests.packages.urllib3.exceptions import InsecureRequestWarning
             requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-            get_dataset  = requests.get(dataset.headers['location'], auth = (username, password), verify = False)
+            get_dataset = requests.get(dataset.headers['location'],
+                                       auth=(username, password), verify=False)
 
         # download data (first save as text file)
-        pathtext = os.path.join(output_folder,'temp.txt')
-        z = open(pathtext,'wb')
+        pathtext = os.path.join(output_folder, 'temp.txt')
+        z = open(pathtext, 'wb')
         z.write(get_dataset.content)
         z.close()
 
         # Open text file and remove header and footer
         data_start = np.genfromtxt(pathtext, dtype=float, skip_header=1, delimiter=',')
-        data = data_start[:,1:] * Scaling
+        data = data_start[:, 1:] * Scaling
         data[data < 0] = -9999
         data = data.transpose()
         data = np.flipud(data)

@@ -1,7 +1,7 @@
 import os
 import inspect
 
-from IHEWAcollect.download import Download
+import IHEWAcollect
 
 
 def main():
@@ -34,16 +34,16 @@ def main():
         'e': '2008-01-31'
     }
 
-    download = Download(workspace=path,
-                        product=product,
-                        version=version,
-                        parameter=parameter,
-                        resolution=resolution,
-                        variable=variable,
-                        bbox=bbox,
-                        period=period,
-                        NaN=-9999,
-                        is_status=False)
+    download = IHEWAcollect.Download(workspace=path,
+                                     product=product,
+                                     version=version,
+                                     parameter=parameter,
+                                     resolution=resolution,
+                                     variable=variable,
+                                     bbox=bbox,
+                                     period=period,
+                                     NaN=-9999,
+                                     is_status=False)
 
 
 if __name__ == "__main__":

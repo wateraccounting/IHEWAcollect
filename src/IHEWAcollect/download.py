@@ -108,8 +108,8 @@ class Download(User):
             'parameter': '',
             'resolution': '',
             'variable': '',
-            'bbox': [],
-            'period': [],
+            'bbox': {},
+            'period': {},
             'NaN': -9999,
             'template': '',
             'url': '',
@@ -302,22 +302,25 @@ class Download(User):
         variable = product['variable']
 
         if self.__status['code'] == 0:
-            product['name'] = self._Base__conf['product']['name']
-            product['data'] = self._Base__conf['product']['data']
+            product['name'] = \
+                self._Base__conf['product']['name']
+            product['data'] = \
+                self._Base__conf['product']['data']
             product['template'] = \
-                self._Base__conf['product']['data']['template']
+                self._Base__conf['product']['data'][
+                    'template']
             product['url'] = \
-                self._Base__conf['product']['data'][version][parameter][resolution][
-                    'url']
+                self._Base__conf['product']['data'][
+                    version][parameter][resolution]['url']
             product['protocol'] = \
-                self._Base__conf['product']['data'][version][parameter][resolution][
-                    'protocol']
+                self._Base__conf['product']['data'][
+                    version][parameter][resolution]['protocol']
             product['method'] = \
-                self._Base__conf['product']['data'][version][parameter][resolution][
-                    'method']
+                self._Base__conf['product']['data'][
+                    version][parameter][resolution]['method']
             product['freq'] = \
-                self._Base__conf['product']['data'][version][parameter][resolution][
-                    'freq']
+                self._Base__conf['product']['data'][
+                    version][parameter][resolution]['freq']
 
             keys = product['data'].keys()
             if version not in keys:
@@ -374,10 +377,11 @@ class Download(User):
     def clean_folder(self, name):
         statue = 1
 
-        # os.chdir(output_folder)
-        # re = glob.glob("*.dat")
+        # shutil
+
+        # re = glob.glob(os.path.join(folder['r'], '*'))
         # for f in re:
-        #     os.remove(os.path.join(output_folder, f))
+        #     os.remove(os.path.join(folder['r'], f))
         return statue
 
     def _log(self) -> dict:
@@ -413,9 +417,13 @@ class Download(User):
         self.__conf['time']['now'] = time
 
         print('Create log file: {f}'.format(f=file))
-        txt = '{t}: IHEWAcollect created.'.format(t=time_str)
+        txt = '{t}: IHEWAcollect'.format(t=time_str)
+
         fp = open(file, 'w+')
         fp.write('{}\n'.format(txt))
+        for key, value in self.__conf['product'].items():
+            if key is not 'data':
+                fp.write('{:>26s}: {}\n'.format(key, str(value)))
 
         return fp
 
@@ -497,8 +505,8 @@ def main():
     # product = 'ALEXI'
     # version = 'v1'
     # parameter = 'evapotranspiration'
-    # # resolution = 'daily'
-    # resolution = 'weekly'
+    # resolution = 'daily'
+    # # resolution = 'weekly'
     # variable = 'ETA'
     # bbox = {
     #     'w': -19.0,
@@ -511,21 +519,21 @@ def main():
     #     'e': '2005-01-31'
     # }
 
-    # product = 'ASCAT'
-    # version = 'v3.1.1'
-    # parameter = 'soil_water_index'
-    # resolution = 'daily'
-    # variable = 'SWI_010'
-    # bbox = {
-    #     'w': -19.0,
-    #     's': -35.0,
-    #     'e': 55.0,
-    #     'n': 38.0
-    # }
-    # period = {
-    #     's': '2007-01-01',
-    #     'e': '2007-01-31'
-    # }
+    product = 'ASCAT'
+    version = 'v3.1.1'
+    parameter = 'soil_water_index'
+    resolution = 'daily'
+    variable = 'SWI_010'
+    bbox = {
+        'w': -19.0,
+        's': -35.0,
+        'e': 55.0,
+        'n': 38.0
+    }
+    period = {
+        's': '2007-01-01',
+        'e': '2007-01-31'
+    }
 
     # Caution:
     # dec_jpeg2000: Unable to open JPEG2000 image within GRIB file.
@@ -672,21 +680,21 @@ def main():
     # }
 
     # TODO, GPM
-    product = 'GPM'
-    version = 'v6'
-    parameter = 'precipitation'
-    resolution = 'daily'
-    variable = 'PCP'
-    bbox = {
-        'w': -19.0,
-        's': -35.0,
-        'e': 55.0,
-        'n': 38.0
-    }
-    period = {
-        's': '2008-01-01',
-        'e': '2008-01-31'
-    }
+    # product = 'GPM'
+    # version = 'v6'
+    # parameter = 'precipitation'
+    # resolution = 'daily'
+    # variable = 'PCP'
+    # bbox = {
+    #     'w': -19.0,
+    #     's': -35.0,
+    #     'e': 55.0,
+    #     'n': 38.0
+    # }
+    # period = {
+    #     's': '2008-01-01',
+    #     'e': '2008-01-31'
+    # }
 
     # product = 'TRMM'
     # version = 'v7'

@@ -18,18 +18,10 @@ except ImportError:
 class Dtime(object):
     status = 'Global status.'
 
-    __status = {
-        'messages': {
-            0: 'S: WA.Dtime    {f:>20} : status {c}, {m}',
-            1: 'E: WA.Dtime    {f:>20} : status {c}: {m}',
-            2: 'W: WA.Dtime    {f:>20} : status {c}: {m}',
-        },
-        'code': 0,
-        'message': '',
-        'is_print': True
-    }
+    __status = {}
+    __conf = {}
 
-    __conf = {
+    conf = {
         'path': '',
         'file': {
             'i': '',
@@ -45,19 +37,22 @@ class Dtime(object):
         },
         'data': {}
     }
-    product = {}
-    data = np.ndarray
 
-    def __init__(self, workspace, product, is_print, **kwargs):
+    def __init__(self, __status, __conf, **kwargs):
         """Class instantiation
         """
-        # Class self.__status['is_print']
-        self.__status['is_print'] = is_print
-
-        # Class self.__conf['path']
-        self.__conf['path'] = workspace
-        self.product = product
-        self._dtime()
+        self.__status = __status
+        __status = {
+            'messages': {
+                0: 'S: WA.Dtime    {f:>20} : status {c}, {m}',
+                1: 'E: WA.Dtime    {f:>20} : status {c}: {m}',
+                2: 'W: WA.Dtime    {f:>20} : status {c}: {m}',
+            },
+            'code': 0,
+            'message': '',
+            'is_print': True
+        }
+        self.__conf = __conf
 
     def set_status(self, fun='', prt=False, ext=''):
         """Set status
