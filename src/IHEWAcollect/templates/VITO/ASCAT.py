@@ -207,9 +207,7 @@ def start_download(args) -> int:
     Keyword arguments:
 
     """
-    # Define local variable
-    status = -1
-
+    # Unpack the arguments
     latlim, lonlim, date, \
     product, \
     username, password, apitoken, \
@@ -218,6 +216,9 @@ def start_download(args) -> int:
     remote_file, temp_file, local_file,\
     y_id, x_id, pixel_size, pixel_w, pixel_h, \
     data_ndv, data_type, data_multiplier, data_variable = args
+
+    # Define local variable
+    status = -1
 
     # Download the data from server if the file not exists
     msg = 'Downloading "{f}"'.format(f=remote_fname)
