@@ -27,7 +27,7 @@ in the ``IHEWAcollect/accounts.yml`` file.
 
 """
 import os
-# import sys
+import sys
 import inspect
 import importlib
 
@@ -252,7 +252,7 @@ class Download(User):
         """
         status = -1
         self._log_close()
-        # clean_folder
+        # _folder_clean
         return status
 
     def _time(self) -> dict:
@@ -375,7 +375,7 @@ class Download(User):
             self.__conf['folder'] = folder
         return folder
 
-    def clean_folder(self, name):
+    def _folder_clean(self, name):
         statue = 1
 
         # shutil
@@ -459,30 +459,39 @@ class Download(User):
             template['name'] = self._Base__conf['product']['data']['template']
 
             # Load module
-            module_obj = None
-            try:
-                # def template_load(self) -> dict:
-                module_obj = \
-                    importlib.import_module('IHEWAcollect.templates'
-                                            '.{p}.{m}'.format(p=product['template'],
-                                                              m=product['name']))
-                print('Loaded module from IHEWAcollect.templates'
-                      '.{p}.{m}'.format(p=product['template'],
-                                        m=product['name']))
-            except ImportError:
-                module_obj = \
-                    importlib.import_module('IHEWAcollect.templates'
-                                            '.{p}.{m}'.format(p=product['template'],
-                                                              m=product['name']))
-                print('Loaded module from IHEWAcollect.templates'
-                      '.{p}.{m}'.format(p=product['template'],
-                                        m=product['name']))
-            finally:
-                # def template_init(self) -> dict:
-                if module_obj is not None:
-                    template['module'] = module_obj
-                    # module_obj.DownloadData(self.__status, self.__conf)
-                else:
+            # module_obj = None
+
+            module_obj = template['module']
+            if module_obj is None:
+                try:
+                    # def template_load(self) -> dict:
+                    module_obj = \
+                        importlib.import_module('IHEWAcollect.templates'
+                                                '.{p}.{m}'.format(p=product['template'],
+                                                                  m=product['name']))
+                    print('Loaded module from IHEWAcollect.templates'
+                          '.{p}.{m}'.format(p=product['template'],
+                                            m=product['name']))
+                except ImportError:
+                    module_obj = \
+                        importlib.import_module('IHEWAcollect.templates'
+                                                '.{p}.{m}'.format(p=product['template'],
+                                                                  m=product['name']))
+                    print('Loaded module from IHEWAcollect.templates'
+                          '.{p}.{m}'.format(p=product['template'],
+                                            m=product['name']))
+                finally:
+                    # def template_init(self) -> dict:
+                    if module_obj is not None:
+                        template['module'] = module_obj
+                        # module_obj.DownloadData(self.__status, self.__conf)
+                    else:
+                        template['module'] = None
+                        raise IHEClassInitError('Templates') from None
+            else:
+                try:
+                    module_obj = importlib.reload(module_obj)
+                except ImportError:
                     template['module'] = None
                     raise IHEClassInitError('Templates') from None
 
@@ -506,29 +515,71 @@ def main():
         '../', '../', 'tests'
     )
 
-    # product = 'ALEXI'
-    # version = 'v1'
-    # parameter = 'evapotranspiration'
-    # # resolution = 'daily'
-    # resolution = 'weekly'
-    # variable = 'ETA'
-    # bbox = {
-    #     'w': -19.0,
-    #     's': -35.0,
-    #     'e': 55.0,
-    #     'n': 38.0
-    # }
-    # period = {
-    #     's': '2005-01-01',
-    #     'e': '2005-01-31'
-    # }
-    # nodata = -9999
+    test_args = {
+        '1': {
+            'product': 'ALEXI',
+            'version': 'v1',
+            'parameter': 'evapotranspiration',
+            'resolution': 'daily',
+            'variable': 'ETA',
+            'bbox': {
+                'w': -19.0,
+                's': -35.0,
+                'e': 55.0,
+                'n': 38.0
+            },
+            'period': {
+                's': '2005-01-01',
+                'e': '2005-01-02'
+            },
+            'nodata': -9999
+        },
+        '2': {
+            'product': 'ALEXI',
+            'version': 'v1',
+            'parameter': 'evapotranspiration',
+            'resolution': 'weekly',
+            'variable': 'ETA',
+            'bbox': {
+                'w': -19.0,
+                's': -35.0,
+                'e': 55.0,
+                'n': 38.0
+            },
+            'period': {
+                's': '2005-01-01',
+                'e': '2005-01-15'
+            },
+            'nodata': -9999
+        },
+        '3': {
+            'product': 'ASCAT',
+            'version': 'v3.1.1',
+            'parameter': 'soil_water_index',
+            'resolution': 'daily',
+            'variable': 'SWI_010',
+            'bbox': {
+                'w': -19.0,
+                's': -35.0,
+                'e': 55.0,
+                'n': 38.0
+            },
+            'period': {
+                's': '2005-01-01',
+                'e': '2005-01-02'
+            },
+            'nodata': -9999
+        },
+    }
 
-    # product = 'ASCAT'
-    # version = 'v3.1.1'
-    # parameter = 'soil_water_index'
+    # # Caution:
+    # # dec_jpeg2000: Unable to open JPEG2000 image within GRIB file.
+    # # Docker, pass!
+    # product = 'CFSR'
+    # version = 'v1'
+    # parameter = 'radiation'
     # resolution = 'daily'
-    # variable = 'SWI_010'
+    # variable = 'dlwsfc'
     # bbox = {
     #     'w': -19.0,
     #     's': -35.0,
@@ -537,30 +588,9 @@ def main():
     # }
     # period = {
     #     's': '2007-01-01',
-    #     'e': '2007-01-31'
+    #     'e': '2007-01-02'
     # }
     # nodata = -9999
-
-    # # Caution:
-    # # dec_jpeg2000: Unable to open JPEG2000 image within GRIB file.
-    # # Docker, pass!
-    # # TODO, 20200120, QPan, CFSR, replace some values
-    product = 'CFSR'
-    version = 'v1'
-    parameter = 'radiation'
-    resolution = 'daily'
-    variable = 'dlwsfc'
-    bbox = {
-        'w': -19.0,
-        's': -35.0,
-        'e': 55.0,
-        'n': 38.0
-    }
-    period = {
-        's': '2007-01-01',
-        'e': '2007-01-31'
-    }
-    nodata = -9999
 
     # product = 'CHIRPS'
     # version = 'v2.0'
@@ -717,16 +747,19 @@ def main():
     # resolution = 'monthly'
     # variable = 'PCP'
 
-    download = Download(workspace=path,
-                        product=product,
-                        version=version,
-                        parameter=parameter,
-                        resolution=resolution,
-                        variable=variable,
-                        bbox=bbox,
-                        period=period,
-                        nodata=nodata,
-                        is_status=False)
+    for key, value in test_args.items():
+        print('\ntest case {:>10s}\n-----'.format(key))
+
+        download = Download(workspace=path,
+                            product=value['product'],
+                            version=value['version'],
+                            parameter=value['parameter'],
+                            resolution=value['resolution'],
+                            variable=value['variable'],
+                            bbox=value['bbox'],
+                            period=value['period'],
+                            nodata=value['nodata'],
+                            is_status=False)
 
 
 if __name__ == "__main__":

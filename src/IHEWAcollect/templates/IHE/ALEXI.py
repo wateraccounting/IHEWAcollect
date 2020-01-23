@@ -60,6 +60,9 @@ __this = sys.modules[__name__]
 
 
 def _init(status, conf) -> tuple:
+    # test = sys.modules
+    # print('GIS' in test)
+
     # From download.py
     __this.status = status
     __this.conf = conf
@@ -277,9 +280,14 @@ def get_download_args(latlim, lonlim, date,
                       account, folder, product) -> tuple:
     # Define arg_account
     # For download
-    username = account['data']['username']
-    password = account['data']['password']
-    apitoken = account['data']['apitoken']
+    try:
+        username = account['data']['username']
+        password = account['data']['password']
+        apitoken = account['data']['apitoken']
+    except KeyError:
+        username = ''
+        password = ''
+        apitoken = ''
 
     # Define arg_url
     url_server = urlparse(product['url']).netloc
@@ -287,10 +295,10 @@ def get_download_args(latlim, lonlim, date,
 
     # Define arg_filename
     fname_r = product['data']['fname']['r'].format(dtime=date)
-    if product['data']['fname']['t'] is not None:
-        fname_t = product['data']['fname']['t'].format(dtime=date)
-    else:
+    if product['data']['fname']['t'] is None:
         fname_t = ''
+    else:
+        fname_t = product['data']['fname']['t'].format(dtime=date)
     fname_l = product['data']['fname']['l'].format(dtime=date)
 
     # Define arg_file
@@ -368,15 +376,20 @@ def start_download(args) -> int:
 
     if not os.path.exists(local_file):
         url = '{sr}{dr}{fn}'.format(sr=url_server, dr='', fn='')
+
         try:
             # Download data
-            req = ftplib.FTP(url)
-            req.login(username, password)
-            req.cwd(url_dir)
+            if not os.path.exists(remote_file):
+                with open(remote_file, "wb") as fp:
+                    conn = ftplib.FTP(url)
+                    conn.login(username, password)
+                    conn.cwd(url_dir)
 
-            fp = open(remote_file, "wb")
-            req.retrbinary("RETR " + remote_fname, fp.write)
-            fp.close()
+                    conn.retrbinary("RETR " + remote_fname, fp.write)
+            else:
+                msg = 'Exist "{f}"'.format(f=remote_file)
+                print('\33[93m{}\33[0m'.format(msg))
+                __this.Log.write(datetime.datetime.now(), msg=msg)
         except ftplib.all_errors as err:
             # Download error
             status = 1
@@ -393,32 +406,7 @@ def start_download(args) -> int:
             print('\33[94m{}\33[0m'.format(msg))
             __this.Log.write(datetime.datetime.now(), msg=msg)
 
-            if product['resolution'] == "daily":
-                # load data from downloaded remote file, and clip data
-                Extract_Data_gz(remote_file, temp_file)
-
-                data_raw = np.fromfile(temp_file, dtype="<f4")
-
-                dataset = np.flipud(np.resize(data_raw, [pixel_h, pixel_w]))
-                data = dataset[y_id[0]:y_id[1], x_id[0]:x_id[1]]
-
-                # convert units, set Nodata Value
-                data = data * data_multiplier
-                data[data < 0] = data_ndv
-            if product['resolution'] == "weekly":
-                # load data from downloaded remote file, and clip data
-                dataset = Open_tiff_array(remote_file)
-
-                data = dataset[y_id[0]:y_id[1], x_id[0]:x_id[1]]
-
-                # convert units, set NVD
-                data[data < 0] = data_ndv
-
-            # Save as GTiff
-            geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
-            Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
-
-            status = 0
+            status = convert_data(args)
         finally:
             # Release local resources.
             raw_data = None
@@ -433,4 +421,49 @@ def start_download(args) -> int:
 
     msg = 'Finish'
     __this.Log.write(datetime.datetime.now(), msg=msg)
+    return status
+
+
+def convert_data(args):
+    """
+    """
+    # Unpack the arguments
+    latlim, lonlim, date,\
+    product, \
+    username, password, apitoken, \
+    url_server, url_dir, \
+    remote_fname, temp_fname, local_fname,\
+    remote_file, temp_file, local_file,\
+    y_id, x_id, pixel_size, pixel_w, pixel_h, \
+    data_ndv, data_type, data_multiplier, data_variable = args
+
+    # Define local variable
+    status = -1
+
+    if product['resolution'] == "daily":
+        # load data from downloaded remote file, and clip data
+        Extract_Data_gz(remote_file, temp_file)
+
+        data_raw = np.fromfile(temp_file, dtype="<f4")
+
+        dataset = np.flipud(np.resize(data_raw, [pixel_h, pixel_w]))
+        data = dataset[y_id[0]:y_id[1], x_id[0]:x_id[1]]
+
+        # convert units, set Nodata Value
+        data = data * data_multiplier
+        data[data < 0] = data_ndv
+    if product['resolution'] == "weekly":
+        # load data from downloaded remote file, and clip data
+        dataset = Open_tiff_array(remote_file)
+
+        data = dataset[y_id[0]:y_id[1], x_id[0]:x_id[1]]
+
+        # convert units, set NVD
+        data[data < 0] = data_ndv
+
+    # Save as GTiff
+    geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
+    Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
+
+    status = 0
     return status

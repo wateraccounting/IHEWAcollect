@@ -41,6 +41,7 @@ class Dtime(object):
     def __init__(self, __status, __conf, **kwargs):
         """Class instantiation
         """
+        print('Dtime.__init__')
         self.__status = __status
         __status = {
             'messages': {

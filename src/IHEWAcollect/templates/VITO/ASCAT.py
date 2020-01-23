@@ -141,9 +141,14 @@ def get_download_args(latlim, lonlim, date,
                       account, folder, product) -> tuple:
     # Define arg_account
     # For download
-    username = account['data']['username']
-    password = account['data']['password']
-    apitoken = account['data']['apitoken']
+    try:
+        username = account['data']['username']
+        password = account['data']['password']
+        apitoken = account['data']['apitoken']
+    except KeyError:
+        username = ''
+        password = ''
+        apitoken = ''
 
     # Define arg_url
     url_server = product['url']
@@ -151,10 +156,10 @@ def get_download_args(latlim, lonlim, date,
 
     # Define arg_filename
     fname_r = product['data']['fname']['r'].format(dtime=date)
-    if product['data']['fname']['t'] is not None:
-        fname_t = product['data']['fname']['t'].format(dtime=date)
-    else:
+    if product['data']['fname']['t'] is None:
         fname_t = ''
+    else:
+        fname_t = product['data']['fname']['t'].format(dtime=date)
     fname_l = product['data']['fname']['l'].format(dtime=date)
 
     # Define arg_file
@@ -227,19 +232,25 @@ def start_download(args) -> int:
 
     if not os.path.exists(local_file):
         url = '{sr}{dr}{fl}'.format(sr=url_server, dr=url_dir, fl=remote_fname)
+
         try:
             # Download data
-            try:
-                req = requests.get(url, auth=HTTPBasicAuth(username, password))
-                # req.raise_for_status()
-            except BaseException:
-                from requests.packages.urllib3.exceptions import InsecureRequestWarning
-                requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-                req = requests.get(url, auth=(username, password), verify=False)
+            if not os.path.exists(remote_file):
+                with open(remote_file, 'wb') as fp:
+                    try:
+                        conn = requests.get(url, auth=HTTPBasicAuth(username, password))
+                        # conn.raise_for_status()
+                    except BaseException:
+                        from requests.packages.urllib3.exceptions import \
+                            InsecureRequestWarning
+                        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+                        conn = requests.get(url, auth=(username, password), verify=False)
 
-            fp = open(remote_file, 'wb')
-            fp.write(req.content)
-            fp.close()
+                    fp.write(conn.content)
+            else:
+                msg = 'Exist "{f}"'.format(f=remote_file)
+                print('\33[93m{}\33[0m'.format(msg))
+                __this.Log.write(datetime.datetime.now(), msg=msg)
         except requests.exceptions.RequestException as err:
             # Download error
             status = 1
@@ -256,25 +267,7 @@ def start_download(args) -> int:
             print('\33[94m{}\33[0m'.format(msg))
             __this.Log.write(datetime.datetime.now(), msg=msg)
 
-            # load data from downloaded remote file, and clip data
-            fh = Dataset(remote_file)
-            data_raw = fh.variables[data_variable]
-
-            # dataset = np.flipud(np.resize(data_raw, [pixel_h, pixel_w]))
-            dataset = data_raw[:, y_id[0]: y_id[1], x_id[0]: x_id[1]]
-
-            data = np.squeeze(dataset.data, axis=0)
-            fh.close()
-
-            # convert units, set NVD
-            data = data * data_multiplier
-            data[data > 100.] = data_ndv
-
-            # save as GTiff
-            geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
-            Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
-
-            status = 0
+            status = convert_data(args)
         finally:
             # Release local resources.
             raw_data = None
@@ -291,3 +284,40 @@ def start_download(args) -> int:
     __this.Log.write(datetime.datetime.now(), msg=msg)
     return status
 
+
+def convert_data(args):
+    """
+    """
+    # Unpack the arguments
+    latlim, lonlim, date,\
+    product, \
+    username, password, apitoken, \
+    url_server, url_dir, \
+    remote_fname, temp_fname, local_fname,\
+    remote_file, temp_file, local_file,\
+    y_id, x_id, pixel_size, pixel_w, pixel_h, \
+    data_ndv, data_type, data_multiplier, data_variable = args
+
+    # Define local variable
+    status = -1
+
+    # load data from downloaded remote file, and clip data
+    fh = Dataset(remote_file)
+    data_raw = fh.variables[data_variable]
+
+    # dataset = np.flipud(np.resize(data_raw, [pixel_h, pixel_w]))
+    dataset = data_raw[:, y_id[0]: y_id[1], x_id[0]: x_id[1]]
+
+    data = np.squeeze(dataset.data, axis=0)
+    fh.close()
+
+    # convert units, set NVD
+    data = data * data_multiplier
+    data[data > 100.] = data_ndv
+
+    # save as GTiff
+    geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
+    Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
+
+    status = 0
+    return status

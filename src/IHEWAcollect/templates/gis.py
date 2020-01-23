@@ -111,6 +111,7 @@ class GIS(object):
     def __init__(self, __status, __conf, **kwargs):
         """Class instantiation
         """
+        print('GIS.__init__')
         self.__status = __status
         self.__status = {
             'messages': {

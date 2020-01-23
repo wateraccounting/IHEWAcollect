@@ -28,6 +28,7 @@ def main():
         's': '',
         'e': ''
     }
+    nodata = -9999
 
     download = IHEWAcollect.Download(workspace=path,
                                      product=product,
@@ -37,7 +38,7 @@ def main():
                                      variable=variable,
                                      bbox=bbox,
                                      period=period,
-                                     NaN=-9999,
+                                     nodata=nodata,
                                      is_status=False)
 
 
