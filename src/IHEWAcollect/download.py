@@ -124,7 +124,7 @@ class Download(User):
             'l': ''
         },
         'log': {
-            'name': 'log.txt',
+            'name': 'log.{var}.{res}.{prod}.txt',
             'file': '{path}/log-.txt',
             'fp': None,
             'status': -1,  # -1: not found, 0: closed, 1: opened
@@ -251,7 +251,7 @@ class Download(User):
           int: Status.
         """
         status = -1
-        self.close_log()
+        self._log_close()
         # clean_folder
         return status
 
@@ -394,17 +394,20 @@ class Download(User):
         # Class self.__conf['log']
         status = -1
         log = self.__conf['log']
+        product = self.__conf['product']['name']
+        resolution = self.__conf['product']['resolution']
+        variable = self.__conf['product']['variable']
 
         if self.__status['code'] == 0:
             path = self.__conf['path']
             time = self.__conf['time']['start']
             time_str = time.strftime('%Y-%m-%d %H:%M:%S.%f')
 
-            fname = log['name']
+            fname = log['name'].format(prod=product, var=variable, res=resolution)
             file = os.path.join(path, fname)
 
             # -1: not found, 0: closed, 1: opened
-            fp = self.create_log(file)
+            fp = self._log_create(file)
 
             self.__conf['log']['fname'] = fname
             self.__conf['log']['file'] = file
@@ -412,7 +415,7 @@ class Download(User):
             self.__conf['log']['status'] = status
         return log
 
-    def create_log(self, file):
+    def _log_create(self, file):
         time = datetime.datetime.now()
         time_str = time.strftime('%Y-%m-%d %H:%M:%S.%f')
         self.__conf['time']['now'] = time
@@ -428,7 +431,7 @@ class Download(User):
 
         return fp
 
-    def close_log(self):
+    def _log_close(self):
         time = datetime.datetime.now()
         time_str = time.strftime('%Y-%m-%d %H:%M:%S.%f')
         self.__conf['time']['now'] = time
@@ -506,8 +509,8 @@ def main():
     # product = 'ALEXI'
     # version = 'v1'
     # parameter = 'evapotranspiration'
-    # resolution = 'daily'
-    # # resolution = 'weekly'
+    # # resolution = 'daily'
+    # resolution = 'weekly'
     # variable = 'ETA'
     # bbox = {
     #     'w': -19.0,

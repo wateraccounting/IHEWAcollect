@@ -31,8 +31,6 @@ the **total evaporation** in ``mm`` for the period of ``1 January - 7 January``.
 # General modules
 import os
 import sys
-# import glob
-# import shutil
 import datetime
 
 import ftplib
@@ -61,20 +59,21 @@ except ImportError:
 __this = sys.modules[__name__]
 
 
-def _init(status, conf):
+def _init(status, conf) -> tuple:
     # From download.py
     __this.status = status
     __this.conf = conf
+
+    account = conf['account']
+    folder = conf['folder']
+    product = conf['product']
 
     # Init supported classes
     __this.GIS = GIS(status, conf)
     __this.Dtime = Dtime(status, conf)
     __this.Log = Log(conf['log'])
 
-    # For download
-    __this.username = conf['account']['data']['username']
-    __this.password = conf['account']['data']['password']
-    __this.apitoken = conf['account']['data']['apitoken']
+    return account, folder, product
 
 
 def DownloadData(status, conf) -> int:
@@ -95,56 +94,42 @@ def DownloadData(status, conf) -> int:
     # 1. Init function #
     # ================ #
     # Global variable, __this
-    _init(status, conf)
+    account, folder, product = _init(status, conf)
 
     # User input arguments
     arg_bbox = conf['product']['bbox']
     arg_period_s = conf['product']['period']['s']
     arg_period_e = conf['product']['period']['e']
 
-    # Product data from base.yml
-    prod_folder = conf['folder']
-
-    prod_res = conf['product']['resolution']
-    prod_freq = conf['product']['freq']
-
-    prod_lat = conf['product']['data']['lat']
-    prod_lon = conf['product']['data']['lon']
-
-    prod_date_s = conf['product']['data']['time']['s']
-    prod_date_e = conf['product']['data']['time']['s']
-
-    prod_fname = conf['product']['data']['fname']
-
     # Local variables
     is_waitbar = False
 
-    # ============ #
-    # 2. Check arg #
-    # ============ #
+    # ============================== #
+    # 2. Check latlim, lonlim, dates #
+    # ============================== #
     # Check the latitude and longitude, otherwise set lat or lon on greatest extent
-    latlim = [np.max([arg_bbox['s'], prod_lat['s']]),
-              np.min([arg_bbox['n'], prod_lat['n']])]
+    latlim = [np.max([arg_bbox['s'], product['data']['lat']['s']]),
+              np.min([arg_bbox['n'], product['data']['lat']['n']])]
 
-    lonlim = [np.max([arg_bbox['w'], prod_lon['w']]),
-              np.min([arg_bbox['e'], prod_lon['e']])]
+    lonlim = [np.max([arg_bbox['w'], product['data']['lon']['w']]),
+              np.min([arg_bbox['e'], product['data']['lon']['e']])]
 
     # Check Startdate and Enddate, make a panda timestamp of the date
     if np.logical_or(arg_period_s == '', arg_period_s is None):
-        date_s = pd.Timestamp(prod_date_s)
+        date_s = pd.Timestamp(product['data']['time']['s'])
     else:
         date_s = pd.Timestamp(arg_period_s)
 
     if np.logical_or(arg_period_e == '', arg_period_e is None):
-        if prod_date_e is None:
+        if product['data']['time']['e'] is None:
             date_e = pd.Timestamp.now()
         else:
-            date_e = pd.Timestamp(prod_date_e)
+            date_e = pd.Timestamp(product['data']['time']['e'])
     else:
         date_e = pd.Timestamp(arg_period_e)
 
     # Creates dates library
-    if prod_res == 'weekly':
+    if product['resolution'] == 'weekly':
         date_doy = date_s.timetuple().tm_yday
         date_year = date_s.timetuple().tm_year
 
@@ -165,65 +150,36 @@ def DownloadData(status, conf) -> int:
         date = pd.Timestamp(date)
 
         # amount of Dates weekly
-        date_dates = pd.date_range(date, date_e, freq=prod_freq)
+        date_dates = pd.date_range(date, date_e, freq=product['freq'])
 
-    elif prod_res == 'daily':
-        date_dates = pd.date_range(date_s, date_e, freq=prod_freq)
+    elif product['resolution'] == 'daily':
+        date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
 
     else:
-        raise ValueError('{err} not support.'.format(err=prod_res))
+        raise ValueError('{err} not support.'.format(err=product['freq']))
 
     # =========== #
     # 3. Download #
     # =========== #
-    # Download variables
-    if prod_res == 'weekly':
-        dwn_date = date
-        dwn_end = date_e
+    if product['resolution'] == 'daily':
+        status = download_product_daily(latlim, lonlim, date_dates,
+                                        account, folder, product,
+                                        is_waitbar)
+    if product['resolution'] == 'weekly':
+        status = download_product_weekly(date, date_s, date_e,
+                                         latlim, lonlim, date_dates,
+                                         account, folder, product,
+                                         is_waitbar)
 
-    dwn_dates = date_dates
-    dwn_folders = prod_folder
-    dwn_fnames = prod_fname
-    dwn_latlim = latlim
-    dwn_lonlim = lonlim
-    dwn_total = len(date_dates)
-    dwn_res = prod_res
-
-    # Download start
-    if prod_res == 'weekly':
-        status = download_product_weekly(dwn_date, dwn_end,
-                                         dwn_folders, dwn_fnames,
-                                         dwn_latlim, dwn_lonlim,
-                                         date_year,
-                                         is_waitbar, dwn_total, dwn_res)
-
-    if prod_res == 'daily':
-        status = download_product_daily(dwn_dates,
-                                        dwn_folders, dwn_fnames,
-                                        dwn_latlim, dwn_lonlim,
-                                        is_waitbar, dwn_total, dwn_res)
     return status
 
 
-def download_product_daily(dates,
-                           tmp_folder, tmp_fname,
-                           latlim, lonlim,
-                           is_waitbar, total, timestep) -> int:
+def download_product_daily(latlim, lonlim, dates,
+                           account, folder, product,
+                           is_waitbar) -> int:
     # Define local variable
     status = -1
-
-    username = __this.username
-    password = __this.password
-    url_server = urlparse(__this.conf['product']['url']).netloc
-    tmp_url_dir = __this.conf['product']['data']['dir']
-
-    # Define IDs
-    y_id = 3000 - np.int16(
-        np.array([np.ceil((latlim[1] + 60) * 20),
-                  np.floor((latlim[0] + 60) * 20)]))
-    x_id = np.int16(
-        np.array([np.floor((lonlim[0]) * 20),
-                  np.ceil((lonlim[1]) * 20)]) + 3600)
+    total = len(dates)
 
     # Create Waitbar
     # amount = 0
@@ -234,23 +190,10 @@ def download_product_daily(dates,
     #                     length=50)
 
     for date in dates:
-        # Date as printed in filename
-        fname_r = tmp_fname['r'].format(dtime=date)
-        if tmp_fname['t'] is not None:
-            fname_t = tmp_fname['t'].format(dtime=date)
-        else:
-            fname_t = ''
-        fname_l = tmp_fname['l'].format(dtime=date)
+        args = get_download_args(latlim, lonlim, date,
+                                 account, folder, product)
 
-        file_r = os.path.join(tmp_folder['r'], fname_r)
-        file_t = os.path.join(tmp_folder['t'], fname_t)
-        file_l = os.path.join(tmp_folder['l'], fname_l)
-
-        # Download the data from server
-        url_dir = tmp_url_dir.format(dtime=date)
-        status = start_download(file_r, file_t, file_l, fname_r,
-                                lonlim, latlim, y_id, x_id, timestep,
-                                url_server, url_dir, username, password)
+        status = start_download(args)
 
         # Update waitbar
         # if is_waitbar == 1:
@@ -261,26 +204,14 @@ def download_product_daily(dates,
     return status
 
 
-def download_product_weekly(date, dates_e,
-                            tmp_folder, tmp_fname,
-                            latlim, lonlim,
-                            date_year,
-                            is_waitbar, total, timestep) -> int:
+def download_product_weekly(date, date_s, dates_e,
+                            latlim, lonlim, dates,
+                            account, folder, product,
+                            is_waitbar) -> int:
     # Define local variable
     status = -1
-
-    username = __this.username
-    password = __this.password
-    url_server = urlparse(__this.conf['product']['url']).netloc
-    tmp_url_dir = __this.conf['product']['data']['dir']
-
-    # Define IDs
-    y_id = 3000 - np.int16(
-        np.array([np.ceil((latlim[1] + 60) * 20),
-                  np.floor((latlim[0] + 60) * 20)]))
-    x_id = np.int16(
-        np.array([np.floor((lonlim[0]) * 20),
-                  np.ceil((lonlim[1]) * 20)]) + 3600)
+    total = len(dates)
+    date_year = date_s.timetuple().tm_year
 
     # Create Waitbar
     # amount = 0
@@ -294,23 +225,22 @@ def download_product_weekly(date, dates_e,
     Stop = dates_e.toordinal()
     End_date = 0
     while End_date == 0:
-        # Date as printed in filename
-        fname_r = tmp_fname['r'].format(dtime=date)
-        if tmp_fname['t'] is not None:
-            fname_t = tmp_fname['t'].format(dtime=date)
-        else:
-            fname_t = ''
-        fname_l = tmp_fname['l'].format(dtime=date + pd.DateOffset(days=-7))
-
-        file_r = os.path.join(tmp_folder['r'], fname_r)
-        file_t = os.path.join(tmp_folder['t'], fname_t)
-        file_l = os.path.join(tmp_folder['l'], fname_l)
 
         # Download the data from server
-        url_dir = tmp_url_dir.format(dtime=date)
-        status = start_download(file_r, file_t, file_l, fname_r,
-                                lonlim, latlim, y_id, x_id, timestep,
-                                url_server, url_dir, username, password)
+
+        tmp_args = get_download_args(latlim, lonlim, date,
+                                     account, folder, product)
+
+        args = []
+        i = 0
+        for value in tmp_args:
+            if i == 8:
+                url_dir = product['data']['dir'].format(
+                    dtime=date + pd.DateOffset(days=-7))
+            else:
+                args.append(value)
+
+        status = start_download(tuple(args))
 
         # Create the new date for the next download
         Datename = (str(date.strftime('%Y')) + '-' + str(
@@ -343,9 +273,65 @@ def download_product_weekly(date, dates_e,
     return status
 
 
-def start_download(remote_file, temp_file, local_file, remote_fname,
-                   lonlim, latlim, y_id, x_id, timestep,
-                   url_server, url_dir, username, password) -> int:
+def get_download_args(latlim, lonlim, date,
+                      account, folder, product) -> tuple:
+    # Define arg_account
+    # For download
+    username = account['data']['username']
+    password = account['data']['password']
+    apitoken = account['data']['apitoken']
+
+    # Define arg_url
+    url_server = urlparse(product['url']).netloc
+    url_dir = product['data']['dir'].format(dtime=date)
+
+    # Define arg_filename
+    fname_r = product['data']['fname']['r'].format(dtime=date)
+    if product['data']['fname']['t'] is not None:
+        fname_t = product['data']['fname']['t'].format(dtime=date)
+    else:
+        fname_t = ''
+    fname_l = product['data']['fname']['l'].format(dtime=date)
+
+    # Define arg_file
+    file_r = os.path.join(folder['r'], fname_r)
+    file_t = os.path.join(folder['t'], fname_t)
+    file_l = os.path.join(folder['l'], fname_l)
+
+    # Define arg_IDs
+    y_id = np.int16(
+        np.array([
+            3000 - np.ceil((latlim[1] + 60) * 20),
+            3000 - np.floor((latlim[0] + 60) * 20)
+        ]))
+    x_id = np.int16(
+        np.array([
+            np.floor((lonlim[0]) * 20) + 3600,
+            np.ceil((lonlim[1]) * 20) + 3600
+        ]))
+
+    pixel_size = abs(product['data']['lat']['r'])
+    # lat_pixel_size = -abs(product['data']['lat']['r'])
+    # lon_pixel_size = abs(product['data']['lon']['r'])
+    pixel_w = int(product['data']['dem']['w'])
+    pixel_h = int(product['data']['dem']['h'])
+
+    data_ndv = product['nodata']
+    data_type = product['data']['dtype']['l']
+    data_multiplier = float(product['data']['units']['m'])
+    data_variable = product['data']['variable']
+
+    return latlim, lonlim, date,\
+           product, \
+           username, password, apitoken, \
+           url_server, url_dir, \
+           fname_r, fname_t, fname_l, \
+           file_r, file_t, file_l,\
+           y_id, x_id, pixel_size, pixel_w, pixel_h, \
+           data_ndv, data_type, data_multiplier, data_variable
+
+
+def start_download(args) -> int:
     """Retrieves ALEXI data
 
     This function retrieves ALEXI data for a given date from the
@@ -365,15 +351,14 @@ def start_download(remote_file, temp_file, local_file, remote_fname,
     # Define local variable
     status = -1
 
-    pixel_size = abs(__this.conf['product']['data']['lat']['r'])
-    # lat_pixel_size = -abs(__this.conf['product']['data']['lat']['r'])
-    # lon_pixel_size = abs(__this.conf['product']['data']['lon']['r'])
-    pixel_w = int(__this.conf['product']['data']['dem']['w'])
-    pixel_h = int(__this.conf['product']['data']['dem']['h'])
-    data_multiplier = float(__this.conf['product']['data']['units']['m'])
-    data_ndv = __this.conf['product']['nodata']
-    # data_type = __this
-    data_variable = __this.conf['product']['data']['variable']
+    latlim, lonlim, date,\
+    product, \
+    username, password, apitoken, \
+    url_server, url_dir, \
+    remote_fname, temp_fname, local_fname,\
+    remote_file, temp_file, local_file,\
+    y_id, x_id, pixel_size, pixel_w, pixel_h, \
+    data_ndv, data_type, data_multiplier, data_variable = args
 
     # Download the data from server if the file not exists
     msg = 'Downloading "{f}"'.format(f=remote_fname)
@@ -381,7 +366,7 @@ def start_download(remote_file, temp_file, local_file, remote_fname,
     __this.Log.write(datetime.datetime.now(), msg=msg)
 
     if not os.path.exists(local_file):
-        url = '{sr}{dr}{fl}'.format(sr=url_server, dr='', fl='')
+        url = '{sr}{dr}{fn}'.format(sr=url_server, dr='', fn='')
         try:
             # Download data
             req = ftplib.FTP(url)
@@ -394,9 +379,9 @@ def start_download(remote_file, temp_file, local_file, remote_fname,
         except ftplib.all_errors as err:
             # Download error
             status = 1
-            msg = "Not able to download {fl}, from {sr}{dr}".format(sr=url_server,
+            msg = "Not able to download {fn}, from {sr}{dr}".format(sr=url_server,
                                                                     dr=url_dir,
-                                                                    fl=remote_fname)
+                                                                    fn=remote_fname)
             print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
             __this.Log.write(datetime.datetime.now(),
                              msg='{}\n{}'.format(msg, str(err)))
@@ -407,7 +392,7 @@ def start_download(remote_file, temp_file, local_file, remote_fname,
             print('\33[94m{}\33[0m'.format(msg))
             __this.Log.write(datetime.datetime.now(), msg=msg)
 
-            if timestep == "daily":
+            if product['resolution'] == "daily":
                 # load data from downloaded remote file, and clip data
                 Extract_Data_gz(remote_file, temp_file)
 
@@ -419,7 +404,7 @@ def start_download(remote_file, temp_file, local_file, remote_fname,
                 # convert units, set Nodata Value
                 data = data * data_multiplier
                 data[data < 0] = data_ndv
-            if timestep == "weekly":
+            if product['resolution'] == "weekly":
                 # load data from downloaded remote file, and clip data
                 dataset = Open_tiff_array(remote_file)
 
