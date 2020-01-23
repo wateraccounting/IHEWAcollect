@@ -252,7 +252,7 @@ Read the Docs
 
     $ python setup.py docs
 
-upload to PyPI
+Upload to PyPI
 
 1. In IDE, **commit** the changes
 2. In IDE, add version tag, select **VCS -> Git -> tag**

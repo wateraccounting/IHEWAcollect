@@ -38,7 +38,7 @@ import math
 import datetime
 
 from urllib.parse import urlparse
-from ftplib import FTP, all_errors
+import ftplib
 
 import numpy as np
 import pandas as pd
@@ -62,7 +62,7 @@ except ImportError:
 __this = sys.modules[__name__]
 
 
-def init(status, conf):
+def _init(status, conf):
     # From download.py
     __this.status = status
     __this.conf = conf
@@ -78,7 +78,7 @@ def init(status, conf):
     __this.apitoken = conf['account']['data']['apitoken']
 
 
-def DownloadData(status, conf) -> dict:
+def DownloadData(status, conf) -> int:
     """Downloads ALEXI ET data
 
     This scripts downloads ALEXI ET data from the UNESCO-IHE ftp server.
@@ -96,7 +96,7 @@ def DownloadData(status, conf) -> dict:
     # 1. Init function #
     # ================ #
     # Global variable, __this
-    init(status, conf)
+    _init(status, conf)
 
     # User input arguments
     arg_bbox = conf['product']['bbox']
@@ -116,9 +116,6 @@ def DownloadData(status, conf) -> dict:
     prod_date_e = conf['product']['data']['time']['s']
 
     prod_fname = conf['product']['data']['fname']
-
-    # Local variable
-    is_waitbar = False
 
     # ============ #
     # 2. Check arg #
@@ -144,8 +141,7 @@ def DownloadData(status, conf) -> dict:
     else:
         date_e = pd.Timestamp(arg_period_e)
 
-    # Check resolution,
-    # Define the Start date of ALEXI
+    # Creates dates library
     if prod_res == 'weekly':
         date_doy = date_s.timetuple().tm_yday
         date_year = date_s.timetuple().tm_year
@@ -178,56 +174,64 @@ def DownloadData(status, conf) -> dict:
     # =========== #
     # 3. Download #
     # =========== #
+    # Download variables
+    is_waitbar = False
+
     if prod_res == 'weekly':
         dwn_date = date
+        dwn_end = date_e
 
     dwn_dates = date_dates
-    dwn_end = date_e
-    dwn_nfile = date_e
     dwn_folders = prod_folder
     dwn_fnames = prod_fname
     dwn_latlim = latlim
     dwn_lonlim = lonlim
+    dwn_total = len(date_dates)
     dwn_res = prod_res
 
-    # Create Waitbar
-    date_total_amount = len(date_dates)
-    # if is_waitbar == 1:
-    #     amount = 0
-    #     collect.WaitBar(amount, total_amount,
-    #                     prefix='ALEXI:', suffix='Complete',
-    #                     length=50)
-
+    # Download start
     if prod_res == 'weekly':
-        status = ALEXI_weekly(dwn_date, dwn_end,
-                              dwn_folders, dwn_fnames,
-                              dwn_latlim, dwn_lonlim,
-                              date_year,
-                              is_waitbar, dwn_nfile, dwn_res)
+        status = download_product_weekly(dwn_date, dwn_end,
+                                         dwn_folders, dwn_fnames,
+                                         dwn_latlim, dwn_lonlim,
+                                         date_year,
+                                         is_waitbar, dwn_total, dwn_res)
 
     if prod_res == 'daily':
-        status = ALEXI_daily(dwn_dates,
-                             dwn_folders, dwn_fnames,
-                             dwn_latlim, dwn_lonlim,
-                             is_waitbar, dwn_nfile, dwn_res)
-
+        status = download_product_daily(dwn_dates,
+                                        dwn_folders, dwn_fnames,
+                                        dwn_latlim, dwn_lonlim,
+                                        is_waitbar, dwn_total, dwn_res)
     return status
 
 
-def ALEXI_daily(dates,
-                tmp_folder, tmp_fname,
-                latlim, lonlim,
-                is_waitbar, total, timestep) -> int:
+def download_product_daily(dates,
+                           tmp_folder, tmp_fname,
+                           latlim, lonlim,
+                           is_waitbar, total, timestep) -> int:
+    # Define local variable
     status = -1
 
-    # Define local variable
-    amount = 0
+    username = __this.username
+    password = __this.password
+    url_server = urlparse(__this.conf['product']['url']).netloc
+    tmp_url_dir = __this.conf['product']['data']['dir']
 
     # Define IDs
     y_id = 3000 - np.int16(
-        np.array([np.ceil((latlim[1] + 60) * 20), np.floor((latlim[0] + 60) * 20)]))
+        np.array([np.ceil((latlim[1] + 60) * 20),
+                  np.floor((latlim[0] + 60) * 20)]))
     x_id = np.int16(
-        np.array([np.floor((lonlim[0]) * 20), np.ceil((lonlim[1]) * 20)]) + 3600)
+        np.array([np.floor((lonlim[0]) * 20),
+                  np.ceil((lonlim[1]) * 20)]) + 3600)
+
+    # Create Waitbar
+    # amount = 0
+    # if is_waitbar == 1:
+    #     amount = 0
+    #     collect.WaitBar(amount, total,
+    #                     prefix='ALEXI:', suffix='Complete',
+    #                     length=50)
 
     for date in dates:
         # Date as printed in filename
@@ -243,39 +247,52 @@ def ALEXI_daily(dates,
         file_l = os.path.join(tmp_folder['l'], fname_l)
 
         # Download the data from server
-        status = Download_ALEXI_from_WA_FTP(file_r, file_t, file_l, fname_r,
-                                            lonlim, latlim, y_id, x_id,
-                                            timestep)
+        url_dir = tmp_url_dir.format(dtime=date)
+        status = start_download(file_r, file_t, file_l, fname_r,
+                                lonlim, latlim, y_id, x_id, timestep,
+                                url_server, url_dir, username, password)
 
-        # # Adjust waitbar
+        # Update waitbar
         # if is_waitbar == 1:
         #     amount += 1
-        #     collect.WaitBar(amount, total_amount,
+        #     collect.WaitBar(amount, total,
         #                     prefix='ALEXI:', suffix='Complete',
         #                     length=50)
     return status
 
 
-def ALEXI_weekly(date, dates_e,
-                 tmp_folder, tmp_fname,
-                 latlim, lonlim,
-                 date_year,
-                 is_waitbar, total, timestep) -> int:
+def download_product_weekly(date, dates_e,
+                            tmp_folder, tmp_fname,
+                            latlim, lonlim,
+                            date_year,
+                            is_waitbar, total, timestep) -> int:
+    # Define local variable
     status = -1
 
-    # Define local variable
-    amount = 0
+    username = __this.username
+    password = __this.password
+    url_server = urlparse(__this.conf['product']['url']).netloc
+    tmp_url_dir = __this.conf['product']['data']['dir']
+
+    # Define IDs
+    y_id = 3000 - np.int16(
+        np.array([np.ceil((latlim[1] + 60) * 20),
+                  np.floor((latlim[0] + 60) * 20)]))
+    x_id = np.int16(
+        np.array([np.floor((lonlim[0]) * 20),
+                  np.ceil((lonlim[1]) * 20)]) + 3600)
+
+    # Create Waitbar
+    # amount = 0
+    # if is_waitbar == 1:
+    #     amount = 0
+    #     collect.WaitBar(amount, total,
+    #                     prefix='Progress:', suffix='Complete',
+    #                     length=50)
 
     # Define the stop conditions
     Stop = dates_e.toordinal()
     End_date = 0
-
-    # Define IDs
-    y_id = 3000 - np.int16(
-        np.array([np.ceil((latlim[1] + 60) * 20), np.floor((latlim[0] + 60) * 20)]))
-    x_id = np.int16(
-        np.array([np.floor((lonlim[0]) * 20), np.ceil((lonlim[1]) * 20)]) + 3600)
-
     while End_date == 0:
         # Date as printed in filename
         fname_r = tmp_fname['r'].format(dtime=date)
@@ -290,9 +307,10 @@ def ALEXI_weekly(date, dates_e,
         file_l = os.path.join(tmp_folder['l'], fname_l)
 
         # Download the data from server
-        status = Download_ALEXI_from_WA_FTP(file_r, file_t, file_l, fname_r,
-                                            lonlim, latlim, y_id, x_id,
-                                            timestep)
+        url_dir = tmp_url_dir.format(dtime=date)
+        status = start_download(file_r, file_t, file_l, fname_r,
+                                lonlim, latlim, y_id, x_id, timestep,
+                                url_server, url_dir, username, password)
 
         # Create the new date for the next download
         Datename = (str(date.strftime('%Y')) + '-' + str(
@@ -316,17 +334,18 @@ def ALEXI_weekly(date, dates_e,
         if date.toordinal() > Stop:
             End_date = 1
 
-        # # Adjust waitbar
+        # Update waitbar
         # if is_waitbar == 1:
         #     amount += 1
-        #     collect.WaitBar(amount, total_amount,
-        #                     prefix='ALEXI:', suffix='Complete',
+        #     collect.WaitBar(amount, total,
+        #                     prefix='Progress:', suffix='Complete',
         #                     length=50)
     return status
 
 
-def Download_ALEXI_from_WA_FTP(remote_file, temp_file, local_file, remote_fname,
-                               lonlim, latlim, y_id, x_id, timestep) -> int:
+def start_download(remote_file, temp_file, local_file, remote_fname,
+                   lonlim, latlim, y_id, x_id, timestep,
+                   url_server, url_dir, username, password) -> int:
     """Retrieves ALEXI data
 
     This function retrieves ALEXI data for a given date from the
@@ -343,67 +362,73 @@ def Download_ALEXI_from_WA_FTP(remote_file, temp_file, local_file, remote_fname,
       TimeStep (str): 'daily' or 'weekly'  (by using here monthly,
         an older dataset will be used).
     """
+    # Define local variable
     status = -1
 
+    # Download the data from server if the file not exists
     msg = 'Downloading "{f}"'.format(f=remote_fname)
     print('{}'.format(msg))
     __this.Log.write(datetime.datetime.now(), msg=msg)
+
     if not os.path.exists(local_file):
+        url = '{sr}{dr}{fl}'.format(sr=url_server, dr='', fl='')
         try:
-            # Collect url
-            # with "ftp://" -> "[Errno 11001] getaddrinfo failed"
-            # url_server = __this.conf['product']['url']
-            # without "ftp://" -> Pass
-            url_server = urlparse(__this.conf['product']['url']).netloc
-            url_dir = __this.conf['product']['data']['dir']
-
-            # Access server
-            ftp = FTP(url_server)
-            ftp.login(__this.username, __this.password)
-            ftp.cwd(url_dir)
-
             # Download data
-            lf = open(remote_file, "wb")
-            ftp.retrbinary("RETR " + remote_fname, lf.write)
-            lf.close()
-        except all_errors as err:
+            req = ftplib.FTP(url)
+            req.login(username, password)
+            req.cwd(url_dir)
+
+            fp = open(remote_file, "wb")
+            req.retrbinary("RETR " + remote_fname, fp.write)
+            fp.close()
+        except ftplib.all_errors as err:
+            # Download error
             status = 1
-            msg = "Not able to download file, from {sr}{dr}".format(sr=url_server,
-                                                                    dr=url_dir)
+            msg = "Not able to download {fl}, from {sr}{dr}".format(sr=url_server,
+                                                                    dr=url_dir,
+                                                                    fl=remote_fname)
             print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
             __this.Log.write(datetime.datetime.now(),
                              msg='{}\n{}'.format(msg, str(err)))
         else:
-            # Post-process
-            # remote (from server) -> temporary (unzip) -> local (gis)
+            # Download success
+            # post-process remote (from server) -> temporary (unzip) -> local (gis)
+            msg = 'Saving file "{f}"'.format(f=local_file)
+            print('\33[94m{}\33[0m'.format(msg))
+            __this.Log.write(datetime.datetime.now(), msg=msg)
+
             if timestep == "daily":
+                # load data from downloaded remote file, and clip data
                 Extract_Data_gz(remote_file, temp_file)
 
-                raw_data = np.fromfile(temp_file, dtype="<f4")
+                data_raw = np.fromfile(temp_file, dtype="<f4")
 
-                dataset = np.flipud(np.resize(raw_data, [3000, 7200]))
-                # Values are in MJ/m2d so convert to mm/d
-                data = dataset[y_id[0]:y_id[1], x_id[0]:x_id[1]] / 2.45  # mm/d
+                dataset = np.flipud(np.resize(data_raw, [3000, 7200]))
+
+                data = dataset[y_id[0]:y_id[1], x_id[0]:x_id[1]]
+
+                # convert units, set NVD
+                data = data / 2.45  # mm/d
                 data[data < 0] = -9999
-
             if timestep == "weekly":
-                # Open global ALEXI data
+                # load data from downloaded remote file, and clip data
                 dataset = Open_tiff_array(remote_file)
 
-                # Clip extend out of world data
                 data = dataset[y_id[0]:y_id[1], x_id[0]:x_id[1]]
+
+                # convert units, set NVD
                 data[data < 0] = -9999
 
-            # final GTiff
+            # Save as GTiff
             geo = [lonlim[0], 0.05, 0, latlim[1], 0, -0.05]
             Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
             status = 0
-            msg = 'Finish "{f}"'.format(f=local_file)
-            print('\33[94m{}\33[0m'.format(msg))
-            __this.Log.write(datetime.datetime.now(), msg=msg)
         finally:
             # Release local resources.
+            raw_data = None
+            dataset = None
+            data = None
             pass
     else:
         status = 0
@@ -411,4 +436,6 @@ def Download_ALEXI_from_WA_FTP(remote_file, temp_file, local_file, remote_fname,
         print('\33[93m{}\33[0m'.format(msg))
         __this.Log.write(datetime.datetime.now(), msg=msg)
 
+    msg = 'Finish'
+    __this.Log.write(datetime.datetime.now(), msg=msg)
     return status
