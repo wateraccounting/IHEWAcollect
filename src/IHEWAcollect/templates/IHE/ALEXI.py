@@ -365,6 +365,16 @@ def start_download(remote_file, temp_file, local_file, remote_fname,
     # Define local variable
     status = -1
 
+    pixel_size = abs(__this.conf['product']['data']['lat']['r'])
+    # lat_pixel_size = -abs(__this.conf['product']['data']['lat']['r'])
+    # lon_pixel_size = abs(__this.conf['product']['data']['lon']['r'])
+    pixel_w = int(__this.conf['product']['data']['dem']['w'])
+    pixel_h = int(__this.conf['product']['data']['dem']['h'])
+    data_multiplier = float(__this.conf['product']['data']['units']['m'])
+    data_ndv = __this.conf['product']['nodata']
+    # data_type = __this
+    data_variable = __this.conf['product']['data']['variable']
+
     # Download the data from server if the file not exists
     msg = 'Downloading "{f}"'.format(f=remote_fname)
     print('{}'.format(msg))
@@ -403,13 +413,12 @@ def start_download(remote_file, temp_file, local_file, remote_fname,
 
                 data_raw = np.fromfile(temp_file, dtype="<f4")
 
-                dataset = np.flipud(np.resize(data_raw, [3000, 7200]))
-
+                dataset = np.flipud(np.resize(data_raw, [pixel_h, pixel_w]))
                 data = dataset[y_id[0]:y_id[1], x_id[0]:x_id[1]]
 
-                # convert units, set NVD
-                data = data / 2.45  # mm/d
-                data[data < 0] = -9999
+                # convert units, set Nodata Value
+                data = data * data_multiplier
+                data[data < 0] = data_ndv
             if timestep == "weekly":
                 # load data from downloaded remote file, and clip data
                 dataset = Open_tiff_array(remote_file)
@@ -417,10 +426,10 @@ def start_download(remote_file, temp_file, local_file, remote_fname,
                 data = dataset[y_id[0]:y_id[1], x_id[0]:x_id[1]]
 
                 # convert units, set NVD
-                data[data < 0] = -9999
+                data[data < 0] = data_ndv
 
             # Save as GTiff
-            geo = [lonlim[0], 0.05, 0, latlim[1], 0, -0.05]
+            geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
             Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
             status = 0

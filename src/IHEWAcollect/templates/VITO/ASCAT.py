@@ -205,6 +205,16 @@ def start_download(remote_file, temp_file, local_file, remote_fname,
     # Define local variable
     status = -1
 
+    pixel_size = abs(__this.conf['product']['data']['lat']['r'])
+    # lat_pixel_size = -abs(__this.conf['product']['data']['lat']['r'])
+    # lon_pixel_size = abs(__this.conf['product']['data']['lon']['r'])
+    pixel_w = int(__this.conf['product']['data']['dem']['w'])
+    pixel_h = int(__this.conf['product']['data']['dem']['h'])
+    data_multiplier = float(__this.conf['product']['data']['units']['m'])
+    data_ndv = __this.conf['product']['nodata']
+    # data_type = __this
+    data_variable = __this.conf['product']['data']['variable']
+
     # Download the data from server if the file not exists
     msg = 'Downloading "{f}"'.format(f=remote_fname)
     print('{}'.format(msg))
@@ -243,19 +253,20 @@ def start_download(remote_file, temp_file, local_file, remote_fname,
 
             # load data from downloaded remote file, and clip data
             fh = Dataset(remote_file)
-            data_raw = fh.variables['SWI_010']
+            data_raw = fh.variables[data_variable]
 
+            # dataset = np.flipud(np.resize(data_raw, [pixel_h, pixel_w]))
             dataset = data_raw[:, y_id[0]: y_id[1], x_id[0]: x_id[1]]
 
             data = np.squeeze(dataset.data, axis=0)
             fh.close()
 
             # convert units, set NVD
-            data = data * 0.5
-            data[data > 100.] = -9999
+            data = data * data_multiplier
+            data[data > 100.] = data_ndv
 
             # save as GTiff
-            geo = [lonlim[0], 0.1, 0, latlim[1], 0, -0.1]
+            geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
             Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
             status = 0

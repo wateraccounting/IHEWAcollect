@@ -110,7 +110,7 @@ class Download(User):
             'variable': '',
             'bbox': {},
             'period': {},
-            'NaN': -9999,
+            'nodata': -9999,
             'template': '',
             'url': '',
             'protocol': '',
@@ -138,7 +138,7 @@ class Download(User):
 
     def __init__(self, workspace='',
                  product='', version='', parameter='', resolution='', variable='',
-                 bbox={}, period={}, NaN=-9999,
+                 bbox={}, period={}, nodata=-9999,
                  is_status=True, **kwargs):
         """Class instantiation
         """
@@ -172,9 +172,10 @@ class Download(User):
                 self.__conf['product'][vname] = vdata
             else:
                 self.__status['code'] = 1
+
         self.__conf['product']['bbox'] = bbox
         self.__conf['product']['period'] = period
-        self.__conf['product']['NaN'] = NaN
+        self.__conf['product']['nodata'] = nodata
 
         # super(Download, self).__init__(**kwargs)
         if self.__status['code'] == 0:
@@ -518,6 +519,7 @@ def main():
     #     's': '2005-01-01',
     #     'e': '2005-01-31'
     # }
+    # nodata = -9999
 
     # product = 'ASCAT'
     # version = 'v3.1.1'
@@ -534,11 +536,12 @@ def main():
     #     's': '2007-01-01',
     #     'e': '2007-01-31'
     # }
+    # nodata = -9999
 
-    # Caution:
-    # dec_jpeg2000: Unable to open JPEG2000 image within GRIB file.
-    # Docker, pass!
-    # TODO, 20200120, QPan, CFSR, replace some values
+    # # Caution:
+    # # dec_jpeg2000: Unable to open JPEG2000 image within GRIB file.
+    # # Docker, pass!
+    # # TODO, 20200120, QPan, CFSR, replace some values
     product = 'CFSR'
     version = 'v1'
     parameter = 'radiation'
@@ -554,6 +557,7 @@ def main():
         's': '2007-01-01',
         'e': '2007-01-31'
     }
+    nodata = -9999
 
     # product = 'CHIRPS'
     # version = 'v2.0'
@@ -571,6 +575,7 @@ def main():
     #     's': '2007-01-01',
     #     'e': '2007-01-31'
     # }
+    # nodata = -9999
 
     # product = 'CMRSET'
     # version = 'v1'
@@ -587,6 +592,7 @@ def main():
     #     's': '2007-01-01',
     #     'e': '2007-01-31'
     # }
+    # nodata = -9999
 
     # TODO, 20200120, QPan, DEM, replace some values, and re-design base.yml
     # product = 'DEM'
@@ -604,6 +610,7 @@ def main():
     #     's': '',
     #     'e': ''
     # }
+    # nodata = -9999
 
     # TODO, ECMWF
     # product = ''
@@ -628,6 +635,7 @@ def main():
     #     's': '2008-01-01',
     #     'e': '2008-01-31'
     # }
+    # nodata = -9999
 
     # product = 'FEWS'
     # version = 'v4'
@@ -644,6 +652,7 @@ def main():
     #     's': '2008-01-01',
     #     'e': '2008-01-31'
     # }
+    # nodata = -9999
 
     # TODO, 20200120, QPan, GLDAS, change code of download from "requested text" to "NetCDF"
     # product = 'GLDAS'
@@ -661,6 +670,7 @@ def main():
     #     's': '2008-01-01',
     #     'e': '2008-01-31'
     # }
+    # nodata = -9999
 
     # TODO, 20200120, QPan, GLEAM, replace some values
     # product = 'GLEAM'
@@ -678,6 +688,7 @@ def main():
     #     's': '2008-01-01',
     #     'e': '2008-01-31'
     # }
+    # nodata = -9999
 
     # TODO, GPM
     # product = 'GPM'
@@ -695,6 +706,7 @@ def main():
     #     's': '2008-01-01',
     #     'e': '2008-01-31'
     # }
+    # nodata = -9999
 
     # product = 'TRMM'
     # version = 'v7'
@@ -710,7 +722,7 @@ def main():
                         variable=variable,
                         bbox=bbox,
                         period=period,
-                        NaN=-9999,
+                        nodata=nodata,
                         is_status=False)
 
 
