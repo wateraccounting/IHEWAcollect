@@ -84,6 +84,7 @@ def DownloadData(status, conf) -> int:
 
     # Local variables
     is_waitbar = False
+
     # ============ #
     # 2. Check arg #
     # ============ #
