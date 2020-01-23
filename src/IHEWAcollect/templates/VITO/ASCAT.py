@@ -82,6 +82,8 @@ def DownloadData(status, conf) -> int:
 
     prod_fname = conf['product']['data']['fname']
 
+    # Local variables
+    is_waitbar = False
     # ============ #
     # 2. Check arg #
     # ============ #
@@ -113,8 +115,6 @@ def DownloadData(status, conf) -> int:
     # 3. Download #
     # =========== #
     # Download variables
-    is_waitbar = False
-
     dwn_dates = date_dates
     dwn_folders = prod_folder
     dwn_fnames = prod_fname

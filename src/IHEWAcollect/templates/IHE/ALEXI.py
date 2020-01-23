@@ -116,6 +116,8 @@ def DownloadData(status, conf) -> int:
 
     prod_fname = conf['product']['data']['fname']
 
+    # Local variables
+    is_waitbar = False
     # ============ #
     # 2. Check arg #
     # ============ #
@@ -174,8 +176,6 @@ def DownloadData(status, conf) -> int:
     # 3. Download #
     # =========== #
     # Download variables
-    is_waitbar = False
-
     if prod_res == 'weekly':
         dwn_date = date
         dwn_end = date_e
