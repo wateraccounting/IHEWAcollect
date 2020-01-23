@@ -2,17 +2,16 @@
 # General modules
 import os
 import sys
-import shutil
-
+# import glob
+# import shutil
 import datetime
 
 import requests
 from requests.auth import HTTPBasicAuth
+# from joblib import Parallel, delayed
 
 import numpy as np
 import pandas as pd
-
-# import h5py
 from netCDF4 import Dataset
 
 # IHEWAcollect Modules

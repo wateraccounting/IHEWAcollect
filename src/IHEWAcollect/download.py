@@ -519,31 +519,11 @@ def main():
     #     'e': '2005-01-31'
     # }
 
-    product = 'ASCAT'
-    version = 'v3.1.1'
-    parameter = 'soil_water_index'
-    resolution = 'daily'
-    variable = 'SWI_010'
-    bbox = {
-        'w': -19.0,
-        's': -35.0,
-        'e': 55.0,
-        'n': 38.0
-    }
-    period = {
-        's': '2007-01-01',
-        'e': '2007-01-31'
-    }
-
-    # Caution:
-    # dec_jpeg2000: Unable to open JPEG2000 image within GRIB file.
-    # Docker, pass!
-    # TODO, 20200120, QPan, CFSR, replace some values
-    # product = 'CFSR'
-    # version = 'v1'
-    # parameter = 'radiation'
+    # product = 'ASCAT'
+    # version = 'v3.1.1'
+    # parameter = 'soil_water_index'
     # resolution = 'daily'
-    # variable = 'dlwsfc'
+    # variable = 'SWI_010'
     # bbox = {
     #     'w': -19.0,
     #     's': -35.0,
@@ -554,6 +534,26 @@ def main():
     #     's': '2007-01-01',
     #     'e': '2007-01-31'
     # }
+
+    # Caution:
+    # dec_jpeg2000: Unable to open JPEG2000 image within GRIB file.
+    # Docker, pass!
+    # TODO, 20200120, QPan, CFSR, replace some values
+    product = 'CFSR'
+    version = 'v1'
+    parameter = 'radiation'
+    resolution = 'daily'
+    variable = 'dlwsfc'
+    bbox = {
+        'w': -19.0,
+        's': -35.0,
+        'e': 55.0,
+        'n': 38.0
+    }
+    period = {
+        's': '2007-01-01',
+        'e': '2007-01-31'
+    }
 
     # product = 'CHIRPS'
     # version = 'v2.0'

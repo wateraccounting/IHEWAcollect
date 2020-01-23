@@ -33,12 +33,11 @@ import os
 import sys
 # import glob
 # import shutil
-
-import math
 import datetime
 
-from urllib.parse import urlparse
 import ftplib
+from urllib.parse import urlparse
+# from joblib import Parallel, delayed
 
 import numpy as np
 import pandas as pd
@@ -147,7 +146,7 @@ def DownloadData(status, conf) -> int:
         date_year = date_s.timetuple().tm_year
 
         # Change the startdate so it includes an ALEXI date
-        date_doy_s = int(math.ceil(date_doy / 7.0) * 7 + 1)
+        date_doy_s = int(np.ceil(date_doy / 7.0) * 7 + 1)
 
         # Stringify date DOY start
         date_doy_s = '{doy}-{yr}'.format(doy=date_doy_s, yr=date_year)
