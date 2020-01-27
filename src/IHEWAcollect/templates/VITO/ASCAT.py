@@ -226,33 +226,24 @@ def start_download(args) -> int:
     status = -1
 
     # Download the data from server if the file not exists
-    msg = 'Downloading "{f}"'.format(f=remote_fname)
-    print('{}'.format(msg))
-    __this.Log.write(datetime.datetime.now(), msg=msg)
-
     if not os.path.exists(local_file):
         url = '{sr}{dr}{fl}'.format(sr=url_server, dr=url_dir, fl=remote_fname)
 
         try:
-            # Download data
-            if not os.path.exists(remote_file):
-                with open(remote_file, 'wb') as fp:
-                    try:
-                        conn = requests.get(url, auth=HTTPBasicAuth(username, password))
-                        # conn.raise_for_status()
-                    except BaseException:
-                        from requests.packages.urllib3.exceptions import \
-                            InsecureRequestWarning
-                        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-                        conn = requests.get(url, auth=(username, password), verify=False)
+            # Connect to server
+            msg = 'Downloading "{f}"'.format(f=remote_fname)
+            print('{}'.format(msg))
+            __this.Log.write(datetime.datetime.now(), msg=msg)
 
-                    fp.write(conn.content)
-            else:
-                msg = 'Exist "{f}"'.format(f=remote_file)
-                print('\33[93m{}\33[0m'.format(msg))
-                __this.Log.write(datetime.datetime.now(), msg=msg)
+            try:
+                conn = requests.get(url, auth=HTTPBasicAuth(username, password))
+                # conn.raise_for_status()
+            except BaseException:
+                from requests.packages.urllib3.exceptions import InsecureRequestWarning
+                requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+                conn = requests.get(url, auth=(username, password), verify=False)
         except requests.exceptions.RequestException as err:
-            # Download error
+            # Connect error
             status = 1
             msg = "Not able to download {fl}, from {sr}{dr}".format(sr=url_server,
                                                                     dr=url_dir,
@@ -261,12 +252,21 @@ def start_download(args) -> int:
             __this.Log.write(datetime.datetime.now(),
                              msg='{}\n{}'.format(msg, str(err)))
         else:
+            # Download data
+            if not os.path.exists(remote_file):
+                msg = 'Saving file "{f}"'.format(f=local_file)
+                print('\33[94m{}\33[0m'.format(msg))
+                __this.Log.write(datetime.datetime.now(), msg=msg)
+
+                with open(remote_file, 'wb') as fp:
+                    fp.write(conn.content)
+            else:
+                msg = 'Exist "{f}"'.format(f=remote_file)
+                print('\33[93m{}\33[0m'.format(msg))
+                __this.Log.write(datetime.datetime.now(), msg=msg)
+
             # Download success
             # post-process remote (from server) -> temporary (unzip) -> local (gis)
-            msg = 'Saving file "{f}"'.format(f=local_file)
-            print('\33[94m{}\33[0m'.format(msg))
-            __this.Log.write(datetime.datetime.now(), msg=msg)
-
             status = convert_data(args)
         finally:
             # Release local resources.

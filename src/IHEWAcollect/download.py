@@ -456,13 +456,34 @@ class Download(User):
 
         if self.__status['code'] == 0:
             product = self.__conf['product']
-            template['name'] = self._Base__conf['product']['data']['template']
+            module_name_base = '{tmp}.{prod}'.format(
+                tmp=self._Base__conf['product']['data']['template'],
+                prod=product['name'])
 
             # Load module
             # module_obj = None
-
+            module_name = template['name']
             module_obj = template['module']
             if module_obj is None:
+                is_reload_module = False
+            else:
+                if module_name == module_name_base:
+                    is_reload_module = True
+                else:
+                    is_reload_module = False
+            template['name'] = module_name_base
+
+            if is_reload_module:
+                try:
+                    module_obj = importlib.reload(module_obj)
+                except ImportError:
+                    raise IHEClassInitError('Templates') from None
+                else:
+                    template['module'] = module_obj
+                    print('Reloaded module'
+                          '.{p}.{m}'.format(p=product['template'],
+                                            m=product['name']))
+            else:
                 try:
                     # def template_load(self) -> dict:
                     module_obj = \
@@ -484,16 +505,8 @@ class Download(User):
                     # def template_init(self) -> dict:
                     if module_obj is not None:
                         template['module'] = module_obj
-                        # module_obj.DownloadData(self.__status, self.__conf)
                     else:
-                        template['module'] = None
                         raise IHEClassInitError('Templates') from None
-            else:
-                try:
-                    module_obj = importlib.reload(module_obj)
-                except ImportError:
-                    template['module'] = None
-                    raise IHEClassInitError('Templates') from None
 
             self.__tmp['name'] = template['name']
             self.__tmp['module'] = template['module']
@@ -565,32 +578,34 @@ def main():
                 'n': 38.0
             },
             'period': {
-                's': '2005-01-01',
-                'e': '2005-01-02'
+                's': '2007-01-01',
+                'e': '2007-01-02'
+            },
+            'nodata': -9999
+        },
+        '4': {
+            # Caution:
+            # dec_jpeg2000: Unable to open JPEG2000 image within GRIB file.
+            # Docker, pass!
+            'product': 'CFSR',
+            'version': 'v1',
+            'parameter': 'radiation',
+            'resolution': 'daily',
+            'variable': 'dlwsfc',
+            'bbox': {
+                'w': -19.0,
+                's': -35.0,
+                'e': 55.0,
+                'n': 38.0
+            },
+            'period': {
+                's': '2007-01-01',
+                'e': '2007-01-02'
             },
             'nodata': -9999
         },
     }
 
-    # # Caution:
-    # # dec_jpeg2000: Unable to open JPEG2000 image within GRIB file.
-    # # Docker, pass!
-    # product = 'CFSR'
-    # version = 'v1'
-    # parameter = 'radiation'
-    # resolution = 'daily'
-    # variable = 'dlwsfc'
-    # bbox = {
-    #     'w': -19.0,
-    #     's': -35.0,
-    #     'e': 55.0,
-    #     'n': 38.0
-    # }
-    # period = {
-    #     's': '2007-01-01',
-    #     'e': '2007-01-02'
-    # }
-    # nodata = -9999
 
     # product = 'CHIRPS'
     # version = 'v2.0'
