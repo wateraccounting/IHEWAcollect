@@ -223,7 +223,7 @@ def Extract_Data_tar_gz(zip_filename, output_folder):
     tar.close()
 
 
-def Save_as_tiff(name='', data='', geo='', projection=''):
+def Save_as_tiff(name, data, geo, projection):
     """
     This function save the array as a geotiff
 
@@ -265,7 +265,7 @@ def Save_as_tiff(name='', data='', geo='', projection=''):
     return ()
 
 
-def Save_as_MEM(data='', geo='', projection=''):
+def Save_as_MEM(data, geo, projection, ndv):
     """
     This function save the array as a memory file
 
@@ -285,10 +285,11 @@ def Save_as_MEM(data='', geo='', projection=''):
     else:
         srse.SetWellKnownGeogCS(projection)
     dst_ds.SetProjection(srse.ExportToWkt())
-    dst_ds.GetRasterBand(1).SetNoDataValue(-9999)
+    dst_ds.GetRasterBand(1).SetNoDataValue(ndv)
     dst_ds.SetGeoTransform(geo)
     dst_ds.GetRasterBand(1).WriteArray(data)
-    return (dst_ds)
+
+    return dst_ds
 
 
 def Save_as_NC(namenc, DataCube, Var, Reference_filename, Startdate='', Enddate='',
@@ -593,11 +594,11 @@ def Run_command_window(argument):
     Keyword Arguments:
     argument -- string, name of the adf file
     """
-    print('\n{}'.format(argument))
+    # print('\n{}'.format(argument))
 
     if os.name == 'posix':
         argument = argument.replace(".exe", "")
-        os.system(argument)
+        rtn_cod = os.system(argument)
 
     else:
         startupinfo = subprocess.STARTUPINFO()
@@ -605,9 +606,11 @@ def Run_command_window(argument):
 
         process = subprocess.Popen(argument, startupinfo=startupinfo,
                                    stderr=subprocess.PIPE, stdout=subprocess.PIPE)
-        process.wait()
+        rtn_cod = process.wait()
 
-    return ()
+    if rtn_cod != 0:
+        raise RuntimeError(argument)
+    return rtn_cod
 
 
 def Open_array_info(filename=''):
@@ -647,8 +650,8 @@ def Open_tiff_array(filename='', band=''):
     else:
         if band is '':
             band = 1
-        Data = f.GetRasterBand(band).ReadAsArray()
-    return (Data)
+        data = f.GetRasterBand(band).ReadAsArray()
+    return data
 
 
 def Open_nc_info(NC_filename, Var=None):
@@ -767,7 +770,7 @@ def Open_bil_array(bil_filename, band=1):
     img = gdal.Open(bil_filename)
     Data = img.GetRasterBand(band).ReadAsArray()
 
-    return (Data)
+    return Data
 
 
 def Open_ncs_array(NC_Directory, Var, Startdate, Enddate):
@@ -911,7 +914,8 @@ def Open_nc_dict(input_netcdf, group_name, startdate='', enddate=''):
 
 def Clip_Dataset_GDAL(input_name, output_name, latlim, lonlim):
     """
-    Clip the data to the defined extend of the user (latlim, lonlim) by using the gdal_translate executable of gdal.
+    Clip the data to the defined extend of the user (latlim, lonlim)
+     by using the gdal_translate executable of gdal.
 
     Keyword Arguments:
     input_name -- input data, input directory and filename of the tiff file
@@ -926,17 +930,21 @@ def Clip_Dataset_GDAL(input_name, output_name, latlim, lonlim):
     GDAL_TRANSLATE_PATH = 'gdal_translate.exe'
 
     # find path to the executable
-    fullCmd = ' '.join([GDAL_TRANSLATE_PATH,
-                        '-projwin %s %s %s %s -of GTiff %s %s' % (
-                        lonlim[0], latlim[1], lonlim[1], latlim[0], input_name,
-                        output_name)])
+    fullCmd = ' '.join([
+        GDAL_TRANSLATE_PATH,
+        '-projwin %s %s %s %s -of GTiff %s %s' % (
+            lonlim[0], latlim[1], lonlim[1], latlim[0],
+            input_name,
+            output_name
+        )
+    ])
     print(fullCmd)
     Run_command_window(fullCmd)
 
     return ()
 
 
-def clip_data(input_file, latlim, lonlim):
+def Clip_Data(input_file, latlim, lonlim):
     """
     Clip the data to the defined extend of the user (latlim, lonlim) or to the
     extend of the DEM tile
@@ -978,7 +986,7 @@ def clip_data(input_file, latlim, lonlim):
     data = data_in[Start_y:End_y, Start_x:End_x]
     dest_in = None
 
-    return (data, Geo_out)
+    return data, Geo_out
 
 
 def reproject_dataset_epsg(dataset, pixel_spacing, epsg_to, method=2):
@@ -1085,7 +1093,7 @@ def reproject_dataset_epsg(dataset, pixel_spacing, epsg_to, method=2):
     return dest, ulx, lry, lrx, uly, epsg_to
 
 
-def reproject_MODIS(input_name, epsg_to):
+def reproject_MODIS(input_name, output_name, epsg_to):
     '''
     Reproject the merged data file by using gdalwarp. The input projection must be the MODIS projection.
     The output projection can be defined by the user.
@@ -1097,7 +1105,7 @@ def reproject_MODIS(input_name, epsg_to):
         The EPSG code of the output dataset
     '''
     # Define the output name
-    name_out = ''.join(input_name.split(".")[:-1]) + '_reprojected.tif'
+    # name_out = ''.join(input_name.split(".")[:-1]) + '_reprojected.tif'
 
     # Get environmental variable
     # WA_env_paths = os.environ["GDAL_DRIVER"].split(';')
@@ -1108,10 +1116,10 @@ def reproject_MODIS(input_name, epsg_to):
     # find path to the executable
     fullCmd = ' '.join([GDALWARP_PATH,
                         '-overwrite -s_srs "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"',
-                        '-t_srs EPSG:%s -of GTiff' % (epsg_to), input_name, name_out])
+                        '-t_srs EPSG:%s -of GTiff' % (epsg_to), input_name, output_name])
     Run_command_window(fullCmd)
 
-    return (name_out)
+    return output_name
 
 
 def reproject_dataset_example(dataset, dataset_example, method=1):

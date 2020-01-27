@@ -74,11 +74,35 @@ def DownloadData(status, conf) -> int:
     # 2. Check latlim, lonlim, dates #
     # ============================== #
     # Check the latitude and longitude, otherwise set lat or lon on greatest extent
-    latlim = [np.max([arg_bbox['s'], product['data']['lat']['s']]),
-              np.min([arg_bbox['n'], product['data']['lat']['n']])]
+    latlim = [
+        np.max(
+            [
+                arg_bbox['s'],
+                product['data']['lat']['s']
+            ]
+        ),
+        np.min(
+            [
+                arg_bbox['n'],
+                product['data']['lat']['n']
+            ]
+        )
+    ]
 
-    lonlim = [np.max([arg_bbox['w'], product['data']['lon']['w']]),
-              np.min([arg_bbox['e'], product['data']['lon']['e']])]
+    lonlim = [
+        np.max(
+            [
+                arg_bbox['w'],
+                product['data']['lon']['w']
+            ]
+        ),
+        np.min(
+            [
+                arg_bbox['e'],
+                product['data']['lon']['e']
+            ]
+        )
+    ]
 
     # Check Startdate and Enddate, make a panda timestamp of the date
     if np.logical_or(arg_period_s == '', arg_period_s is None):
@@ -159,25 +183,13 @@ def get_download_args(latlim, lonlim, date,
     if product['data']['fname']['t'] is None:
         fname_t = ''
     else:
-        fname_t = product['data']['fname']['t'].format(dtime=date)
+        fname_t = product['data']['fname']['t']
     fname_l = product['data']['fname']['l'].format(dtime=date)
 
     # Define arg_file
     file_r = os.path.join(folder['r'], fname_r)
     file_t = os.path.join(folder['t'], fname_t)
     file_l = os.path.join(folder['l'], fname_l)
-
-    # Define arg_IDs
-    y_id = np.int16(
-        np.array([
-            np.floor((-latlim[1]) * 10) + 900,
-            np.ceil((-latlim[0]) * 10) + 900
-        ]))
-    x_id = np.int16(
-        np.array([
-            np.ceil((lonlim[0]) * 10) + 1800,
-            np.floor((lonlim[1]) * 10) + 1800
-        ]))
 
     pixel_size = abs(product['data']['lat']['r'])
     # lat_pixel_size = -abs(product['data']['lat']['r'])
@@ -190,6 +202,21 @@ def get_download_args(latlim, lonlim, date,
     data_multiplier = float(product['data']['units']['m'])
     data_variable = product['data']['variable']
 
+    # Define arg_IDs
+    prod_lat_s = product['data']['lat']['s']
+    prod_lon_w = product['data']['lon']['w']
+    prod_lat_size = abs(product['data']['lat']['r'])
+    prod_lon_size = abs(product['data']['lon']['r'])
+
+    y_id = np.int16(np.array([
+        pixel_h - np.ceil((latlim[1] + abs(prod_lat_s)) / prod_lat_size),
+        pixel_h - np.floor((latlim[0] + abs(prod_lat_s)) / prod_lat_size)
+    ]))
+    x_id = np.int16(np.array([
+        np.floor((lonlim[0] + abs(prod_lon_w)) / prod_lon_size),
+        np.ceil((lonlim[1] + abs(prod_lon_w)) / prod_lon_size)
+    ]))
+
     return latlim, lonlim, date, \
            product, \
            username, password, apitoken, \
@@ -201,16 +228,7 @@ def get_download_args(latlim, lonlim, date,
 
 
 def start_download(args) -> int:
-    """
-    This function retrieves ALEXI data for a given date from the
-    ftp.wateraccounting.unesco-ihe.org server.
-
-    Restrictions:
-    The data and this python file may not be distributed to others without
-    permission of the WA+ team due data restriction of the ALEXI developers.
-
-    Keyword arguments:
-
+    """Retrieves data
     """
     # Unpack the arguments
     latlim, lonlim, date, \
@@ -301,17 +319,20 @@ def convert_data(args):
     # Define local variable
     status = -1
 
-    # load data from downloaded remote file, and clip data
+    # Load data from downloaded remote file
     fh = Dataset(remote_file)
+
     data_raw = fh.variables[data_variable]
 
-    # dataset = np.flipud(np.resize(data_raw, [pixel_h, pixel_w]))
-    dataset = data_raw[:, y_id[0]: y_id[1], x_id[0]: x_id[1]]
+    # Generate temporary files
 
-    data = np.squeeze(dataset.data, axis=0)
+    data_tmp = data_raw[:, y_id[0]: y_id[1], x_id[0]: x_id[1]]
+
+    # Clip data
+    data = np.squeeze(data_tmp.data, axis=0)
     fh.close()
 
-    # convert units, set NVD
+    # Convert units, set NVD
     data = data * data_multiplier
     data[data > 100.] = data_ndv
 

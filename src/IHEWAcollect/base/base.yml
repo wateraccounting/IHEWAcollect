@@ -2722,12 +2722,12 @@ products:
               dir: '/WaterAccounting/Data_Satellite/Evaporation/ETmonitor/Global/'
               fname:
                 r: 'ET_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
-                t: null
+                t: 'ET_ETmonitor_mm-month_{dtime:%Y_%m_01}_4326.tif'
                 l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
-                t: null
+                t: 'dtime'
                 l: 'dtime'
               ftype:
                 r: 'GTiff'
@@ -2763,12 +2763,12 @@ products:
               dir: '/WaterAccounting/Data_Satellite/Evaporation/ETmonitor/Potential_Evapotranspiration/'
               fname:
                 r: 'ETpot_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
-                t: null
+                t: 'ETpot_ETmonitor_mm-month_{dtime:%Y_%m_01}_4326.tif'
                 l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
-                t: null
+                t: 'dtime'
                 l: 'dtime'
               ftype:
                 r: 'GTiff'
@@ -2804,12 +2804,12 @@ products:
               dir: '/WaterAccounting/Data_Satellite/Evaporation/ETmonitor/Global/'
               fname:
                 r: 'Ew_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
-                t: null
+                t: 'Ew_ETmonitor_mm-month_{dtime:%Y_%m_01}_4326.tif'
                 l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
-                t: null
+                t: 'dtime'
                 l: 'dtime'
               ftype:
                 r: 'GTiff'
@@ -2845,12 +2845,12 @@ products:
               dir: '/WaterAccounting/Data_Satellite/Evaporation/ETmonitor/Global/'
               fname:
                 r: 'Es_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
-                t: null
+                t: 'Es_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
                 l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
-                t: null
+                t: 'dtime'
                 l: 'dtime'
               ftype:
                 r: 'GTiff'
@@ -2886,12 +2886,12 @@ products:
               dir: '/WaterAccounting/Data_Satellite/Evaporation/ETmonitor/Global/'
               fname:
                 r: 'Ei_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
-                t: null
+                t: 'Ei_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
                 l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
-                t: null
+                t: 'dtime'
                 l: 'dtime'
               ftype:
                 r: 'GTiff'
@@ -2927,12 +2927,12 @@ products:
               dir: '/WaterAccounting/Data_Satellite/Evaporation/ETmonitor/Global/'
               fname:
                 r: 'Tr_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
-                t: null
+                t: 'Tr_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
                 l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
-                t: null
+                t: 'dtime'
                 l: 'dtime'
               ftype:
                 r: 'GTiff'
@@ -3024,7 +3024,7 @@ products:
               units:
                 r: 'mm'
                 l: 'mm'
-                m: 1.0
+                m: 0.01
               lat:
                 s: -90.5
                 n: 90.5

@@ -9,41 +9,53 @@ Module: Collect/CFSR
 # General modules
 import os
 import sys
-
 import datetime
 
-import re
-from joblib import Parallel, delayed
 import pycurl
+from joblib import Parallel, delayed
 
 import pandas as pd
 import numpy as np
-
 from netCDF4 import Dataset
 
-# WA+ modules
-# from watools.Collect.CFSR.Download_data_CFSR import Download_data
 # IHEWAcollect Modules
 try:
     from ..collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
         Convert_grb2_to_nc
-    # from ..gis import GIS
-    # from ..dtime import Dtime
+    from ..gis import GIS
+    from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
         Convert_grb2_to_nc
-    # from IHEWAcollect.templates.gis import GIS
-    # from IHEWAcollect.templates.dtime import Dtime
+    from IHEWAcollect.templates.gis import GIS
+    from IHEWAcollect.templates.dtime import Dtime
     from IHEWAcollect.templates.util import Log
 
 
 __this = sys.modules[__name__]
 
 
-def DownloadData(status, conf):
+def _init(status, conf):
+    # From download.py
+    __this.status = status
+    __this.conf = conf
+
+    account = conf['account']
+    folder = conf['folder']
+    product = conf['product']
+
+    # Init supported classes
+    __this.GIS = GIS(status, conf)
+    __this.Dtime = Dtime(status, conf)
+    __this.Log = Log(conf['log'])
+
+    return account, folder, product
+
+
+def DownloadData(status, conf) -> int:
     """
     This function collects daily CFSR data in geotiff format
 
@@ -51,222 +63,318 @@ def DownloadData(status, conf):
       status (dict): Status.
       conf (dict): Configuration.
     """
-    __this.account = conf['account']
-    __this.product = conf['product']
-    __this.Log = Log(conf['log'])
+    # ================ #
+    # 1. Init function #
+    # ================ #
+    # Global variable, __this
+    account, folder, product = _init(status, conf)
 
-    Waitbar = 0
+    # User input arguments
+    arg_bbox = conf['product']['bbox']
+    arg_period_s = conf['product']['period']['s']
+    arg_period_e = conf['product']['period']['e']
+
+    # Local variables
+    is_waitbar = False
+
+    # ============================== #
+    # 2. Check latlim, lonlim, dates #
+    # ============================== #
+    # Check the latitude and longitude, otherwise set lat or lon on greatest extent
+    latlim = [
+        np.max(
+            [
+                arg_bbox['s'],
+                product['data']['lat']['s']
+            ]
+        ),
+        np.min(
+            [
+                arg_bbox['n'],
+                product['data']['lat']['n']
+            ]
+        )
+    ]
+
+    lonlim = [
+        np.max(
+            [
+                arg_bbox['w'],
+                -((product['data']['lon']['e'] - product['data']['lon']['w']) / 2.0
+                  - product['data']['lon']['w'])
+            ]
+        ),
+        np.min(
+            [
+                arg_bbox['e'],
+                (product['data']['lon']['e'] - product['data']['lon']['w']) / 2.0
+                - product['data']['lon']['w']
+            ]
+        )
+    ]
+
+    # Check Startdate and Enddate, make a panda timestamp of the date
+    if np.logical_or(arg_period_s == '', arg_period_s is None):
+        date_s = pd.Timestamp(product['data']['time']['s'])
+    else:
+        date_s = pd.Timestamp(arg_period_s)
+
+    if np.logical_or(arg_period_e == '', arg_period_e is None):
+        if product['data']['time']['e'] is None:
+            date_e = pd.Timestamp.now()
+        else:
+            date_e = pd.Timestamp(product['data']['time']['e'])
+    else:
+        date_e = pd.Timestamp(arg_period_e)
+
+    # Creates dates library
+    date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
+
+    # =========== #
+    # 3. Download #
+    # =========== #
+    status = download_product(latlim, lonlim, date_dates,
+                              account, folder, product,
+                              is_waitbar)
+
+    return status
+
+
+def download_product(latlim, lonlim, dates,
+                     account, folder, product,
+                     is_waitbar) -> int:
+    # Define local variable
+    status = -1
+    total = len(dates)
     cores = 1
 
-    bbox = conf['product']['bbox']
-    Startdate = conf['product']['period']['s']
-    Enddate = conf['product']['period']['e']
-
-    Version = int(conf['product']['version'][-1])
-    TimeStep = conf['product']['resolution']
-    Var = conf['product']['variable']
-    freq = conf['product']['freq']
-    latlim = conf['product']['data']['lat']
-    lonlim = conf['product']['data']['lon']
-
-    folder = conf['folder']
-
-    # Creates an array of the days of which the ET is taken
-    Dates = pd.date_range(Startdate, Enddate, freq=freq)
-
-    # # Create Waitbar
-    # if Waitbar == 1:
-    #     import watools.Functions.Start.WaitbarConsole as WaitbarConsole
-    #     total_amount = len(Dates)
+    # Create Waitbar
+    # amount = 0
+    # if is_waitbar == 1:
     #     amount = 0
-    #     WaitbarConsole.printWaitBar(amount, total_amount, prefix='Progress:', suffix='Complete', length=50)
+    #     collect.WaitBar(amount, total,
+    #                     prefix='ALEXI:', suffix='Complete',
+    #                     length=50)
 
-    # Check the latitude and longitude and otherwise set lat or lon on greatest extent
-    # if bbox['s'] < latlim['s'] or bbox['n'] > latlim['n']:
-    #     bbox['s'] = np.max(bbox['s'], latlim['s'])
-    #     bbox['n'] = np.min(bbox['n'], latlim['n'])
-    # if bbox['w'] < lonlim['w'] or bbox['e'] > lonlim['e']:
-    #     bbox['w'] = np.max(bbox['w'], lonlim['w'])
-    #     bbox['e'] = np.min(bbox['e'], lonlim['e'])
-
-    latlim = [bbox['s'], bbox['n']]
-    lonlim = [bbox['w'], bbox['e']]
-
-    # Make directory for the CFSR data
-    output_folder = folder['l']
-
-    # Pass variables to parallel function and run
-    args = [output_folder, latlim, lonlim, Var, Version]
     if not cores:
-        for Date in Dates:
-            RetrieveData(Date, args)
-            # if Waitbar == 1:
+        for date in dates:
+            args = get_download_args(latlim, lonlim, date,
+                                     account, folder, product)
+
+            status = start_download(args)
+
+            # Update waitbar
+            # if is_waitbar == 1:
             #     amount += 1
-            #     WaitbarConsole.printWaitBar(amount, total_amount, prefix = 'Progress:', suffix = 'Complete', length = 50)
-        results = True
+            #     collect.WaitBar(amount, total,
+            #                     prefix='Progress:', suffix='Complete',
+            #                     length=50)
     else:
-        results = Parallel(n_jobs=cores)(delayed(RetrieveData)(Date, args)
-                                         for Date in Dates)
+        status = Parallel(n_jobs=cores)(
+            delayed(
+                start_download)(
+                get_download_args(
+                    latlim, lonlim, date,
+                    account, folder, product)) for date in dates)
 
-    # # Remove all .nc and .grb2 files
-    # for f in os.listdir(output_folder):
-    #     if re.search(".nc", f):
-    #         os.remove(os.path.join(output_folder, f))
-    # for f in os.listdir(output_folder):
-    #     if re.search(".grb2", f):
-    #         os.remove(os.path.join(output_folder, f))
-    # for f in os.listdir(output_folder):
-    #     if re.search(".grib2", f):
-    #         os.remove(os.path.join(output_folder, f))
-
-    return results
+    return status
 
 
-def RetrieveData(Date, args):
-    # unpack the arguments
-    [output_folder, latlim, lonlim, Var, Version] = args
-
-    # Name of the outputfile
-    Outputname = __this.product['data']['fname']['l'].format(dtime=Date)
-
-    msg = 'Downloading "{f}"'.format(f=Outputname)
-    print('Downloading {f}'.format(f=Outputname))
-    __this.Log.write(datetime.datetime.now(), msg=msg)
-
-    # Create the total end output name
-    outputnamePath = os.path.join(output_folder, Outputname)
-
-    # If the output name not exists than create this output
-    if not os.path.exists(outputnamePath):
-
-        local_filename = Download_data(Date, Version, output_folder, Var)
-
-        # convert grb2 to netcdf (wgrib2 module is needed)
-        for i in range(0, 4):
-            nameNC = __this.product['data']['fname']['t'].format(dtime=Date, ipart=str(i+1))
-
-            # Total path of the output
-            FileNC6hour = os.path.join(output_folder, nameNC)
-
-            # Band number of the grib data which is converted in .nc
-            band = (int(Date.strftime('%d')) - 1) * 28 + (i + 1) * 7
-
-            # Convert the data
-            Convert_grb2_to_nc(local_filename, FileNC6hour, band)
-
-        if Version == 1:
-            if Date < pd.Timestamp(pd.datetime(2011, 1, 1)):
-                # Convert the latlim and lonlim into array
-                Xstart = np.floor((lonlim[0] + 180.1562497) / 0.3125)
-                Xend = np.ceil((lonlim[1] + 180.1562497) / 0.3125) + 1
-                Ystart = np.floor((latlim[0] + 89.9171038899) / 0.3122121663)
-                Yend = np.ceil((latlim[1] + 89.9171038899) / 0.3122121663)
-
-                # Create a new dataset
-                Datatot = np.zeros([576, 1152])
-
-            else:
-                Version = 2
-
-        if Version == 2:
-            # Convert the latlim and lonlim into array
-            Xstart = np.floor((lonlim[0] + 180.102272725) / 0.204545)
-            Xend = np.ceil((lonlim[1] + 180.102272725) / 0.204545) + 1
-            Ystart = np.floor((latlim[0] + 89.9462116040955806) / 0.204423)
-            Yend = np.ceil((latlim[1] + 89.9462116040955806) / 0.204423)
-
-            # Create a new dataset
-            Datatot = np.zeros([880, 1760])
-
-        # Open 4 times 6 hourly dataset
-        for i in range(0, 4):
-            nameNC = __this.product['data']['fname']['t'].format(dtime=Date, ipart=str(i+1))
-            FileNC6hour = os.path.join(output_folder, nameNC)
-
-            f = Dataset(FileNC6hour, mode='r')
-            Data = f.variables['Band1'][0:int(Datatot.shape[0]), 0:int(Datatot.shape[1])]
-            f.close()
-            data = np.array(Data)
-            Datatot = Datatot + data
-
-        # Calculate the average in W/m^2 over the day
-        DatatotDay = Datatot / 4
-        DatatotDayEnd = np.zeros([int(Datatot.shape[0]), int(Datatot.shape[1])])
-        DatatotDayEnd[:,0:int(Datatot.shape[0])] = DatatotDay[:, int(Datatot.shape[0]):int(Datatot.shape[1])]
-        DatatotDayEnd[:,int(Datatot.shape[0]):int(Datatot.shape[1])] = DatatotDay[:, 0:int(Datatot.shape[0])]
-
-        # clip the data to the extent difined by the user
-        DatasetEnd = DatatotDayEnd[int(Ystart):int(Yend), int(Xstart):int(Xend)]
-
-        # save file
-        if Version == 1:
-            pixel_size = 0.3125
-        if Version == 2:
-            pixel_size = 0.204545
-        geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
-        Save_as_tiff(data=np.flipud(DatasetEnd), name=outputnamePath, geo=geo, projection="WGS84")
-
-        os.remove(local_filename)
-        for i in range(0, 4):
-            nameNC = __this.product['data']['fname']['t'].format(dtime=Date, ipart=str(i+1))
-            FileNC6hour = os.path.join(output_folder, nameNC)
-            os.remove(FileNC6hour)
-
-    return()
-
-
-def Download_data(Date, Version, output_folder, Var):
-    """
-    This function downloads CFSR data from the FTP server
-    For - CFSR:    https://nomads.ncdc.noaa.gov/data/cfsr/
-    - CFSRv2:  http://nomads.ncdc.noaa.gov/modeldata/cfsv2_analysis_timeseries/
-
-    Keyword arguments:
-    Date -- pandas timestamp day
-    Version -- 1 or 2 (1 = CFSR, 2 = CFSRv2)
-    output_folder -- The directory for storing the downloaded files
-    Var -- The variable that must be downloaded from the server ('dlwsfc','uswsfc','dswsfc','ulwsfc')
-    """
-    # Define the filename that must be downloaded
-    if Version == 1:
-        filename = Var + '.gdas.' + str(Date.strftime('%Y')) + str(Date.strftime('%m')) + '.grb2'
-    if Version == 2:
-        filename = Var + '.gdas.' + str(Date.strftime('%Y')) + str(Date.strftime('%m')) + '.grib2'
-
+def get_download_args(latlim, lonlim, date,
+                      account, folder, product) -> tuple:
+    # Define arg_account
+    # For download
     try:
-         # download the file when it not exist
-        local_filename = os.path.join(output_folder, filename)
-        if not os.path.exists(local_filename):
-            Downloaded = 0
-            Times = 0
-            while Downloaded == 0:
-                # Create the command and run the command in cmd
-                FTP_name = '{}{}{}'.format(__this.product['url'].format(dtime=Date),
-                                           __this.product['data']['dir'].format(dtime=Date),
-                                           filename)
-                # if Version == 1:
-                #     FTP_name = 'https://nomads.ncdc.noaa.gov/data/cfsr/' + Date.strftime('%Y') + Date.strftime('%m')+ '/' + filename
-                #
-                # if Version == 2:
-                #     FTP_name = 'https://nomads.ncdc.noaa.gov/modeldata/cfsv2_analysis_timeseries/' + Date.strftime('%Y') + '/' + Date.strftime('%Y') + Date.strftime('%m')+ '/' + filename
+        username = account['data']['username']
+        password = account['data']['password']
+        apitoken = account['data']['apitoken']
+    except KeyError:
+        username = ''
+        password = ''
+        apitoken = ''
 
-                curl = pycurl.Curl()
-                curl.setopt(pycurl.URL, FTP_name)
-                fp = open(local_filename, "wb")
-                curl.setopt(pycurl.SSL_VERIFYPEER, 0)
-                curl.setopt(pycurl.SSL_VERIFYHOST, 0)
-                curl.setopt(pycurl.WRITEDATA, fp)
-                curl.perform()
-                curl.close()
-                fp.close()
-                statinfo = os.stat(local_filename)
-                if int(statinfo.st_size) > 10000:
-                    Downloaded = 1
-                else:
-                    Times += 1
-                    if Times == 10:
-                        Downloaded = 1
-    except:
-        print('Was not able to download the CFSR file from the FTP server')
+    # Define arg_url
+    url_server = product['url']
+    url_dir = product['data']['dir'].format(dtime=date)
 
-    return(local_filename)
+    # Define arg_filename
+    fname_r = product['data']['fname']['r'].format(dtime=date)
+    if product['data']['fname']['t'] is None:
+        fname_t = ''
+    else:
+        fname_t = product['data']['fname']['t']
+    fname_l = product['data']['fname']['l'].format(dtime=date)
+
+    # Define arg_file
+    file_r = os.path.join(folder['r'], fname_r)
+    file_t = os.path.join(folder['t'], fname_t)
+    file_l = os.path.join(folder['l'], fname_l)
+
+    pixel_size = abs(product['data']['lat']['r'])
+    # lat_pixel_size = -abs(product['data']['lat']['r'])
+    # lon_pixel_size = abs(product['data']['lon']['r'])
+    pixel_w = int(product['data']['dem']['w'])
+    pixel_h = int(product['data']['dem']['h'])
+
+    data_ndv = product['nodata']
+    data_type = product['data']['dtype']['l']
+    data_multiplier = float(product['data']['units']['m'])
+    data_variable = product['data']['variable']
+
+    # Define arg_IDs
+    prod_lat_s = product['data']['lat']['s']
+    prod_lon_w = product['data']['lon']['w']
+    prod_lat_size = abs(product['data']['lat']['r'])
+    prod_lon_size = abs(product['data']['lon']['r'])
+
+    y_id = np.int16(np.array([
+        pixel_h - np.ceil((latlim[1] + abs(prod_lat_s)) / prod_lat_size),
+        pixel_h - np.floor((latlim[0] + abs(prod_lat_s)) / prod_lat_size)
+    ]))
+    x_id = np.int16(np.array([
+        np.floor((lonlim[0] + abs(prod_lon_w)) / prod_lon_size),
+        np.ceil((lonlim[1] + abs(prod_lon_w)) / prod_lon_size)
+    ]))
+
+    return latlim, lonlim, date, \
+           product, \
+           username, password, apitoken, \
+           url_server, url_dir, \
+           fname_r, fname_t, fname_l, \
+           file_r, file_t, file_l,\
+           y_id, x_id, pixel_size, pixel_w, pixel_h, \
+           data_ndv, data_type, data_multiplier, data_variable
+
+
+def start_download(args) -> int:
+    """Retrieves data
+    """
+    # Unpack the arguments
+    latlim, lonlim, date,\
+    product, \
+    username, password, apitoken, \
+    url_server, url_dir, \
+    remote_fname, temp_fname, local_fname,\
+    remote_file, temp_file, local_file,\
+    y_id, x_id, pixel_size, pixel_w, pixel_h, \
+    data_ndv, data_type, data_multiplier, data_variable = args
+
+    # Define local variable
+    status = -1
+
+    # Download the data from server if the file not exists
+    if not os.path.exists(local_file):
+        url = '{sr}{dr}{fn}'.format(sr=url_server, dr=url_dir, fn=remote_fname)
+
+        try:
+            # Connect to server
+            msg = 'Downloading "{f}"'.format(f=remote_fname)
+            print('{}'.format(msg))
+            __this.Log.write(datetime.datetime.now(), msg=msg)
+
+            conn = pycurl.Curl()
+            conn.setopt(pycurl.URL, url)
+            conn.setopt(pycurl.SSL_VERIFYPEER, 0)
+            conn.setopt(pycurl.SSL_VERIFYHOST, 0)
+        except pycurl.error as err:
+            # Connect error
+            status = 1
+            msg = "Not able to download {fl}, from {sr}{dr}".format(sr=url_server,
+                                                                    dr=url_dir,
+                                                                    fl=remote_fname)
+            print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
+            __this.Log.write(datetime.datetime.now(),
+                             msg='{}\n{}'.format(msg, str(err)))
+        else:
+            # Download data
+            if not os.path.exists(remote_file):
+                with open(remote_file, "wb") as fp:
+                    conn.setopt(pycurl.WRITEDATA, fp)
+                    conn.perform()
+                    conn.close()
+            else:
+                msg = 'Exist "{f}"'.format(f=remote_file)
+                print('\33[93m{}\33[0m'.format(msg))
+                __this.Log.write(datetime.datetime.now(), msg=msg)
+
+            # Download success
+            # post-process remote (from server) -> temporary (unzip) -> local (gis)
+            msg = 'Saving file "{f}"'.format(f=local_file)
+            print('\33[94m{}\33[0m'.format(msg))
+            __this.Log.write(datetime.datetime.now(), msg=msg)
+
+            status = convert_data(args)
+        finally:
+            # Release local resources.
+            raw_data = None
+            dataset = None
+            data = None
+            pass
+    else:
+        status = 0
+        msg = 'Exist "{f}"'.format(f=local_file)
+        print('\33[93m{}\33[0m'.format(msg))
+        __this.Log.write(datetime.datetime.now(), msg=msg)
+
+    msg = 'Finish'
+    __this.Log.write(datetime.datetime.now(), msg=msg)
+    return status
+
+
+def convert_data(args):
+    """
+    """
+    # Unpack the arguments
+    latlim, lonlim, date,\
+    product, \
+    username, password, apitoken, \
+    url_server, url_dir, \
+    remote_fname, temp_fname, local_fname,\
+    remote_file, temp_file, local_file,\
+    y_id, x_id, pixel_size, pixel_w, pixel_h, \
+    data_ndv, data_type, data_multiplier, data_variable = args
+
+    # Define local variable
+    status = -1
+    nparts = 4
+
+    # Load data from downloaded remote file
+
+    # Generate temporary files
+    for i in range(0, nparts):
+        # Band number of the grib data which is converted in .nc
+        temp_file_part = temp_file.format(dtime=date, ipart=str(i + 1))
+        temp_file_band = (int(date.strftime('%d')) - 1) * 28 + (i + 1) * 7
+
+        Convert_grb2_to_nc(remote_file, temp_file_part, temp_file_band)
+
+    # Load data from temporary files
+    for i in range(0, nparts):
+        temp_file_part = temp_file.format(dtime=date, ipart=str(i + 1))
+
+        fp = Dataset(temp_file_part, mode='r')
+
+        data_raw = np.zeros([pixel_h, pixel_w])
+        data_raw = data_raw + np.array(fp.variables['Band1'][0:pixel_h, 0:pixel_w])
+
+        fp.close()
+    # calculate the average
+    data_raw = data_raw / float(nparts)
+
+    data_tmp = np.zeros([pixel_h, pixel_w])
+    data_tmp[:, 0:int(pixel_w / 2)] = data_raw[:, int(pixel_w / 2):pixel_w]
+    data_tmp[:, int(pixel_w / 2):pixel_w] = data_raw[:, 0:int(pixel_w / 2)]
+
+    # Clip data
+    data = np.flipud(data_tmp[y_id[0]:y_id[1], x_id[0]:x_id[1]])
+
+    # Convert units, set NVD
+    data = data * data_multiplier
+    # data[data < 0] = data_ndv
+
+    # Save as GTiff
+    geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
+    Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
+
+    status = 0
+    return status

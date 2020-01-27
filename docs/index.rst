@@ -153,6 +153,13 @@ Set "Shared Folders" in Virtual Machine.
 - Auto-mount: Yes
 - Make Permanent: Yes
 
+Go to IHEWAcollect folder.
+
+.. code-block:: console
+
+    $ git clone https://github.com/wateraccounting/IHEWAcollect.git
+    $ cd IHEWAcollect
+
 Restart Docker Virtual Machine image.
 
 .. code-block:: console
@@ -195,10 +202,7 @@ Access to running image, in the new cmd window.
 
     $ docker exec -it ihewacollect bash
 
-    $ cd /notebook/
-
-    $ git clone https://github.com/wateraccounting/IHEWAcollect.git
-    $ cd IHEWAcollect
+    $ cd /notebooks/
 
     $ python3 setup.py install
     $ python3 ./examples/ex_ETmonitor_BigTIFF.py

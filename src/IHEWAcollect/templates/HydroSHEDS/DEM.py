@@ -11,7 +11,6 @@ Module: Collect/DEM
 import os
 import sys
 import glob
-
 import datetime
 
 import urllib
@@ -25,22 +24,39 @@ try:
     from ..collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
         Extract_Data, Convert_adf_to_tiff, Convert_bil_to_tiff, Open_array_info, clip_data
-    # from ..gis import GIS
-    # from ..dtime import Dtime
+    from ..gis import GIS
+    from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
         Extract_Data, Convert_adf_to_tiff, Convert_bil_to_tiff, Open_array_info, clip_data
-    # from IHEWAcollect.templates.gis import GIS
-    # from IHEWAcollect.templates.dtime import Dtime
+    from IHEWAcollect.templates.gis import GIS
+    from IHEWAcollect.templates.dtime import Dtime
     from IHEWAcollect.templates.util import Log
 
 
 __this = sys.modules[__name__]
 
 
-def DownloadData(status, conf):
+def _init(status, conf):
+    # From download.py
+    __this.status = status
+    __this.conf = conf
+
+    account = conf['account']
+    folder = conf['folder']
+    product = conf['product']
+
+    # Init supported classes
+    __this.GIS = GIS(status, conf)
+    __this.Dtime = Dtime(status, conf)
+    __this.Log = Log(conf['log'])
+
+    return account, folder, product
+
+
+def DownloadData(status, conf) -> int:
     """
     This function downloads DEM data from HydroSHED
 

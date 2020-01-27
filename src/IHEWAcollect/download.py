@@ -583,15 +583,35 @@ def main():
             },
             'nodata': -9999
         },
-        '4': {
-            # Caution:
-            # dec_jpeg2000: Unable to open JPEG2000 image within GRIB file.
-            # Docker, pass!
-            'product': 'CFSR',
-            'version': 'v1',
-            'parameter': 'radiation',
+        # TODO, 20200120, QPan, CFSR, dec_jpeg2000, Docker
+        # '4': {
+        #     # Caution:
+        #     # dec_jpeg2000: Unable to open JPEG2000 image within GRIB file.
+        #     # Docker, pass
+        #
+        #     'product': 'CFSR',
+        #     'version': 'v1',
+        #     'parameter': 'radiation',
+        #     'resolution': 'daily',
+        #     'variable': 'dlwsfc',
+        #     'bbox': {
+        #         'w': -19.0,
+        #         's': -35.0,
+        #         'e': 55.0,
+        #         'n': 38.0
+        #     },
+        #     'period': {
+        #         's': '2007-01-01',
+        #         'e': '2007-01-02'
+        #     },
+        #     'nodata': -9999
+        # },
+        '5': {
+            'product': 'CHIRPS',
+            'version': 'v2.0',
+            'parameter': 'precipitation',
             'resolution': 'daily',
-            'variable': 'dlwsfc',
+            'variable': 'PCP',
             'bbox': {
                 'w': -19.0,
                 's': -35.0,
@@ -604,157 +624,165 @@ def main():
             },
             'nodata': -9999
         },
+        '6': {
+            'product': 'CHIRPS',
+            'version': 'v2.0',
+            'parameter': 'precipitation',
+            'resolution': 'monthly',
+            'variable': 'PCP',
+            'bbox': {
+                'w': -19.0,
+                's': -35.0,
+                'e': 55.0,
+                'n': 38.0
+            },
+            'period': {
+                's': '2007-01-01',
+                'e': '2007-01-02'
+            },
+            'nodata': -9999
+        },
+        '7': {
+            'product': 'CMRSET',
+            'version': 'v1',
+            'parameter': 'evapotranspiration',
+            'resolution': 'monthly',
+            'variable': 'ETA',
+            'bbox': {
+                'w': -19.0,
+                's': -35.0,
+                'e': 55.0,
+                'n': 38.0
+            },
+            'period': {
+                's': '2007-01-01',
+                'e': '2007-01-31'
+            },
+            'nodata': -9999
+        },
+        # TODO, 20200120, QPan, DEM, rewrite, and re-design base.yml
+        # '8': {
+        #     'product': 'DEM',
+        #     'version': 'v1',
+        #     'parameter': 'DEM',
+        #     'resolution': '30s',
+        #     'variable': 'af',
+        #     'bbox': {
+        #         'w': -19.0,
+        #         's': -35.0,
+        #         'e': 55.0,
+        #         'n': 38.0
+        #     },
+        #     'period': {
+        #         's': '',
+        #         'e': ''
+        #     },
+        #     'nodata': -9999
+        # },
+        # TODO, 20200120, QPan, ECMWF
+        # '9': {
+        #     'product': '',
+        # },
+        # TODO, 20200120, QPan, GDAL, ETmonitor, BigTIFF, Docker,
+        #  Why gdal_translate.exe use less RAM?
+        # '10': {
+        #     # Caution:
+        #     # A 69618 pixels x 29007 lines x 1 bands Float32 image would be larger than 4GB
+        #     # but this is the largest size a TIFF can be, and BigTIFF is unavailable.
+        #     # Docker, pass
+        #
+        #     'product': 'ETmonitor',
+        #     'version': 'v1',
+        #     'parameter': 'evapotranspiration',
+        #     'resolution': 'monthly',
+        #     'variable': 'ETA',
+        #     # variable': 'ETP',
+        #     'bbox': {
+        #         'w': -19.0,
+        #         's': -35.0,
+        #         'e': 55.0,
+        #         'n': 38.0
+        #     },
+        #     'period': {
+        #         's': '2008-01-01',
+        #         'e': '2008-01-31'
+        #     },
+        #     'nodata': -9999
+        # },
+        '11': {
+            'product': 'FEWS',
+            'version': 'v4',
+            'parameter': 'evapotranspiration',
+            'resolution': 'daily',
+            'variable': 'ETP',
+            'bbox': {
+                'w': -19.0,
+                's': -35.0,
+                'e': 55.0,
+                'n': 38.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': -9999
+        }
     }
 
 
-    # product = 'CHIRPS'
-    # version = 'v2.0'
-    # parameter = 'precipitation'
-    # resolution = 'daily'
-    # # resolution = 'monthly'
-    # variable = 'PCP'
-    # bbox = {
-    #     'w': -19.0,
-    #     's': -35.0,
-    #     'e': 55.0,
-    #     'n': 38.0
-    # }
-    # period = {
-    #     's': '2007-01-01',
-    #     'e': '2007-01-31'
-    # }
-    # nodata = -9999
-
-    # product = 'CMRSET'
-    # version = 'v1'
-    # parameter = 'evapotranspiration'
-    # resolution = 'monthly'
-    # variable = 'ETA'
-    # bbox = {
-    #     'w': -19.0,
-    #     's': -35.0,
-    #     'e': 55.0,
-    #     'n': 38.0
-    # }
-    # period = {
-    #     's': '2007-01-01',
-    #     'e': '2007-01-31'
-    # }
-    # nodata = -9999
-
-    # TODO, 20200120, QPan, DEM, replace some values, and re-design base.yml
-    # product = 'DEM'
-    # version = 'v1'
-    # parameter = 'DEM'
-    # resolution = '30s'
-    # variable = 'af'
-    # bbox = {
-    #     'w': -19.0,
-    #     's': -35.0,
-    #     'e': 55.0,
-    #     'n': 38.0
-    # }
-    # period = {
-    #     's': '',
-    #     'e': ''
-    # }
-    # nodata = -9999
-
-    # TODO, ECMWF
-    # product = ''
-
-    # Caution:
-    # # A 69618 pixels x 29007 lines x 1 bands Float32 image would be larger than 4GB
-    # # but this is the largest size a TIFF can be, and BigTIFF is unavailable.
-    # Docker, pass!
-    # product = 'ETmonitor'
-    # version = 'v1'
-    # parameter = 'evapotranspiration'
-    # resolution = 'monthly'
-    # variable = 'ETA'
-    # # variable = 'ETP'
-    # bbox = {
-    #     'w': -19.0,
-    #     's': -35.0,
-    #     'e': 55.0,
-    #     'n': 38.0
-    # }
-    # period = {
-    #     's': '2008-01-01',
-    #     'e': '2008-01-31'
-    # }
-    # nodata = -9999
-
-    # product = 'FEWS'
-    # version = 'v4'
-    # parameter = 'evapotranspiration'
-    # resolution = 'daily'
-    # variable = 'ETP'
-    # bbox = {
-    #     'w': -19.0,
-    #     's': -35.0,
-    #     'e': 55.0,
-    #     'n': 38.0
-    # }
-    # period = {
-    #     's': '2008-01-01',
-    #     'e': '2008-01-31'
-    # }
-    # nodata = -9999
-
     # TODO, 20200120, QPan, GLDAS, change code of download from "requested text" to "NetCDF"
-    # product = 'GLDAS'
-    # version = 'v2.1'
-    # parameter = 'evapotranspiration'
-    # resolution = 'three_hourly'
-    # variable = 'ET'
-    # bbox = {
+    # product': 'GLDAS'
+    # version': 'v2.1'
+    # parameter': 'evapotranspiration'
+    # resolution': 'three_hourly'
+    # variable': 'ET'
+    # bbox': {
     #     'w': -19.0,
     #     's': -35.0,
     #     'e': 55.0,
     #     'n': 38.0
     # }
-    # period = {
+    # period': {
     #     's': '2008-01-01',
     #     'e': '2008-01-31'
     # }
-    # nodata = -9999
+    # nodata': -9999
 
     # TODO, 20200120, QPan, GLEAM, replace some values
-    # product = 'GLEAM'
-    # version = 'v3.3a'
-    # parameter = 'evapotranspiration'
-    # resolution = 'daily'
-    # variable = 'ET'
-    # bbox = {
+    # product': 'GLEAM'
+    # version': 'v3.3a'
+    # parameter': 'evapotranspiration'
+    # resolution': 'daily'
+    # variable': 'ET'
+    # bbox': {
     #     'w': -19.0,
     #     's': -35.0,
     #     'e': 55.0,
     #     'n': 38.0
     # }
-    # period = {
+    # period': {
     #     's': '2008-01-01',
     #     'e': '2008-01-31'
     # }
-    # nodata = -9999
+    # nodata': -9999
 
     # TODO, GPM
-    # product = 'GPM'
-    # version = 'v6'
-    # parameter = 'precipitation'
-    # resolution = 'daily'
-    # variable = 'PCP'
-    # bbox = {
+    # product': 'GPM'
+    # version': 'v6'
+    # parameter': 'precipitation'
+    # resolution': 'daily'
+    # variable': 'PCP'
+    # bbox': {
     #     'w': -19.0,
     #     's': -35.0,
     #     'e': 55.0,
     #     'n': 38.0
     # }
-    # period = {
+    # period': {
     #     's': '2008-01-01',
     #     'e': '2008-01-31'
     # }
-    # nodata = -9999
+    # nodata': -9999
 
     # product = 'TRMM'
     # version = 'v7'

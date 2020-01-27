@@ -29,13 +29,10 @@ in the ``WaterAccounting/accounts.yml`` file.
 
 """
 import os
-# import sys
+import sys
 import inspect
+import subprocess
 
-# import shutil
-# import yaml
-
-# import datetime
 import numpy as np
 # import pandas as pd
 
@@ -134,60 +131,75 @@ class GIS(object):
                                    self.__status['code'],
                                    fun, prt, ext)
 
-    def get_latlon(self):
-        latlim = self.__conf['latlim']
-        lonlim = self.__conf['lonlim']
-        dem = self.__conf['dem']
-        latlon = self.__conf['latlon']
+    def get_latlon_lim(self, arg_bbox):
+        prod_lat = self.product['data']['lat']
+        prod_lon = self.product['data']['lon']
+        prod_dem = self.product['data']['dem']
 
-        if self.__status['code'] == 0:
-            latlim = self.product['data']['lat']
-            lonlim = self.product['data']['lon']
-            dem = self.product['data']['dem']
-            bbox = self.product['bbox']
+        # from osgeo import osr
+        #
+        # src = osr.SpatialReference()
+        # tgt = osr.SpatialReference()
+        # src.ImportFromEPSG(4326)
+        # tgt.ImportFromEPSG(int(data['crs']))
+        #
+        # transform = osr.CoordinateTransformation(src, tgt)
+        # coords = transform.TransformPoint(-122, 46)
+        # x, y = coords[0:2]
 
-            self.__conf['latlim'] = latlim
-            self.__conf['lonlim'] = lonlim
-            self.__conf['dem'] = dem
+        arg_lat = [
+            np.max(
+                [
+                    arg_bbox['s'],
+                    prod_lat['s']
+                ]
+            ),
+            np.min(
+                [
+                    arg_bbox['n'],
+                    prod_lat['n']
+                ]
+            )
+        ]
 
-            if bbox['s'] < latlim['s']:
-                print('latlim: {}'.format(latlim))
-                raise IHEClassInitError('GIS') from None
-            if latlim['n'] < bbox['n']:
-                print('latlim: {}'.format(latlim))
-                raise IHEClassInitError('GIS') from None
-            if bbox['w'] < lonlim['w']:
-                print('lonlim: {}'.format(lonlim))
-                raise IHEClassInitError('GIS') from None
-            if lonlim['e'] < bbox['e']:
-                print('lonlim: {}'.format(latlim))
-                raise IHEClassInitError('GIS') from None
+        arg_lon = [
+            np.max(
+                [
+                    arg_bbox['w'],
+                    prod_lon['w']
+                ]
+            ),
+            np.min(
+                [
+                    arg_bbox['e'],
+                    prod_lon['e']
+                ]
+            )
+        ]
+        return arg_lat, arg_lon
 
-            self.__conf['latlon'] = latlon
-        return latlon
+    def get_latlon_index(self, arg_lat, arg_lon) -> tuple:
+        prod_lat = self.product['data']['lat']
+        prod_lon = self.product['data']['lon']
+        prod_dem = self.product['data']['dem']
 
-    def get_latlon_index(self, lat, lon, conf_dem):
-        latid, lonid = np.ndarray, np.ndarray
-        latlim = self.__conf['latlim']
-        lonlim = self.__conf['lonlim']
+        y_id = np.int16(
+            np.array([
+                3000 - np.ceil((arg_lat[1] + 60) * 20),
+                3000 - np.floor((arg_lat[0] + 60) * 20)
+            ]))
 
-        latid = 3000 - np.int16(np.array(
-            [np.ceil((latlim['s'] + 60) * 20), np.floor((latlim['n'] + 60) * 20)]))
-        lonid = np.int16(np.array(
-            [np.floor((lonlim['w']) * 20), np.ceil((lonlim['e']) * 20)]) + 3600)
+        x_id = np.int16(
+            np.array([
+                np.floor((arg_lon[0]) * 20) + 3600,
+                np.ceil((arg_lon[1]) * 20) + 3600
+            ]))
+        return y_id, x_id
 
-        # raw_data = np.fromfile(os.path.splitext(local_filename)[0], dtype="<f4")
-        # dataset = np.flipud(np.resize(raw_data, [3000, 7200]))
-        # data = dataset[yID[0]:yID[1],
-        #        xID[0]:xID[1]] / 2.45  # Values are in MJ/m2d so convert to mm/d
-        # data[data < 0] = -9999
-
-        return latid, lonid
-
-    def check_continent(self, lat, lon, conf_lat, conf_lon):
+    def check_continent(self, arg_lat, arg_lon) -> list:
         """Check area located in continent or continents, based on HydroSHEDS
         """
-        continents = {
+        continent_list = {
             'af': {
                 'w': -19.0,
                 's': -35.0,
@@ -231,11 +243,10 @@ class GIS(object):
                 'n': 15.0
             },
         }
-        continent = []
+        continents = []
+        return continents
 
-        return continent
-
-    def load_file(self, file='', band=1):
+    def load_file(self, file, band=1) -> np.ndarray:
         """Get tif band data
 
         This function get tif band as numpy.ndarray.
@@ -251,7 +262,7 @@ class GIS(object):
         :Example:
 
             >>> import os
-            >>> from IHEWAcollect.base.gis import GIS
+            >>> from IHEWAcollect.templates.gis import GIS
             >>> gis = GIS(os.getcwd(), is_print=False)
             >>> path = os.path.join(os.getcwd(), 'tests', 'data', 'BigTIFF')
             >>> file = os.path.join(path, 'Classic.tif')
@@ -272,9 +283,7 @@ class GIS(object):
                    [  0,   0,   0, ...,   0,   0,   0],
                    [  0,   0,   0, ...,   0,   0,   0]], dtype=uint8)
         """
-        data = np.ndarray
-
-        if band == '':
+        if band < 1:
             band = 1
 
         fp = gdal.Open(file)
@@ -286,17 +295,17 @@ class GIS(object):
                 # raise AttributeError('Band {band} not found.'.format(band=band))
         else:
             raise IHEFileError(file)from None
-            # raise IOError('{} not found.'.format(file))
-
         return data
 
-    def merge_map(self, data):
-        pass
+    def merge_map(self, data) -> np.ndarray:
+        rtn_data = np.zeros([1, 1])
+        return rtn_data
 
-    def clip_map(self, data):
-        pass
+    def clip_map(self, data) -> np.ndarray:
+        rtn_data = np.zeros([1, 1])
+        return rtn_data
 
-    def save_GTiff(self, name='', data='', geo='', projection=''):
+    def saveas_GTiff(self, name, data, geo, projection, ndv):
         """Save as tif
 
         This function save the array as a geotiff.
@@ -310,7 +319,7 @@ class GIS(object):
 
         :Example:
 
-            >>> from IHEWAcollect.base.gis import GIS
+            >>> from IHEWAcollect.templates.gis import GIS
             >>> gis = GIS(os.getcwd(), is_print=False)
             >>> path = os.path.join(os.getcwd(), 'tests', 'data', 'BigTIFF')
             >>> file = os.path.join(path, 'Classic.tif')
@@ -326,7 +335,7 @@ class GIS(object):
                    [  0,   0,   0, ...,   0,   0,   0],
                    [  0,   0,   0, ...,   0,   0,   0]], dtype=uint8)
 
-            >>> gis.save_GTiff(test, data, [0, 1, 0, 0, 1, 0], "WGS84")
+            >>> gis.saveas_GTiff(test, data, [0, 1, 0, 0, 1, 0], "WGS84", -9999)
             >>> data = gis.load_file(test, 1)
             >>> data
             array([[255., 255., 255., ...   0.,   0.,   0.],
@@ -337,6 +346,8 @@ class GIS(object):
                    [  0.,   0.,   0., ...,   0.,   0.,   0.],
                    [  0.,   0.,   0., ...,   0.,   0.,   0.]], dtype=float32)
         """
+        status = -1
+
         driver = gdal.GetDriverByName("GTiff")
         dst_ds = driver.Create(name,
                                int(data.shape[1]), int(data.shape[0]),
@@ -368,12 +379,84 @@ class GIS(object):
 
         dst_ds.SetProjection(srse.ExportToWkt())
         dst_ds.SetGeoTransform(geo)
-        dst_ds.GetRasterBand(1).SetNoDataValue(-9999)
+        dst_ds.GetRasterBand(1).SetNoDataValue(ndv)
         dst_ds.GetRasterBand(1).WriteArray(data)
         dst_ds = None
+        return status
 
-    def save_NetCDF(self):
-        pass
+    def saveas_NetCDF(self) -> int:
+        status = -1
+        return status
+
+    def reproject_MODIS(self, file_i, file_o, epsg_str) -> int:
+        """Reproject the map
+
+        The input projection must be the MODIS projection.
+        The output projection can be defined by the user.
+        """
+        status = -1
+
+        # Get environmental variable
+        # WA_env_paths = os.environ["GDAL_DRIVER"].split(';')
+        # GDAL_env_path = WA_env_paths[0]
+        # GDALWARP_PATH = os.path.join(GDAL_env_path, 'gdalwarp.exe')
+
+        exe_str = 'gdalwarp.exe'
+
+        cmd_str = '{para1} {para2} {para3} {para4} {para5} {fi} {fo}'.format(
+            para1='-overwrite',
+            para2='-s_srs',
+            para3='"{0} {1} {2} {3} {4} {5} {6}"'.format(
+                '+proj=sinu',
+                '+lon_0=0',
+                '+x_0=0 +y_0=0',
+                '+a=6371007.181',
+                '+b=6371007.181',
+                '+units=m',
+                '+no_defs'
+            ),
+            para4='-t_srs EPSG:%s' % epsg_str,
+            para5='-of GTiff',
+            fi=file_i,
+            fo=file_o
+        )
+        # -r {nearest}
+
+        status = self.exe_cmd(exe_str, cmd_str)
+        return status
+
+    def exe_cmd(self, exe_name, cmd_str) -> int:
+        """
+        This function runs the argument in the command window without showing cmd window
+
+        Keyword Arguments:
+        argument -- string, name of the adf file
+        """
+        # print('\n{}'.format(argument))
+        status = -1
+
+        if os.name == 'posix':
+            exe_str = exe_name.replace(".exe", "")
+        else:
+            exe_str = exe_name
+        cmd = '{exe} {cmd}'.format(exe=exe_str, cmd=cmd_str)
+
+        if os.name == 'posix':
+            status = os.system(cmd)
+
+        else:
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
+            process = subprocess.Popen(cmd,
+                                       startupinfo=startupinfo,
+                                       stderr=subprocess.PIPE,
+                                       stdout=subprocess.PIPE)
+            status = process.wait()
+
+        if status != 0:
+            raise RuntimeError(cmd)
+        return status
 
 
 def main():
