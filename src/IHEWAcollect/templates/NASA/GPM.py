@@ -8,11 +8,10 @@ Module: Collect/GPM
 """
 import os
 import sys
-
 import calendar
 
-from joblib import Parallel, delayed
 import requests
+from joblib import Parallel, delayed
 
 import numpy as np
 import pandas as pd

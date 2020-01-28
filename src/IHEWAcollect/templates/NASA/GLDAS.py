@@ -3,36 +3,55 @@
 # General modules
 import os
 import sys
-
 import datetime
 import calendar
 
-from joblib import Parallel, delayed
 import requests
+from requests.auth import HTTPBasicAuth
+from joblib import Parallel, delayed
 
 import numpy as np
 import pandas as pd
+from netCDF4 import Dataset
 
 # IHEWAcollect Modules
 try:
     from ..collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
         Clip_Dataset_GDAL
-    # from ..gis import GIS
-    # from ..dtime import Dtime
+    from ..gis import GIS
+    from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
         Clip_Dataset_GDAL
-    # from IHEWAcollect.templates.gis import GIS
-    # from IHEWAcollect.templates.dtime import Dtime
+    from IHEWAcollect.templates.gis import GIS
+    from IHEWAcollect.templates.dtime import Dtime
     from IHEWAcollect.templates.util import Log
+
 
 __this = sys.modules[__name__]
 
 
-def DownloadData(status, conf):
+def _init(status, conf):
+    # From download.py
+    __this.status = status
+    __this.conf = conf
+
+    account = conf['account']
+    folder = conf['folder']
+    product = conf['product']
+
+    # Init supported classes
+    __this.GIS = GIS(status, conf)
+    __this.Dtime = Dtime(status, conf)
+    __this.Log = Log(conf['log'])
+
+    return account, folder, product
+
+
+def DownloadData(status, conf) -> int:
     """
     This function downloads GLDAS CLSM daily data
 
@@ -40,564 +59,337 @@ def DownloadData(status, conf):
       status (dict): Status.
       conf (dict): Configuration.
     """
-    # Check the latitude and longitude and otherwise set lat or lon on greatest extent
-    __this.account = conf['account']
-    __this.product = conf['product']
-    __this.Log = Log(conf['log'])
+    # ================ #
+    # 1. Init function #
+    # ================ #
+    # Global variable, __this
+    account, folder, product = _init(status, conf)
 
-    Waitbar = 0
+    # User input arguments
+    arg_bbox = conf['product']['bbox']
+    arg_period_s = conf['product']['period']['s']
+    arg_period_e = conf['product']['period']['e']
+
+    # Local variables
+    is_waitbar = False
+
+    # ============================== #
+    # 2. Check latlim, lonlim, dates #
+    # ============================== #
+    # Check the latitude and longitude, otherwise set lat or lon on greatest extent
+    latlim = [
+        np.max(
+            [
+                arg_bbox['s'],
+                product['data']['lat']['s']
+            ]
+        ),
+        np.min(
+            [
+                arg_bbox['n'],
+                product['data']['lat']['n']
+            ]
+        )
+    ]
+
+    lonlim = [
+        np.max(
+            [
+                arg_bbox['w'],
+                product['data']['lon']['w']
+            ]
+        ),
+        np.min(
+            [
+                arg_bbox['e'],
+                product['data']['lon']['e']
+            ]
+        )
+    ]
+
+    # Check Startdate and Enddate, make a panda timestamp of the date
+    if np.logical_or(arg_period_s == '', arg_period_s is None):
+        date_s = pd.Timestamp('{} 03:00:00'.format(product['data']['time']['s']))
+    else:
+        date_s = pd.Timestamp(arg_period_s)
+
+    if np.logical_or(arg_period_e == '', arg_period_e is None):
+        if product['data']['time']['e'] is None:
+            date_e = pd.Timestamp.now()
+        else:
+            date_e = pd.Timestamp(product['data']['time']['e'])
+    else:
+        date_e = pd.Timestamp(arg_period_e)
+
+    # Creates dates library
+    date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
+    # if version == '2.1':
+    #     zID = int(((Date - pd.Timestamp("2000-1-1")).days) * 8) + (period - 1) - 1
+    # elif version == '2.0':
+    #     zID = int(((Date - pd.Timestamp("1948-1-1")).days) * 8) + (period - 1) - 1
+
+    # =========== #
+    # 3. Download #
+    # =========== #
+    status = download_product(latlim, lonlim, date_dates,
+                              account, folder, product,
+                              is_waitbar)
+
+    return status
+
+
+def download_product(latlim, lonlim, dates,
+                     account, folder, product,
+                     is_waitbar) -> int:
+    # Define local variable
+    status = -1
+    total = len(dates)
     cores = 1
 
-    bbox = conf['product']['bbox']
-    Startdate = conf['product']['period']['s']
-    Enddate = conf['product']['period']['e']
-
-    TimeCase = conf['product']['resolution']
-    TimeFreq = conf['product']['freq']
-    Var = conf['product']['data']['variable']
-    latlim = conf['product']['data']['lat']
-    lonlim = conf['product']['data']['lon']
-
-    folder = conf['folder']
-
-    # Load factors / unit / type of variables / accounts
-    VarInfo = VariablesInfo(TimeCase)
-    username = __this.account['data']['username']
-    password = __this.account['data']['password']
-
-    # Set required data for the daily option
-    # Set required data for the three hourly option
-    latlim = [bbox['s'], bbox['n']]
-    lonlim = [bbox['w'], bbox['e']]
-
-    CaseParameters = [1, 4, 5, 8]
-
-    if TimeCase == 'three_hourly':
-
-        # Define output folder and create this one if not exists
-        path = folder['l']
-        # path = os.path.join(Dir, 'Weather_Data', 'Model', 'GLDAS',
-        #                     TimeCase, Var)
-        #
-        # if not os.path.exists(path):
-        #     os.makedirs(path)
-
-        # Startdate if not defined
-        sd_date = '1979-01-02'
-
-        # Define Time frequency
-        TimeFreq = 'D'
-
-        # Define URL by using personal account
-        # url = 'http://%s:%s@hydro1.gesdisc.eosdis.nasa.gov:80/dods/GLDAS_NOAH025SUBP_3H' %(username,password)
-        url = 'https://hydro1.gesdisc.eosdis.nasa.gov/data/GLDAS/GLDAS_NOAH025_3H.2.1'  # %(username,password)
-
-        # Name the definition that will be used to obtain the data
-        RetrieveData_fcn = RetrieveData_three_hourly
-
-        types = ['mean']
-
-    # elif TimeCase == 'daily':
-    #
-    #     types = ['mean']
-    #
-    #     # Define output folder and create this one if not exists
-    #     path = folder['l']
-    #     # path = {'mean': os.path.join(Dir, 'Weather_Data', 'Model', 'GLDAS_CLSM',
-    #     #                              TimeCase, Var, 'mean')}
-    #     # for i in range(len(types)):
-    #     #     if not os.path.exists(path[types[i]]):
-    #     #         os.makedirs(path[types[i]])
-    #
-    #     # Startdate if not defined
-    #     sd_date = '1948-01-01'
-    #
-    #     # Define Time frequency
-    #     TimeFreq = 'D'
-    #
-    #     # Define URL by using personal account
-    #     url = 'https://hydro1.gesdisc.eosdis.nasa.gov/dods/GLDAS_CLSM025_D.2.0'
-    #
-    #     # Name the definition that will be used to obtain the data
-    #     RetrieveData_fcn = RetrieveData_daily
-
-    # Set required data for the monthly option
-    elif TimeCase == 'monthly':
-
-        types = ['mean']
-
-        # Define output folder and create this one if not exists
-        path = folder['l']
-        # path = {'mean': os.path.join(Dir, 'Weather_Data', 'Model', 'GLDAS_CLSM',
-        #                              TimeCase, Var, 'mean')}
-        # for i in range(len(types)):
-        #     if not os.path.exists(path[types[i]]):
-        #         os.makedirs(path[types[i]])
-
-        # Startdate if not defined
-        sd_date = '1979-01-02'
-
-        # Define Time frequency
-        TimeFreq = 'MS'
-
-        # Define URL by using personal account
-        url = 'https://hydro1.gesdisc.eosdis.nasa.gov/data/GLDAS/GLDAS_NOAH025_M.2.1'
-
-        # Name the definition that will be used to obtain the data
-        RetrieveData_fcn = RetrieveData_monthly
-    # If none of the possible option are chosen
-    else:
-        raise KeyError("The input time interval is not supported")
-
-    if TimeCase == 'three_hourly':
-
-        # Define IDs (latitude/longitude)
-        yID = np.int16(np.array([np.ceil((latlim[0] + 60)),
-                                 np.floor((latlim[1] + 60))]))
-        xID = np.int16(np.array([np.floor((lonlim[0] + 180)),
-                                 np.ceil((lonlim[1] + 180))]))
-    else:
-
-        # Define IDs (latitude/longitude)
-        yID = np.int16(np.array([np.ceil((latlim[0] + 60) * 4),
-                                 np.floor((latlim[1] + 60) * 4)]))
-        xID = np.int16(np.array([np.floor((lonlim[0] + 180) * 4),
-                                 np.ceil((lonlim[1] + 180) * 4)]))
-
-    # Check dates. If no dates are given, the max number of days is used.
-    if not Startdate:
-        Startdate = pd.Timestamp(sd_date)
-    if not Enddate:
-        Enddate = pd.Timestamp('Now')  # Should be much than available
-
-    # Create all dates that will be calculated
-    Dates = pd.date_range(Startdate, Enddate, freq=TimeFreq)
-
     # Create Waitbar
-    # if Waitbar == 1:
-    #     import watools.Functions.Start.WaitbarConsole as WaitbarConsole
-    #     total_amount = len(Dates)
+    # amount = 0
+    # if is_waitbar == 1:
     #     amount = 0
-    #     WaitbarConsole.printWaitBar(amount, total_amount, prefix='Progress:',
-    #                                 suffix='Complete', length=50)
+    #     collect.WaitBar(amount, total,
+    #                     prefix='Progress:', suffix='Complete',
+    #                     length=50)
 
-    # Define the variable string name
-    VarStr = VarInfo.names[Var]
-
-    # Create one parameter with all the required arguments
-    args = [path, url, Var, VarStr, VarInfo, TimeCase, xID, yID, lonlim, latlim,
-            CaseParameters, username, password, types]
-
-    # Pass variables to parallel function and run
     if not cores:
-        for Date in Dates:
-            RetrieveData_fcn(Date, args)
-            # if Waitbar == 1:
+        for date in dates:
+            args = get_download_args(latlim, lonlim, date,
+                                     account, folder, product)
+
+            status = start_download(args)
+
+            # Update waitbar
+            # if is_waitbar == 1:
             #     amount += 1
-            #     WaitbarConsole.printWaitBar(amount, total_amount, prefix='Progress:',
-            #                                 suffix='Complete', length=50)
-        results = True
+            #     collect.WaitBar(amount, total,
+            #                     prefix='Progress:', suffix='Complete',
+            #                     length=50)
     else:
-        results = Parallel(n_jobs=cores)(delayed(RetrieveData_fcn)(Date, args)
-                                         for Date in Dates)
-    return results
+        status = Parallel(n_jobs=cores)(
+            delayed(
+                start_download)(
+                get_download_args(
+                    latlim, lonlim, date,
+                    account, folder, product)) for date in dates)
+
+    return status
 
 
-def RetrieveData_three_hourly(Date, args):
+def get_download_args(latlim, lonlim, date,
+                      account, folder, product) -> tuple:
+    # Define arg_account
+    # For download
+    try:
+        username = account['data']['username']
+        password = account['data']['password']
+        apitoken = account['data']['apitoken']
+    except KeyError:
+        username = ''
+        password = ''
+        apitoken = ''
+
+    # Define arg_url
+    url_server = product['url']
+    url_dir = product['data']['dir'].format(dtime=date)
+
+    # Define arg_filename
+    fname_r = product['data']['fname']['r'].format(dtime=date)
+    if product['data']['fname']['t'] is None:
+        fname_t = ''
+    else:
+        fname_t = product['data']['fname']['t']
+    fname_l = product['data']['fname']['l'].format(dtime=date)
+
+    # Define arg_file
+    file_r = os.path.join(folder['r'], fname_r)
+    file_t = os.path.join(folder['t'], fname_t)
+    file_l = os.path.join(folder['l'], fname_l)
+
+    pixel_size = abs(product['data']['lat']['r'])
+    pixel_w = int(product['data']['dem']['w'])
+    pixel_h = int(product['data']['dem']['h'])
+
+    data_ndv = product['nodata']
+    data_type = product['data']['dtype']['l']
+    data_multiplier = float(product['data']['units']['m'])
+    data_variable = product['data']['variable']
+
+    # Define arg_IDs
+    prod_lat_s = product['data']['lat']['s']
+    prod_lon_w = product['data']['lon']['w']
+    prod_lat_size = abs(product['data']['lat']['r'])
+    prod_lon_size = abs(product['data']['lon']['r'])
+
+    # y_id = np.int16(np.array([
+    #     pixel_h - np.ceil((latlim[1] + abs(prod_lat_s)) / prod_lat_size),
+    #     pixel_h - np.floor((latlim[0] + abs(prod_lat_s)) / prod_lat_size)
+    # ]))
+    # x_id = np.int16(np.array([
+    #     np.floor((lonlim[0] + abs(prod_lon_w)) / prod_lon_size),
+    #     np.ceil((lonlim[1] + abs(prod_lon_w)) / prod_lon_size)
+    # ]))
+    y_id = np.int16(np.array([
+        np.ceil((latlim[0] - prod_lat_s) / prod_lat_size),
+        np.floor((latlim[1] - prod_lat_s) / prod_lat_size)
+    ]))
+    x_id = np.int16(np.array([
+        np.ceil((lonlim[0] - prod_lon_w) / prod_lon_size),
+        np.floor((lonlim[1] - prod_lon_w) / prod_lon_size)
+    ]))
+
+    return latlim, lonlim, date, \
+           product, \
+           username, password, apitoken, \
+           url_server, url_dir, \
+           fname_r, fname_t, fname_l, \
+           file_r, file_t, file_l, \
+           y_id, x_id, pixel_size, pixel_w, pixel_h, \
+           data_ndv, data_type, data_multiplier, data_variable
+
+
+def start_download(args) -> int:
+    """Retrieves data
     """
-    This function retrieves GLDAS three-hourly data for a given date.
+    # Unpack the arguments
+    latlim, lonlim, date,\
+    product, \
+    username, password, apitoken, \
+    url_server, url_dir, \
+    remote_fname, temp_fname, local_fname,\
+    remote_file, temp_file, local_file,\
+    y_id, x_id, pixel_size, pixel_w, pixel_h, \
+    data_ndv, data_type, data_multiplier, data_variable = args
 
-    Keyword arguments:
-    Date -- 'yyyy-mm-dd'
-    args -- A list of parameters defined in the DownloadData function.
-    """
+    # Define local variable
+    status = -1
 
-    # Open all the parameters
-    [path, url, Var, VarStr, VarInfo, TimeCase, xID, yID, lonlim, latlim,
-     CaseParameters, username, password, types] = args
+    # # Load factors / unit / type of variables / accounts
+    # var_info = VariablesInfo(product['resolution'])
+    # var_name = var_info.names[product['data']['variable']]
+    # var_mult = var_info.factors[product['data']['variable']]
+    # var_unit = var_info.units[product['data']['variable']]
 
-    # Open variable info parameters
-    VarFactor = VarInfo.factors[Var]
+    # Download the data from server if the file not exists
+    if not os.path.exists(local_file):
+        # https://disc.gsfc.nasa.gov/data-access#python
+        # C:\Users\qpa001\.netrc
+        file_conn_auth = os.path.join(os.path.expanduser("~"), ".netrc")
+        with open(file_conn_auth, 'w+') as fp:
+            fp.write('machine {m} login {u} password {p}\n'.format(
+                m='urs.earthdata.nasa.gov',
+                u=username,
+                p=password
+            ))
 
-    # Loop over the periods
-    for period in CaseParameters:
+        url = '{sr}{dr}{fl}'.format(sr=url_server, dr=url_dir, fl=remote_fname)
+        # print('url: "{f}"'.format(f=url))
 
-        # Check whether the file already exist or the worldfile is
-        # downloaded
-        BasinDir = path + '/' + VarStr + '_GLDAS-CLSM_' + \
-                   VarInfo.units[Var] + '_3hour_' + Date.strftime('%Y.%m.%d') + \
-                   '_' + str(period) + '.tif'
+        try:
+            # Connect to server
+            msg = 'Downloading "{f}"'.format(f=remote_fname)
+            print('{}'.format(msg))
+            __this.Log.write(datetime.datetime.now(), msg=msg)
 
-        if not os.path.isfile(BasinDir):
-
-            # Reset the begin parameters for downloading
-            downloaded = 0
-            N = 0
-
-            while downloaded == 0:
-                try:
-                    fname = os.path.split(BasinDir)[-1]
-                    msg = 'Downloading "{f}"'.format(f=fname)
-                    print('Downloading {f}'.format(f=fname))
+            conn = requests.get(url)
+            # conn.raise_for_status()
+        except requests.exceptions.RequestException as err:
+            # Connect error
+            status = 1
+            msg = "Not able to download {fl}, from {sr}{dr}".format(sr=url_server,
+                                                                    dr=url_dir,
+                                                                    fl=remote_fname)
+            print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
+            __this.Log.write(datetime.datetime.now(),
+                             msg='{}\n{}'.format(msg, str(err)))
+        else:
+            # Download data
+            if conn.status_code == requests.codes.ok:
+                if not os.path.exists(remote_file):
+                    with open(remote_file, 'wb') as fp:
+                        fp.write(conn.content)
+                else:
+                    msg = 'Exist "{f}"'.format(f=remote_file)
+                    print('\33[93m{}\33[0m'.format(msg))
                     __this.Log.write(datetime.datetime.now(), msg=msg)
 
-                    # Define time
-                    zID = int(((Date - pd.Timestamp("1979-1-2")).days) * 8) + (
-                            period - 1)
+                # Download success
+                # post-process remote (from server) -> temporary (unzip) -> local (gis)
+                msg = 'Saving file "{f}"'.format(f=local_file)
+                print('\33[94m{}\33[0m'.format(msg))
+                __this.Log.write(datetime.datetime.now(), msg=msg)
 
-                    # total URL
-                    url_GLDAS = url + '.ascii?%s[%s][%s:1:%s][%s:1:%s]' % (
-                        Var, zID, yID[0], yID[1], xID[0], xID[1])
+                status = convert_data(args)
+            else:
+                msg = "Not able to download {fl}, from {sr}{dr}".format(sr=url_server,
+                                                                        dr=url_dir,
+                                                                        fl=remote_fname)
+                print('\33[91m{}\n{}\33[0m'.format(conn.status_code, msg))
+                __this.Log.write(datetime.datetime.now(),
+                                 msg='{}\n{}'.format(conn.status_code, msg))
+        finally:
+            # Release local resources.
+            # raw_data = None
+            # dataset = None
+            # data = None
+            pass
+    else:
+        status = 0
+        msg = 'Exist "{f}"'.format(f=local_file)
+        print('\33[93m{}\33[0m'.format(msg))
+        __this.Log.write(datetime.datetime.now(), msg=msg)
 
-                    # open URL
-                    try:
-                        dataset = requests.get(url_GLDAS, allow_redirects=False,
-                                               stream=True)
-                    except:
-                        from requests.packages.urllib3.exceptions import \
-                            InsecureRequestWarning
-                        requests.packages.urllib3.disable_warnings(
-                            InsecureRequestWarning)
-                        dataset = requests.get(url_GLDAS, allow_redirects=False,
-                                               stream=True, verify=False)
-
-                    try:
-                        get_dataset = requests.get(dataset.headers['Location'],
-                                                   auth=(username, password),
-                                                   stream=True)
-                    except:
-                        from requests.packages.urllib3.exceptions import \
-                            InsecureRequestWarning
-                        requests.packages.urllib3.disable_warnings(
-                            InsecureRequestWarning)
-                        get_dataset = requests.get(dataset.headers['location'],
-                                                   auth=(username, password),
-                                                   stream=True, verify=False)
-
-                        # download data (first save as text file)
-                    pathtext = os.path.join(path, 'temp%s.txt' % zID)
-                    z = open(pathtext, 'w')
-                    z.write(get_dataset.text)
-                    z.close()
-
-                    # Open text file and remove header and footer
-                    data_start = np.genfromtxt(pathtext, dtype=float, skip_header=1,
-                                               skip_footer=6, delimiter=',')
-                    data = data_start[:, 1:]
-
-                    # Add the VarFactor
-                    if VarFactor < 0:
-                        data = data + VarFactor
-                    else:
-                        data = data * VarFactor
-                    if VarInfo.types[Var] == 'flux':
-                        data = data / 8
-
-                    # Set Nan value for values lower than -9999
-                    data[data < -9999] = -9999
-
-                    # Say that download was succesfull
-                    downloaded = 1
-
-                # If download was not succesfull
-                except BaseException as err:
-
-                    data = []
-
-                    # Try another time
-                    N = N + 1
-
-                    # Stop trying after 10 times
-                    if N == 10:
-                        msg = "\nWas not able to download file with date %s" % Date
-                        print('{}\n{}'.format(msg, str(err)))
-                        __this.Log.write(datetime.datetime.now(),
-                                         msg='{}\n{}'.format(msg, str(err)))
-                        downloaded = 1
-
-            # define geo
-            lonlimGLDAS = xID[0] * 1.0 - 180
-            latlimGLDAS = (yID[1] + 1) * 1.0 - 60
-
-            # Save to geotiff file
-            geo = [lonlimGLDAS, 1.0, 0, latlimGLDAS, 0, -1.0]
-            Save_as_tiff(name=BasinDir, data=np.flipud(data[:, :]), geo=geo, projection="WGS84")
-
-            # Delete data and text file
-            del data
-            # os.remove(pathtext)
-
-    return True
+    msg = 'Finish'
+    __this.Log.write(datetime.datetime.now(), msg=msg)
+    return status
 
 
-def RetrieveData_daily(Date, args):
+def convert_data(args):
     """
-    This function retrieves GLDAS daily data for a given date.
-
-    Keyword arguments:
-    Date -- 'yyyy-mm-dd'
-    args -- A list of parameters defined in the DownloadData function.
     """
+    # Unpack the arguments
+    latlim, lonlim, date,\
+    product, \
+    username, password, apitoken, \
+    url_server, url_dir, \
+    remote_fname, temp_fname, local_fname,\
+    remote_file, temp_file, local_file,\
+    y_id, x_id, pixel_size, pixel_w, pixel_h, \
+    data_ndv, data_type, data_multiplier, data_variable = args
 
-    # Open all the parameters
-    [path, url, Var, VarStr, VarInfo, TimeCase, xID, yID, lonlim, latlim,
-     CaseParameters, username, password, types] = args
+    # Define local variable
+    status = -1
 
-    # Reset the begin parameters for downloading
-    downloaded = 0
-    N = 0
-    data_end = []
+    # Load data from downloaded remote file
+    fh = Dataset(remote_file)
 
-    # Check GLDAS version
-    version = url[-3:]
+    data_raw = fh.variables[data_variable]
+    data_raw_missing = data_raw.missing_value
+    data_raw_scale = data_raw.scale_factor
 
-    # Open all variable info
-    for T in types:
-        if T == 'mean':
-            VarStr = VarInfo.names[Var]
-        else:
-            VarStr = VarInfo.names[Var] + '-' + T
+    # Generate temporary files
 
-        # Check whether the file already exist or
-        # the worldfile is downloaded
-        BasinDir = os.path.join(path[T], VarStr + '_GLDAS-CLSM_' + VarInfo.units[
-            Var] + '_daily_' + Date.strftime('%Y.%m.%d') + '.tif')
+    # Clip data
+    data_tmp = data_raw[:, y_id[0]: y_id[1], x_id[0]: x_id[1]]
 
-        # Check if the outputfile already excists
-        if not os.path.isfile(BasinDir):
+    # data = np.squeeze(data_tmp.data, axis=0)
+    data = np.flipud(np.squeeze(data_tmp.data, axis=0))
+    fh.close()
 
-            # Create the time dimension
-            if version == '2.0':
-                zID_start = int(((Date - pd.Timestamp("1948-1-1")).days))
-                zID_end = int(zID_start)
-                if zID_end == 24472:
-                    zID_end = 24470
+    # Convert units, set NVD
+    data[data == data_raw_missing] = np.nan
+    data = data * data_raw_scale * data_multiplier
 
-            # define total url
-            url_GLDAS = url + '.ascii?%s[%s:1:%s][%s:1:%s][%s:1:%s]' % (
-                Var, zID_start, zID_end, yID[0], yID[1], xID[0], xID[1])
+    data[data == np.nan] = data_ndv
 
-            # if not downloaded try to download file
-            while downloaded == 0:
-                try:
+    # save as GTiff
+    geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
+    Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
-                    # open URL
-                    try:
-                        dataset = requests.get(url_GLDAS, allow_redirects=False,
-                                               stream=True)
-                    except:
-                        from requests.packages.urllib3.exceptions import \
-                            InsecureRequestWarning
-                        requests.packages.urllib3.disable_warnings(
-                            InsecureRequestWarning)
-                        dataset = requests.get(url_GLDAS, allow_redirects=False,
-                                               stream=True, verify=False)
-                    try:
-                        get_dataset = requests.get(dataset.headers['location'],
-                                                   auth=(username, password),
-                                                   stream=True)
-                    except:
-                        from requests.packages.urllib3.exceptions import \
-                            InsecureRequestWarning
-                        requests.packages.urllib3.disable_warnings(
-                            InsecureRequestWarning)
-                        get_dataset = requests.get(dataset.headers['location'],
-                                                   auth=(username, password),
-                                                   stream=True, verify=False)
-
-                    # download data (first save as text file)
-                    pathtext = os.path.join(path[T], 'temp%s.txt' % str(zID_start))
-                    z = open(pathtext, 'w')
-                    z.write(get_dataset.text)
-                    z.close()
-
-                    # Reshape data
-                    datashape = [yID[1] - yID[0] + 1, xID[1] - xID[0] + 1]
-                    data_start = np.genfromtxt(pathtext, dtype=float, skip_header=1,
-                                               skip_footer=6, delimiter=',')
-                    data_list = np.asarray(data_start[:, 1:])
-                    data_end = np.resize(data_list, (datashape[0], datashape[1]))
-                    # os.remove(pathtext)
-
-                    # Add the VarFactor
-                    if VarInfo.factors[Var] < 0:
-                        data_end[data_end != -9999] = data_end[data_end != -9999] + \
-                                                      VarInfo.factors[Var]
-                    else:
-                        data_end[data_end != -9999] = data_end[data_end != -9999] * \
-                                                      VarInfo.factors[Var]
-                    data_end[data_end < -9999] = -9999
-
-                    # define geo
-                    lonlimGLDAS = xID[0] * 0.25 - 180
-                    latlimGLDAS = (yID[1] + 1) * 0.25 - 60
-
-                    # Download was succesfull
-                    downloaded = 1
-
-                # If download was not succesfull
-                except:
-
-                    # Try another time
-                    N = N + 1
-
-                    # Stop trying after 10 times
-                    if N == 10:
-                        print('Data from ' + Date.strftime(
-                            '%Y-%m-%d') + ' is not available')
-                        downloaded = 1
-
-            try:
-                # Save to geotiff file
-
-                if T == 'mean':
-                    data = np.flipud(data_end)
-
-                geo = [lonlimGLDAS, 0.25, 0, latlimGLDAS, 0, -0.25]
-                Save_as_tiff(name=BasinDir, data=data, geo=geo, projection="WGS84")
-
-            except:
-                print('GLDAS map from ' + Date.strftime('%Y-%m-%d') + ' is not created')
-
-    return True
-
-
-def RetrieveData_monthly(Date, args):
-    """
-    This function retrieves GLDAS CLSM monthly data for a given date.
-
-    Keyword arguments:
-    Date -- 'yyyy-mm-dd'
-    args -- A list of parameters defined in the DownloadData function.
-    """
-
-    # Open all the parameters
-    [path, url, Var, VarStr, VarInfo, TimeCase, xID, yID, lonlim, latlim,
-     CaseParameters, username, password, types] = args
-
-    # Reset the begin parameters for downloading
-    downloaded = 0
-    N = 0
-    data_end = []
-
-    # Check GLDAS version
-    version = url[-3:]
-
-    # Open all variable info
-    for T in types:
-        if T == 'mean':
-            VarStr = VarInfo.names[Var]
-        else:
-            VarStr = VarInfo.names[Var] + '-' + T
-
-        # Check whether the file already exist or
-        # the worldfile is downloaded
-        BasinDir = os.path.join(path[T], VarStr + '_GLDAS-CLSM_' + VarInfo.units[
-            Var] + '_monthly_' + Date.strftime('%Y.%m.%d') + '.tif')
-
-        # Check if the outputfile already excists
-        if not os.path.isfile(BasinDir):
-
-            # Create the time dimension
-            if version == '2.0':
-                zID_start = int(((Date - pd.Timestamp("1948-1-1")).days))
-                Y = int(Date.year)
-                M = int(Date.month)
-                Mday = calendar.monthrange(Y, M)[1]
-                zID_end = zID_start + Mday
-                if zID_end == 24472:
-                    zID_end = 24470
-                    Mday = Mday - 2
-
-            # define total url
-            url_GLDAS = url + '.ascii?%s[%s:1:%s][%s:1:%s][%s:1:%s]' % (
-                Var, zID_start, zID_end, yID[0], yID[1], xID[0], xID[1])
-
-            # if not downloaded try to download file
-            while downloaded == 0:
-                try:
-
-                    # open URL
-                    try:
-                        dataset = requests.get(url_GLDAS, allow_redirects=False,
-                                               stream=True)
-                    except:
-                        from requests.packages.urllib3.exceptions import \
-                            InsecureRequestWarning
-                        requests.packages.urllib3.disable_warnings(
-                            InsecureRequestWarning)
-                        dataset = requests.get(url_GLDAS, allow_redirects=False,
-                                               stream=True, verify=False)
-                    try:
-                        get_dataset = requests.get(dataset.headers['location'],
-                                                   auth=(username, password),
-                                                   stream=True)
-                    except:
-                        from requests.packages.urllib3.exceptions import \
-                            InsecureRequestWarning
-                        requests.packages.urllib3.disable_warnings(
-                            InsecureRequestWarning)
-                        get_dataset = requests.get(dataset.headers['location'],
-                                                   auth=(username, password),
-                                                   stream=True, verify=False)
-
-                    # download data (first save as text file)
-                    pathtext = os.path.join(path[T], 'temp%s.txt' % str(zID_start))
-                    z = open(pathtext, 'w')
-                    z.write(get_dataset.text)
-                    z.close()
-
-                    # Reshape data
-                    datashape = [Mday, yID[1] - yID[0] + 1, xID[1] - xID[0] + 1]
-                    data_start = np.genfromtxt(pathtext, dtype=float, skip_header=1,
-                                               skip_footer=6, delimiter=',')
-                    data_list = np.asarray(data_start[:, 1:])
-                    data_end = np.resize(data_list, (Mday, datashape[1], datashape[2]))
-                    # os.remove(pathtext)
-
-                    # Add the VarFactor
-                    if VarInfo.factors[Var] < 0:
-                        data_end[data_end != -9999] = data_end[data_end != -9999] + \
-                                                      VarInfo.factors[Var]
-                    else:
-                        data_end[data_end != -9999] = data_end[data_end != -9999] * \
-                                                      VarInfo.factors[Var]
-                    data_end[data_end < -9999] = -9999
-
-                    # define geo
-                    lonlimGLDAS = xID[0] * 0.25 - 180
-                    latlimGLDAS = (yID[1] + 1) * 0.25 - 60
-
-                    # Download was succesfull
-                    downloaded = 1
-
-                # If download was not succesfull
-                except:
-
-                    # Try another time
-                    N = N + 1
-
-                    # Stop trying after 10 times
-                    if N == 10:
-                        print('Data from ' + Date.strftime(
-                            '%Y-%m-%d') + ' is not available')
-                        downloaded = 1
-
-            try:
-                # Save to geotiff file
-                if T == 'mean':
-                    data_end[data_end < -100] = np.nan
-                    data = np.flipud(np.nanmean(data_end, axis=0))
-                if VarInfo.types[Var] == 'flux':
-                    data = data * Mday
-
-                geo = [lonlimGLDAS, 0.25, 0, latlimGLDAS, 0, -0.25]
-                Save_as_tiff(name=BasinDir, data=data, geo=geo, projection="WGS84")
-
-            except:
-                print('GLDAS map from ' + Date.strftime('%Y-%m-%d') + ' is not created')
-
-    return True
+    status = 0
+    return status
 
 
 class VariablesInfo:

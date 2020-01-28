@@ -726,27 +726,46 @@ def main():
                 'e': '2008-01-02'
             },
             'nodata': -9999
+        },
+        '12': {
+            'product': 'GLDAS',
+            'version': 'v2.1',
+            'parameter': 'evapotranspiration',
+            'resolution': 'three_hourly',
+            'variable': 'ETA',
+            'bbox': {
+                'w': -19.0,
+                's': -35.0,
+                'e': 55.0,
+                'n': 38.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': -9999
+        },
+        '13': {
+            'product': 'GLDAS',
+            'version': 'v2.1',
+            'parameter': 'evapotranspiration',
+            'resolution': 'monthly',
+            'variable': 'ETA',
+            'bbox': {
+                'w': -19.0,
+                's': -35.0,
+                'e': 55.0,
+                'n': 38.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': -9999
         }
     }
 
 
-    # TODO, 20200120, QPan, GLDAS, change code of download from "requested text" to "NetCDF"
-    # product': 'GLDAS'
-    # version': 'v2.1'
-    # parameter': 'evapotranspiration'
-    # resolution': 'three_hourly'
-    # variable': 'ET'
-    # bbox': {
-    #     'w': -19.0,
-    #     's': -35.0,
-    #     'e': 55.0,
-    #     'n': 38.0
-    # }
-    # period': {
-    #     's': '2008-01-01',
-    #     'e': '2008-01-31'
-    # }
-    # nodata': -9999
 
     # TODO, 20200120, QPan, GLEAM, replace some values
     # product': 'GLEAM'

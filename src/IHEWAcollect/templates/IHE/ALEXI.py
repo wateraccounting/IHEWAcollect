@@ -246,9 +246,9 @@ def download_product_weekly(date, date_s, dates_e,
     #                     length=50)
 
     # Define the stop conditions
-    Stop = dates_e.toordinal()
-    End_date = 0
-    while End_date == 0:
+    date_stop = dates_e.toordinal()
+    date_end = 0
+    while date_end == 0:
 
         # Download the data from server
 
@@ -261,32 +261,33 @@ def download_product_weekly(date, date_s, dates_e,
             if i == 8:
                 url_dir = product['data']['dir'].format(
                     dtime=date + pd.DateOffset(days=-7))
+                args.append(url_dir)
             else:
                 args.append(value)
 
         status = start_download(tuple(args))
 
         # Create the new date for the next download
-        Datename = (str(date.strftime('%Y')) + '-' + str(
-            date.strftime('%m')) + '-' + str(date.strftime('%d')))
-        DOY = datetime.datetime.strptime(Datename,
-                                         '%Y-%m-%d').timetuple().tm_yday
-
+        # date_str = (str(date.strftime('%Y')) + '-' + str(
+        #     date.strftime('%m')) + '-' + str(date.strftime('%d')))
+        # date_doy = datetime.datetime.strptime(date_str,
+        #                                  '%Y-%m-%d').timetuple().tm_yday
+        date_doy = date.timetuple().tm_yday
         # Define next day
-        DOY_next = int(DOY + 7)
-        if DOY_next >= 366:
-            DOY_next = 8
+        date_doy_next_int = int(date_doy + 7)
+        if date_doy_next_int >= 366:
+            date_doy_next_int = 8
             date_year += 1
-        DOYnext = str('%s-%s' % (DOY_next, date_year))
-        DayNext = datetime.datetime.strptime(DOYnext, '%j-%Y')
-        Month = '%02d' % DayNext.month
-        Day = '%02d' % DayNext.day
-        date = (str(date_year) + '-' + str(Month) + '-' + str(Day))
+        date_doy_next_str = str('%s-%s' % (date_doy_next_int, date_year))
 
+        date_day_next = datetime.datetime.strptime(date_doy_next_str, '%j-%Y')
+        date_month = '%02d' % date_day_next.month
+        date_day = '%02d' % date_day_next.day
+        date_str = (str(date_year) + '-' + str(date_month) + '-' + str(date_day))
         # Check if this file must be downloaded
-        date = pd.Timestamp(date)
-        if date.toordinal() > Stop:
-            End_date = 1
+        date = pd.Timestamp(date_str)
+        if date.toordinal() > date_stop:
+            date_end = 1
 
         # Update waitbar
         # if is_waitbar == 1:
@@ -352,6 +353,14 @@ def get_download_args(latlim, lonlim, date,
         np.floor((lonlim[0] + abs(prod_lon_w)) / prod_lon_size),
         np.ceil((lonlim[1] + abs(prod_lon_w)) / prod_lon_size)
     ]))
+    # y_id = np.int16(np.array([
+    #     np.ceil((latlim[0] - prod_lat_s) / prod_lat_size),
+    #     np.floor((latlim[1] - prod_lat_s) / prod_lat_size)
+    # ]))
+    # x_id = np.int16(np.array([
+    #     np.ceil((lonlim[0] - prod_lon_w) / prod_lon_size),
+    #     np.floor((lonlim[1] - prod_lon_w) / prod_lon_size)
+    # ]))
 
     return latlim, lonlim, date,\
            product, \
@@ -382,6 +391,7 @@ def start_download(args) -> int:
     # Download the data from server if the file not exists
     if not os.path.exists(local_file):
         url = '{sr}{dr}{fn}'.format(sr=urlparse(url_server).netloc, dr='', fn='')
+        # print('url: "{f}"'.format(f=url))
 
         try:
             # Connect to server
@@ -409,10 +419,6 @@ def start_download(args) -> int:
         else:
             # Download data
             if not os.path.exists(remote_file):
-                msg = 'Saving file "{f}"'.format(f=local_file)
-                print('\33[94m{}\33[0m'.format(msg))
-                __this.Log.write(datetime.datetime.now(), msg=msg)
-
                 with open(remote_file, "wb") as fp:
                     conn.retrbinary("RETR " + remote_fname, fp.write)
             else:
@@ -422,12 +428,16 @@ def start_download(args) -> int:
 
             # Download success
             # post-process remote (from server) -> temporary (unzip) -> local (gis)
+            msg = 'Saving file "{f}"'.format(f=local_file)
+            print('\33[94m{}\33[0m'.format(msg))
+            __this.Log.write(datetime.datetime.now(), msg=msg)
+
             status = convert_data(args)
         finally:
             # Release local resources.
-            raw_data = None
-            dataset = None
-            data = None
+            # raw_data = None
+            # dataset = None
+            # data = None
             pass
     else:
         status = 0
@@ -472,8 +482,8 @@ def convert_data(args):
         data = np.flipud(data_tmp[y_id[0]:y_id[1], x_id[0]:x_id[1]])
 
         # Convert units, set NVD
-        data = data * data_multiplier
         data[data < 0] = data_ndv
+        data = data * data_multiplier
 
     if product['resolution'] == "weekly":
         # Load data from downloaded remote file
@@ -485,8 +495,10 @@ def convert_data(args):
         data = data_raw[y_id[0]:y_id[1], x_id[0]:x_id[1]]
 
         # Convert units, set NVD
+        data[data < 0] = np.nan
         data = data * data_multiplier
-        data[data < 0] = data_ndv
+
+        data[data == np.nan] = data_ndv
 
     # Save as GTiff
     geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]

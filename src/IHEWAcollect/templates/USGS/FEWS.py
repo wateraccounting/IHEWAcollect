@@ -243,6 +243,14 @@ def get_download_args(latlim, lonlim, date,
         np.floor((lonlim[0] + abs(prod_lon_w)) / prod_lon_size),
         np.ceil((lonlim[1] + abs(prod_lon_w)) / prod_lon_size)
     ]))
+    # y_id = np.int16(np.array([
+    #     np.ceil((latlim[0] - prod_lat_s) / prod_lat_size),
+    #     np.floor((latlim[1] - prod_lat_s) / prod_lat_size)
+    # ]))
+    # x_id = np.int16(np.array([
+    #     np.ceil((lonlim[0] - prod_lon_w) / prod_lon_size),
+    #     np.floor((lonlim[1] - prod_lon_w) / prod_lon_size)
+    # ]))
 
     return latlim, lonlim, date, \
            product, \
@@ -273,6 +281,7 @@ def start_download(args) -> int:
     # Download the data from server if the file not exists
     if not os.path.exists(local_file):
         url = '{sr}{dr}{fn}'.format(sr=url_server, dr=url_dir, fn=remote_fname)
+        # print('url: "{f}"'.format(f=url))
 
         try:
             # Connect to server
@@ -309,6 +318,7 @@ def start_download(args) -> int:
                              msg='{}\n{}'.format(msg, str(err)))
         else:
             # Download data
+            # move to "Connect to server" step
 
             # Download success
             # post-process remote (from server) -> temporary (unzip) -> local (gis)
@@ -319,10 +329,19 @@ def start_download(args) -> int:
             status = convert_data(args)
         finally:
             # Release local resources.
-            raw_data = None
-            dataset = None
-            data = None
+            # raw_data = None
+            # dataset = None
+            # data = None
             pass
+    else:
+        status = 0
+        msg = 'Exist "{f}"'.format(f=local_file)
+        print('\33[93m{}\33[0m'.format(msg))
+        __this.Log.write(datetime.datetime.now(), msg=msg)
+
+    msg = 'Finish'
+    __this.Log.write(datetime.datetime.now(), msg=msg)
+    return status
 
 
 def convert_data(args):
@@ -355,8 +374,8 @@ def convert_data(args):
     data = data_raw[y_id[0]:y_id[1], x_id[0]:x_id[1]]
 
     # Convert units, set NVD
-    data = data * data_multiplier
     # data[data < 0] = data_ndv
+    data = data * data_multiplier
 
     # Save as GTiff
     geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]

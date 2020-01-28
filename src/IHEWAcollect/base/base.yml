@@ -3024,6 +3024,7 @@ products:
               units:
                 r: 'mm'
                 l: 'mm'
+                # uint16 to float32
                 m: 0.01
               lat:
                 s: -90.5
@@ -3082,14 +3083,14 @@ products:
           method: 'get'
           freq: '3H'
           variables:
-            ET:
+            ETA:
               variable: 'Evap_tavg'
-              name: 'Three Hourly Evaporation'
+              name: 'Three Hourly Evapotranspiration'
               description:
                 ''
               dir: '/data/GLDAS/GLDAS_NOAH025_3H.2.1/{dtime:%Y/%j}/'
               fname:
-                r: 'GLDAS_NOAH025_3H.A{dtime:%y%m%d.%H%M}.021.nc4'
+                r: 'GLDAS_NOAH025_3H.A{dtime:%Y%m%d.%H%M}.021.nc4'
                 t: null
                 l: 'GLDAS_v2.1_mm.d_3H-{dtime:%Y%m%d_%H%M}.tif'
               fmt:
@@ -3129,14 +3130,14 @@ products:
           method: 'get'
           freq: 'MS'
           variables:
-            E:
+            ETA:
               variable: 'Evap_tavg'
-              name: 'Monthly Evaporation'
+              name: 'Monthly Evapotranspiration'
               description:
                 ''
               dir: '/data/GLDAS/GLDAS_NOAH025_M.2.1/{dtime:%Y}/'
               fname:
-                r: 'GLDAS_NOAH025_M.A{dtime:%y%m}.021.nc4'
+                r: 'GLDAS_NOAH025_M.A{dtime:%Y%m}.021.nc4'
                 t: null
                 l: 'GLDAS_v2.1_mm.d_MS-{dtime:%Y%m}.tif'
               fmt:

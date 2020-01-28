@@ -100,15 +100,15 @@ def DownloadData(status, conf) -> int:
         np.max(
             [
                 arg_bbox['w'],
-                -((product['data']['lon']['e'] - product['data']['lon']['w']) / 2.0
-                  - product['data']['lon']['w'])
+                product['data']['lon']['w'] -
+                (product['data']['lon']['e'] - product['data']['lon']['w']) / 2.0
             ]
         ),
         np.min(
             [
                 arg_bbox['e'],
+                product['data']['lon']['e'] -
                 (product['data']['lon']['e'] - product['data']['lon']['w']) / 2.0
-                - product['data']['lon']['w']
             ]
         )
     ]
@@ -224,17 +224,27 @@ def get_download_args(latlim, lonlim, date,
     # Define arg_IDs
     prod_lat_s = product['data']['lat']['s']
     prod_lon_w = product['data']['lon']['w']
+    prod_lon_e = product['data']['lon']['e']
     prod_lat_size = abs(product['data']['lat']['r'])
     prod_lon_size = abs(product['data']['lon']['r'])
 
+    prod_lat_w_shift = prod_lon_w - (prod_lon_e - prod_lon_w) / 2.0
     y_id = np.int16(np.array([
         pixel_h - np.ceil((latlim[1] + abs(prod_lat_s)) / prod_lat_size),
         pixel_h - np.floor((latlim[0] + abs(prod_lat_s)) / prod_lat_size)
     ]))
     x_id = np.int16(np.array([
-        np.floor((lonlim[0] + abs(prod_lon_w)) / prod_lon_size),
-        np.ceil((lonlim[1] + abs(prod_lon_w)) / prod_lon_size)
+        np.floor((lonlim[0] + abs(prod_lat_w_shift)) / prod_lon_size),
+        np.ceil((lonlim[1] + abs(prod_lat_w_shift)) / prod_lon_size)
     ]))
+    # y_id = np.int16(np.array([
+    #     np.ceil((latlim[0] - prod_lat_s) / prod_lat_size),
+    #     np.floor((latlim[1] - prod_lat_s) / prod_lat_size)
+    # ]))
+    # x_id = np.int16(np.array([
+    #     np.ceil((lonlim[0] - prod_lon_w) / prod_lon_size),
+    #     np.floor((lonlim[1] - prod_lon_w) / prod_lon_size)
+    # ]))
 
     return latlim, lonlim, date, \
            product, \
@@ -265,6 +275,7 @@ def start_download(args) -> int:
     # Download the data from server if the file not exists
     if not os.path.exists(local_file):
         url = '{sr}{dr}{fn}'.format(sr=url_server, dr=url_dir, fn=remote_fname)
+        # print('url: "{f}"'.format(f=url))
 
         try:
             # Connect to server
@@ -306,9 +317,9 @@ def start_download(args) -> int:
             status = convert_data(args)
         finally:
             # Release local resources.
-            raw_data = None
-            dataset = None
-            data = None
+            # raw_data = None
+            # dataset = None
+            # data = None
             pass
     else:
         status = 0
@@ -369,8 +380,8 @@ def convert_data(args):
     data = np.flipud(data_tmp[y_id[0]:y_id[1], x_id[0]:x_id[1]])
 
     # Convert units, set NVD
-    data = data * data_multiplier
     # data[data < 0] = data_ndv
+    data = data * data_multiplier
 
     # Save as GTiff
     geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]

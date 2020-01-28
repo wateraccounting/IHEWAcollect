@@ -233,6 +233,14 @@ def get_download_args(latlim, lonlim, date,
         np.floor((lonlim[0] + abs(prod_lon_w)) / prod_lon_size),
         np.ceil((lonlim[1] + abs(prod_lon_w)) / prod_lon_size)
     ]))
+    # y_id = np.int16(np.array([
+    #     np.ceil((latlim[0] - prod_lat_s) / prod_lat_size),
+    #     np.floor((latlim[1] - prod_lat_s) / prod_lat_size)
+    # ]))
+    # x_id = np.int16(np.array([
+    #     np.ceil((lonlim[0] - prod_lon_w) / prod_lon_size),
+    #     np.floor((lonlim[1] - prod_lon_w) / prod_lon_size)
+    # ]))
 
     return latlim, lonlim, date, \
            product, \
@@ -263,6 +271,7 @@ def start_download(args) -> int:
     # Download the data from server if the file not exists
     if not os.path.exists(local_file):
         url = '{sr}{dr}{fn}'.format(sr=urlparse(url_server).netloc, dr='', fn='')
+        # print('url: "{f}"'.format(f=url))
 
         try:
             # Connect to server
@@ -290,10 +299,6 @@ def start_download(args) -> int:
         else:
             # Download data
             if not os.path.exists(remote_file):
-                msg = 'Saving file "{f}"'.format(f=local_file)
-                print('\33[94m{}\33[0m'.format(msg))
-                __this.Log.write(datetime.datetime.now(), msg=msg)
-
                 with open(remote_file, "wb") as fp:
                     conn.retrbinary("RETR " + remote_fname, fp.write)
             else:
@@ -303,13 +308,26 @@ def start_download(args) -> int:
 
             # Download success
             # post-process remote (from server) -> temporary (unzip) -> local (gis)
+            msg = 'Saving file "{f}"'.format(f=local_file)
+            print('\33[94m{}\33[0m'.format(msg))
+            __this.Log.write(datetime.datetime.now(), msg=msg)
+
             status = convert_data(args)
         finally:
             # Release local resources.
-            raw_data = None
-            dataset = None
-            data = None
+            # raw_data = None
+            # dataset = None
+            # data = None
             pass
+    else:
+        status = 0
+        msg = 'Exist "{f}"'.format(f=local_file)
+        print('\33[93m{}\33[0m'.format(msg))
+        __this.Log.write(datetime.datetime.now(), msg=msg)
+
+    msg = 'Finish'
+    __this.Log.write(datetime.datetime.now(), msg=msg)
+    return status
 
 
 def convert_data(args):
@@ -341,8 +359,10 @@ def convert_data(args):
     data = data_raw[y_id[0]:y_id[1], x_id[0]:x_id[1]]
 
     # Convert units, set NVD
+    data[data < 0] = np.nan
     data = data * data_multiplier
-    data[data < 0] = data_ndv
+
+    data[data == np.nan] = data_ndv
 
     # Save as GTiff
     geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]

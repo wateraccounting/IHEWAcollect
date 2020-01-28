@@ -14,15 +14,7 @@ from netCDF4 import Dataset
 # Water Accounting modules
 import watools.General.data_conversions as DC
 
-'''
-TimeCase = 'monthly'
-Startdate = '2007-01-01'
-Enddate = '2003-03-02'
-Var = 'T'
-Dir = 'C:\Test'
-latlim = [30.1, 50.1]
-lonlim = [-20.1, 20.1]
-'''
+
 def DownloadData(Dir, Var, Startdate, Enddate, latlim, lonlim, Waitbar, cores,
                  TimeCase, CaseParameters):
     """

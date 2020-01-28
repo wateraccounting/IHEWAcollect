@@ -644,13 +644,14 @@ def Open_tiff_array(filename='', band=''):
     band -- integer
         Defines the band of the tiff that must be opened.
     """
-    f = gdal.Open(filename)
-    if f is None:
+    fp = gdal.Open(filename)
+    if fp is None:
         print('%s does not exists' % filename)
     else:
         if band is '':
             band = 1
-        data = f.GetRasterBand(band).ReadAsArray()
+        data = fp.GetRasterBand(band).ReadAsArray()
+    fp = None
     return data
 
 
