@@ -270,7 +270,10 @@ def start_download(args) -> int:
 
     # Download the data from server if the file not exists
     if not os.path.exists(local_file):
-        url = '{sr}{dr}{fn}'.format(sr=urlparse(url_server).netloc, dr='', fn='')
+        url_parse = urlparse(url_server)
+        url_host = url_parse.hostname
+        url_port = url_parse.port
+        url = '{sr}{dr}{fn}'.format(sr=url_host, dr='', fn='')
         # print('url: "{f}"'.format(f=url))
 
         try:
@@ -301,6 +304,7 @@ def start_download(args) -> int:
             if not os.path.exists(remote_file):
                 with open(remote_file, "wb") as fp:
                     conn.retrbinary("RETR " + remote_fname, fp.write)
+                    conn.close()
             else:
                 msg = 'Exist "{f}"'.format(f=remote_file)
                 print('\33[93m{}\33[0m'.format(msg))

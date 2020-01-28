@@ -4,10 +4,9 @@
 import os
 import sys
 import datetime
-import calendar
 
 import requests
-from requests.auth import HTTPBasicAuth
+# from requests.auth import HTTPBasicAuth => .netrc
 from joblib import Parallel, delayed
 
 import numpy as np
@@ -266,12 +265,6 @@ def start_download(args) -> int:
     # Define local variable
     status = -1
 
-    # # Load factors / unit / type of variables / accounts
-    # var_info = VariablesInfo(product['resolution'])
-    # var_name = var_info.names[product['data']['variable']]
-    # var_mult = var_info.factors[product['data']['variable']]
-    # var_unit = var_info.units[product['data']['variable']]
-
     # Download the data from server if the file not exists
     if not os.path.exists(local_file):
         # https://disc.gsfc.nasa.gov/data-access#python
@@ -310,6 +303,7 @@ def start_download(args) -> int:
                 if not os.path.exists(remote_file):
                     with open(remote_file, 'wb') as fp:
                         fp.write(conn.content)
+                        conn.close()
                 else:
                     msg = 'Exist "{f}"'.format(f=remote_file)
                     print('\33[93m{}\33[0m'.format(msg))
@@ -363,11 +357,17 @@ def convert_data(args):
     status = -1
 
     # Load data from downloaded remote file
-    fh = Dataset(remote_file)
+    fh = Dataset(remote_file, mode='r')
 
     data_raw = fh.variables[data_variable]
-    data_raw_missing = data_raw.missing_value
-    data_raw_scale = data_raw.scale_factor
+    if 'missing_value' in data_raw.ncattrs():
+        data_raw_missing = data_raw.missing_value
+    else:
+        data_raw_missing = data_raw._FillValue
+    if 'scale_factor' in data_raw.ncattrs():
+        data_raw_scale = data_raw.scale_factor
+    else:
+        data_raw_scale = 1.0
 
     # Generate temporary files
 
@@ -376,6 +376,7 @@ def convert_data(args):
 
     # data = np.squeeze(data_tmp.data, axis=0)
     data = np.flipud(np.squeeze(data_tmp.data, axis=0))
+    # data = np.swapaxes(data_tmp, 0, 1)
     fh.close()
 
     # Convert units, set NVD
@@ -396,6 +397,12 @@ class VariablesInfo:
     """
     This class contains the information about the GLDAS variables
     """
+    # # Load factors / unit / type of variables / accounts
+    # var_info = VariablesInfo(product['resolution'])
+    # var_name = var_info.names[product['data']['variable']]
+    # var_mult = var_info.factors[product['data']['variable']]
+    # var_unit = var_info.units[product['data']['variable']]
+
     names = {'avgsurft_tavg': 'SurfaceTemperature',
              'canopint_tavg': 'TotCanopyWaterStorage',
              'Evap_tavg': 'ET',

@@ -762,28 +762,47 @@ def main():
                 'e': '2008-01-02'
             },
             'nodata': -9999
+        },
+        '14': {
+            'product': 'GLEAM',
+            'version': 'v3.3a',
+            'parameter': 'evapotranspiration',
+            'resolution': 'daily',
+            'variable': 'ETA',
+            'bbox': {
+                'w': -19.0,
+                's': -35.0,
+                'e': 55.0,
+                'n': 38.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': -9999
+        },
+        '15': {
+            'product': 'GLEAM',
+            'version': 'v3.3a',
+            'parameter': 'evapotranspiration',
+            'resolution': 'monthly',
+            'variable': 'ETA',
+            'bbox': {
+                'w': -19.0,
+                's': -35.0,
+                'e': 55.0,
+                'n': 38.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': -9999
         }
     }
 
 
 
-    # TODO, 20200120, QPan, GLEAM, replace some values
-    # product': 'GLEAM'
-    # version': 'v3.3a'
-    # parameter': 'evapotranspiration'
-    # resolution': 'daily'
-    # variable': 'ET'
-    # bbox': {
-    #     'w': -19.0,
-    #     's': -35.0,
-    #     'e': 55.0,
-    #     'n': 38.0
-    # }
-    # period': {
-    #     's': '2008-01-01',
-    #     'e': '2008-01-31'
-    # }
-    # nodata': -9999
 
     # TODO, GPM
     # product': 'GPM'
@@ -810,7 +829,7 @@ def main():
     # variable = 'PCP'
 
     for key, value in test_args.items():
-        print('\ntest case {:>10s}\n-----'.format(key))
+        print('\n{:>4s}{:>20s}\n{:->24s}'.format(key, value['product'], '-'))
 
         download = Download(workspace=path,
                             product=value['product'],

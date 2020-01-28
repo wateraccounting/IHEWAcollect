@@ -11,7 +11,9 @@ import os
 import sys
 import datetime
 
-import pycurl
+# import pycurl
+import requests
+# from requests.auth import HTTPBasicAuth
 from joblib import Parallel, delayed
 
 import pandas as pd
@@ -283,11 +285,26 @@ def start_download(args) -> int:
             print('{}'.format(msg))
             __this.Log.write(datetime.datetime.now(), msg=msg)
 
-            conn = pycurl.Curl()
-            conn.setopt(pycurl.URL, url)
-            conn.setopt(pycurl.SSL_VERIFYPEER, 0)
-            conn.setopt(pycurl.SSL_VERIFYHOST, 0)
-        except pycurl.error as err:
+            # try:
+            #     # Connect to server
+            #     conn = pycurl.Curl()
+            #     conn.setopt(pycurl.URL, url)
+            #     conn.setopt(pycurl.SSL_VERIFYPEER, 0)
+            #     conn.setopt(pycurl.SSL_VERIFYHOST, 0)
+            # except pycurl.error as err:
+            # else:
+            #     with open(remote_file, "wb") as fp:
+            #         conn.setopt(pycurl.WRITEDATA, fp)
+            #         conn.perform()
+            #         conn.close()
+            try:
+                conn = requests.get(url)
+            except BaseException:
+                from requests.packages.urllib3.exceptions import InsecureRequestWarning
+                requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+                conn = requests.get(url, verify=False)
+            # conn.raise_for_status()
+        except requests.exceptions.RequestException as err:
             # Connect error
             status = 1
             msg = "Not able to download {fl}, from {sr}{dr}".format(sr=url_server,
@@ -298,23 +315,30 @@ def start_download(args) -> int:
                              msg='{}\n{}'.format(msg, str(err)))
         else:
             # Download data
-            if not os.path.exists(remote_file):
-                with open(remote_file, "wb") as fp:
-                    conn.setopt(pycurl.WRITEDATA, fp)
-                    conn.perform()
-                    conn.close()
-            else:
-                msg = 'Exist "{f}"'.format(f=remote_file)
-                print('\33[93m{}\33[0m'.format(msg))
+            if conn.status_code == requests.codes.ok:
+                if not os.path.exists(remote_file):
+                    with open(remote_file, "wb") as fp:
+                        fp.write(conn.content)
+                        conn.close()
+                else:
+                    msg = 'Exist "{f}"'.format(f=remote_file)
+                    print('\33[93m{}\33[0m'.format(msg))
+                    __this.Log.write(datetime.datetime.now(), msg=msg)
+
+                # Download success
+                # post-process remote (from server) -> temporary (unzip) -> local (gis)
+                msg = 'Saving file "{f}"'.format(f=local_file)
+                print('\33[94m{}\33[0m'.format(msg))
                 __this.Log.write(datetime.datetime.now(), msg=msg)
 
-            # Download success
-            # post-process remote (from server) -> temporary (unzip) -> local (gis)
-            msg = 'Saving file "{f}"'.format(f=local_file)
-            print('\33[94m{}\33[0m'.format(msg))
-            __this.Log.write(datetime.datetime.now(), msg=msg)
-
-            status = convert_data(args)
+                status = convert_data(args)
+            else:
+                msg = "Not able to download {fl}, from {sr}{dr}".format(sr=url_server,
+                                                                        dr=url_dir,
+                                                                        fl=remote_fname)
+                print('\33[91m{}\n{}\33[0m'.format(conn.status_code, msg))
+                __this.Log.write(datetime.datetime.now(),
+                                 msg='{}\n{}'.format(conn.status_code, msg))
         finally:
             # Release local resources.
             # raw_data = None

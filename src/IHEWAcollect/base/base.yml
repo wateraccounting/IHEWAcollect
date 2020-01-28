@@ -3206,12 +3206,12 @@ products:
     v3.3a:
       evapotranspiration:
         daily:
-          url: 'hydras.ugent.be:2225'
+          url: 'sftp://hydras.ugent.be:2225'
           protocol: 'SFTP'
           method: 'get'
           freq: 'D'
           variables:
-            ET:
+            ETA:
               variable: 'Et'
               name: 'Daily Evapotranspiration'
               description:
@@ -3253,12 +3253,12 @@ products:
                 w: 1440
                 h: 720
         monthly:
-          url: 'hydras.ugent.be:2225'
+          url: 'sftp://hydras.ugent.be:2225'
           protocol: 'SFTP'
           method: 'get'
           freq: 'MS'
           variables:
-            ET:
+            ETA:
               variable: 'Et'
               name: 'Monthly Evapotranspiration'
               description:
@@ -3267,7 +3267,7 @@ products:
               fname:
                 r: 'Et_1980_2018_GLEAM_v3.3a_MO.nc'
                 t: null
-                l: 'GLEAM_v3.3a_mm.d_D-{dtime:%Y%m}.tif'
+                l: 'GLEAM_v3.3a_mm.d_MS-{dtime:%Y%m}.tif'
               fmt:
                 d: null
                 r: null
@@ -3302,11 +3302,11 @@ products:
     v3.3b:
       evapotranspiration:
         daily:
-          url: 'hydras.ugent.be:2225'
+          url: 'sftp://hydras.ugent.be:2225'
           method: 'get'
           freq: 'D'
           variables:
-            ET:
+            ETA:
               name: 'Daily Evapotranspiration'
               description:
                 ''
@@ -3347,11 +3347,11 @@ products:
                 w: 1440
                 h: 720
         monthly:
-          url: 'hydras.ugent.be:2225'
+          url: 'sftp://hydras.ugent.be:2225'
           method: 'get'
           freq: 'MS'
           variables:
-            ET:
+            ETA:
               variable: 'Et'
               name: 'Monthly Evapotranspiration'
               description:
@@ -3360,7 +3360,7 @@ products:
               fname:
                 r: 'Et_2003_2018_GLEAM_v3.3b_MO.nc'
                 t: null
-                l: 'GLEAM_v3.3b_mm.d_D-{dtime:%Y%m}.tif'
+                l: 'GLEAM_v3.3b_mm.d_MS-{dtime:%Y%m}.tif'
               fmt:
                 d: null
                 r: null
