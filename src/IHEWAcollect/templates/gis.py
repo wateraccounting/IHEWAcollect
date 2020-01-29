@@ -283,18 +283,54 @@ class GIS(object):
                    [  0,   0,   0, ...,   0,   0,   0],
                    [  0,   0,   0, ...,   0,   0,   0]], dtype=uint8)
         """
-        if band < 1:
-            band = 1
+        data = np.ndarray
 
-        fp = gdal.Open(file)
-        if fp is not None:
-            try:
-                data = fp.GetRasterBand(band).ReadAsArray()
-            except AttributeError:
-                raise IHEKeyError('Band {b}'.format(b=band), file) from None
-                # raise AttributeError('Band {band} not found.'.format(band=band))
+        ds = gdal.Open(file)
+        if ds is None:
+            raise IHEFileError(file) from None
         else:
-            raise IHEFileError(file)from None
+            if band is None:
+                band = 1
+            # data = fp.GetRasterBand(band).ReadAsArray()
+
+            if ds.RasterCount > 0:
+                try:
+                    ds_band = ds.GetRasterBand(band)
+                    if ds_band is None:
+                        pass
+                    else:
+                        ds_band_ndv = ds_band.GetNoDataValue()
+                        ds_band_scale = ds_band.GetScale()
+                        ds_band_unit = ds_band.GetUnitType()
+
+                        data = ds_band.ReadAsArray()
+
+                        # Check data type
+                        if isinstance(data, np.ma.MaskedArray):
+                            data = data.filled()
+                        else:
+                            data = np.asarray(data)
+
+                        # convert to float
+                        data = data.astype(np.float32)
+
+                        if np.logical_or(isinstance(ds_band_ndv, str),
+                                         isinstance(ds_band_scale, str)):
+                            ds_band_ndv = float(ds_band_ndv)
+                            ds_band_scale = float(ds_band_scale)
+
+                        # Convert units, set NVD
+                        if ds_band_ndv is not None:
+                            data[data == ds_band_ndv] = np.nan
+                        if ds_band_scale is not None:
+                            data = data * ds_band_scale
+
+                except BaseException as err:
+                    raise IHEKeyError('Band {b}'.format(b=band), file) from None
+            else:
+                raise IHEFileError(file) from None
+
+        ds = None
         return data
 
     def merge_map(self, data) -> np.ndarray:

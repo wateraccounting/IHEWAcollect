@@ -708,6 +708,8 @@ def main():
         #     },
         #     'nodata': -9999
         # },
+        # TODO, 20200129-END, QPan, FEWS (SEBS)
+        #  multiplier: uint16 to float32, 0.01
         '9a': {
             'product': 'FEWS',
             'version': 'v4',
@@ -852,7 +854,7 @@ def main():
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999,
+            'nodata': -9999
         },
         # TODO, 20200120-END, QPan, ex_GPM_HDF5
         #  product['data']['ftype']['r'].split('.')
@@ -872,9 +874,33 @@ def main():
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999,
+            'nodata': -9999
+        },
+        '13a': {
+            'product': 'HiHydroSoil',
+            'version': 'v1',
+            'parameter': 'soil',
+            'resolution': '30s',
+            'variable': 'wcsat_topsoil',
+            'bbox': {
+                'w': -19.0,
+                'n': 38.0,
+                'e': 55.0,
+                's': -35.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': -9999
         }
     }
+    # TODO, 20200129, QPan, SEBS (FEWS)
+    #  multiplier: uint16 to float32, 0.01
+
+    # TODO, 20200129, QPan, SoilGrids
+    #  BDRLOG, CLYPPT, CRFVOL, SLTPPT, SNDPPT
+    #  multiplier: ubyte to float32, 0.01 => percent
 
     # product = 'TRMM'
     # version = 'v7'
@@ -884,8 +910,8 @@ def main():
 
     for key, value in test_args.items():
         print('\n{:>4s}'
-              '{:>20s}{:>6s}{:>20s}{:>20s}{:>10s}\n'
-              '{:->80s}'.format(key,
+              '{:>20s}{:>6s}{:>20s}{:>20s}{:>20s}\n'
+              '{:->90s}'.format(key,
                                 value['product'],
                                 value['version'],
                                 value['parameter'],

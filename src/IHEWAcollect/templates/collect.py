@@ -634,7 +634,7 @@ def Open_array_info(filename=''):
     return (geo_out, proj, size_X, size_Y)
 
 
-def Open_tiff_array(filename='', band=''):
+def Open_tiff_array(filename, band=1) -> np.ndarray:
     """
     Opening a tiff array.
 
@@ -644,14 +644,54 @@ def Open_tiff_array(filename='', band=''):
     band -- integer
         Defines the band of the tiff that must be opened.
     """
-    fp = gdal.Open(filename)
-    if fp is None:
+    data = np.ndarray
+
+    ds = gdal.Open(filename)
+    if ds is None:
         print('%s does not exists' % filename)
     else:
-        if band is '':
+        if band is None:
             band = 1
-        data = fp.GetRasterBand(band).ReadAsArray()
-    fp = None
+        # data = fp.GetRasterBand(band).ReadAsArray()
+
+        if ds.RasterCount > 0:
+            try:
+                ds_band = ds.GetRasterBand(band)
+                if ds_band is None:
+                    pass
+                else:
+                    ds_band_ndv = ds_band.GetNoDataValue()
+                    ds_band_scale = ds_band.GetScale()
+                    ds_band_unit = ds_band.GetUnitType()
+
+                    data = ds_band.ReadAsArray()
+
+                    # Check data type
+                    if isinstance(data, np.ma.MaskedArray):
+                        data = data.filled()
+                    else:
+                        data = np.asarray(data)
+
+                    # convert to float
+                    data = data.astype(np.float32)
+
+                    if np.logical_or(isinstance(ds_band_ndv, str),
+                                     isinstance(ds_band_scale, str)):
+                        ds_band_ndv = float(ds_band_ndv)
+                        ds_band_scale = float(ds_band_scale)
+
+                    # Convert units, set NVD
+                    if ds_band_ndv is not None:
+                        data[data == ds_band_ndv] = np.nan
+                    if ds_band_scale is not None:
+                        data = data * ds_band_scale
+
+            except RuntimeError as err:
+                print('No band %i found' % band)
+        else:
+            raise RuntimeError('No band %i found' % band)
+
+    ds = None
     return data
 
 
@@ -768,10 +808,37 @@ def Open_bil_array(bil_filename, band=1):
         Defines the band of the tiff that must be opened.
     """
     gdal.GetDriverByName('EHdr').Register()
-    img = gdal.Open(bil_filename)
-    Data = img.GetRasterBand(band).ReadAsArray()
+    ds = gdal.Open(bil_filename)
+    ds_band = ds.GetRasterBand(band)
 
-    return Data
+    ds_band_ndv = ds_band.GetNoDataValue()
+    ds_band_scale = ds_band.GetScale()
+    ds_band_unit = ds_band.GetUnitType()
+
+    data = ds_band.ReadAsArray()
+
+    # Check data type
+    if isinstance(data, np.ma.MaskedArray):
+        data = data.filled()
+    else:
+        data = np.asarray(data)
+
+    # convert to float
+    data = data.astype(np.float32)
+
+    if np.logical_or(isinstance(ds_band_ndv, str),
+                     isinstance(ds_band_scale, str)):
+        ds_band_ndv = float(ds_band_ndv)
+        ds_band_scale = float(ds_band_scale)
+
+    # Convert units, set NVD
+    if ds_band_ndv is not None:
+        data[data == ds_band_ndv] = np.nan
+    if ds_band_scale is not None:
+        data = data * ds_band_scale
+
+    ds = None
+    return data
 
 
 def Open_ncs_array(NC_Directory, Var, Startdate, Enddate):

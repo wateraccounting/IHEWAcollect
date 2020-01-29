@@ -36,6 +36,14 @@ IHEWAcollect.templates.IHE.ETmonitor\_create module
    :undoc-members:
    :show-inheritance:
 
+IHEWAcollect.templates.IHE.HiHydroSoil module
+---------------------------------------------
+
+.. automodule:: IHEWAcollect.templates.IHE.HiHydroSoil
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------

@@ -19,14 +19,14 @@ import pandas as pd
 try:
     from ..collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
-        Open_bil_array, Save_as_MEM, Clip_Data, Extract_Data_tar_gz
+        Open_bil_array, Clip_Data, Extract_Data_tar_gz
     from ..gis import GIS
     from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
-        Open_bil_array, Save_as_MEM, Clip_Data, Extract_Data_tar_gz
+        Open_bil_array, Clip_Data, Extract_Data_tar_gz
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
     from IHEWAcollect.templates.util import Log
@@ -149,7 +149,7 @@ def download_product(latlim, lonlim, dates,
     # if is_waitbar == 1:
     #     amount = 0
     #     collect.WaitBar(amount, total,
-    #                     prefix='ALEXI:', suffix='Complete',
+    #                     prefix='Progress:', suffix='Complete',
     #                     length=50)
 
     for date in dates:
@@ -162,7 +162,7 @@ def download_product(latlim, lonlim, dates,
         # if is_waitbar == 1:
         #     amount += 1
         #     collect.WaitBar(amount, total,
-        #                     prefix='ALEXI:', suffix='Complete',
+        #                     prefix='Progress:', suffix='Complete',
         #                     length=50)
 
     return status
@@ -266,69 +266,82 @@ def start_download(args) -> int:
     status = -1
 
     # Download the data from server if the file not exists
-    if not os.path.exists(local_file):
+    msg = 'Downloading "{f}"'.format(f=remote_fname)
+    print('{}'.format(msg))
+    __this.Log.write(datetime.datetime.now(), msg=msg)
+
+    is_download = True
+    if os.path.exists(remote_file):
+        if np.ceil(os.stat(remote_file).st_size / 1024) > 0:
+            is_download = False
+
+            msg = 'Exist "{f}"'.format(f=remote_file)
+            print('\33[93m{}\33[0m'.format(msg))
+            __this.Log.write(datetime.datetime.now(), msg=msg)
+
+    is_start_download = True
+    if os.path.exists(local_file):
+        if np.ceil(os.stat(local_file).st_size / 1024) > 0:
+            is_start_download = False
+
+            msg = 'Exist "{f}"'.format(f=local_file)
+            print('\33[93m{}\33[0m'.format(msg))
+            __this.Log.write(datetime.datetime.now(), msg=msg)
+
+    if is_start_download:
         url = '{sr}{dr}{fn}'.format(sr=url_server, dr=url_dir, fn=remote_fname)
         # print('url: "{f}"'.format(f=url))
 
-        try:
-            # Connect to server
-            msg = 'Downloading "{f}"'.format(f=remote_fname)
-            print('{}'.format(msg))
-            __this.Log.write(datetime.datetime.now(), msg=msg)
-
+        if is_download:
             try:
-                conn = requests.get(url)
-            except BaseException:
-                from requests.packages.urllib3.exceptions import InsecureRequestWarning
-                requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-                conn = requests.get(url, verify=False)
-            # conn.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            # Connect error
-            status = 1
-            msg = "Not able to download {fl}, from {sr}{dr}".format(sr=url_server,
-                                                                    dr=url_dir,
-                                                                    fl=remote_fname)
-            print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
-            __this.Log.write(datetime.datetime.now(),
-                             msg='{}\n{}'.format(msg, str(err)))
-        else:
-            # Download data
-            if conn.status_code == requests.codes.ok:
-                if not os.path.exists(remote_file):
-                    with open(remote_file, 'wb') as fp:
-                        fp.write(conn.content)
-                        conn.close()
-                else:
-                    msg = 'Exist "{f}"'.format(f=remote_file)
-                    print('\33[93m{}\33[0m'.format(msg))
-                    __this.Log.write(datetime.datetime.now(), msg=msg)
-
-                # Download success
-                # post-process remote (from server) -> temporary (unzip) -> local (gis)
-                msg = 'Saving file "{f}"'.format(f=local_file)
-                print('\33[94m{}\33[0m'.format(msg))
-                __this.Log.write(datetime.datetime.now(), msg=msg)
-
-                status = convert_data(args)
-            else:
+                # Connect to server
+                try:
+                    conn = requests.get(url)
+                except BaseException:
+                    from requests.packages.urllib3.exceptions import InsecureRequestWarning
+                    requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+                    conn = requests.get(url, verify=False)
+                # conn.raise_for_status()
+            except requests.exceptions.RequestException as err:
+                # Connect error
+                status = 1
                 msg = "Not able to download {fl}, from {sr}{dr}".format(sr=url_server,
                                                                         dr=url_dir,
                                                                         fl=remote_fname)
-                print('\33[91m{}\n{}\33[0m'.format(conn.status_code, msg))
+                print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
                 __this.Log.write(datetime.datetime.now(),
-                                 msg='{}\n{}'.format(conn.status_code, msg))
-        finally:
-            # Release local resources.
-            # raw_data = None
-            # dataset = None
-            # data = None
-            pass
+                                 msg='{}\n{}'.format(msg, str(err)))
+            else:
+                # Download data
+                if conn.status_code == requests.codes.ok:
+                    with open(remote_file, 'wb') as fp:
+                        fp.write(conn.content)
+                        conn.close()
+
+                    # Download success
+                    # post-process remote (from server)
+                    #  -> temporary (unzip)
+                    #   -> local (gis)
+                    msg = 'Saving file "{f}"'.format(f=local_file)
+                    print('\33[94m{}\33[0m'.format(msg))
+                    __this.Log.write(datetime.datetime.now(), msg=msg)
+
+                    status = convert_data(args)
+                else:
+                    msg = "Not able to download {fl}, from {sr}{dr}".format(sr=url_server,
+                                                                            dr=url_dir,
+                                                                            fl=remote_fname)
+                    print('\33[91m{}\n{}\33[0m'.format(conn.status_code, msg))
+                    __this.Log.write(datetime.datetime.now(),
+                                     msg='{}\n{}'.format(conn.status_code, msg))
+            finally:
+                # Release local resources.
+                # raw_data = None
+                # dataset = None
+                # data = None
+                pass
     else:
         status = 0
-        msg = 'Exist "{f}"'.format(f=local_file)
-        print('\33[93m{}\33[0m'.format(msg))
-        __this.Log.write(datetime.datetime.now(), msg=msg)
 
     msg = 'Finish'
     __this.Log.write(datetime.datetime.now(), msg=msg)

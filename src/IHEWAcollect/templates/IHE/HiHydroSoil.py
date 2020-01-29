@@ -7,26 +7,23 @@ import os
 import sys
 import datetime
 
-import requests
-# from requests.auth import HTTPBasicAuth
-from joblib import Parallel, delayed
+import ftplib
+from urllib.parse import urlparse
+# from joblib import Parallel, delayed
 
-import pandas as pd
 import numpy as np
-from netCDF4 import Dataset
+import pandas as pd
 
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
-        Convert_grb2_to_nc
+        Extract_Data_gz, Open_tiff_array, Save_as_tiff
     from ..gis import GIS
     from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
-        Convert_grb2_to_nc
+        Extract_Data_gz, Open_tiff_array, Save_as_tiff
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
     from IHEWAcollect.templates.util import Log
@@ -54,7 +51,8 @@ def _init(status, conf):
 
 def DownloadData(status, conf) -> int:
     """
-    This function collects daily CFSR data in geotiff format
+    This scripts downloads HiHydroSoil Saturated Theta soil data
+    from the UNESCO-IHE ftp server.
 
     Args:
       status (dict): Status.
@@ -97,15 +95,13 @@ def DownloadData(status, conf) -> int:
         np.max(
             [
                 arg_bbox['w'],
-                product['data']['lon']['w'] -
-                (product['data']['lon']['e'] - product['data']['lon']['w']) / 2.0
+                product['data']['lon']['w']
             ]
         ),
         np.min(
             [
                 arg_bbox['e'],
-                product['data']['lon']['e'] -
-                (product['data']['lon']['e'] - product['data']['lon']['w']) / 2.0
+                product['data']['lon']['e']
             ]
         )
     ]
@@ -143,7 +139,6 @@ def download_product(latlim, lonlim, dates,
     # Define local variable
     status = -1
     total = len(dates)
-    cores = 1
 
     # Create Waitbar
     # amount = 0
@@ -153,26 +148,18 @@ def download_product(latlim, lonlim, dates,
     #                     prefix='Progress:', suffix='Complete',
     #                     length=50)
 
-    if not cores:
-        for date in dates:
-            args = get_download_args(latlim, lonlim, date,
-                                     account, folder, product)
+    for date in dates:
+        args = get_download_args(latlim, lonlim, date,
+                                 account, folder, product)
 
-            status = start_download(args)
+        status = start_download(args)
 
-            # Update waitbar
-            # if is_waitbar == 1:
-            #     amount += 1
-            #     collect.WaitBar(amount, total,
-            #                     prefix='Progress:', suffix='Complete',
-            #                     length=50)
-    else:
-        status = Parallel(n_jobs=cores)(
-            delayed(
-                start_download)(
-                get_download_args(
-                    latlim, lonlim, date,
-                    account, folder, product)) for date in dates)
+        # Update waitbar
+        # if is_waitbar == 1:
+        #     amount += 1
+        #     collect.WaitBar(amount, total,
+        #                     prefix='Progress:', suffix='Complete',
+        #                     length=50)
 
     return status
 
@@ -225,8 +212,6 @@ def get_download_args(latlim, lonlim, date,
     pixel_size = max(prod_lat_size, prod_lon_size)
 
     # Calculate arg_IDs
-    prod_lat_w_shift = prod_lon_w - (prod_lon_e - prod_lon_w) / 2.0
-
     # [w,n]--[e,n]
     #   |      |
     # [w,s]--[e,s]
@@ -235,8 +220,8 @@ def get_download_args(latlim, lonlim, date,
         np.ceil((prod_lat_n - latlim[0]) / prod_lat_size)
     ]))
     x_id = np.int16(np.array([
-        np.floor((lonlim[0] - prod_lat_w_shift) / prod_lon_size),
-        np.ceil((lonlim[1] - prod_lat_w_shift) / prod_lon_size)
+        np.floor((lonlim[0] - prod_lon_w) / prod_lon_size),
+        np.ceil((lonlim[1] - prod_lon_w) / prod_lon_size)
     ]))
     # [w,s]--[e,s]
     #   |      |
@@ -246,8 +231,8 @@ def get_download_args(latlim, lonlim, date,
     #     np.ceil((latlim[1] - prod_lat_s) / prod_lat_size)
     # ]))
     # x_id = np.int16(np.array([
-    #     np.floor((lonlim[0] - prod_lat_w_shift) / prod_lon_size),
-    #     np.ceil((lonlim[1] - prod_lat_w_shift) / prod_lon_size)
+    #     np.floor((lonlim[0] - prod_lon_w) / prod_lon_size),
+    #     np.ceil((lonlim[1] - prod_lon_w) / prod_lon_size)
     # ]))
 
     return latlim, lonlim, date, \
@@ -255,7 +240,7 @@ def get_download_args(latlim, lonlim, date,
            username, password, apitoken, \
            url_server, url_dir, \
            fname_r, fname_t, fname_l, \
-           file_r, file_t, file_l,\
+           file_r, file_t, file_l, \
            y_id, x_id, pixel_size, pixel_w, pixel_h, \
            data_ndv, data_type, data_multiplier, data_variable
 
@@ -264,12 +249,12 @@ def start_download(args) -> int:
     """Retrieves data
     """
     # Unpack the arguments
-    latlim, lonlim, date,\
+    latlim, lonlim, date, \
     product, \
     username, password, apitoken, \
     url_server, url_dir, \
-    remote_fname, temp_fname, local_fname,\
-    remote_file, temp_file, local_file,\
+    remote_fname, temp_fname, local_fname, \
+    remote_file, temp_file, local_file, \
     y_id, x_id, pixel_size, pixel_w, pixel_h, \
     data_ndv, data_type, data_multiplier, data_variable = args
 
@@ -300,64 +285,47 @@ def start_download(args) -> int:
             __this.Log.write(datetime.datetime.now(), msg=msg)
 
     if is_start_download:
-        url = '{sr}{dr}{fn}'.format(sr=url_server, dr=url_dir, fn=remote_fname)
+        url_parse = urlparse(url_server)
+        url_host = url_parse.hostname
+        url_port = url_parse.port
+        url = '{sr}{dr}{fn}'.format(sr=url_host, dr='', fn='')
         # print('url: "{f}"'.format(f=url))
 
         if is_download:
             try:
                 # Connect to server
-                # import pycurl
-                # try:
-                #     # Connect to server
-                #     conn = pycurl.Curl()
-                #     conn.setopt(pycurl.URL, url)
-                #     conn.setopt(pycurl.SSL_VERIFYPEER, 0)
-                #     conn.setopt(pycurl.SSL_VERIFYHOST, 0)
-                # except pycurl.error as err:
-                # else:
-                #     with open(remote_file, "wb") as fp:
-                #         conn.setopt(pycurl.WRITEDATA, fp)
-                #         conn.perform()
-                #         conn.close()
-                try:
-                    conn = requests.get(url)
-                except BaseException:
-                    from requests.packages.urllib3.exceptions import InsecureRequestWarning
-                    requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-                    conn = requests.get(url, verify=False)
-                # conn.raise_for_status()
-            except requests.exceptions.RequestException as err:
+                conn = ftplib.FTP(url)
+                # conn.login()
+                conn.login(username, password)
+                conn.cwd(url_dir)
+
+                # listing = []
+                # conn.retrlines("LIST", listing.append)
+                # print(listing)
+            except ftplib.all_errors as err:
                 # Connect error
                 status = 1
-                msg = "Not able to download {fl}, from {sr}{dr}".format(sr=url_server,
+                msg = "Not able to download {fn}, from {sr}{dr}".format(sr=url_server,
                                                                         dr=url_dir,
-                                                                        fl=remote_fname)
+                                                                        fn=remote_fname)
                 print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
                 __this.Log.write(datetime.datetime.now(),
                                  msg='{}\n{}'.format(msg, str(err)))
             else:
                 # Download data
-                if conn.status_code == requests.codes.ok:
-                    with open(remote_file, "wb") as fp:
-                        fp.write(conn.content)
-                        conn.close()
+                with open(remote_file, "wb") as fp:
+                    conn.retrbinary("RETR " + remote_fname, fp.write)
+                    conn.close()
 
-                    # Download success
-                    # post-process remote (from server)
-                    #  -> temporary (unzip)
-                    #   -> local (gis)
-                    msg = 'Saving file "{f}"'.format(f=local_file)
-                    print('\33[94m{}\33[0m'.format(msg))
-                    __this.Log.write(datetime.datetime.now(), msg=msg)
+                # Download success
+                # post-process remote (from server)
+                #  -> temporary (unzip)
+                #   -> local (gis)
+                msg = 'Saving file "{f}"'.format(f=local_file)
+                print('\33[94m{}\33[0m'.format(msg))
+                __this.Log.write(datetime.datetime.now(), msg=msg)
 
-                    status = convert_data(args)
-                else:
-                    msg = "Not able to download {fl}, from {sr}{dr}".format(sr=url_server,
-                                                                            dr=url_dir,
-                                                                            fl=remote_fname)
-                    print('\33[91m{}\n{}\33[0m'.format(conn.status_code, msg))
-                    __this.Log.write(datetime.datetime.now(),
-                                     msg='{}\n{}'.format(conn.status_code, msg))
+                status = convert_data(args)
             finally:
                 # Release local resources.
                 # raw_data = None
@@ -387,48 +355,14 @@ def convert_data(args):
 
     # Define local variable
     status = -1
-    nparts = 4
 
     # Load data from downloaded remote file
+    data_raw = Open_tiff_array(remote_file)
 
     # Generate temporary files
-    for i in range(0, nparts):
-        # Band number of the grib data which is converted in .nc
-        temp_file_part = temp_file.format(dtime=date, ipart=str(i + 1))
-        temp_file_band = (int(date.strftime('%d')) - 1) * 28 + (i + 1) * 7
-
-        Convert_grb2_to_nc(remote_file, temp_file_part, temp_file_band)
-
-    # Load data from temporary files
-    for i in range(0, nparts):
-        temp_file_part = temp_file.format(dtime=date, ipart=str(i + 1))
-
-        fp = Dataset(temp_file_part, mode='r')
-
-        data_raw = fp.variables['Band1']
-
-        if 'missing_value' in data_raw.ncattrs():
-            data_raw_missing = data_raw.getncattr('missing_value')
-        else:
-            data_raw_missing = data_raw.getncattr('_FillValue')
-        if 'scale_factor' in data_raw.ncattrs():
-            data_raw_scale = data_raw.getncattr('scale_factor')
-        else:
-            data_raw_scale = 1.0
-
-        data_raw = np.zeros([pixel_h, pixel_w])
-        data_raw = data_raw + np.array(fp.variables['Band1'][0:pixel_h, 0:pixel_w])
-
-        fp.close()
-    # calculate the average
-    data_raw = data_raw / float(nparts)
-
-    data_tmp = np.zeros([pixel_h, pixel_w])
-    data_tmp[:, 0:int(pixel_w / 2)] = data_raw[:, int(pixel_w / 2):pixel_w]
-    data_tmp[:, int(pixel_w / 2):pixel_w] = data_raw[:, 0:int(pixel_w / 2)]
 
     # Clip data
-    data = np.flipud(data_tmp[y_id[0]:y_id[1], x_id[0]:x_id[1]])
+    data = data_raw[y_id[0]:y_id[1], x_id[0]:x_id[1]]
 
     # Check data type
     # filled numpy.ma.MaskedArray as numpy.ndarray
@@ -437,16 +371,14 @@ def convert_data(args):
     else:
         data = np.asarray(data)
     # convert to float
-    if np.logical_or(isinstance(data_raw_missing, str),
-                     isinstance(data_raw_scale, str)):
-        data_raw_missing = float(data_raw_missing)
-        data_raw_scale = float(data_raw_scale)
+    # if np.logical_or(isinstance(data_raw_missing, str),
+    #                  isinstance(data_raw_scale, str)):
+    #     data_raw_missing = float(data_raw_missing)
+    #     data_raw_scale = float(data_raw_scale)
 
     # Convert units, set NVD
-    data[data == data_raw_missing] = np.nan
-    data = data * data_raw_scale * data_multiplier
-
-    data[data == np.nan] = data_ndv
+    # data[data < 0] = data_ndv
+    data = data * data_multiplier
 
     # Save as GTiff
     geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]

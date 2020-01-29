@@ -184,7 +184,7 @@ def download_product_daily(latlim, lonlim, dates,
     # if is_waitbar == 1:
     #     amount = 0
     #     collect.WaitBar(amount, total,
-    #                     prefix='ALEXI:', suffix='Complete',
+    #                     prefix='Progress:', suffix='Complete',
     #                     length=50)
 
     for date in dates:
@@ -197,8 +197,9 @@ def download_product_daily(latlim, lonlim, dates,
         # if is_waitbar == 1:
         #     amount += 1
         #     collect.WaitBar(amount, total,
-        #                     prefix='ALEXI:', suffix='Complete',
+        #                     prefix='Progress:', suffix='Complete',
         #                     length=50)
+
     return status
 
 
@@ -269,6 +270,7 @@ def download_product_weekly(date, date_s, dates_e,
         #     collect.WaitBar(amount, total,
         #                     prefix='Progress:', suffix='Complete',
         #                     length=50)
+
     return status
 
 
@@ -370,65 +372,78 @@ def start_download(args) -> int:
     status = -1
 
     # Download the data from server if the file not exists
-    if not os.path.exists(local_file):
+    msg = 'Downloading "{f}"'.format(f=remote_fname)
+    print('{}'.format(msg))
+    __this.Log.write(datetime.datetime.now(), msg=msg)
+
+    is_download = True
+    if os.path.exists(remote_file):
+        if np.ceil(os.stat(remote_file).st_size / 1024) > 0:
+            is_download = False
+
+            msg = 'Exist "{f}"'.format(f=remote_file)
+            print('\33[93m{}\33[0m'.format(msg))
+            __this.Log.write(datetime.datetime.now(), msg=msg)
+
+    is_start_download = True
+    if os.path.exists(local_file):
+        if np.ceil(os.stat(local_file).st_size / 1024) > 0:
+            is_start_download = False
+
+            msg = 'Exist "{f}"'.format(f=local_file)
+            print('\33[93m{}\33[0m'.format(msg))
+            __this.Log.write(datetime.datetime.now(), msg=msg)
+
+    if is_start_download:
         url_parse = urlparse(url_server)
         url_host = url_parse.hostname
         url_port = url_parse.port
         url = '{sr}{dr}{fn}'.format(sr=url_host, dr='', fn='')
         # print('url: "{f}"'.format(f=url))
 
-        try:
-            # Connect to server
-            msg = 'Downloading "{f}"'.format(f=remote_fname)
-            print('{}'.format(msg))
-            __this.Log.write(datetime.datetime.now(), msg=msg)
+        if is_download:
+            try:
+                # Connect to server
+                conn = ftplib.FTP(url)
+                # conn.login()
+                conn.login(username, password)
+                conn.cwd(url_dir)
 
-            conn = ftplib.FTP(url)
-            # conn.login()
-            conn.login(username, password)
-            conn.cwd(url_dir)
-
-            # listing = []
-            # conn.retrlines("LIST", listing.append)
-            # print(listing)
-        except ftplib.all_errors as err:
-            # Connect error
-            status = 1
-            msg = "Not able to download {fn}, from {sr}{dr}".format(sr=url_server,
-                                                                    dr=url_dir,
-                                                                    fn=remote_fname)
-            print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
-            __this.Log.write(datetime.datetime.now(),
-                             msg='{}\n{}'.format(msg, str(err)))
-        else:
-            # Download data
-            if not os.path.exists(remote_file):
+                # listing = []
+                # conn.retrlines("LIST", listing.append)
+                # print(listing)
+            except ftplib.all_errors as err:
+                # Connect error
+                status = 1
+                msg = "Not able to download {fn}, from {sr}{dr}".format(sr=url_server,
+                                                                        dr=url_dir,
+                                                                        fn=remote_fname)
+                print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
+                __this.Log.write(datetime.datetime.now(),
+                                 msg='{}\n{}'.format(msg, str(err)))
+            else:
+                # Download data
                 with open(remote_file, "wb") as fp:
                     conn.retrbinary("RETR " + remote_fname, fp.write)
                     conn.close()
-            else:
-                msg = 'Exist "{f}"'.format(f=remote_file)
-                print('\33[93m{}\33[0m'.format(msg))
+
+                # Download success
+                # post-process remote (from server)
+                #  -> temporary (unzip)
+                #   -> local (gis)
+                msg = 'Saving file "{f}"'.format(f=local_file)
+                print('\33[94m{}\33[0m'.format(msg))
                 __this.Log.write(datetime.datetime.now(), msg=msg)
 
-            # Download success
-            # post-process remote (from server) -> temporary (unzip) -> local (gis)
-            msg = 'Saving file "{f}"'.format(f=local_file)
-            print('\33[94m{}\33[0m'.format(msg))
-            __this.Log.write(datetime.datetime.now(), msg=msg)
-
-            status = convert_data(args)
-        finally:
-            # Release local resources.
-            # raw_data = None
-            # dataset = None
-            # data = None
-            pass
+                status = convert_data(args)
+            finally:
+                # Release local resources.
+                # raw_data = None
+                # dataset = None
+                # data = None
+                pass
     else:
         status = 0
-        msg = 'Exist "{f}"'.format(f=local_file)
-        print('\33[93m{}\33[0m'.format(msg))
-        __this.Log.write(datetime.datetime.now(), msg=msg)
 
     msg = 'Finish'
     __this.Log.write(datetime.datetime.now(), msg=msg)

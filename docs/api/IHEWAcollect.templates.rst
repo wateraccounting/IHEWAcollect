@@ -8,8 +8,8 @@ Subpackages
 
    IHEWAcollect.templates.ECMWF
    IHEWAcollect.templates.ESA
+   IHEWAcollect.templates.EU
    IHEWAcollect.templates.FAO
-   IHEWAcollect.templates.Google
    IHEWAcollect.templates.HydroSHEDS
    IHEWAcollect.templates.IHE
    IHEWAcollect.templates.ISRIC
