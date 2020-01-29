@@ -147,14 +147,13 @@ def DownloadData(status, conf) -> int:
                                               '%Y-%m-%d').timetuple().tm_yday
         date = pd.Timestamp(date)
 
-        # amount of Dates weekly
-        date_dates = pd.date_range(date, date_e, freq=product['freq'])
-
-    elif product['resolution'] == 'daily':
-        date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
-
+    if np.logical_or(pd.Timestamp(date_s) is pd.NaT,
+                     pd.Timestamp(date_e) is pd.NaT):
+        date_s = pd.Timestamp.now()
+        date_e = pd.Timestamp.now()
+        date_dates = pd.date_range(date_s, date_e)
     else:
-        raise ValueError('{err} not support.'.format(err=product['freq']))
+        date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
 
     # =========== #
     # 3. Download #
@@ -243,10 +242,6 @@ def download_product_weekly(date, date_s, dates_e,
         status = start_download(tuple(args))
 
         # Create the new date for the next download
-        # date_str = (str(date.strftime('%Y')) + '-' + str(
-        #     date.strftime('%m')) + '-' + str(date.strftime('%d')))
-        # date_doy = datetime.datetime.strptime(date_str,
-        #                                  '%Y-%m-%d').timetuple().tm_yday
         date_doy = date.timetuple().tm_yday
         # Define next day
         date_doy_next_int = int(date_doy + 7)
@@ -276,6 +271,10 @@ def download_product_weekly(date, date_s, dates_e,
 
 def get_download_args(latlim, lonlim, date,
                       account, folder, product) -> tuple:
+    msg = 'Collecting  "{f}"'.format(f=date)
+    print('{}'.format(msg))
+    __this.Log.write(datetime.datetime.now(), msg=msg)
+
     # Define arg_account
     try:
         username = account['data']['username']
@@ -391,7 +390,7 @@ def start_download(args) -> int:
             is_start_download = False
 
             msg = 'Exist "{f}"'.format(f=local_file)
-            print('\33[93m{}\33[0m'.format(msg))
+            print('\33[92m{}\33[0m'.format(msg))
             __this.Log.write(datetime.datetime.now(), msg=msg)
 
     if is_start_download:
@@ -429,13 +428,6 @@ def start_download(args) -> int:
                     conn.close()
 
                 # Download success
-                # post-process remote (from server)
-                #  -> temporary (unzip)
-                #   -> local (gis)
-                msg = 'Saving file "{f}"'.format(f=local_file)
-                print('\33[94m{}\33[0m'.format(msg))
-                __this.Log.write(datetime.datetime.now(), msg=msg)
-
                 status = convert_data(args)
             finally:
                 # Release local resources.
@@ -466,6 +458,13 @@ def convert_data(args):
 
     # Define local variable
     status = -1
+
+    # post-process remote (from server)
+    #  -> temporary (unzip)
+    #   -> local (gis)
+    msg = 'Converting  "{f}"'.format(f=local_file)
+    print('\33[94m{}\33[0m'.format(msg))
+    __this.Log.write(datetime.datetime.now(), msg=msg)
 
     if product['resolution'] == "daily":
         # Load data from downloaded remote file

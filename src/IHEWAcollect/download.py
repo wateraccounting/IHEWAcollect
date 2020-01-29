@@ -421,7 +421,7 @@ class Download(User):
         time_str = time.strftime('%Y-%m-%d %H:%M:%S.%f')
         self.__conf['time']['now'] = time
 
-        print('Create log file: {f}'.format(f=file))
+        print('Create log file "{f}"'.format(f=file))
         txt = '{t}: IHEWAcollect'.format(t=time_str)
 
         fp = open(file, 'w+')
@@ -440,7 +440,7 @@ class Download(User):
         file = self.__conf['log']['file']
         fp = self.__conf['log']['fp']
 
-        print('Close log file: {f}'.format(f=file))
+        print('Close log file "{f}"'.format(f=file))
         txt = '{t}: IHEWAcollect finished.'.format(t=time_str)
         fp.write('{}\n'.format(txt))
         fp.close()
@@ -889,8 +889,8 @@ def main():
                 's': -35.0
             },
             'period': {
-                's': '2008-01-01',
-                'e': '2008-01-02'
+                's': None,
+                'e': None
             },
             'nodata': -9999
         }
