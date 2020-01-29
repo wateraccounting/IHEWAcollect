@@ -3491,15 +3491,15 @@ products:
           freq: 'MS'
           variables:
             PCP:
-              variable: 'precipitationCal'
+              variable: 'precipitation'
               name: 'Monthly Precipitation'
               description:
                 ''
               dir: '/data/GPM_L3/GPM_3IMERGM.06/{dtime:%Y}/'
               fname:
-                r: '3B-MO.MS.MRG.3IMERG.{dtime:%Y%m01}-S000000-E235959.06.V06B.HDF5'
+                r: '3B-MO.MS.MRG.3IMERG.{dtime:%Y%m01}-S000000-E235959.{dtime:%m}.V06B.HDF5'
                 t: null
-                l: 'GPM_v6_mm_MS-{dtime:%Y%m}.tif'
+                l: 'GPM_v6_mm.d_MS-{dtime:%Y%m}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -3514,9 +3514,9 @@ products:
                 t: null
                 l: 'float32'
               units:
-                r: 'mm'
-                l: 'mm'
-                m: 1.0
+                r: 'mm.hr'
+                l: 'mm.d'
+                m: 24.0
               lat:
                 s: -90.0
                 n: 90.0

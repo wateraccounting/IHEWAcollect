@@ -28,6 +28,14 @@ IHEWAcollect.templates.IHE.ETmonitor module
    :undoc-members:
    :show-inheritance:
 
+IHEWAcollect.templates.IHE.ETmonitor\_create module
+---------------------------------------------------
+
+.. automodule:: IHEWAcollect.templates.IHE.ETmonitor_create
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------

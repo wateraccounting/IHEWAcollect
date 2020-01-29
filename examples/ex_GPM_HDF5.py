@@ -5,7 +5,6 @@ import IHEWAcollect
 
 
 def main():
-
     path = os.path.join(
         os.getcwd(),
         os.path.dirname(
@@ -13,11 +12,11 @@ def main():
                 inspect.currentframe()))
     )
 
-    product = 'GLEAM'
-    version = 'v3.3a'
-    parameter = 'evapotranspiration'
-    resolution = 'daily'
-    variable = 'ET'
+    product = 'GPM'
+    version = 'v6'
+    parameter = 'precipitation'
+    resolution = 'monthly'
+    variable = 'PCP'
     bbox = {
         'w': -19.0,
         'n': 38.0,
@@ -26,7 +25,7 @@ def main():
     }
     period = {
         's': '2008-01-01',
-        'e': '2008-01-31'
+        'e': '2008-01-02'
     }
     nodata = -9999
 

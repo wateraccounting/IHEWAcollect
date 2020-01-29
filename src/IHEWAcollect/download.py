@@ -529,7 +529,8 @@ def main():
     )
 
     test_args = {
-        '1': {
+        # TODO, 20200120, QPan, ex_ALEXI_DAT
+        '1a': {
             'product': 'ALEXI',
             'version': 'v1',
             'parameter': 'evapotranspiration',
@@ -537,9 +538,9 @@ def main():
             'variable': 'ETA',
             'bbox': {
                 'w': -19.0,
-                's': -35.0,
+                'n': 38.0,
                 'e': 55.0,
-                'n': 38.0
+                's': -35.0
             },
             'period': {
                 's': '2005-01-01',
@@ -547,7 +548,7 @@ def main():
             },
             'nodata': -9999
         },
-        '2': {
+        '1b': {
             'product': 'ALEXI',
             'version': 'v1',
             'parameter': 'evapotranspiration',
@@ -555,9 +556,9 @@ def main():
             'variable': 'ETA',
             'bbox': {
                 'w': -19.0,
-                's': -35.0,
+                'n': 38.0,
                 'e': 55.0,
-                'n': 38.0
+                's': -35.0
             },
             'period': {
                 's': '2005-01-01',
@@ -565,7 +566,7 @@ def main():
             },
             'nodata': -9999
         },
-        '3': {
+        '2a': {
             'product': 'ASCAT',
             'version': 'v3.1.1',
             'parameter': 'soil_water_index',
@@ -573,9 +574,9 @@ def main():
             'variable': 'SWI_010',
             'bbox': {
                 'w': -19.0,
-                's': -35.0,
+                'n': 38.0,
                 'e': 55.0,
-                'n': 38.0
+                's': -35.0
             },
             'period': {
                 's': '2007-01-01',
@@ -583,8 +584,9 @@ def main():
             },
             'nodata': -9999
         },
-        # TODO, 20200120, QPan, CFSR, dec_jpeg2000, Docker
-        # '4': {
+        # TODO, 20200120, QPan, ex_CFSR_GRIB
+        #  dec_jpeg2000, Docker
+        # '3a': {
         #     # Caution:
         #     # dec_jpeg2000: Unable to open JPEG2000 image within GRIB file.
         #     # Docker, pass
@@ -596,9 +598,9 @@ def main():
         #     'variable': 'dlwsfc',
         #     'bbox': {
         #         'w': -19.0,
-        #         's': -35.0,
+        #         'n': 38.0,
         #         'e': 55.0,
-        #         'n': 38.0
+        #         's': -35.0
         #     },
         #     'period': {
         #         's': '2007-01-01',
@@ -606,7 +608,7 @@ def main():
         #     },
         #     'nodata': -9999
         # },
-        '5': {
+        '4a': {
             'product': 'CHIRPS',
             'version': 'v2.0',
             'parameter': 'precipitation',
@@ -614,9 +616,9 @@ def main():
             'variable': 'PCP',
             'bbox': {
                 'w': -19.0,
-                's': -35.0,
+                'n': 38.0,
                 'e': 55.0,
-                'n': 38.0
+                's': -35.0
             },
             'period': {
                 's': '2007-01-01',
@@ -624,7 +626,7 @@ def main():
             },
             'nodata': -9999
         },
-        '6': {
+        '4b': {
             'product': 'CHIRPS',
             'version': 'v2.0',
             'parameter': 'precipitation',
@@ -632,9 +634,9 @@ def main():
             'variable': 'PCP',
             'bbox': {
                 'w': -19.0,
-                's': -35.0,
+                'n': 38.0,
                 'e': 55.0,
-                'n': 38.0
+                's': -35.0
             },
             'period': {
                 's': '2007-01-01',
@@ -642,7 +644,7 @@ def main():
             },
             'nodata': -9999
         },
-        '7': {
+        '5a': {
             'product': 'CMRSET',
             'version': 'v1',
             'parameter': 'evapotranspiration',
@@ -650,9 +652,9 @@ def main():
             'variable': 'ETA',
             'bbox': {
                 'w': -19.0,
-                's': -35.0,
+                'n': 38.0,
                 'e': 55.0,
-                'n': 38.0
+                's': -35.0
             },
             'period': {
                 's': '2007-01-01',
@@ -660,8 +662,9 @@ def main():
             },
             'nodata': -9999
         },
-        # TODO, 20200120, QPan, DEM, rewrite, and re-design base.yml
-        # '8': {
+        # TODO, 20200120, QPan, ex_DEM_Merge
+        #  rewrite, and re-design base.yml
+        # '6a': {
         #     'product': 'DEM',
         #     'version': 'v1',
         #     'parameter': 'DEM',
@@ -669,9 +672,9 @@ def main():
         #     'variable': 'af',
         #     'bbox': {
         #         'w': -19.0,
-        #         's': -35.0,
+        #         'n': 38.0,
         #         'e': 55.0,
-        #         'n': 38.0
+        #         's': -35.0
         #     },
         #     'period': {
         #         's': '',
@@ -680,17 +683,12 @@ def main():
         #     'nodata': -9999
         # },
         # TODO, 20200120, QPan, ECMWF
-        # '9': {
-        #     'product': '',
+        # '7a': {
+        #     'product': 'ECMWF',
         # },
-        # TODO, 20200120, QPan, GDAL, ETmonitor, BigTIFF, Docker,
-        #  Why gdal_translate.exe use less RAM?
-        # '10': {
-        #     # Caution:
-        #     # A 69618 pixels x 29007 lines x 1 bands Float32 image would be larger than 4GB
-        #     # but this is the largest size a TIFF can be, and BigTIFF is unavailable.
-        #     # Docker, pass
-        #
+        # TODO, 20200120, QPan, ex_ETmonitor_BigTIFF
+        #  Docker, Why gdal_translate.exe use less RAM?
+        # '8a': {
         #     'product': 'ETmonitor',
         #     'version': 'v1',
         #     'parameter': 'evapotranspiration',
@@ -699,9 +697,9 @@ def main():
         #     # variable': 'ETP',
         #     'bbox': {
         #         'w': -19.0,
-        #         's': -35.0,
+        #         'n': 38.0,
         #         'e': 55.0,
-        #         'n': 38.0
+        #         's': -35.0
         #     },
         #     'period': {
         #         's': '2008-01-01',
@@ -709,7 +707,7 @@ def main():
         #     },
         #     'nodata': -9999
         # },
-        '11': {
+        '9a': {
             'product': 'FEWS',
             'version': 'v4',
             'parameter': 'evapotranspiration',
@@ -717,9 +715,9 @@ def main():
             'variable': 'ETP',
             'bbox': {
                 'w': -19.0,
-                's': -35.0,
+                'n': 38.0,
                 'e': 55.0,
-                'n': 38.0
+                's': -35.0
             },
             'period': {
                 's': '2008-01-01',
@@ -727,7 +725,7 @@ def main():
             },
             'nodata': -9999
         },
-        '12': {
+        '10a': {
             'product': 'GLDAS',
             'version': 'v2.1',
             'parameter': 'evapotranspiration',
@@ -735,9 +733,9 @@ def main():
             'variable': 'ETA',
             'bbox': {
                 'w': -19.0,
-                's': -35.0,
+                'n': 38.0,
                 'e': 55.0,
-                'n': 38.0
+                's': -35.0
             },
             'period': {
                 's': '2008-01-01',
@@ -745,7 +743,7 @@ def main():
             },
             'nodata': -9999
         },
-        '13': {
+        '10b': {
             'product': 'GLDAS',
             'version': 'v2.1',
             'parameter': 'evapotranspiration',
@@ -753,9 +751,9 @@ def main():
             'variable': 'ETA',
             'bbox': {
                 'w': -19.0,
-                's': -35.0,
+                'n': 38.0,
                 'e': 55.0,
-                'n': 38.0
+                's': -35.0
             },
             'period': {
                 's': '2008-01-01',
@@ -763,7 +761,7 @@ def main():
             },
             'nodata': -9999
         },
-        '14': {
+        '11a': {
             'product': 'GLEAM',
             'version': 'v3.3a',
             'parameter': 'evapotranspiration',
@@ -771,9 +769,9 @@ def main():
             'variable': 'ETA',
             'bbox': {
                 'w': -19.0,
-                's': -35.0,
+                'n': 38.0,
                 'e': 55.0,
-                'n': 38.0
+                's': -35.0
             },
             'period': {
                 's': '2008-01-01',
@@ -781,46 +779,65 @@ def main():
             },
             'nodata': -9999
         },
-        '15': {
+        # TODO, 20200128, QPan, ex_GLEAM_NetCDF
+        #  date_id = (total month from time['s'])
+        '11b': {
             'product': 'GLEAM',
             'version': 'v3.3a',
             'parameter': 'evapotranspiration',
             'resolution': 'monthly',
             'variable': 'ETA',
             'bbox': {
-                'w': -19.0,
-                's': -35.0,
-                'e': 55.0,
-                'n': 38.0
+                'w': -180.0,
+                'n': 90.0,
+                'e': 180.0,
+                's': -90.0
             },
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
             'nodata': -9999
+        },
+        '12a': {
+            'product': 'GPM',
+            'version': 'v6',
+            'parameter': 'precipitation',
+            'resolution': 'daily',
+            'variable': 'PCP',
+            'bbox': {
+                'w': -19.0,
+                'n': 38.0,
+                'e': 55.0,
+                's': -35.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': -9999,
+        },
+        # TODO, 20200120, QPan, ex_GPM_HDF5
+        #  product['data']['ftype']['r'].split('.')
+        '12b': {
+            'product': 'GPM',
+            'version': 'v6',
+            'parameter': 'precipitation',
+            'resolution': 'monthly',
+            'variable': 'PCP',
+            'bbox': {
+                'w': -180.0,
+                'n': 90.0,
+                'e': 180.0,
+                's': -90.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': -9999,
         }
     }
-
-
-
-
-    # TODO, GPM
-    # product': 'GPM'
-    # version': 'v6'
-    # parameter': 'precipitation'
-    # resolution': 'daily'
-    # variable': 'PCP'
-    # bbox': {
-    #     'w': -19.0,
-    #     's': -35.0,
-    #     'e': 55.0,
-    #     'n': 38.0
-    # }
-    # period': {
-    #     's': '2008-01-01',
-    #     'e': '2008-01-31'
-    # }
-    # nodata': -9999
 
     # product = 'TRMM'
     # version = 'v7'
@@ -829,7 +846,15 @@ def main():
     # variable = 'PCP'
 
     for key, value in test_args.items():
-        print('\n{:>4s}{:>20s}\n{:->24s}'.format(key, value['product'], '-'))
+        print('\n{:>4s}'
+              '{:>20s}{:>6s}{:>20s}{:>20s}{:>10s}\n'
+              '{:->80s}'.format(key,
+                                value['product'],
+                                value['version'],
+                                value['parameter'],
+                                value['resolution'],
+                                value['variable'],
+                                '-'))
 
         download = Download(workspace=path,
                             product=value['product'],

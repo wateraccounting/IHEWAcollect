@@ -301,7 +301,6 @@ def download_product_weekly(date, date_s, dates_e,
 def get_download_args(latlim, lonlim, date,
                       account, folder, product) -> tuple:
     # Define arg_account
-    # For download
     try:
         username = account['data']['username']
         password = account['data']['password']
@@ -328,38 +327,46 @@ def get_download_args(latlim, lonlim, date,
     file_t = os.path.join(folder['t'], fname_t)
     file_l = os.path.join(folder['l'], fname_l)
 
-    pixel_size = abs(product['data']['lat']['r'])
-    # lat_pixel_size = -abs(product['data']['lat']['r'])
-    # lon_pixel_size = abs(product['data']['lon']['r'])
-    pixel_w = int(product['data']['dem']['w'])
-    pixel_h = int(product['data']['dem']['h'])
-
     data_ndv = product['nodata']
     data_type = product['data']['dtype']['l']
     data_multiplier = float(product['data']['units']['m'])
     data_variable = product['data']['variable']
 
     # Define arg_IDs
-    prod_lat_s = product['data']['lat']['s']
     prod_lon_w = product['data']['lon']['w']
+    prod_lat_n = product['data']['lat']['n']
+    prod_lon_e = product['data']['lon']['e']
+    prod_lat_s = product['data']['lat']['s']
     prod_lat_size = abs(product['data']['lat']['r'])
     prod_lon_size = abs(product['data']['lon']['r'])
 
+    # Define arg_GTiff
+    pixel_h = int(product['data']['dem']['h'])
+    pixel_w = int(product['data']['dem']['w'])
+    pixel_size = max(prod_lat_size, prod_lon_size)
+
+    # Calculate arg_IDs
+    # [w,n]--[e,n]
+    #   |      |
+    # [w,s]--[e,s]
     y_id = np.int16(np.array([
-        pixel_h - np.ceil((latlim[1] + abs(prod_lat_s)) / prod_lat_size),
-        pixel_h - np.floor((latlim[0] + abs(prod_lat_s)) / prod_lat_size)
+        np.floor((prod_lat_n - latlim[1]) / prod_lat_size),
+        np.ceil((prod_lat_n - latlim[0]) / prod_lat_size)
     ]))
     x_id = np.int16(np.array([
-        np.floor((lonlim[0] + abs(prod_lon_w)) / prod_lon_size),
-        np.ceil((lonlim[1] + abs(prod_lon_w)) / prod_lon_size)
+        np.floor((lonlim[0] - prod_lon_w) / prod_lon_size),
+        np.ceil((lonlim[1] - prod_lon_w) / prod_lon_size)
     ]))
+    # [w,s]--[e,s]
+    #   |      |
+    # [w,n]--[e,n]
     # y_id = np.int16(np.array([
-    #     np.ceil((latlim[0] - prod_lat_s) / prod_lat_size),
-    #     np.floor((latlim[1] - prod_lat_s) / prod_lat_size)
+    #     np.floor((latlim[0] - prod_lat_s) / prod_lat_size),
+    #     np.ceil((latlim[1] - prod_lat_s) / prod_lat_size)
     # ]))
     # x_id = np.int16(np.array([
-    #     np.ceil((lonlim[0] - prod_lon_w) / prod_lon_size),
-    #     np.floor((lonlim[1] - prod_lon_w) / prod_lon_size)
+    #     np.floor((lonlim[0] - prod_lon_w) / prod_lon_size),
+    #     np.ceil((lonlim[1] - prod_lon_w) / prod_lon_size)
     # ]))
 
     return latlim, lonlim, date,\
@@ -485,10 +492,6 @@ def convert_data(args):
         # Clip data
         data = np.flipud(data_tmp[y_id[0]:y_id[1], x_id[0]:x_id[1]])
 
-        # Convert units, set NVD
-        data[data < 0] = data_ndv
-        data = data * data_multiplier
-
     if product['resolution'] == "weekly":
         # Load data from downloaded remote file
         data_raw = Open_tiff_array(remote_file)
@@ -498,11 +501,23 @@ def convert_data(args):
         # Clip data
         data = data_raw[y_id[0]:y_id[1], x_id[0]:x_id[1]]
 
-        # Convert units, set NVD
-        data[data < 0] = np.nan
-        data = data * data_multiplier
+    # Check data type
+    # filled numpy.ma.MaskedArray as numpy.ndarray
+    if isinstance(data, np.ma.MaskedArray):
+        data = data.filled()
+    else:
+        data = np.asarray(data)
+    # convert to float
+    # if np.logical_or(isinstance(data_raw_missing, str),
+    #                  isinstance(data_raw_scale, str)):
+    #     data_raw_missing = float(data_raw_missing)
+    #     data_raw_scale = float(data_raw_scale)
 
-        data[data == np.nan] = data_ndv
+    # Convert units, set NVD
+    data[data < 0] = np.nan
+    data = data * data_multiplier
+
+    data[data == np.nan] = data_ndv
 
     # Save as GTiff
     geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
