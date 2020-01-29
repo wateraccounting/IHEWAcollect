@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
-"""
-Authors: Tim Hessels
-         UNESCO-IHE 2016
-Contact: t.hessels@unesco-ihe.org
-Repository: https://github.com/wateraccounting/watools
-Module: Collect/GLEAM
 """
 
-# import general python modules
+"""
+# General modules
 import os
 import sys
 import datetime
@@ -392,8 +386,15 @@ def convert_data(args):
     # Generate temporary files
 
     # Clip data
-    date_id = int(date.strftime('%j')) - 1
-    data_tmp = data_raw[date_id, x_id[0]: x_id[1], y_id[0]: y_id[1]]
+    if product['resolution'] == 'daily':
+        date_id = int(date.strftime('%j')) - 1
+        data_tmp = data_raw[date_id, x_id[0]: x_id[1], y_id[0]: y_id[1]]
+    elif product['resolution'] == 'monthly':
+        date_id = len(pd.date_range(product['data']['time']['s'], date,
+                                    freq=product['freq'])) - 1
+        data_tmp = data_raw[date_id, x_id[0]: x_id[1], y_id[0]: y_id[1]]
+    else:
+        data_tmp = np.zeros([x_id[1] - x_id[0],  y_id[1] - y_id[0]])
 
     # data = np.squeeze(data_tmp.data, axis=0)
     # data = np.flipud(np.squeeze(data_tmp.data, axis=0))
@@ -422,46 +423,6 @@ def convert_data(args):
     # save as GTiff
     geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
     Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
-
-    # if TimeCase == 'monthly':
-    #
-    #     # defines the start and end of the month
-    #     Datesend1 = str(Date)
-    #     Datesend2 = Datesend1.replace(Datesend1[8:10], "01")
-    #     Datesend3 = Datesend2[0:10]
-    #     Datesend4 = Datesend1[0:10]
-    #     Datestart = pd.date_range(Datesend3, Datesend4, freq='MS')
-    #
-    #     DOY = int(Datestart[0].strftime('%j'))
-    #     DOYend = int(Date.strftime('%j'))
-    #     DOYDownload = DOY - 1
-    #     Day = 1
-    #
-    #     variable = __this.product['data']['variable']
-    #     Data = f.variables[variable][DOYDownload:DOYend, Xstart:Xend, Ystart:Yend]
-    #
-    #     data = np.array(Data)
-    #     f.close()
-    #
-    #     # Sum ET data in time and change the no data value into -999
-    #     dataSum = sum(data, 1)
-    #     dataSum[dataSum < -100] = -999.000
-    #     dataCor = np.swapaxes(dataSum, 0, 1)
-    #
-    # if TimeCase == 'daily':
-    #     Day = Date.day
-    #
-    #     # Define the DOY, DOY-1 is taken from the yearly dataset
-    #     DOY = int(Date.strftime('%j'))
-    #     DOYDownload = DOY - 1
-    #
-    #     variable = __this.product['data']['variable']
-    #     Data = f.variables[variable][DOYDownload, Xstart:Xend, Ystart:Yend]
-    #     data = np.array(Data)
-    #     f.close()
-    #
-    #     data[data < -100] = -999.000
-    #     dataCor = np.swapaxes(data, 0, 1)
 
     status = 0
     return status

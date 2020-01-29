@@ -1,26 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Authors: Tim Hessels and Gonzalo Espinoza
-         UNESCO-IHE 2016
-Contact: t.hessels@unesco-ihe.org
-         g.espinoza@unesco-ihe.org
-Repository: https://github.com/wateraccounting/watools
-Module: Collect/SSEBop
-
-Restrictions:
-The data and this python file may not be distributed to others without
-permission of the WA+ team due data restriction of the SSEBop developers.
-
-Description:
-This script collects SSEBop data from the UNESCO-IHE FTP server or from the web. The data has a
-monthly temporal resolution and a spatial resolution of 0.01 degree. The
-resulting tiff files are in the WGS84 projection.
-The data is available between 2003-01-01 till present.
-
-Example:
-from watools.Collect import SSEBop
-SSEBop.monthly(Dir='C:/Temp/', Startdate='2003-02-24', Enddate='2003-03-09',
-                     latlim=[50,54], lonlim=[3,7])
 
 """
 # General modules

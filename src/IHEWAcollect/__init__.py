@@ -107,27 +107,6 @@ This module contains scripts used to download Level 1 data (data directly from w
 
     - `Internet Protocols <https://www.restapitutorial.com/httpstatuscodes.html>`_
     - `datetime strftime code <http://strftime.org/>`_
-
-.. todo::
-
-    20190931, QPan, Collect module
-
-    1. Create `config.yml` contains
-        a. Portal name
-        b. Portal url
-        c. Portal data name, directory
-        d. Portal data range, resolution
-        e. Portal data file name template on ftp
-        f. Portal data file name template on local
-    2. cryptography `config.yml` file
-    3. Add exception to check data meta information
-    4. Estimate data size and tiff location to decided download or not
-    5. Add unit test, and test datasets under "tests/data"
-    6. read `__version__` from setup.py (git tag)
-
-    20200116, QPan, __init__
-
-    1. Decide IHEWAcollect.download.Download() OR IHEWAcollect(args)
 """
 
 
@@ -142,10 +121,22 @@ except DistributionNotFound:
 finally:
     del get_distribution, DistributionNotFound
 
+# TODO, 20190931, QPan, Collect module
+#  1. Create `config.yml` contains
+#      a. Portal name
+#      b. Portal url
+#      c. Portal data name, directory
+#      d. Portal data range, resolution
+#      e. Portal data file name template on ftp
+#      f. Portal data file name template on local
+#  2. cryptography `config.yml` file
+#  3. Add exception to check data meta information
+#  4. Estimate data size and tiff location to decided download or not
+#  5. Add unit test, and test datasets under "tests/data"
+#  6. read `__version__` from setup.py (git tag)
 
-# Check: envorinment, dependeny, library!
-
-
+# TODO, 20200116-END, QPan, __init__
+#  1. Decide IHEWAcollect.download.Download() OR IHEWAcollect(args)
 # import IHEWAcollect
 # IHEWAcollect.Download(args)
 try:
@@ -153,3 +144,6 @@ try:
 except ImportError:
     from IHEWAcollect.download import Download
 __all__ = ['Download']
+
+# TODO, 20200128, QPan, __init__
+#  Check, envorinment, dependeny, library

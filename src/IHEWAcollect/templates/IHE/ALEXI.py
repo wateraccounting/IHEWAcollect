@@ -1,32 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-**ALEXI**
 
-`Restrictions`
-
-The data and this python file may not be distributed to others without
-permission of the WA+ team.
-
-`Description`
-
-This module downloads ALEXI data from
-``ftp.wateraccounting.unesco-ihe.org``.
-
-Use the ALEXI.daily function to download
-and create weekly ALEXI images in Gtiff format.
-
-The data is available between ``2003-01-01 till 2015-12-31``.
-
-The output file with the name ``2003.01.01`` contains
-the **total evaporation** in ``mm`` for the period of ``1 January - 7 January``.
-
-**Examples:**
-::
-
-    from IHEWAcollect import ALEXI
-    ALEXI.daily(Dir='C:/Temp/',
-                Startdate='2003-12-01', Enddate='2004-01-20',
-                latlim=[-10, 30], lonlim=[-20, -10])
 """
 # General modules
 import os

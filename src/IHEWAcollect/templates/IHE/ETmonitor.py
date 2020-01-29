@@ -1,26 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Authors: Tim Hessels and Gonzalo Espinoza
-         UNESCO-IHE 2016
-Contact: t.hessels@unesco-ihe.org
-         g.espinoza@unesco-ihe.org
-Repository: https://github.com/wateraccounting/watools
-Module: Collect/ETmonitor
-
-Restrictions:
-The data and this python file may not be distributed to others without
-permission of the WA+ team due data restriction of the ETmonitor developers.
-
-Description:
-This script collects ETmonitor data from the UNESCO-IHE FTP server. The data has a
-monthly temporal resolution and a spatial resolution of 0.01 degree. The
-resulting tiff files are in the WGS84 projection.
-The data is available between 2008-01-01 till 2013-12-31.
-
-Example:
-from watools.Collect import ETmonitor
-ETmonitor.ET_monthly(Dir='C:/Temp/', Startdate='2003-02-24', Enddate='2003-03-09',
-                     latlim=[50,54], lonlim=[3,7])
 
 """
 # General modules
@@ -30,6 +9,7 @@ import datetime
 
 import ftplib
 from urllib.parse import urlparse
+# from joblib import Parallel, delayed
 
 import numpy as np
 import pandas as pd

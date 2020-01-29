@@ -1,19 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Authors: Tim Hessels
-         UNESCO-IHE 2016
-Contact: t.hessels@unesco-ihe.org
-Repository: https://github.com/wateraccounting/watools
-Module: Collect/DEM
-"""
 
+"""
 # General modules
 import os
 import sys
-import glob
 import datetime
 
-import urllib
+import requests
+# from requests.auth import HTTPBasicAuth => .netrc
+# from joblib import Parallel, delayed
 
 import numpy as np
 
@@ -23,14 +19,14 @@ import gdal
 try:
     from ..collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
-        Extract_Data, Convert_adf_to_tiff, Convert_bil_to_tiff, Open_array_info, clip_data
+        Extract_Data, Convert_adf_to_tiff, Convert_bil_to_tiff, Open_array_info, Clip_Data
     from ..gis import GIS
     from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
-        Extract_Data, Convert_adf_to_tiff, Convert_bil_to_tiff, Open_array_info, clip_data
+        Extract_Data, Convert_adf_to_tiff, Convert_bil_to_tiff, Open_array_info, Clip_Data
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
     from IHEWAcollect.templates.util import Log

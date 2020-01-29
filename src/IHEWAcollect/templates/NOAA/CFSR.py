@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Authors: Tim Hessels
-         UNESCO-IHE 2016
-Contact: t.hessels@unesco-ihe.org
-Repository: https://github.com/wateraccounting/watools
-Module: Collect/CFSR
+
 """
 # General modules
 import os
 import sys
 import datetime
 
-# import pycurl
 import requests
 # from requests.auth import HTTPBasicAuth
 from joblib import Parallel, delayed
@@ -292,6 +287,7 @@ def start_download(args) -> int:
             print('{}'.format(msg))
             __this.Log.write(datetime.datetime.now(), msg=msg)
 
+            # import pycurl
             # try:
             #     # Connect to server
             #     conn = pycurl.Curl()

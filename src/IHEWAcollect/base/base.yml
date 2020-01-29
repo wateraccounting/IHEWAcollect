@@ -3303,10 +3303,12 @@ products:
       evapotranspiration:
         daily:
           url: 'sftp://hydras.ugent.be:2225'
+          protocol: 'SFTP'
           method: 'get'
           freq: 'D'
           variables:
             ETA:
+              variable: 'Et'
               name: 'Daily Evapotranspiration'
               description:
                 ''
@@ -3348,6 +3350,7 @@ products:
                 h: 720
         monthly:
           url: 'sftp://hydras.ugent.be:2225'
+          protocol: 'SFTP'
           method: 'get'
           freq: 'MS'
           variables:

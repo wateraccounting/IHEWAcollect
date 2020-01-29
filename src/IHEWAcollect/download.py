@@ -229,6 +229,7 @@ class Download(User):
         self._folder()
         self._log()
         self._template()
+        # _folder_clean
         return status
 
     def start(self) -> int:
@@ -529,7 +530,7 @@ def main():
     )
 
     test_args = {
-        # TODO, 20200120, QPan, ex_ALEXI_DAT
+        # TODO, 20200120-END, QPan, ex_ALEXI_DAT
         '1a': {
             'product': 'ALEXI',
             'version': 'v1',
@@ -584,7 +585,7 @@ def main():
             },
             'nodata': -9999
         },
-        # TODO, 20200120, QPan, ex_CFSR_GRIB
+        # TODO, 20200120-END, QPan, ex_CFSR_GRIB
         #  dec_jpeg2000, Docker
         # '3a': {
         #     # Caution:
@@ -686,7 +687,7 @@ def main():
         # '7a': {
         #     'product': 'ECMWF',
         # },
-        # TODO, 20200120, QPan, ex_ETmonitor_BigTIFF
+        # TODO, 20200120-END, QPan, ex_ETmonitor_BigTIFF
         #  Docker, Why gdal_translate.exe use less RAM?
         # '8a': {
         #     'product': 'ETmonitor',
@@ -779,11 +780,47 @@ def main():
             },
             'nodata': -9999
         },
-        # TODO, 20200128, QPan, ex_GLEAM_NetCDF
+        # TODO, 20200128-END, QPan, ex_GLEAM_NetCDF
         #  date_id = (total month from time['s'])
         '11b': {
             'product': 'GLEAM',
             'version': 'v3.3a',
+            'parameter': 'evapotranspiration',
+            'resolution': 'monthly',
+            'variable': 'ETA',
+            'bbox': {
+                'w': -180.0,
+                'n': 90.0,
+                'e': 180.0,
+                's': -90.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': -9999
+        },
+        '11c': {
+            'product': 'GLEAM',
+            'version': 'v3.3b',
+            'parameter': 'evapotranspiration',
+            'resolution': 'daily',
+            'variable': 'ETA',
+            'bbox': {
+                'w': -19.0,
+                'n': 38.0,
+                'e': 55.0,
+                's': -35.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': -9999
+        },
+        '11d': {
+            'product': 'GLEAM',
+            'version': 'v3.3b',
             'parameter': 'evapotranspiration',
             'resolution': 'monthly',
             'variable': 'ETA',
@@ -817,7 +854,7 @@ def main():
             },
             'nodata': -9999,
         },
-        # TODO, 20200120, QPan, ex_GPM_HDF5
+        # TODO, 20200120-END, QPan, ex_GPM_HDF5
         #  product['data']['ftype']['r'].split('.')
         '12b': {
             'product': 'GPM',

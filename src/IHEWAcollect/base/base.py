@@ -17,10 +17,6 @@ in the ``IHEWAcollect/accounts.yml`` file.
 
     from IHEWAcollect.base.base import Base
     base = Base(is_print=True)
-
-.. todo::
-
-    1. 20191010, QPan, add section **sources** from ``self.__conf`` to ``base.yml``
 """
 import os
 import sys

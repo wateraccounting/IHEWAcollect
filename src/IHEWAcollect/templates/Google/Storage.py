@@ -1,50 +1,67 @@
 # -*- coding: utf-8 -*-
+"""
+
+"""
+# General modules
+import os
+import sys
+import datetime
+
+import paramiko
+from urllib.parse import urlparse
+from joblib import Parallel, delayed
+
+import numpy as np
+import pandas as pd
+from netCDF4 import Dataset
+
+# IHEWAcollect Modules
 try:
-    from ..base.gis import GIS
-    from ..base.dtime import Dtime
+    from ..collect import \
+        Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
+        Clip_Dataset_GDAL
+    from ..gis import GIS
+    from ..dtime import Dtime
+    from ..util import Log
 except ImportError:
-    from src.IHEWAcollect.base.gis import GIS
-    from src.IHEWAcollect.base.dtime import Dtime
+    from IHEWAcollect.templates.collect import \
+        Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
+        Clip_Dataset_GDAL
+    from IHEWAcollect.templates.gis import GIS
+    from IHEWAcollect.templates.dtime import Dtime
+    from IHEWAcollect.templates.util import Log
 
 
-class Template(GIS, Dtime):
-    status = 'Global status.'
+__this = sys.modules[__name__]
 
-    __status = {}
-    __conf = {}
 
-    def __init__(self, status, config, **kwargs):
-        print('Template.__init__()')
-        # Class self.__status < Download.__status
-        self.__status = status
-        # Class self.__conf <- Download.__conf
-        self.__conf = config
+def _init(status, conf):
+    # From download.py
+    __this.status = status
+    __this.conf = conf
 
-        # super(IHE, self).__init__(status, config, **kwargs)
-        GIS.__init__(self, config['path'], status['is_print'], **kwargs)
-        Dtime.__init__(self, config['path'], status['is_print'], **kwargs)
+    account = conf['account']
+    folder = conf['folder']
+    product = conf['product']
 
-        # Class GIS
-        # self.latlim = self.var['lat']
-        # self.lonlim = self.var['lon']
-        # self.timlim = self.var['time']
+    # Init supported classes
+    __this.GIS = GIS(status, conf)
+    __this.Dtime = Dtime(status, conf)
+    __this.Log = Log(conf['log'])
 
-        # Class Dtime
+    return account, folder, product
 
-    def check(self):
-        print('Template.check()')
 
-    def download(self):
-        print('Template.download()')
+def DownloadData(status, conf) -> int:
+    """
+    This function downloads GLEAM ET data
 
-        from pprint import pprint
-        print('\n=> Template.__status')
-        pprint(self.__status)
-        print('\n=> Template.__conf')
-        pprint(self.__conf)
-
-    def convert(self):
-        print('Template.convert()')
-
-    def saveas(self):
-        print('Template.saveas()')
+    Args:
+      status (dict): Status.
+      conf (dict): Configuration.
+    """
+    # ================ #
+    # 1. Init function #
+    # ================ #
+    # Global variable, __this
+    account, folder, product = _init(status, conf)

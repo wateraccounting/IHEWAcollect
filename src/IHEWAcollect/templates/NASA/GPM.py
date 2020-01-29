@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Authors: Tim Hessels
-         UNESCO-IHE 2019
-Contact: t.hessels@unesco-ihe.org
-Repository: https://github.com/wateraccounting/watools
-Module: Collect/GPM
+
 """
+# General modules
 import os
 import sys
 import datetime
