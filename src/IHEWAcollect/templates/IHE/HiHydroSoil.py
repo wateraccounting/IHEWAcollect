@@ -305,9 +305,10 @@ def start_download(args) -> int:
             except ftplib.all_errors as err:
                 # Connect error
                 status = 1
-                msg = "Not able to download {fn}, from {sr}{dr}".format(sr=url_server,
-                                                                        dr=url_dir,
-                                                                        fn=remote_fname)
+                msg = 'Not able to download {fn}, from {sr}{dr}'.format(
+                    sr=url_server,
+                    dr=url_dir,
+                    fn=remote_fname)
                 print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
                 __this.Log.write(datetime.datetime.now(),
                                  msg='{}\n{}'.format(msg, str(err)))

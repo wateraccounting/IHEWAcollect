@@ -295,16 +295,19 @@ def start_download(args) -> int:
                 try:
                     conn = requests.get(url, auth=HTTPBasicAuth(username, password))
                 except BaseException:
-                    from requests.packages.urllib3.exceptions import InsecureRequestWarning
-                    requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+                    from requests.packages.urllib3.exceptions \
+                        import InsecureRequestWarning
+                    requests.packages.urllib3.disable_warnings(
+                        InsecureRequestWarning)
                     conn = requests.get(url, auth=(username, password), verify=False)
                 # conn.raise_for_status()
             except requests.exceptions.RequestException as err:
                 # Connect error
                 status = 1
-                msg = "Not able to download {fl}, from {sr}{dr}".format(sr=url_server,
-                                                                        dr=url_dir,
-                                                                        fl=remote_fname)
+                msg = 'Not able to download {fn}, from {sr}{dr}'.format(
+                    sr=url_server,
+                    dr=url_dir,
+                    fn=remote_fname)
                 print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
                 __this.Log.write(datetime.datetime.now(),
                                  msg='{}\n{}'.format(msg, str(err)))
@@ -325,9 +328,10 @@ def start_download(args) -> int:
 
                     status = convert_data(args)
                 else:
-                    msg = "Not able to download {fl}, from {sr}{dr}".format(sr=url_server,
-                                                                            dr=url_dir,
-                                                                            fl=remote_fname)
+                    msg = 'Not able to download {fn}, from {sr}{dr}'.format(
+                        sr=url_server,
+                        dr=url_dir,
+                        fn=remote_fname)
                     print('\33[91m{}\n{}\33[0m'.format(conn.status_code, msg))
                     __this.Log.write(datetime.datetime.now(),
                                      msg='{}\n{}'.format(conn.status_code, msg))
