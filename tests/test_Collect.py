@@ -44,20 +44,20 @@ __path_data = os.path.join(__path, 'data')
 #     #     credential.encrypt_cfg('', 'config.yml', 'WaterAccounting')
 
 
-def test_ALEXI():
-    # assert ALEXI.__version__ == '0.1'
+# https://docs.travis-ci.com/user/common-build-problems/#ftpsmtpother-protocol-do-not-work
+def test_CFSR():
     # path = os.path.join(__path_data, 'download')
     path = __path
 
     test_freq = 'D'
-    test_units = 'mm.d'
+    test_units = 'W.m2'
     test_args = {
         '1a': {
-            'product': 'ALEXI',
+            'product': 'CFSR',
             'version': 'v1',
-            'parameter': 'evapotranspiration',
+            'parameter': 'radiation',
             'resolution': 'daily',
-            'variable': 'ETA',
+            'variable': 'dlwsfc',
             'bbox': {
                 'w': -19.0,
                 'n': 38.0,
@@ -65,8 +65,8 @@ def test_ALEXI():
                 's': -35.0
             },
             'period': {
-                's': '2005-01-01',
-                'e': '2005-01-02'
+                's': '2007-01-01',
+                'e': '2007-01-02'
             },
             'nodata': -9999
         }
