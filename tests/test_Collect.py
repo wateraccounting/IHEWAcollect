@@ -93,7 +93,6 @@ def test_ALEXI():
                                   'IHEWAcollect',
                                   value['variable'],
                                   'download')
-        local_files = []
         test_fname = '{p}_{v}_{u}_{f}'.format(
             p=value['product'],
             v=value['version'],
@@ -101,9 +100,10 @@ def test_ALEXI():
             f=test_freq
         )
         fnames = os.listdir(local_path)
+        local_files = []
         for fname in fnames:
             print(fname)
-            if value['product'] in fname:
+            if test_fname in fname:
                 file = os.path.join(local_path, fname)
                 if np.ceil(os.stat(file).st_size / 1024) > 0:
                     local_files.append(file)
