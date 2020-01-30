@@ -919,16 +919,16 @@ def main():
                                 value['variable'],
                                 '-'))
 
-        download = Download(workspace=path,
-                            product=value['product'],
-                            version=value['version'],
-                            parameter=value['parameter'],
-                            resolution=value['resolution'],
-                            variable=value['variable'],
-                            bbox=value['bbox'],
-                            period=value['period'],
-                            nodata=value['nodata'],
-                            is_status=False)
+        Download(workspace=path,
+                 product=value['product'],
+                 version=value['version'],
+                 parameter=value['parameter'],
+                 resolution=value['resolution'],
+                 variable=value['variable'],
+                 bbox=value['bbox'],
+                 period=value['period'],
+                 nodata=value['nodata'],
+                 is_status=False)
 
 
 if __name__ == "__main__":
