@@ -56,9 +56,13 @@ def DownloadData(status, conf) -> int:
     The name of the file corresponds to the first day of the month.
 
     Args:
-      status (dict): Status.
-      conf (dict): Configuration.
+        status (dict): Status.
+        conf (dict): Configuration.
     """
+    # Define local variable
+    status_cod = -1
+    is_waitbar = False
+
     # ================ #
     # 1. Init function #
     # ================ #
@@ -69,9 +73,6 @@ def DownloadData(status, conf) -> int:
     arg_bbox = conf['product']['bbox']
     arg_period_s = conf['product']['period']['s']
     arg_period_e = conf['product']['period']['e']
-
-    # Local variables
-    is_waitbar = False
 
     # ============================== #
     # 2. Check latlim, lonlim, dates #
@@ -133,11 +134,11 @@ def DownloadData(status, conf) -> int:
     # =========== #
     # 3. Download #
     # =========== #
-    status = download_product(latlim, lonlim, date_dates,
-                              account, folder, product,
-                              is_waitbar)
+    status_cod = download_product(latlim, lonlim, date_dates,
+                                  account, folder, product,
+                                  is_waitbar)
 
-    return status
+    return status_cod
 
 
 def download_product(latlim, lonlim, dates,
@@ -246,28 +247,28 @@ def get_download_args(latlim, lonlim, date,
     #     np.ceil((lonlim[1] - prod_lon_w) / prod_lon_size)
     # ]))
 
-    return latlim, lonlim, date,\
-           product, \
-           username, password, apitoken, \
-           url_server, url_dir, \
-           fname_r, fname_t, fname_l, \
-           file_r, file_t, file_l,\
-           y_id, x_id, pixel_size, pixel_w, pixel_h, \
-           data_ndv, data_type, data_multiplier, data_variable
+    return latlim, lonlim, date, \
+        product, \
+        username, password, apitoken, \
+        url_server, url_dir, \
+        fname_r, fname_t, fname_l, \
+        file_r, file_t, file_l,\
+        y_id, x_id, pixel_size, pixel_w, pixel_h, \
+        data_ndv, data_type, data_multiplier, data_variable
 
 
 def start_download(args) -> int:
     """Retrieves data
     """
     # Unpack the arguments
-    latlim, lonlim, date,\
-    product, \
-    username, password, apitoken, \
-    url_server, url_dir, \
-    remote_fname, temp_fname, local_fname,\
-    remote_file, temp_file, local_file,\
-    y_id, x_id, pixel_size, pixel_w, pixel_h, \
-    data_ndv, data_type, data_multiplier, data_variable = args
+    latlim, lonlim, date, \
+        product, \
+        username, password, apitoken, \
+        url_server, url_dir, \
+        remote_fname, temp_fname, local_fname,\
+        remote_file, temp_file, local_file,\
+        y_id, x_id, pixel_size, pixel_w, pixel_h, \
+        data_ndv, data_type, data_multiplier, data_variable = args
 
     # Define local variable
     status = -1

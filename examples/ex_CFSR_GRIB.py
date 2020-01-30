@@ -33,16 +33,16 @@ def main():
     }
     nodata = -9999
 
-    download = IHEWAcollect.Download(workspace=path,
-                                     product=product,
-                                     version=version,
-                                     parameter=parameter,
-                                     resolution=resolution,
-                                     variable=variable,
-                                     bbox=bbox,
-                                     period=period,
-                                     nodata=nodata,
-                                     is_status=False)
+    IHEWAcollect.Download(workspace=path,
+                          product=product,
+                          version=version,
+                          parameter=parameter,
+                          resolution=resolution,
+                          variable=variable,
+                          bbox=bbox,
+                          period=period,
+                          nodata=nodata,
+                          is_status=False)
 
 
 if __name__ == "__main__":

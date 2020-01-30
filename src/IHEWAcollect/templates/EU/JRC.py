@@ -57,11 +57,31 @@ def DownloadData(status, conf) -> int:
     This function downloads GLEAM ET data
 
     Args:
-      status (dict): Status.
-      conf (dict): Configuration.
+        status (dict): Status.
+        conf (dict): Configuration.
     """
+    # Define local variable
+    status_cod = -1
+    is_waitbar = False
+
     # ================ #
     # 1. Init function #
     # ================ #
     # Global variable, __this
     account, folder, product = _init(status, conf)
+
+    # User input arguments
+    arg_bbox = conf['product']['bbox']
+    arg_period_s = conf['product']['period']['s']
+    arg_period_e = conf['product']['period']['e']
+
+    # ============================== #
+    # 2. Check latlim, lonlim, dates #
+    # ============================== #
+    # Check the latitude and longitude, otherwise set lat or lon on greatest extent
+
+    # =========== #
+    # 3. Download #
+    # =========== #
+
+    return status_cod

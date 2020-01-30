@@ -12,14 +12,14 @@ permission of the WA+ team.
 Utilities for IHEWAcollect template modules.
 """
 import os
+# import datetime
 
 import gzip
 import zipfile
 import tarfile
 
-# import datetime
 import numpy as np
-
+import pandas as pd
 
 try:
     from .exception import \

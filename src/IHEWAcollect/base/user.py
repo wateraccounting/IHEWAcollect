@@ -31,10 +31,10 @@ in the ``accounts.yml`` file.
 import os
 import sys
 import inspect
-
 # import shutil
+# import datetime
+
 import yaml
-# from datetime import datetime
 
 import base64
 from cryptography.fernet import Fernet

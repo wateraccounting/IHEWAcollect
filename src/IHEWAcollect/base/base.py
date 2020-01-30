@@ -21,10 +21,10 @@ in the ``IHEWAcollect/accounts.yml`` file.
 import os
 import sys
 import inspect
-
 # import shutil
+# import datetime
+
 import yaml
-# from datetime import datetime
 
 # try:
 #     # setup.py

@@ -427,7 +427,7 @@ class Download(User):
         fp = open(file, 'w+')
         fp.write('{}\n'.format(txt))
         for key, value in self.__conf['product'].items():
-            if key is not 'data':
+            if key != 'data':
                 fp.write('{:>26s}: {}\n'.format(key, str(value)))
 
         return fp

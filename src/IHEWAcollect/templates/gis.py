@@ -29,7 +29,7 @@ in the ``WaterAccounting/accounts.yml`` file.
 
 """
 import os
-import sys
+# import sys
 import inspect
 import subprocess
 

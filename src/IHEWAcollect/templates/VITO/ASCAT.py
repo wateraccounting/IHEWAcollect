@@ -56,9 +56,13 @@ def DownloadData(status, conf) -> int:
     The output files display the Surface Water Index.
 
     Args:
-      status (dict): Status.
-      conf (dict): Configuration.
+        status (dict): Status.
+        conf (dict): Configuration.
     """
+    # Define local variable
+    status_cod = -1
+    is_waitbar = False
+
     # ================ #
     # 1. Init function #
     # ================ #
@@ -66,12 +70,9 @@ def DownloadData(status, conf) -> int:
     account, folder, product = _init(status, conf)
 
     # User input arguments
-    arg_bbox = product['bbox']
-    arg_period_s = product['period']['s']
-    arg_period_e = product['period']['e']
-
-    # Local variables
-    is_waitbar = False
+    arg_bbox = conf['product']['bbox']
+    arg_period_s = conf['product']['period']['s']
+    arg_period_e = conf['product']['period']['e']
 
     # ============================== #
     # 2. Check latlim, lonlim, dates #
@@ -133,11 +134,11 @@ def DownloadData(status, conf) -> int:
     # =========== #
     # 3. Download #
     # =========== #
-    status = download_product(latlim, lonlim, date_dates,
-                              account, folder, product,
-                              is_waitbar)
+    status_cod = download_product(latlim, lonlim, date_dates,
+                                  account, folder, product,
+                                  is_waitbar)
 
-    return status
+    return status_cod
 
 
 def download_product(latlim, lonlim, dates,
@@ -247,13 +248,13 @@ def get_download_args(latlim, lonlim, date,
     # ]))
 
     return latlim, lonlim, date, \
-           product, \
-           username, password, apitoken, \
-           url_server, url_dir, \
-           fname_r, fname_t, fname_l, \
-           file_r, file_t, file_l,\
-           y_id, x_id, pixel_size, pixel_w, pixel_h, \
-           data_ndv, data_type, data_multiplier, data_variable
+        product, \
+        username, password, apitoken, \
+        url_server, url_dir, \
+        fname_r, fname_t, fname_l, \
+        file_r, file_t, file_l,\
+        y_id, x_id, pixel_size, pixel_w, pixel_h, \
+        data_ndv, data_type, data_multiplier, data_variable
 
 
 def start_download(args) -> int:
@@ -261,13 +262,13 @@ def start_download(args) -> int:
     """
     # Unpack the arguments
     latlim, lonlim, date, \
-    product, \
-    username, password, apitoken, \
-    url_server, url_dir, \
-    remote_fname, temp_fname, local_fname,\
-    remote_file, temp_file, local_file,\
-    y_id, x_id, pixel_size, pixel_w, pixel_h, \
-    data_ndv, data_type, data_multiplier, data_variable = args
+        product, \
+        username, password, apitoken, \
+        url_server, url_dir, \
+        remote_fname, temp_fname, local_fname,\
+        remote_file, temp_file, local_file,\
+        y_id, x_id, pixel_size, pixel_w, pixel_h, \
+        data_ndv, data_type, data_multiplier, data_variable = args
 
     # Define local variable
     status = -1
@@ -356,14 +357,14 @@ def convert_data(args):
     """
     """
     # Unpack the arguments
-    latlim, lonlim, date,\
-    product, \
-    username, password, apitoken, \
-    url_server, url_dir, \
-    remote_fname, temp_fname, local_fname,\
-    remote_file, temp_file, local_file,\
-    y_id, x_id, pixel_size, pixel_w, pixel_h, \
-    data_ndv, data_type, data_multiplier, data_variable = args
+    latlim, lonlim, date, \
+        product, \
+        username, password, apitoken, \
+        url_server, url_dir, \
+        remote_fname, temp_fname, local_fname,\
+        remote_file, temp_file, local_file,\
+        y_id, x_id, pixel_size, pixel_w, pixel_h, \
+        data_ndv, data_type, data_multiplier, data_variable = args
 
     # Define local variable
     status = -1
