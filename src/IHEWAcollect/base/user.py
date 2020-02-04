@@ -61,10 +61,10 @@ class User(Base):
     Description
 
     Args:
-      workspace (str): Directory to accounts.yml.
-      product (str): Product name of data products.
-      is_print (bool): Is to print status message.
-      kwargs (dict): Other arguments.
+        workspace (str): Directory to accounts.yml.
+        product (str): Product name of data products.
+        is_print (bool): Is to print status message.
+        kwargs (dict): Other arguments.
     """
     status = 'Global status.'
 
@@ -145,8 +145,8 @@ class User(Base):
 
         **Don't synchronize the details to github.**
 
+        - File to read: ``accounts.yml-credential``
         - File to read: ``accounts.yml-encrypted``
-        - File to read: ``credential.yml``
         """
         conf_enc = None
         fname_org = 'accounts.yml'
@@ -203,7 +203,7 @@ class User(Base):
         Anyone with this key is able to create and read messages.
 
         Args:
-          file (str): File name.
+            file (str): File name.
         """
         is_renew = False
         conf = yaml.load(open(file, 'r'), Loader=yaml.FullLoader)
@@ -272,10 +272,6 @@ class User(Base):
         This must be kept secret.
         Anyone with this key is able to create and read messages.
 
-        Args:
-          file (str): File name.
-          pswd (bytes): Password.
-
         Returns:
           str: key
         """
@@ -304,7 +300,7 @@ class User(Base):
         This function encrypt accounts.yml file.
 
         Args:
-          file (str): Encrypted file name.
+            file (str): Encrypted file name.
         """
         pswd = self.__conf['credential']['password']
         key = self.__conf['credential']['key']
@@ -335,10 +331,10 @@ class User(Base):
         This function decrypt accounts.yml file.
 
         Args:
-          file (str): File name.
+            file (str): File name.
 
         Returns:
-          str: Decrypted Yaml data by utf-8.
+            str: Decrypted Yaml data by utf-8.
         """
         key = self.__conf['credential']['key']
 
@@ -357,9 +353,9 @@ class User(Base):
         """Set status
 
         Args:
-          fun (str): Function name.
-          prt (bool): Is to print on screen?
-          ext (str): Extra message.
+            fun (str): Function name.
+            prt (bool): Is to print on screen?
+            ext (str): Extra message.
         """
         self.status = self._status(self.__status['messages'],
                                    self.__status['code'],
@@ -372,16 +368,16 @@ class User(Base):
 
         **Don't synchronize the details to github.**
 
-        - File to read: ``credential.yml``
+        - File to read: ``accounts.yml-credential``
           contains key: ``accounts.yml-encrypted``.
         - File to read: ``accounts.yml-encrypted``
           generated from: ``accounts.yml``.
 
         Args:
-          key (str): Key name.
+            key (str): Key name.
 
         Returns:
-          dict: User data.
+            dict: User data.
 
         :Example:
 
@@ -410,37 +406,7 @@ class User(Base):
             ext='')
         return self.__conf[key]
 
-    @staticmethod
-    def wait_bar(i, total,
-                 prefix='', suffix='',
-                 decimals=1, length=100, fill='█'):
-        """Wait Bar Console
-
-        This function will print a waitbar in the console
-
-        Args:
-          i (int): Iteration number.
-          total (int): Total iterations.
-          prefix (str): Prefix name of bar.
-          suffix (str): Suffix name of bar.
-          decimals (int): Decimal of the wait bar.
-          length (int): Width of the wait bar.
-          fill (str): Bar fill.
-        """
-        # Adjust when it is a linux computer
-        if os.name == 'posix' and total == 0:
-            total = 0.0001
-
-        percent = ('{0:.' + str(decimals) + 'f}').format(100 *
-                                                         (i / float(total)))
-        filled = int(length * i // total)
-        bar = fill * filled + '-' * (length - filled)
-
-        sys.stdout.write('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix))
-        sys.stdout.flush()
-
-        if i == total:
-            print()
+    # @staticmethod
 
 
 def main():

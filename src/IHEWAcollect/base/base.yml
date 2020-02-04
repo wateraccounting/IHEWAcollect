@@ -291,7 +291,7 @@ products:
               fmt:
                 d: 'dtime'
                 r: 'dtime'
-                t: 'dtime'
+                t: 'dtime.ipart'
                 l: 'dtime'
               ftype:
                 r: 'grb2'
@@ -3735,17 +3735,54 @@ products:
           freq: 'Y'
           variables:
             LC:
-              variable:
-                - 'LC_Type3'
-                - 'LC_Prop1'
-                - 'LC_Prop2'
-                - 'LC_Prop3'
+              variable: 'LC_Prop1'
               name: 'Yearly Land Cover'
+              description:
+                ''
+              dir: '/MOTA/MCD12Q1.006/{dtime:%Y}.01.01/'
+              fname:
+                r: 'MCD12Q1.A{dtime:%Y}001.{lat}{lon}.006.{ctime}.hdf'
+                t: 'MCD12Q1.A{dtime:%Y}001.{lat}{lon}.006.hdf'
+                l: 'MCD12Q1_v6_._D-{dtime:%Y}.tif'
+              fmt:
+                d: 'dtime'
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.latlon'
+                l: 'dtime'
+              ftype:
+                r: 'NetCDF.MCD12Q1.Data_Fields'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t: null
+                l: 'uint8'
+              units:
+                r: '.'
+                l: '.'
+                m: 1.0
+              lat:
+                s: -10007554.677
+                n: 10007554.677
+                r: 463.31271653
+              lon:
+                w: -20015109.354
+                e: 20015109.354
+                r: 463.31271653
+              time:
+                s: 2001-01-01 00:00:00
+                e: 2018-12-31 23:59:59
+              dem:
+                w: 43200
+                h: 21600
+            LU:
+              variable: 'LC_Prop2'
+              name: 'Yearly Land Use'
               description:
                 ''
               dir: '/MOTA/MCD12Q1.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MCD12Q1.A{dtime:%Y%j}.{lat}{lon}.006.*.hdf'
+                r: 'MCD12Q1.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
                 t: null
                 l: 'MCD12Q1_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
@@ -3830,7 +3867,7 @@ products:
                 ''
               dir: '/MOTA/MCD43A3.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MCD43A3.A{dtime:%Y%j}.{lat}{lon}.006.*.hdf'
+                r: 'MCD43A3.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
                 t: null
                 l: 'MCD43A3_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
@@ -3912,7 +3949,7 @@ products:
                 ''
               dir: '/MOLT/MOD09GQ.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD09GQ.A{dtime:%Y%j}.{lat}{lon}.006.*.hdf'
+                r: 'MOD09GQ.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
                 t: null
                 l: 'MOD09GQ_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
@@ -3997,7 +4034,7 @@ products:
                 ''
               dir: '/MOST/MOD10A2.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD10A2.A{dtime:%Y%j}.{lat}{lon}.006.*.hdf'
+                r: 'MOD10A2.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
                 t: null
                 l: 'MOD10A2_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
@@ -4081,7 +4118,7 @@ products:
                 ''
               dir: '/MOLT/MOD11A2.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD11A2.A{dtime:%Y%j}.{lat}{lon}.006.*.hdf'
+                r: 'MOD11A2.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
                 t: null
                 l: 'MOD11A2_v6_K_D-{dtime:%Y%m%d}.tif'
               fmt:
@@ -4165,7 +4202,7 @@ products:
                 ''
               dir: '/MOLT/MOD13Q1.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD13Q1.A{dtime:%Y%j}.{lat}{lon}.006.*.hdf'
+                r: 'MOD13Q1.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
                 t: null
                 l: 'MOD13Q1_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
@@ -4245,7 +4282,7 @@ products:
                 ''
               dir: '/MOLT/MOD15A2H.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD15A2H.A{dtime:%Y%j}.{lat}{lon}.006.*.hdf'
+                r: 'MOD15A2H.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
                 t: null
                 l: 'MOD15A2H_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
@@ -4327,7 +4364,7 @@ products:
                 ''
               dir: '/MOLT/MOD16A2.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD16A2.A{dtime:%Y%j}.{lat}{lon}.006.*.hdf'
+                r: 'MOD16A2.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
                 t: null
                 l: 'MOD16A2_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
@@ -4409,7 +4446,7 @@ products:
                 ''
               dir: '/MOLT/MOD17A2H.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD17A2H.A{dtime:%Y%j}.{lat}{lon}.006.*.hdf'
+                r: 'MOD17A2H.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
                 t: null
                 l: 'MOD17A2H_v6_kgC.m2_D-{dtime:%Y%m%d}.tif'
               fmt:
@@ -4490,7 +4527,7 @@ products:
                 ''
               dir: '/MOLT/MOD17A3H.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD17A3H.A{dtime:%Y%j}.{lat}{lon}.006.*.hdf'
+                r: 'MOD17A3H.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
                 t: null
                 l: 'MOD17A3H_v6_kgC.m2_D-{dtime:%Y%m%d}.tif'
               fmt:
@@ -4651,7 +4688,7 @@ products:
                 ''
               dir: '/MOLT/MOD13Q1.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD13Q1.A{dtime:%Y%j}.{lat}{lon}.006.*.hdf'
+                r: 'MOD13Q1.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
                 t: null
                 l: 'MOD13Q1_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:

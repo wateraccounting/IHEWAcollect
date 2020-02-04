@@ -20,6 +20,7 @@ try:
     from ..collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
         Convert_grb2_to_nc
+
     from ..gis import GIS
     from ..dtime import Dtime
     from ..util import Log
@@ -27,6 +28,7 @@ except ImportError:
     from IHEWAcollect.templates.collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
         Convert_grb2_to_nc
+
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
     from IHEWAcollect.templates.util import Log
@@ -202,14 +204,48 @@ def get_download_args(latlim, lonlim, date,
 
     # Define arg_url
     url_server = product['url']
-    url_dir = product['data']['dir'].format(dtime=date)
+
+    # url_dir
+    fmt_d = product['data']['fmt']['d']
+    if fmt_d is None:
+        if product['data']['dir'] is None:
+            url_dir = '/'
+        else:
+            url_dir = product['data']['dir']
+    else:
+        if 'dtime' == fmt_d:
+            url_dir = product['data']['dir'].format(dtime=date)
+        else:
+            url_dir = product['data']['dir']
 
     # Define arg_filename
-    fname_r = product['data']['fname']['r'].format(dtime=date)
-    if product['data']['fname']['t'] is None:
-        fname_t = ''
+    # remote_fname
+    fmt_r = product['data']['fmt']['r']
+    if fmt_r is None:
+        if product['data']['fname']['r'] is None:
+            fname_r = ''
+        else:
+            fname_r = product['data']['fname']['r']
     else:
-        fname_t = product['data']['fname']['t']
+        if 'dtime' == fmt_r:
+            fname_r = product['data']['fname']['r'].format(dtime=date)
+        else:
+            fname_r = product['data']['fname']['r']
+
+    # temp_fname
+    fmt_t = product['data']['fmt']['t']
+    if fmt_t is None:
+        if product['data']['fname']['t'] is None:
+            fname_t = ''
+        else:
+            fname_t = product['data']['fname']['t']
+    else:
+        if 'dtime' == fmt_t:
+            fname_t = product['data']['fname']['t'].format(dtime=date)
+        else:
+            fname_t = product['data']['fname']['t']
+
+    # local_fname
     fname_l = product['data']['fname']['l'].format(dtime=date)
 
     # Define arg_file
@@ -241,24 +277,49 @@ def get_download_args(latlim, lonlim, date,
     # [w,n]--[e,n]
     #   |      |
     # [w,s]--[e,s]
+    # y_id = np.int16(np.array([
+    #     np.floor((prod_lat_n - latlim[1]) / prod_lat_size),
+    #     np.ceil((prod_lat_n - latlim[0]) / prod_lat_size)
+    # ]))
+    # x_id = np.int16(np.array([
+    #     np.floor((lonlim[0] - prod_lat_w_shift) / prod_lon_size),
+    #     np.ceil((lonlim[1] - prod_lat_w_shift) / prod_lon_size)
+    # ]))
+
+    # [w,s]--[e,s]
+    #   |      |
+    # [w,n]--[e,n]
     y_id = np.int16(np.array([
-        np.floor((prod_lat_n - latlim[1]) / prod_lat_size),
-        np.ceil((prod_lat_n - latlim[0]) / prod_lat_size)
+        np.floor((latlim[0] - prod_lat_s) / prod_lat_size),
+        np.ceil((latlim[1] - prod_lat_s) / prod_lat_size)
     ]))
     x_id = np.int16(np.array([
         np.floor((lonlim[0] - prod_lat_w_shift) / prod_lon_size),
         np.ceil((lonlim[1] - prod_lat_w_shift) / prod_lon_size)
     ]))
-    # [w,s]--[e,s]
+
+    # [w,n]--[w,s]
     #   |      |
-    # [w,n]--[e,n]
+    # [e,n]--[e,s]
     # y_id = np.int16(np.array([
-    #     np.floor((latlim[0] - prod_lat_s) / prod_lat_size),
-    #     np.ceil((latlim[1] - prod_lat_s) / prod_lat_size)
-    # ]))
-    # x_id = np.int16(np.array([
     #     np.floor((lonlim[0] - prod_lat_w_shift) / prod_lon_size),
     #     np.ceil((lonlim[1] - prod_lat_w_shift) / prod_lon_size)
+    # ]))
+    # x_id = np.int16(np.array([
+    #     np.floor((prod_lat_n - latlim[1]) / prod_lat_size),
+    #     np.ceil((prod_lat_n - latlim[0]) / prod_lat_size)
+    # ]))
+
+    # [w,s]--[w,n]
+    #   |      |
+    # [e,s]--[e,n]
+    # y_id = np.int16(np.array([
+    #     np.floor((lonlim[0] - prod_lat_w_shift) / prod_lon_size),
+    #     np.ceil((lonlim[1] - prod_lat_w_shift) / prod_lon_size)
+    # ]))
+    # x_id = np.int16(np.array([
+    #     np.floor((latlim[0] - prod_lat_s) / prod_lat_size),
+    #     np.ceil((latlim[1] - prod_lat_s) / prod_lat_size)
     # ]))
 
     return latlim, lonlim, date, \
@@ -286,20 +347,8 @@ def start_download(args) -> int:
 
     # Define local variable
     status = -1
-
-    # Download the data from server if the file not exists
-    msg = 'Downloading "{f}"'.format(f=remote_fname)
-    print('{}'.format(msg))
-    __this.Log.write(datetime.datetime.now(), msg=msg)
-
-    is_download = True
-    if os.path.exists(remote_file):
-        if np.ceil(os.stat(remote_file).st_size / 1024) > 0:
-            is_download = False
-
-            msg = 'Exist "{f}"'.format(f=remote_file)
-            print('\33[93m{}\33[0m'.format(msg))
-            __this.Log.write(datetime.datetime.now(), msg=msg)
+    remote_file_status = 0
+    local_file_status = 0
 
     is_start_download = True
     if os.path.exists(local_file):
@@ -311,25 +360,30 @@ def start_download(args) -> int:
             __this.Log.write(datetime.datetime.now(), msg=msg)
 
     if is_start_download:
-        url = '{sr}{dr}{fn}'.format(sr=url_server, dr=url_dir, fn=remote_fname)
-        # print('url: "{f}"'.format(f=url))
+        # Download the data from server if the file not exists
+        msg = 'Downloading "{f}"'.format(f=remote_fname)
+        print('{}'.format(msg))
+        __this.Log.write(datetime.datetime.now(), msg=msg)
 
+        is_download = True
+        if os.path.exists(remote_file):
+            if np.ceil(os.stat(remote_file).st_size / 1024) > 0:
+                is_download = False
+
+                msg = 'Exist "{f}"'.format(f=remote_file)
+                print('\33[93m{}\33[0m'.format(msg))
+                __this.Log.write(datetime.datetime.now(), msg=msg)
+
+        # ------------- #
+        # Download data #
+        # ------------- #
         if is_download:
+            url = '{sr}{dr}{fn}'.format(sr=url_server,
+                                        dr=url_dir,
+                                        fn=remote_fname)
+            # print('url: "{f}"'.format(f=url))
+
             try:
-                # Connect to server
-                # import pycurl
-                # try:
-                #     # Connect to server
-                #     conn = pycurl.Curl()
-                #     conn.setopt(pycurl.URL, url)
-                #     conn.setopt(pycurl.SSL_VERIFYPEER, 0)
-                #     conn.setopt(pycurl.SSL_VERIFYHOST, 0)
-                # except pycurl.error as err:
-                # else:
-                #     with open(remote_file, "wb") as fp:
-                #         conn.setopt(pycurl.WRITEDATA, fp)
-                #         conn.perform()
-                #         conn.close()
                 try:
                     conn = requests.get(url)
                 except BaseException:
@@ -341,7 +395,6 @@ def start_download(args) -> int:
                 # conn.raise_for_status()
             except requests.exceptions.RequestException as err:
                 # Connect error
-                status = 1
                 msg = 'Not able to download {fn}, from {sr}{dr}'.format(
                     sr=url_server,
                     dr=url_dir,
@@ -349,31 +402,33 @@ def start_download(args) -> int:
                 print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
                 __this.Log.write(datetime.datetime.now(),
                                  msg='{}\n{}'.format(msg, str(err)))
+                remote_file_status += 1
             else:
-                # Download data
-                if conn.status_code == requests.codes.ok:
-                    with open(remote_file, "wb") as fp:
-                        fp.write(conn.content)
-                        conn.close()
+                # Fetch data
+                # conn.status_code == requests.codes.ok
+                with open(remote_file, "wb") as fp:
+                    fp.write(conn.content)
+                    conn.close()
+                    remote_file_status += 0
+        else:
+            remote_file_status += 0
 
-                    # Download success
-                    status = convert_data(args)
-                else:
-                    msg = 'Not able to download {fn}, from {sr}{dr}'.format(
-                        sr=url_server,
-                        dr=url_dir,
-                        fn=remote_fname)
-                    print('\33[91m{}\n{}\33[0m'.format(conn.status_code, msg))
-                    __this.Log.write(datetime.datetime.now(),
-                                     msg='{}\n{}'.format(conn.status_code, msg))
-            finally:
-                # Release local resources.
-                # raw_data = None
-                # dataset = None
-                # data = None
-                pass
+        # ---------------- #
+        # Download success #
+        # ---------------- #
+        if remote_file_status == 0:
+            local_file_status = convert_data(args)
+
+        # --------------- #
+        # Download finish #
+        # --------------- #
+        # raw_data = None
+        # dataset = None
+        # data = None
     else:
-        status = 0
+        local_file_status = 0
+
+    status = remote_file_status + local_file_status
 
     msg = 'Finish'
     __this.Log.write(datetime.datetime.now(), msg=msg)
@@ -404,8 +459,12 @@ def convert_data(args):
     print('\33[94m{}\33[0m'.format(msg))
     __this.Log.write(datetime.datetime.now(), msg=msg)
 
-    # Load data from downloaded remote file
+    # --------- #
+    # Load data #
+    # --------- #
+    # From downloaded remote file
 
+    # From generated temporary file
     # Generate temporary files
     for i in range(0, nparts):
         # Band number of the grib data which is converted in .nc
@@ -414,16 +473,25 @@ def convert_data(args):
 
         Convert_grb2_to_nc(remote_file, temp_file_part, temp_file_band)
 
-    # Load data from temporary files
+    data_variable = 'Band1'
+    data_sum = np.zeros([y_id[1] - y_id[0], x_id[1] - x_id[0]])
     for i in range(0, nparts):
         temp_file_part = temp_file.format(dtime=date, ipart=str(i + 1))
 
-        fp = Dataset(temp_file_part, mode='r')
+        fh = Dataset(temp_file_part, mode='r')
 
-        data_raw = fp.variables['Band1']
+        data_group = product['data']['ftype']['r'].split('.')
+        if len(data_group) > 1:
+            data_raw = fh.groups[data_group[1]].variables[data_variable]
+        else:
+            data_raw = fh.variables[data_variable]
 
         if 'missing_value' in data_raw.ncattrs():
+            # ASCAT
             data_raw_missing = data_raw.getncattr('missing_value')
+        elif 'CodeMissingValue' in data_raw.ncattrs():
+            # GPM
+            data_raw_missing = data_raw.getncattr('CodeMissingValue')
         else:
             data_raw_missing = data_raw.getncattr('_FillValue')
         if 'scale_factor' in data_raw.ncattrs():
@@ -431,37 +499,68 @@ def convert_data(args):
         else:
             data_raw_scale = 1.0
 
-        data_raw = np.zeros([pixel_h, pixel_w])
-        data_raw = data_raw + np.array(fp.variables['Band1'][0:pixel_h, 0:pixel_w])
+        # Convert meta data to float
+        if np.logical_or(isinstance(data_raw_missing, str),
+                         isinstance(data_raw_scale, str)):
+            data_raw_missing = float(data_raw_missing)
+            data_raw_scale = float(data_raw_scale)
 
-        fp.close()
+        # --------- #
+        # Clip data #
+        # --------- #
+        # get data to 2D matrix
+        data_raw_tmp = np.zeros([pixel_h, pixel_w])
+        data_raw_tmp[:, 0:int(pixel_w / 2)] = data_raw[:, int(pixel_w / 2):pixel_w]
+        data_raw_tmp[:, int(pixel_w / 2):pixel_w] = data_raw[:, 0:int(pixel_w / 2)]
+
+        data_tmp = data_raw_tmp[y_id[0]:y_id[1], x_id[0]:x_id[1]]
+        # data_tmp = np.squeeze(data_tmp, axis=0)
+
+        # check data type
+        # filled numpy.ma.MaskedArray as numpy.ndarray
+        if isinstance(data_tmp, np.ma.MaskedArray):
+            data = data_tmp.filled()
+        else:
+            data = np.asarray(data_tmp)
+
+        # transfer matrix to GTiff matrix
+        # [w,n]--[e,n]
+        #   |      |
+        # [w,s]--[e,s]
+        # data = np.asarray(data)
+
+        # [w,s]--[e,s]
+        #   |      |
+        # [w,n]--[e,n]
+        data = np.flipud(data)
+
+        # [w,n]--[w,s]
+        #   |      |
+        # [e,n]--[e,s]
+        # data = np.transpose(a=data, axes=(1, 0))
+
+        # [w,s]--[w,n]
+        #   |      |
+        # [e,s]--[e,n]
+        # data = np.rot90(data, k=1, axes=(0, 1))
+
+        # close file
+        fh.close()
+
+        # ------- #
+        # Convert #
+        # ------- #
+        # scale, units
+        data[data == data_raw_missing] = np.nan
+        data = data * data_raw_scale * data_multiplier
+
+        # novalue data
+        data[data == np.nan] = data_ndv
+
+        data_sum = data_sum + data
+
     # calculate the average
-    data_raw = data_raw / float(nparts)
-
-    data_tmp = np.zeros([pixel_h, pixel_w])
-    data_tmp[:, 0:int(pixel_w / 2)] = data_raw[:, int(pixel_w / 2):pixel_w]
-    data_tmp[:, int(pixel_w / 2):pixel_w] = data_raw[:, 0:int(pixel_w / 2)]
-
-    # Clip data
-    data = np.flipud(data_tmp[y_id[0]:y_id[1], x_id[0]:x_id[1]])
-
-    # Check data type
-    # filled numpy.ma.MaskedArray as numpy.ndarray
-    if isinstance(data, np.ma.MaskedArray):
-        data = data.filled()
-    else:
-        data = np.asarray(data)
-    # convert to float
-    if np.logical_or(isinstance(data_raw_missing, str),
-                     isinstance(data_raw_scale, str)):
-        data_raw_missing = float(data_raw_missing)
-        data_raw_scale = float(data_raw_scale)
-
-    # Convert units, set NVD
-    data[data == data_raw_missing] = np.nan
-    data = data * data_raw_scale * data_multiplier
-
-    data[data == np.nan] = data_ndv
+    data = data_sum / float(nparts)
 
     # Save as GTiff
     geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]

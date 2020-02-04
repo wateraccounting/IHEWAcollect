@@ -25,8 +25,8 @@ def main():
         's': -35.0
     }
     period = {
-        's': '',
-        'e': ''
+        's': None,
+        'e': None
     }
     nodata = -9999
 

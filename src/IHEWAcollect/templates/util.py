@@ -12,6 +12,7 @@ permission of the WA+ team.
 Utilities for IHEWAcollect template modules.
 """
 import os
+import sys
 # import datetime
 
 import gzip
@@ -35,7 +36,7 @@ class Extract(object):
     File pre-process, extract.
 
     Args:
-      is_clean (bool): Is to clean all files in the folder.
+        is_clean (bool): Is to clean all files in the folder.
     """
     __status = {
         'messages': {
@@ -70,8 +71,8 @@ class Extract(object):
         This function extract zip file.
 
         Args:
-          file (str): Name of the file that must be unzipped.
-          outfile (str): Directory where the unzipped data must be stored.
+            file (str): Name of the file that must be unzipped.
+            outfile (str): Directory where the unzipped data must be stored.
         """
         z = zipfile.ZipFile(self.__conf['file']['i'], 'r')
         z.extractall(self.__conf['folder']['o'])
@@ -83,8 +84,8 @@ class Extract(object):
         This function extract gz file.
 
         Args:
-          file (str): Name of the file that must be unzipped.
-          outfile (str): Directory where the unzipped data must be stored.
+            file (str): Name of the file that must be unzipped.
+            outfile (str): Directory where the unzipped data must be stored.
         """
         with gzip.GzipFile(self.__conf['file']['i'], 'rb') as zf:
             file_content = zf.read()
@@ -100,8 +101,8 @@ class Extract(object):
         This function extract tar file.
 
         Args:
-          file (str): Name of the file that must be unzipped.
-          outfile (str): Directory where the unzipped data must be stored.
+            file (str): Name of the file that must be unzipped.
+            outfile (str): Directory where the unzipped data must be stored.
         """
         os.chdir(self.__conf['folder']['o'])
         tar = tarfile.open(self.__conf['file']['i'], "r:gz")
@@ -115,7 +116,7 @@ class Plot(object):
     File post-process, save or show.
 
     Args:
-      is_save (bool): Is to clean all files in the folder.
+        is_save (bool): Is to clean all files in the folder.
     """
     __status = {
         'messages': {
@@ -158,7 +159,7 @@ class Waitbar(object):
     Waitbar on the cmd window.
 
     Args:
-      is_save (bool): Is to clean all files in the folder.
+        is_save (bool): Is to clean all files in the folder.
     """
     __status = {
         'messages': {
@@ -181,6 +182,38 @@ class Waitbar(object):
 
     def __init__(self, is_print):
         self.__status['is_print'] = is_print
+
+    @staticmethod
+    def wait_bar(i, total,
+                 prefix='', suffix='',
+                 decimals=1, length=100, fill='█'):
+        """Wait Bar Console
+
+        This function will print a waitbar in the console
+
+        Args:
+            i (int): Iteration number.
+            total (int): Total iterations.
+            prefix (str): Prefix name of bar.
+            suffix (str): Suffix name of bar.
+            decimals (int): Decimal of the wait bar.
+            length (int): Width of the wait bar.
+            fill (str): Bar fill.
+        """
+        # Adjust when it is a linux computer
+        if os.name == 'posix' and total == 0:
+            total = 0.0001
+
+        percent = ('{0:.' + str(decimals) + 'f}').format(100 *
+                                                         (i / float(total)))
+        filled = int(length * i // total)
+        bar = fill * filled + '-' * (length - filled)
+
+        sys.stdout.write('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix))
+        sys.stdout.flush()
+
+        if i == total:
+            print()
 
 
 class Log(object):

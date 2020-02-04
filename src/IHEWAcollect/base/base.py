@@ -63,8 +63,8 @@ class Base(object):
     """This Base class
 
     Args:
-      product (str): Product name of data products.
-      is_print (bool): Is to print status message.
+        product (str): Product name of data products.
+        is_print (bool): Is to print status message.
     """
     status = 'Global status.'
 
@@ -176,7 +176,7 @@ class Base(object):
         """Set Status
 
         Returns:
-          str: Status message.
+            str: Status message.
         """
         # Global
         msg = self.__conf['data']['messages'][cod]['msg']
@@ -205,7 +205,7 @@ class Base(object):
         This is the function to get project status.
 
         Returns:
-          str: Status message.
+            str: Status message.
         """
         return self.status
 
@@ -215,10 +215,10 @@ class Base(object):
         This is the function to get project's configuration data.
 
         Args:
-          key (str): Key name.
+            key (str): Key name.
 
         Returns:
-          dict: Configuration data.
+            dict: Configuration data.
 
         :Example:
 
@@ -267,10 +267,10 @@ class Base(object):
         - File to read: ``collect.yml``.
 
         Args:
-          key (str): Key name.
+            key (str): Key name.
 
         Returns:
-          dict: Configuration data.
+            dict: Configuration data.
 
         :Example:
 

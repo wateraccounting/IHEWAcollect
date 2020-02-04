@@ -59,9 +59,9 @@ class Dtime(object):
         """Set status
 
         Args:
-          fun (str): Function name.
-          prt (bool): Is to print on screen?
-          ext (str): Extra message.
+            fun (str): Function name.
+            prt (bool): Is to print on screen?
+            ext (str): Extra message.
         """
         self.status = self._status(self.__status['messages'],
                                    self.__status['code'],

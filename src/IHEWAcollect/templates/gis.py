@@ -58,18 +58,58 @@ class GIS(object):
 
     HydroSHEDS:
 
-      - af: Africa,          lat [s:-35.0, n: 38.0], lon [w: -19.0, e:  55.0].
-      - as: Asia,            lat [s:-12.0, n: 61.0], lon [w:  57.0, e: 180.0].
-      - au: Australia,       lat [s:-56.0, n:-10.0], lon [w: 112.0, e: 180.0].
-      - ca: Central America, lat [s:  5.0, n: 39.0], lon [w:-119.0, e: -60.0].
-      - eu: Europe,          lat [s: 12.0, n: 62.0], lon [w: -14.0, e:  70.0].
-      - na: North America,   lat [s: 24.0, n: 60.0], lon [w:-138.0, e: -52.0].
-      - sa: South America,   lat [s:-56.0, n: 15.0], lon [w: -93.0, e: -32.0].
+        - af: Africa,          lat [s:-35.0, n: 38.0], lon [w: -19.0, e:  55.0].
+        - as: Asia,            lat [s:-12.0, n: 61.0], lon [w:  57.0, e: 180.0].
+        - au: Australia,       lat [s:-56.0, n:-10.0], lon [w: 112.0, e: 180.0].
+        - ca: Central America, lat [s:  5.0, n: 39.0], lon [w:-119.0, e: -60.0].
+        - eu: Europe,          lat [s: 12.0, n: 62.0], lon [w: -14.0, e:  70.0].
+        - na: North America,   lat [s: 24.0, n: 60.0], lon [w:-138.0, e: -52.0].
+        - sa: South America,   lat [s:-56.0, n: 15.0], lon [w: -93.0, e: -32.0].
 
     Args:
-      workspace (str): Directory to accounts.yml.
-      is_print (bool): Is to print status message.
-      kwargs (dict): Other arguments.
+        workspace (str): Directory to accounts.yml.
+        is_print (bool): Is to print status message.
+        kwargs (dict): Other arguments.
+
+    :Example:
+
+        >>> import numpy as np
+        >>> # GTiff matrix, [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
+        >>> # [w,n]--[e,n]      1 - 2 - 3
+        >>> #   |      |    ex: 4 - 5 - 6
+        >>> # [w,s]--[e,s]      7 - 8 - 9
+        >>> m = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]], int)
+        >>> m
+        array([[1, 2, 3],
+               [4, 5, 6],
+               [7, 8, 9]])
+
+        >>> # [w,s]--[e,s]      7 - 8 - 9
+        >>> #   |      |    ex: 4 - 5 - 6
+        >>> # [w,n]--[e,n]      1 - 2 - 3
+        >>> m = np.array([[7, 8, 9], [4, 5, 6], [1, 2, 3]], int)
+        >>> np.flipud(m=m)
+        array([[1, 2, 3],
+               [4, 5, 6],
+               [7, 8, 9]])
+
+        >>> # [w,n]--[w,s]      1 - 4 - 7
+        >>> #   |      |    ex: 2 - 5 - 8
+        >>> # [e,n]--[e,s]      3 - 6 - 9
+        >>> m = np.array([[1, 4, 7], [2, 5, 8], [3, 6, 9]], int)
+        >>> np.transpose(a=m, axes=(1, 0))
+        array([[1, 2, 3],
+               [4, 5, 6],
+               [7, 8, 9]])
+
+        >>> # [w,s]--[w,n]      7 - 4 - 1
+        >>> #   |      |    ex: 8 - 5 - 2
+        >>> # [e,s]--[e,n]      9 - 6 - 3
+        >>> m = np.array([[7, 4, 1], [8, 5, 2], [9, 6, 3]], int)
+        >>> np.rot90(m=m, k=1, axes=(0, 1))
+        array([[1, 2, 3],
+               [4, 5, 6],
+               [7, 8, 9]])
     """
     status = 'Global status.'
 
@@ -123,9 +163,9 @@ class GIS(object):
         """Set status
 
         Args:
-          fun (str): Function name.
-          prt (bool): Is to print on screen?
-          ext (str): Extra message.
+            fun (str): Function name.
+            prt (bool): Is to print on screen?
+            ext (str): Extra message.
         """
         self.status = self._status(self.__status['messages'],
                                    self.__status['code'],
@@ -252,36 +292,12 @@ class GIS(object):
         This function get tif band as numpy.ndarray.
 
         Args:
-          file (str): 'C:/file/to/path/file.tif' or a gdal file (gdal.Open(file))
-            string that defines the input tif file or gdal file.
-          band (int): Defines the band of the tif that must be opened.
+            file (str): 'C:/file/to/path/file.tif' or a gdal file (gdal.Open(file))
+                string that defines the input tif file or gdal file.
+            band (int): Defines the band of the tif that must be opened.
 
         Returns:
-          :obj:`numpy.ndarray`: Band data.
-
-        :Example:
-
-            >>> import os
-            >>> from IHEWAcollect.templates.gis import GIS
-            >>> gis = GIS(os.getcwd(), is_print=False)
-            >>> path = os.path.join(os.getcwd(), 'tests', 'data', 'BigTIFF')
-            >>> file = os.path.join(path, 'Classic.tif')
-            >>> data = gis.load_file(file, 1)
-
-            >>> type(data)
-            <class 'numpy.ndarray'>
-
-            >>> data.shape
-            (64, 64)
-
-            >>> data
-            array([[255, 255, 255, ...   0,   0,   0],
-                   [255, 255, 255, ...   0,   0,   0],
-                   [255, 255, 255, ...   0,   0,   0],
-                   ...,
-                   [  0,   0,   0, ...,   0,   0,   0],
-                   [  0,   0,   0, ...,   0,   0,   0],
-                   [  0,   0,   0, ...,   0,   0,   0]], dtype=uint8)
+            :obj:`numpy.ndarray`: Band data.
         """
         data = np.ndarray
 
@@ -347,11 +363,11 @@ class GIS(object):
         This function save the array as a geotiff.
 
         Args:
-          name (str): Directory name.
-          data (:obj:`numpy.ndarray`): Dataset of the geotiff.
-          geo (list): Geospatial dataset, [minimum lon, pixelsize, rotation,
-            maximum lat, rotation, pixelsize].
-          projection (int): EPSG code.
+            name (str): Directory name.
+            data (:obj:`numpy.ndarray`): Dataset of the geotiff.
+            geo (list): Geospatial dataset, [minimum lon, pixelsize, rotation,
+                maximum lat, rotation, pixelsize].
+            projection (int): EPSG code.
 
         :Example:
 

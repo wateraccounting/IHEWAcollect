@@ -15,15 +15,21 @@ in the ``IHEWAcollect/accounts.yml`` file.
 **Examples:**
 ::
 
-    import os
-    from IHEWAcollect.base.download import Download
-    download = Download(workspace=os.getcwd(),
-                        product='ALEXI',
-                        version='v1',
-                        parameter='evapotranspiration',
-                        resolution='daily',
-                        variable='ETA',
-                        is_status=False)
+    # Method-
+    import pycurl
+    try:
+        # Connect to server
+        conn = pycurl.Curl()
+        conn.setopt(pycurl.URL, url)
+        conn.setopt(pycurl.SSL_VERIFYPEER, 0)
+        conn.setopt(pycurl.SSL_VERIFYHOST, 0)
+    except pycurl.error as err:
+        print(err)
+    else:
+        with open(remote_file, "wb") as fp:
+            conn.setopt(pycurl.WRITEDATA, fp)
+            conn.perform()
+            conn.close()
 
 """
 import os
@@ -66,17 +72,17 @@ class Download(User):
     - finish()
 
     Args:
-      workspace (str): Directory to accounts.yml.
-      product (str): Product name.
-      version (str): Version name.
-      parameter (str): Parameter name.
-      resolution (str): Resolution name.
-      variable (str): Variable name.
-      bbox (dict): Spatial range, {'w':, 's':, 'e':, 'n':}.
-      period (dict): Time range, {'s':, 'e':}.
-      NaN (int): -9999.
-      is_status (bool): Is to print status message.
-      kwargs (dict): Other arguments.
+        workspace (str): Directory to accounts.yml.
+        product (str): Product name.
+        version (str): Version name.
+        parameter (str): Parameter name.
+        resolution (str): Resolution name.
+        variable (str): Variable name.
+        bbox (dict): Spatial range, {'w':, 's':, 'e':, 'n':}.
+        period (dict): Time range, {'s':, 'e':}.
+        nodata (int): -9999.
+        is_status (bool): Is to print status message.
+        kwargs (dict): Other arguments.
     """
     status = 'Global status.'
 
@@ -199,9 +205,9 @@ class Download(User):
         """Set status
 
         Args:
-          fun (str): Function name.
-          prt (bool): Is to print on screen?
-          ext (str): Extra message.
+            fun (str): Function name.
+            prt (bool): Is to print on screen?
+            ext (str): Extra message.
         """
         self.status = self._status(self.__status['messages'],
                                    self.__status['code'],
@@ -211,7 +217,7 @@ class Download(User):
         """
 
         Returns:
-          int: Status.
+            int: Status.
         """
         status = -1
         self._time()
@@ -223,7 +229,7 @@ class Download(User):
         """
 
         Returns:
-          int: Status.
+            int: Status.
         """
         status = -1
         self._folder()
@@ -236,7 +242,7 @@ class Download(User):
         """
 
         Returns:
-          int: Status.
+            int: Status.
         """
         status = -1
         self.__tmp['module'].DownloadData(self.__status, self.__conf)
@@ -249,7 +255,7 @@ class Download(User):
         """
 
         Returns:
-          int: Status.
+            int: Status.
         """
         status = -1
         self._log_close()
@@ -260,7 +266,7 @@ class Download(User):
         """
 
         Returns:
-          int: Status.
+            int: Status.
         """
         # Class self.__conf['time']
         time = self.__conf['time']
@@ -277,7 +283,7 @@ class Download(User):
         """
 
         Returns:
-          dict: account.
+            dict: account.
         """
         # Class self.__conf['account'] <- User.account
         account = self.__conf['account']
@@ -294,7 +300,7 @@ class Download(User):
         """
 
         Returns:
-          dict: product.
+            dict: product.
         """
         # Class self.__conf['product'] <- Base.product
         product = self.__conf['product']
@@ -390,7 +396,7 @@ class Download(User):
         """
 
         Returns:
-          dict: log.
+            dict: log.
         """
         # Class self.__conf['log']
         status = -1
@@ -450,7 +456,7 @@ class Download(User):
         """
 
         Returns:
-          dict: template.
+            dict: template.
         """
         # Class self.__tmp <- Base.product
         template = self.__tmp
@@ -669,7 +675,7 @@ def main():
         #     'product': 'DEM',
         #     'version': 'v1',
         #     'parameter': 'DEM',
-        #     'resolution': '30s',
+        #     'resolution': '5s',
         #     'variable': 'af',
         #     'bbox': {
         #         'w': -19.0,
@@ -678,8 +684,26 @@ def main():
         #         's': -35.0
         #     },
         #     'period': {
-        #         's': '',
-        #         'e': ''
+        #         's': None,
+        #         'e': None
+        #     },
+        #     'nodata': -9999
+        # },
+        # '6b': {
+        #     'product': 'DEM',
+        #     'version': 'v1',
+        #     'parameter': 'DEM',
+        #     'resolution': '30s'
+        #     'variable': 'af',
+        #     'bbox': {
+        #         'w': -19.0,
+        #         'n': 38.0,
+        #         'e': 55.0,
+        #         's': -35.0
+        #     },
+        #     'period': {
+        #         's': None,
+        #         'e': None
         #     },
         #     'nodata': -9999
         # },
@@ -891,6 +915,44 @@ def main():
             'period': {
                 's': None,
                 'e': None
+            },
+            'nodata': -9999
+        },
+        # TODO, 20200130-END, QPan, JRC
+        #  Tiles, sn_gring_10deg.csv, memory usage
+        '14a': {
+            'product': 'JRC',
+            'version': 'v1',
+            'parameter': 'water',
+            'resolution': '1s',
+            'variable': 'occurrence',
+            'bbox': {
+                'w': -5.0,
+                'n': 5.0,
+                'e': 5.0,
+                's': -5.0
+            },
+            'period': {
+                's': None,
+                'e': None
+            },
+            'nodata': -9999
+        },
+        '15a': {
+            'product': 'MCD12Q1',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'yearly',
+            'variable': 'LC',
+            'bbox': {
+                'w': -45.0,
+                'n': 5.0,
+                'e': -35.0,
+                's': -5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-12-31'
             },
             'nodata': -9999
         }
