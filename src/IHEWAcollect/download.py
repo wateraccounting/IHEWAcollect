@@ -928,9 +928,9 @@ def main():
             'variable': 'occurrence',
             'bbox': {
                 'w': -5.0,
-                'n': 5.0,
+                'n': 10.0,
                 'e': 5.0,
-                's': -5.0
+                's': 5.0
             },
             'period': {
                 's': None,
@@ -945,14 +945,230 @@ def main():
             'resolution': 'yearly',
             'variable': 'LC',
             'bbox': {
-                'w': -45.0,
-                'n': 5.0,
-                'e': -35.0,
-                's': -5.0
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
             },
             'period': {
                 's': '2008-01-01',
                 'e': '2008-12-31'
+            },
+            'nodata': -9999
+        },
+        '15b': {
+            'product': 'MCD12Q1',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'yearly',
+            'variable': 'LU',
+            'bbox': {
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-12-31'
+            },
+            'nodata': -9999
+        },
+        '16a': {
+            'product': 'MCD43A3',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'daily',
+            'variable': 'AlbedoBSA',
+            'bbox': {
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': -9999
+        },
+        '16b': {
+            'product': 'MCD43A3',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'daily',
+            'variable': 'AlbedoWSA',
+            'bbox': {
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': -9999
+        },
+        '17a': {
+            'product': 'MOD09GQ',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'daily',
+            'variable': 'REFb01',
+            'bbox': {
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': -9999
+        },
+        '17b': {
+            'product': 'MOD09GQ',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'daily',
+            'variable': 'REFb02',
+            'bbox': {
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': -9999
+        },
+        '18a': {
+            'product': 'MOD10A2',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'eight_daily',
+            'variable': 'SnowFrac',
+            'bbox': {
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': -9999
+        },
+        '18b': {
+            'product': 'MOD10A2',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'eight_daily',
+            'variable': 'SnowExt',
+            'bbox': {
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': -9999
+        },
+        '19a': {
+            'product': 'MOD11A2',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'eight_daily',
+            'variable': 'LSTday',
+            'bbox': {
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': -9999
+        },
+        '19b': {
+            'product': 'MOD11A2',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'eight_daily',
+            'variable': 'LSTnight',
+            'bbox': {
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': -9999
+        },
+        '20a': {
+            'product': 'MOD13Q1',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'sixteen_daily',
+            'variable': 'NDVI',
+            'bbox': {
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-17'
+            },
+            'nodata': -9999
+        },
+        '21a': {
+            'product': 'MOD15A2H',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'eight_daily',
+            'variable': 'Fpar',
+            'bbox': {
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': -9999
+        },
+        '21b': {
+            'product': 'MOD15A2H',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'eight_daily',
+            'variable': 'Lai',
+            'bbox': {
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
             },
             'nodata': -9999
         }

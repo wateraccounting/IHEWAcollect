@@ -3741,21 +3741,22 @@ products:
                 ''
               dir: '/MOTA/MCD12Q1.006/{dtime:%Y}.01.01/'
               fname:
-                r: 'MCD12Q1.A{dtime:%Y}001.{lat}{lon}.006.{ctime}.hdf'
-                t: 'MCD12Q1.A{dtime:%Y}001.{lat}{lon}.006.hdf'
+                r: 'MCD12Q1.A{dtime:%Y}001.{lon}{lat}.006.{ctime}.hdf'
+                t: 'MCD12Q1.A{dtime:%Y}001.006.{ipart}.tif'
                 l: 'MCD12Q1_v6_._D-{dtime:%Y}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
-                t: 'dtime.latlon'
+                t: 'dtime.ipart'
                 l: 'dtime'
               ftype:
-                r: 'NetCDF.MCD12Q1.Data_Fields'
-                t: null
+                # r: 'NetCDF.MCD12Q1.Data_Fields'
+                r: 'HDF4'
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'ubyte'
-                t: null
+                t: 'uint8'
                 l: 'uint8'
               units:
                 r: '.'
@@ -3780,23 +3781,24 @@ products:
               name: 'Yearly Land Use'
               description:
                 ''
-              dir: '/MOTA/MCD12Q1.006/{dtime:%Y.%m.%d}/'
+              dir: '/MOTA/MCD12Q1.006/{dtime:%Y}.01.01/'
               fname:
-                r: 'MCD12Q1.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
-                t: null
+                r: 'MCD12Q1.A{dtime:%Y}001.{lon}{lat}.006.{ctime}.hdf'
+                t: 'MCD12Q1.A{dtime:%Y}001.006.{ipart}.tif'
                 l: 'MCD12Q1_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
-                r: 'dtime.latlon'
-                t: null
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
                 l: 'dtime'
               ftype:
-                r: 'NetCDF.MCD12Q1.Data_Fields'
-                t: null
+                # r: 'NetCDF.MCD12Q1.Data_Fields'
+                r: 'HDF4'
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'ubyte'
-                t: null
+                t: 'uint8'
                 l: 'uint8'
               units:
                 r: '.'
@@ -3858,30 +3860,71 @@ products:
           method: 'crawl.get'
           freq: 'D'
           variables:
-            Albedo:
-              variable:
-                - 'Albedo_BSA_shortwave'
-                - 'Albedo_WSA_shortwave'
-              name: 'Daily Albedo'
+            AlbedoWSA:
+              variable: 'Albedo_WSA_shortwave'
+              name: 'Daily Albedo Black'
               description:
                 ''
               dir: '/MOTA/MCD43A3.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MCD43A3.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
-                t: null
+                r: 'MCD43A3.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
+                t: 'MCD43A3.A{dtime:%Y%j}.006.{ipart}.tif'
                 l: 'MCD43A3_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
-                r: 'dtime.latlon'
-                t: null
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
                 l: 'dtime'
               ftype:
-                r: 'NetCDF.MOD_Grid_BRDF.Data_Fields'
-                t: null
+                # r: 'NetCDF.MOD_Grid_BRDF.Data_Fields'
+                r: 'HDF4'
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'int16'
-                t: null
+                t: 'float32'
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 1.0
+              lat:
+                s: -10007554.677
+                n: 10007554.677
+                r: 463.31271653
+              lon:
+                w: -20015109.354
+                e: 20015109.354
+                r: 463.31271653
+              time:
+                s: 2000-02-24 00:00:00
+                e: null
+              dem:
+                w: 86400
+                h: 43200
+            AlbedoBSA:
+              variable: 'Albedo_BSA_shortwave'
+              name: 'Daily Albedo White'
+              description:
+                ''
+              dir: '/MOTA/MCD43A3.006/{dtime:%Y.%m.%d}/'
+              fname:
+                r: 'MCD43A3.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
+                t: 'MCD43A3.A{dtime:%Y%j}.006.{ipart}.tif'
+                l: 'MCD43A3_v6_._D-{dtime:%Y%m%d}.tif'
+              fmt:
+                d: 'dtime'
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
+                l: 'dtime'
+              ftype:
+                # r: 'NetCDF.MOD_Grid_BRDF.Data_Fields'
+                r: 'HDF4'
+                t: 'GTiff'
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t: 'float32'
                 l: 'float32'
               units:
                 r: '.'
@@ -3940,30 +3983,71 @@ products:
           method: 'crawl.get'
           freq: 'D'
           variables:
-            REF:
-              variable:
-                - 'sur_refl_b01_1'
-                - 'sur_refl_b02_1'
+            REFb01:
+              variable: 'sur_refl_b01_1'
               name: 'Daily Reflectance'
               description:
                 ''
               dir: '/MOLT/MOD09GQ.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD09GQ.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
-                t: null
+                r: 'MOD09GQ.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
+                t: 'MOD09GQ.A{dtime:%Y%j}.006.{ipart}.tif'
                 l: 'MOD09GQ_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
-                r: 'dtime.latlon'
-                t: null
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
                 l: 'dtime'
               ftype:
-                r: 'NetCDF.MODIS_Grid.Data_Fields'
-                t: null
+                # r: 'NetCDF.MODIS_Grid.Data_Fields'
+                r: 'HDF4'
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'int16'
-                t: null
+                t: 'float32'
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 1.0
+              lat:
+                s: -10007554.677
+                n: 10007554.677
+                r: 231.65635826
+              lon:
+                w: -20015109.354
+                e: 20015109.354
+                r: 231.65635826
+              time:
+                s: 2000-02-24 00:00:00
+                e: null
+              dem:
+                w: 172800
+                h: 86400
+            REFb02:
+              variable: 'sur_refl_b02_1'
+              name: 'Daily Reflectance'
+              description:
+                ''
+              dir: '/MOLT/MOD09GQ.006/{dtime:%Y.%m.%d}/'
+              fname:
+                r: 'MOD09GQ.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
+                t: 'MOD09GQ.A{dtime:%Y%j}.006.{ipart}.tif'
+                l: 'MOD09GQ_v6_._D-{dtime:%Y%m%d}.tif'
+              fmt:
+                d: 'dtime'
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
+                l: 'dtime'
+              ftype:
+                # r: 'NetCDF.MODIS_Grid.Data_Fields'
+                r: 'HDF4'
+                t: 'GTiff'
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t: 'float32'
                 l: 'float32'
               units:
                 r: '.'
@@ -4026,29 +4110,70 @@ products:
           freq: '8D'
           variables:
             SnowFrac:
-              variable:
-                - 'Eight_Day_Snow_Cover'
-                - 'Maximum_Snow_Extent'
+              variable: 'Eight_Day_Snow_Cover'
               name: 'Eight Daily Snow Fraction'
               description:
                 ''
               dir: '/MOST/MOD10A2.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD10A2.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
-                t: null
+                r: 'MOD10A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
+                t: 'MOD10A2.A{dtime:%Y%j}.006.{ipart}.tif'
                 l: 'MOD10A2_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
-                r: 'dtime.latlon'
-                t: null
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
                 l: 'dtime'
               ftype:
-                r: 'NetCDF.MOD_Grid_Snow_500m.Data_Fields'
-                t: null
+                # r: 'NetCDF.MOD_Grid_Snow_500m.Data_Fields'
+                r: 'NHDF4'
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'ubyte'
-                t: null
+                t: 'uint8'
+                l: 'uint8'
+              units:
+                r: '.'
+                l: '.'
+                m: 1.0
+              lat:
+                s: -10007554.677
+                n: 10007554.677
+                r: 463.31271653
+              lon:
+                w: -20015109.354
+                e: 20015109.354
+                r: 463.31271653
+              time:
+                s: 2000-02-18 00:00:00
+                e: null
+              dem:
+                w: 86400
+                h: 43200
+            SnowExt:
+              variable: 'Maximum_Snow_Extent'
+              name: 'Eight Daily Snow Extent'
+              description:
+                ''
+              dir: '/MOST/MOD10A2.006/{dtime:%Y.%m.%d}/'
+              fname:
+                r: 'MOD10A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
+                t: 'MOD10A2.A{dtime:%Y%j}.006.{ipart}.tif'
+                l: 'MOD10A2_v6_._D-{dtime:%Y%m%d}.tif'
+              fmt:
+                d: 'dtime'
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
+                l: 'dtime'
+              ftype:
+                # r: 'NetCDF.MOD_Grid_Snow_500m.Data_Fields'
+                r: 'NHDF4'
+                t: 'GTiff'
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t: 'uint8'
                 l: 'uint8'
               units:
                 r: '.'
@@ -4109,30 +4234,71 @@ products:
           method: 'crawl.get'
           freq: '8D'
           variables:
-            LST:
-              variable:
-                - 'LST_Day_1km'
-                - 'LST_Night_1km'
+            LSTday:
+              variable: 'LST_Day_1km'
               name: 'Eight Daily Land Surface Temperature'
               description:
                 ''
               dir: '/MOLT/MOD11A2.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD11A2.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
-                t: null
+                r: 'MOD11A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
+                t: 'MOD11A2.A{dtime:%Y%j}.006.{ipart}.tif'
                 l: 'MOD11A2_v6_K_D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
-                r: 'dtime.latlon'
-                t: null
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
                 l: 'dtime'
               ftype:
-                r: 'NetCDF.MODIS_Grid_8Day_1km_LST.Data_Fields'
-                t: null
+                # r: 'NetCDF.MODIS_Grid_8Day_1km_LST.Data_Fields'
+                r: 'HDF4'
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'uint16'
-                t: null
+                t: 'float32'
+                l: 'float32'
+              units:
+                r: 'K'
+                l: 'K'
+                m: 1.0
+              lat:
+                s: -10007554.677
+                n: 10007554.677
+                r: 926.62543314
+              lon:
+                w: -20015109.354
+                e: 20015109.354
+                r: 926.62543314
+              time:
+                s: 2000-02-18 00:00:00
+                e: null
+              dem:
+                w: 43200
+                h: 21600
+            LSTnight:
+              variable: 'LST_Night_1km'
+              name: 'Eight Daily Land Surface Temperature'
+              description:
+                ''
+              dir: '/MOLT/MOD11A2.006/{dtime:%Y.%m.%d}/'
+              fname:
+                r: 'MOD11A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
+                t: 'MOD11A2.A{dtime:%Y%j}.006.{ipart}.tif'
+                l: 'MOD11A2_v6_K_D-{dtime:%Y%m%d}.tif'
+              fmt:
+                d: 'dtime'
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
+                l: 'dtime'
+              ftype:
+                # r: 'NetCDF.MODIS_Grid_8Day_1km_LST.Data_Fields'
+                r: 'HDF4'
+                t: 'GTiff'
+                l: 'GTiff'
+              dtype:
+                r: 'uint16'
+                t: 'float32'
                 l: 'float32'
               units:
                 r: 'K'
@@ -4195,28 +4361,28 @@ products:
           freq: '16D'
           variables:
             NDVI:
-              variable:
-                - '250m_16_days_NDVI'
+              variable: '250m_16_days_NDVI'
               name: 'Sixteen Daily NDVI'
               description:
                 ''
               dir: '/MOLT/MOD13Q1.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD13Q1.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
-                t: null
+                r: 'MOD13Q1.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
+                t: 'MOD13Q1.A{dtime:%Y%j}.006.{ipart}.tif'
                 l: 'MOD13Q1_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
-                r: 'dtime.latlon'
-                t: null
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
                 l: 'dtime'
               ftype:
-                r: 'NetCDF.MODIS_Grid_16DAY_250m_500m_VI.Data_Fields'
-                t: null
+                # r: 'NetCDF.MODIS_Grid_16DAY_250m_500m_VI.Data_Fields'
+                r: 'HDF4'
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'int16'
-                t: null
+                t: 'float32'
                 l: 'float32'
               units:
                 r: '.'
@@ -4274,15 +4440,54 @@ products:
           freq: '8D'
           variables:
             Fpar:
-              variable:
-                - 'Fpar_500m'
-                - 'Lai_500m'
+              variable: 'Fpar_500m'
               name: 'Eight Daily Fraction of Photosynthetically Active Radiation'
               description:
                 ''
               dir: '/MOLT/MOD15A2H.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD15A2H.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
+                r: 'MOD15A2H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
+                t: null
+                l: 'MOD15A2H_v6_._D-{dtime:%Y%m%d}.tif'
+              fmt:
+                d: 'dtime'
+                r: 'dtime.latlon'
+                t: null
+                l: 'dtime'
+              ftype:
+                r: 'NetCDF.MOD_Grid_MOD15A2H.Data_Fields'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'ubyte'
+                t: null
+                l: 'float32'
+              units:
+                r: '.'
+                l: '.'
+                m: 1.0
+              lat:
+                s: -10007554.677
+                n: 10007554.677
+                r: 463.31271653
+              lon:
+                w: -20015109.354
+                e: 20015109.354
+                r: 463.31271653
+              time:
+                s: 2000-02-18 00:00:00
+                e: null
+              dem:
+                w: 86400
+                h: 43200
+            Lai:
+              variable: 'Lai_500m'
+              name: 'Eight Daily Fraction of Photosynthetically Active Radiation'
+              description:
+                ''
+              dir: '/MOLT/MOD15A2H.006/{dtime:%Y.%m.%d}/'
+              fname:
+                r: 'MOD15A2H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: null
                 l: 'MOD15A2H_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
@@ -4364,7 +4569,7 @@ products:
                 ''
               dir: '/MOLT/MOD16A2.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD16A2.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
+                r: 'MOD16A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: null
                 l: 'MOD16A2_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
@@ -4446,7 +4651,7 @@ products:
                 ''
               dir: '/MOLT/MOD17A2H.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD17A2H.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
+                r: 'MOD17A2H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: null
                 l: 'MOD17A2H_v6_kgC.m2_D-{dtime:%Y%m%d}.tif'
               fmt:
@@ -4527,7 +4732,7 @@ products:
                 ''
               dir: '/MOLT/MOD17A3H.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD17A3H.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
+                r: 'MOD17A3H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: null
                 l: 'MOD17A3H_v6_kgC.m2_D-{dtime:%Y%m%d}.tif'
               fmt:
@@ -4688,7 +4893,7 @@ products:
                 ''
               dir: '/MOLT/MOD13Q1.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD13Q1.A{dtime:%Y%j}.{lat}{lon}.006.{ctime}.hdf'
+                r: 'MOD13Q1.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: null
                 l: 'MOD13Q1_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:

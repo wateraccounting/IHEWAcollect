@@ -130,7 +130,7 @@ def Convert_bil_to_tiff(input_bil, output_tiff):
     return (output_tiff)
 
 
-def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band_number, scaling_factor,
+def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scaling_factor,
                          geo_out):
     """
     This function converts the hdf5 files into tiff files
@@ -147,6 +147,16 @@ def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band_number, scaling_
     g = gdal.Open(inputname_hdf, gdal.GA_ReadOnly)
 
     #  Define temporary file out and band name in
+    Band_number = 0
+
+    if isinstance(Band, int):
+        Band_number = Band
+
+    if isinstance(Band, str):
+        for i in range(0, len(g.GetSubDatasets()), 1):
+            if Band == g.GetSubDatasets()[i][0].split(':')[-1]:
+                Band_number = i
+
     name_in = g.GetSubDatasets()[Band_number][0]
 
     # Get environmental variable
@@ -171,6 +181,47 @@ def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band_number, scaling_
     Save_as_tiff(Filename_tiff_end, Data_scaled, geo_out, "WGS84")
 
     return ()
+
+
+# def Convert_hdf_to_tiff(inputname_hdf, Filename_tiff_end, Band_number, scaling_factor):
+#     """
+#     This function converts the hdf5 files into tiff files
+#
+#     Keyword Arguments:
+#     input_adf -- name, name of the adf file
+#     output_tiff -- Name of the output tiff file
+#     Band_number -- bandnumber of the hdf5 that needs to be converted
+#     scaling_factor -- factor multipied by data is the output array
+#     geo -- [minimum lon, pixelsize, rotation, maximum lat, rotation,
+#             pixelsize], (geospatial dataset)
+#     """
+#     # Open the hdf file
+#     g = gdal.Open(inputname_hdf, gdal.GA_ReadOnly)
+#
+#     #  Define temporary file out and band name in
+#     name_in = g.GetSubDatasets()[Band_number][0]
+#
+#     # Get environmental variable
+#     # WA_env_paths = os.environ["GDAL_DRIVER"].split(';')
+#     # GDAL_env_path = WA_env_paths[0]
+#     # GDAL_TRANSLATE_PATH = os.path.join(GDAL_env_path, 'gdal_translate.exe')
+#     GDAL_TRANSLATE_PATH = 'gdal_translate.exe'
+#
+#     # run gdal translate command
+#     FullCmd = '%s -of GTiff %s %s' % (GDAL_TRANSLATE_PATH, name_in, Filename_tiff_end)
+#     Run_command_window(FullCmd)
+#
+#     # # Get the data array
+#     # dest = gdal.Open(Filename_tiff_end)
+#     # Data = dest.GetRasterBand(1).ReadAsArray()
+#     # dest = None
+#     #
+#     # Data_scaled = Data * scaling_factor
+#     #
+#     # # Save the PROBA-V as a tif file
+#     # Save_as_tiff(Filename_tiff_end, Data_scaled, geo_out, "WGS84")
+#
+#     return ()
 
 
 def Extract_Data(input_file, output_folder):
@@ -594,7 +645,7 @@ def Run_command_window(argument):
     Keyword Arguments:
     argument -- string, name of the adf file
     """
-    # print('\n{}'.format(argument))
+    print('\n{}'.format(argument))
 
     if os.name == 'posix':
         argument = argument.replace(".exe", "")

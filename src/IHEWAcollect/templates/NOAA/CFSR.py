@@ -465,14 +465,13 @@ def convert_data(args):
     # From downloaded remote file
 
     # From generated temporary file
-    # Generate temporary files
     for i in range(0, nparts):
         # Band number of the grib data which is converted in .nc
         temp_file_part = temp_file.format(dtime=date, ipart=str(i + 1))
         temp_file_band = (int(date.strftime('%d')) - 1) * 28 + (i + 1) * 7
 
         Convert_grb2_to_nc(remote_file, temp_file_part, temp_file_band)
-
+    # Generate temporary files
     data_variable = 'Band1'
     data_sum = np.zeros([y_id[1] - y_id[0], x_id[1] - x_id[0]])
     for i in range(0, nparts):

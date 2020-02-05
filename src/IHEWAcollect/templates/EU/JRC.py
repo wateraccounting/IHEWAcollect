@@ -402,8 +402,13 @@ def start_download(args) -> int:
         # ---------------- #
         # Download success #
         # ---------------- #
-        if remote_file_status == 0:
-            local_file_status += convert_data(args)
+        if len(remote_fnames) > 0:
+            if remote_file_status == 0:
+                local_file_status += convert_data(args)
+        else:
+            msg = 'No tiles found!'
+            print('{}'.format(msg))
+            __this.Log.write(datetime.datetime.now(), msg=msg)
 
         # --------------- #
         # Download finish #
@@ -475,6 +480,7 @@ def convert_data(args):
     # --------- #
     # Load data #
     # --------- #
+    # From downloaded remote file
     remote_fnames, remote_files = start_download_tiles(latlim, lonlim,
                                                        remote_fname, remote_file)
 

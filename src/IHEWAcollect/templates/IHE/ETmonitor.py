@@ -451,8 +451,8 @@ def convert_data(args):
     # From downloaded remote file
 
     # From generated temporary file
-    # Generate temporary files
     temp_file_part = temp_file.format(dtime=date)
+    # Generate temporary files
     reproject_MODIS(remote_file, temp_file_part, '4326')
 
     # Convert meta data to float

@@ -454,10 +454,9 @@ def convert_data(args):
     # From downloaded remote file
 
     # From generated temporary file
-    # Generate temporary files
     temp_fname_part = temp_fname.format(dtime=date)
     temp_file_part = temp_file.format(dtime=date)
-
+    # Generate temporary files
     Extract_Data_tar_gz(remote_file, temp_file_part)
 
     data_raw = Open_bil_array(os.path.join(temp_file_part, temp_fname_part))
