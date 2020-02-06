@@ -475,12 +475,12 @@ def start_download_tiles(date, url_server, url_dir,
     # print('url: "{f}"'.format(f=url))
 
     latmin = int(np.floor((90.0 - latlim[1]) / 10.))
-    latmax = int(np.floor((90.0 - latlim[0]) / 10.))
+    latmax = int(np.ceil((90.0 - latlim[0]) / 10.))
     lonmin = int(np.floor((180.0 + lonlim[0]) / 10.))
-    lonmax = int(np.floor((180.0 + lonlim[1]) / 10.))
+    lonmax = int(np.ceil((180.0 + lonlim[1]) / 10.))
 
-    lat_steps = range(latmin, latmax + 1, 1)
-    lon_steps = range(lonmin, lonmax + 1, 1)
+    lat_steps = range(latmin, latmax, 1)
+    lon_steps = range(lonmin, lonmax, 1)
 
     fnames = []
     files = []

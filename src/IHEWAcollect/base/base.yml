@@ -5020,21 +5020,21 @@ products:
                 ''
               dir: '/PDF/datapool/Free_Data/PROBA-V_100m/S1_TOC_100_m_C1/{dtime:%Y/%m/%d}/PV_S1_TOC-{dtime:%Y%m%d}_100M_V101/'
               fname:
-                r: 'PROBAV_S1_TOC_{lat}{lon}_{dtime:%Y%m%d}_100M_V101_NDVI.tif'
-                t: null
+                r: 'PROBAV_S1_TOC_{lon}{lat}_{dtime:%Y%m%d}_100M_V101_NDVI.HDF5'
+                t: 'PROBAV_S1_TOC_{dtime:%Y%m%d}_100M_V101_NDVI.{ipart}.HDF5'
                 l: 'PROBAV_v1.01_._D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon'
-                t: null
+                t: 'dtime.ipart'
                 l: 'dtime'
               ftype:
-                r: 'GTiff'
-                t: null
+                r: 'HDF5'
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'float32'
-                t: null
+                t: 'float32'
                 l: 'float32'
               units:
                 r: '.'

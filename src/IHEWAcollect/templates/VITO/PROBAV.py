@@ -459,10 +459,10 @@ def start_download_scan(url, fname_r, lat, lon) -> tuple:
 
     # Sum all the files on the server
     soup = BeautifulSoup(conn.content, "lxml")
-    for ele in soup.findAll('a', attrs={'href': re.compile('(?i)(hdf)$')}):
-        # print('{lon}{lat}'.format(lat=lat, lon=lon) == ele['href'].split('.')[-4], ele)
-        if '{lon}{lat}'.format(lat=lat, lon=lon) == ele['href'].split('.')[-4]:
-            ctime = ele['href'].split('.')[-2]
+    for ele in soup.findAll('a', attrs={'href': re.compile('(?i)(HDF5)$')}):
+        # print('{lon}{lat}'.format(lat=lat, lon=lon) == ele['href'].split('_')[-3], ele)
+        if '{lon}{lat}'.format(lat=lat, lon=lon) == ele['href'].split('_')[-3]:
+            ctime = ele['href'].split('_')[-2]
 
     return ctime
 
@@ -486,18 +486,18 @@ def start_download_tiles(date, url_server, url_dir,
     files = []
     lonlat = []
     for lon_step in lon_steps:
-        string_long = 'h{:02d}'.format(lon_step)
+        string_long = 'X{:02d}'.format(lon_step)
         for lat_step in lat_steps:
-            string_lat = 'v{:02d}'.format(lat_step)
+            string_lat = 'Y{:02d}'.format(lat_step)
             lonlat.append([lon_step * 10.0 - 180.0, 90.0 - lat_step * 10.0])
 
             ctime = start_download_scan(url, fname_r,
                                         string_lat, string_long)
 
             if ctime != '':
-                fnames.append(fname_r.format(dtime=date, ctime=ctime,
+                fnames.append(fname_r.format(dtime=date,
                                              lat=string_lat, lon=string_long))
-                files.append(file_r.format(dtime=date, ctime=ctime,
+                files.append(file_r.format(dtime=date,
                                            lat=string_lat, lon=string_long))
 
     return fnames, files, lonlat
