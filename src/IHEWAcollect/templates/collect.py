@@ -80,10 +80,21 @@ def Convert_grb2_to_nc(input_wgrib, output_nc, band):
     GDAL_TRANSLATE_PATH = 'gdal_translate.exe'
 
     # Create command
-    fullCmd = ' '.join(
-        ['%s -of netcdf -b %d' % (GDAL_TRANSLATE_PATH, band), input_wgrib,
-         output_nc])  # -r {nearest}
-    Run_command_window(fullCmd)
+    FullCmd = '{exe} ' \
+              '-of netcdf ' \
+              '-b {band} ' \
+              '"{file_i}" ' \
+              '"{file_o}"'.format(
+                  exe=GDAL_TRANSLATE_PATH,
+                  band=band,
+                  file_i=input_wgrib.replace('"', '""'),
+                  file_o=output_nc.replace('"', '""'))
+    # FullCmd = ' '.join(
+    #     [
+    #         '%s -of netcdf -b %d' % (GDAL_TRANSLATE_PATH, band),
+    #         input_wgrib, output_nc
+    #     ])  # -r {nearest}
+    Run_command_window(FullCmd)
 
     return ()
 
@@ -103,10 +114,20 @@ def Convert_adf_to_tiff(input_adf, output_tiff):
     GDAL_TRANSLATE_PATH = 'gdal_translate.exe'
 
     # convert data from ESRI GRID to GeoTIFF
-    fullCmd = ('"%s" -co COMPRESS=DEFLATE -co PREDICTOR=1 -co '
-               'ZLEVEL=1 -of GTiff %s %s') % (
-              GDAL_TRANSLATE_PATH, input_adf, output_tiff)
-    Run_command_window(fullCmd)
+    FullCmd = '{exe} ' \
+              '-co COMPRESS=DEFLATE ' \
+              '-co PREDICTOR=1 ' \
+              '-co ZLEVEL=1 ' \
+              '-of GTiff ' \
+              '"{file_i}" ' \
+              '"{file_o}"'.format(
+                  exe=GDAL_TRANSLATE_PATH,
+                  file_i=input_adf.replace('"', '""'),
+                  file_o=output_tiff.replace('"', '""'))
+    # FullCmd = ('"%s" -co COMPRESS=DEFLATE -co PREDICTOR=1 -co '
+    #            'ZLEVEL=1 -of GTiff %s %s') % (
+    #           GDAL_TRANSLATE_PATH, input_adf, output_tiff)
+    Run_command_window(FullCmd)
 
     return (output_tiff)
 
@@ -166,7 +187,15 @@ def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scaling_factor,
     GDAL_TRANSLATE_PATH = 'gdal_translate.exe'
 
     # run gdal translate command
-    FullCmd = '%s -of GTiff %s %s' % (GDAL_TRANSLATE_PATH, name_in, Filename_tiff_end)
+    # os.path.join
+    FullCmd = '{exe} ' \
+              '-of GTiff ' \
+              '"{file_i}" ' \
+              '"{file_o}"'.format(
+                  exe=GDAL_TRANSLATE_PATH,
+                  file_i=name_in.replace('"', '""'),
+                  file_o=Filename_tiff_end.replace('"', '""'))
+    # FullCmd = '%s -of GTiff %s %s' % (GDAL_TRANSLATE_PATH, name_in, Filename_tiff_end)
     Run_command_window(FullCmd)
 
     # Get the data array
@@ -1049,16 +1078,27 @@ def Clip_Dataset_GDAL(input_name, output_name, latlim, lonlim):
     GDAL_TRANSLATE_PATH = 'gdal_translate.exe'
 
     # find path to the executable
-    fullCmd = ' '.join([
-        GDAL_TRANSLATE_PATH,
-        '-projwin %s %s %s %s -of GTiff %s %s' % (
-            lonlim[0], latlim[1], lonlim[1], latlim[0],
-            input_name,
-            output_name
-        )
-    ])
-    print(fullCmd)
-    Run_command_window(fullCmd)
+    FullCmd = '{exe} ' \
+              '-projwin {lon_w} {lat_n} {lon_e} {lat_s} ' \
+              '-of GTiff ' \
+              '"{file_i}" ' \
+              '"{file_o}"'.format(
+                  exe=GDAL_TRANSLATE_PATH,
+                  lon_w=lonlim[0],
+                  lat_n=latlim[1],
+                  lon_e=lonlim[1],
+                  lat_s=latlim[1],
+                  file_i=input_name.replace('"', '""'),
+                  file_o=output_name.replace('"', '""'))
+    # FullCmd = ' '.join([
+    #     GDAL_TRANSLATE_PATH,
+    #     '-projwin %s %s %s %s -of GTiff "%s" "%s"' % (
+    #         lonlim[0], latlim[1], lonlim[1], latlim[0],
+    #         input_name,
+    #         output_name
+    #     )
+    # ])
+    Run_command_window(FullCmd)
 
     return ()
 
@@ -1233,10 +1273,33 @@ def reproject_MODIS(input_name, output_name, epsg_to):
     GDALWARP_PATH = 'gdalwarp.exe'
 
     # find path to the executable
-    fullCmd = ' '.join([GDALWARP_PATH,
-                        '-overwrite -s_srs "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"',
-                        '-t_srs EPSG:%s -of GTiff' % (epsg_to), input_name, output_name])
-    Run_command_window(fullCmd)
+    FullCmd = '{exe} ' \
+              '-overwrite ' \
+              '-s_srs "+proj=sinu ' \
+              '+lon_0=0 +x_0=0 +y_0=0 ' \
+              '+a=6371007.181 +b=6371007.181 ' \
+              '+units=m ' \
+              '+no_defs" ' \
+              '-t_srs EPSG:{epsg} ' \
+              '-of GTiff ' \
+              '"{file_i}" ' \
+              '"{file_o}"'.format(
+                  exe=GDALWARP_PATH,
+                  epsg=epsg_to,
+                  file_i=input_name.replace('"', '""'),
+                  file_o=output_name.replace('"', '""'))
+    # FullCmd = ' '.join([GDALWARP_PATH,
+    #                     '-overwrite -s_srs '
+    #                     '"+proj=sinu '
+    #                     '+lon_0=0 '
+    #                     '+x_0=0 '
+    #                     '+y_0=0 '
+    #                     '+a=6371007.181 '
+    #                     '+b=6371007.181 '
+    #                     '+units=m +no_defs"',
+    #                     '-t_srs EPSG:%s'
+    #                     ' -of GTiff' % (epsg_to), input_name, output_name])
+    Run_command_window(FullCmd)
 
     return output_name
 

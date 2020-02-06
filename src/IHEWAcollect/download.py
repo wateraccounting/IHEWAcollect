@@ -1171,6 +1171,78 @@ def main():
                 'e': '2008-01-09'
             },
             'nodata': -9999
+        },
+        '22a': {
+            'product': 'MOD16A2',
+            'version': 'v6',
+            'parameter': 'evapotranspiration',
+            'resolution': 'eight_daily',
+            'variable': 'ET',
+            'bbox': {
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': -9999
+        },
+        '22b': {
+            'product': 'MOD16A2',
+            'version': 'v6',
+            'parameter': 'evapotranspiration',
+            'resolution': 'eight_daily',
+            'variable': 'ETP',
+            'bbox': {
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': -9999
+        },
+        '23a': {
+            'product': 'MOD17A2H',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'eight_daily',
+            'variable': 'GPP',
+            'bbox': {
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': -9999
+        },
+        '24a': {
+            'product': 'MYD13',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'sixteen_daily',
+            'variable': 'NDVI',
+            'bbox': {
+                'w': -5.0,
+                'n': 10.0,
+                'e': 5.0,
+                's': 5.0
+            },
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-18'
+            },
+            'nodata': -9999
         }
     }
     # TODO, 20200129, QPan, SEBS (FEWS)

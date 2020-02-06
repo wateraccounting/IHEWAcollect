@@ -150,7 +150,7 @@ def download_product(latlim, lonlim, dates,
                      account, folder, product,
                      is_waitbar) -> int:
     # Define local variable
-    status = -1
+    status_cod = -1
     total = len(dates)
     cores = 1
 
@@ -167,7 +167,7 @@ def download_product(latlim, lonlim, dates,
             args = get_download_args(latlim, lonlim, date,
                                      account, folder, product)
 
-            status = start_download(args)
+            status_cod = start_download(args)
 
             # Update waitbar
             # if is_waitbar == 1:
@@ -176,14 +176,14 @@ def download_product(latlim, lonlim, dates,
             #                     prefix='Progress:', suffix='Complete',
             #                     length=50)
     else:
-        status = Parallel(n_jobs=cores)(
+        status_cod = Parallel(n_jobs=cores)(
             delayed(
                 start_download)(
                 get_download_args(
                     latlim, lonlim, date,
                     account, folder, product)) for date in dates)
 
-    return status
+    return status_cod
 
 
 def get_download_args(latlim, lonlim, date,
@@ -344,7 +344,7 @@ def start_download(args) -> int:
         data_ndv, data_type, data_multiplier, data_variable = args
 
     # Define local variable
-    status = -1
+    status_cod = -1
     remote_file_status = 0
     local_file_status = 0
 
@@ -442,11 +442,11 @@ def start_download(args) -> int:
     else:
         local_file_status = 0
 
-    status = remote_file_status + local_file_status
+    status_cod = remote_file_status + local_file_status
 
     msg = 'Finish'
     __this.Log.write(datetime.datetime.now(), msg=msg)
-    return status
+    return status_cod
 
 
 def start_download_scan(url, fname_r, lat, lon) -> tuple:
@@ -517,7 +517,7 @@ def convert_data(args):
         data_ndv, data_type, data_multiplier, data_variable = args
 
     # Define local variable
-    status = -1
+    status_cod = -1
     if abs(pixel_size - 231) < 1:
         pixel_size = 10.0 / 4800.0
     if abs(pixel_size - 463) < 1:
@@ -619,5 +619,5 @@ def convert_data(args):
     geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
     Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
-    status = 0
-    return status
+    status_cod = 0
+    return status_cod

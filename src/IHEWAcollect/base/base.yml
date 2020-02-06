@@ -4447,20 +4447,21 @@ products:
               dir: '/MOLT/MOD15A2H.006/{dtime:%Y.%m.%d}/'
               fname:
                 r: 'MOD15A2H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
-                t: null
+                t: 'MOD15A2H.A{dtime:%Y%j}.006.{ipart}.tif'
                 l: 'MOD15A2H_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
-                r: 'dtime.latlon'
-                t: null
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
                 l: 'dtime'
               ftype:
-                r: 'NetCDF.MOD_Grid_MOD15A2H.Data_Fields'
-                t: null
+                # r: 'NetCDF.MOD_Grid_MOD15A2H.Data_Fields'
+                r: 'HDF4'
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'ubyte'
-                t: null
+                t: 'float32'
                 l: 'float32'
               units:
                 r: '.'
@@ -4482,26 +4483,27 @@ products:
                 h: 43200
             Lai:
               variable: 'Lai_500m'
-              name: 'Eight Daily Fraction of Photosynthetically Active Radiation'
+              name: 'Eight Daily Leaf area index'
               description:
                 ''
               dir: '/MOLT/MOD15A2H.006/{dtime:%Y.%m.%d}/'
               fname:
                 r: 'MOD15A2H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
-                t: null
+                t: 'MOD15A2H.A{dtime:%Y%j}.006.{ipart}.tif'
                 l: 'MOD15A2H_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
-                r: 'dtime.latlon'
-                t: null
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
                 l: 'dtime'
               ftype:
-                r: 'NetCDF.MOD_Grid_MOD15A2H.Data_Fields'
-                t: null
+                # r: 'NetCDF.MOD_Grid_MOD15A2H.Data_Fields'
+                r: 'HDF4'
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'ubyte'
-                t: null
+                t: 'float32'
                 l: 'float32'
               units:
                 r: '.'
@@ -4561,29 +4563,70 @@ products:
           freq: '8D'
           variables:
             ET:
-              variable:
-                - 'ET_500m'
-                - 'PET_500m'
+              variable: 'ET_500m'
               name: 'Eight Daily Evapotranspiration'
               description:
                 ''
               dir: '/MOLT/MOD16A2.006/{dtime:%Y.%m.%d}/'
               fname:
                 r: 'MOD16A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
-                t: null
+                t: 'MOD16A2.A{dtime:%Y%j}.006.{ipart}.tif'
                 l: 'MOD16A2_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
-                r: 'dtime.latlon'
-                t: null
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
                 l: 'dtime'
               ftype:
-                r: 'NetCDF.MOD_Grid_MOD16A2.Data_Fields'
-                t: null
+                # r: 'NetCDF.MOD_Grid_MOD16A2.Data_Fields'
+                r: 'HDF4'
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'int16'
-                t: null
+                t: 'float32'
+                l: 'float32'
+              units:
+                r: 'kg.m2.8d'
+                l: 'mm.d'
+                m: 0.125
+              lat:
+                s: -10007554.677
+                n: 10007554.677
+                r: 463.31271653
+              lon:
+                w: -20015109.354
+                e: 20015109.354
+                r: 463.31271653
+              time:
+                s: 2001-01-01 00:00:00
+                e: null
+              dem:
+                w: 86400
+                h: 43200
+            ETP:
+              variable: 'PET_500m'
+              name: 'Eight Daily Potential Evapotranspiration'
+              description:
+                ''
+              dir: '/MOLT/MOD16A2.006/{dtime:%Y.%m.%d}/'
+              fname:
+                r: 'MOD16A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
+                t: 'MOD16A2.A{dtime:%Y%j}.006.{ipart}.tif'
+                l: 'MOD16A2_v6_._D-{dtime:%Y%m%d}.tif'
+              fmt:
+                d: 'dtime'
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
+                l: 'dtime'
+              ftype:
+                # r: 'NetCDF.MOD_Grid_MOD16A2.Data_Fields'
+                r: 'HDF4'
+                t: 'GTiff'
+                l: 'GTiff'
+              dtype:
+                r: 'int16'
+                t: 'float32'
                 l: 'float32'
               units:
                 r: 'kg.m2.8d'
@@ -4644,24 +4687,24 @@ products:
           freq: '8D'
           variables:
             GPP:
-              variable:
-                - 'Gpp_500m'
+              variable: 'Gpp_500m'
               name: 'Eight Daily Gross Primary Production'
               description:
                 ''
               dir: '/MOLT/MOD17A2H.006/{dtime:%Y.%m.%d}/'
               fname:
                 r: 'MOD17A2H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
-                t: null
+                t: 'MOD17A2H.A{dtime:%Y%j}.006.{ipart}.tif'
                 l: 'MOD17A2H_v6_kgC.m2_D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
-                r: 'dtime.latlon'
-                t: null
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
                 l: 'dtime'
               ftype:
-                r: 'NetCDF.MOD_Grid_MOD17A2H.Data_Fields'
-                t: null
+                # r: 'NetCDF.MOD_Grid_MOD17A2H.Data_Fields'
+                r: 'HDF4'
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'int16'
@@ -4688,6 +4731,7 @@ products:
 
   # Net Primary Production
   # e4ftl01.cr.usgs.gov
+  # unavailable
   MOD17A3H:
     # Terra MODIS Net Primary Production Yearly L4 Global 500 m SIN Grid products are currently
     # unavailable due to unexpected errors in the input data.
@@ -4725,28 +4769,28 @@ products:
           freq: '8D'
           variables:
             NPP:
-              variable:
-                - 'Gpp_500m'
+              variable: 'Npp_500m'
               name: 'Eight Daily Net Primary Production'
               description:
                 ''
               dir: '/MOLT/MOD17A3H.006/{dtime:%Y.%m.%d}/'
               fname:
                 r: 'MOD17A3H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
-                t: null
+                t: 'MOD17A3H.A{dtime:%Y%j}.006.{ipart}.tif'
                 l: 'MOD17A3H_v6_kgC.m2_D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
-                r: 'dtime.latlon'
-                t: null
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
                 l: 'dtime'
               ftype:
-                r: 'NetCDF.MOD_Grid_MOD17A3H.Data_Fields'
-                t: null
+                # r: 'NetCDF.MOD_Grid_MOD17A3H.Data_Fields'
+                r: 'HDF4'
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'int16'
-                t: null
+                t: 'float32'
                 l: 'float32'
               units:
                 r: 'kgC.m2'
@@ -4886,28 +4930,28 @@ products:
           freq: '16D'
           variables:
             NDVI:
-              variable:
-                - '250m_16_days_NDVI'
+              variable: '250m_16_days_NDVI'
               name: 'Sixteen Daily NDVI'
               description:
                 ''
               dir: '/MOLT/MOD13Q1.006/{dtime:%Y.%m.%d}/'
               fname:
                 r: 'MOD13Q1.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
-                t: null
+                t: 'MOD13Q1.A{dtime:%Y%j}.006.{ipart}.tif'
                 l: 'MOD13Q1_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
-                r: 'dtime.latlon'
-                t: null
+                r: 'dtime.latlon.ctime'
+                t: 'dtime.ipart'
                 l: 'dtime'
               ftype:
-                r: 'NetCDF.MODIS_Grid_16DAY_250m_500m_VI.Data_Fields'
-                t: null
+                # r: 'NetCDF.MODIS_Grid_16DAY_250m_500m_VI.Data_Fields'
+                r: 'HDF4'
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'int16'
-                t: null
+                t: 'float32'
                 l: 'float32'
               units:
                 r: '.'
