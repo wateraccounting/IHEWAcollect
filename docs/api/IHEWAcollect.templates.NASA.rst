@@ -20,6 +20,14 @@ IHEWAcollect.templates.NASA.GPM module
    :undoc-members:
    :show-inheritance:
 
+IHEWAcollect.templates.NASA.TRMM module
+---------------------------------------
+
+.. automodule:: IHEWAcollect.templates.NASA.TRMM
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------

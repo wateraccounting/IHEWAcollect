@@ -1341,6 +1341,24 @@ def main():
                 'e': '2008-01-02'
             },
             'nodata': -9999
+        },
+        '29a': {
+            'product': 'TWC',
+            'version': 'v1',
+            'parameter': 'water',
+            'resolution': '5m',
+            'variable': 'WPL',
+            'bbox': {
+                'w': -19.0,
+                'n': 38.0,
+                'e': 55.0,
+                's': -35.0
+            },
+            'period': {
+                's': None,
+                'e': None
+            },
+            'nodata': -9999
         }
     }
 

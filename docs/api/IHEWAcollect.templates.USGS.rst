@@ -20,6 +20,86 @@ IHEWAcollect.templates.USGS.FEWS module
    :undoc-members:
    :show-inheritance:
 
+IHEWAcollect.templates.USGS.MCD12Q1 module
+------------------------------------------
+
+.. automodule:: IHEWAcollect.templates.USGS.MCD12Q1
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IHEWAcollect.templates.USGS.MCD43A3 module
+------------------------------------------
+
+.. automodule:: IHEWAcollect.templates.USGS.MCD43A3
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IHEWAcollect.templates.USGS.MOD09GQ module
+------------------------------------------
+
+.. automodule:: IHEWAcollect.templates.USGS.MOD09GQ
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IHEWAcollect.templates.USGS.MOD10A2 module
+------------------------------------------
+
+.. automodule:: IHEWAcollect.templates.USGS.MOD10A2
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IHEWAcollect.templates.USGS.MOD11A2 module
+------------------------------------------
+
+.. automodule:: IHEWAcollect.templates.USGS.MOD11A2
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IHEWAcollect.templates.USGS.MOD13Q1 module
+------------------------------------------
+
+.. automodule:: IHEWAcollect.templates.USGS.MOD13Q1
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IHEWAcollect.templates.USGS.MOD15A2H module
+-------------------------------------------
+
+.. automodule:: IHEWAcollect.templates.USGS.MOD15A2H
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IHEWAcollect.templates.USGS.MOD16A2 module
+------------------------------------------
+
+.. automodule:: IHEWAcollect.templates.USGS.MOD16A2
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IHEWAcollect.templates.USGS.MOD17A2H module
+-------------------------------------------
+
+.. automodule:: IHEWAcollect.templates.USGS.MOD17A2H
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IHEWAcollect.templates.USGS.MYD13 module
+----------------------------------------
+
+.. automodule:: IHEWAcollect.templates.USGS.MYD13
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------

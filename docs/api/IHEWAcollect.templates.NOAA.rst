@@ -12,6 +12,14 @@ IHEWAcollect.templates.NOAA.CFSR module
    :undoc-members:
    :show-inheritance:
 
+IHEWAcollect.templates.NOAA.RFE module
+--------------------------------------
+
+.. automodule:: IHEWAcollect.templates.NOAA.RFE
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------

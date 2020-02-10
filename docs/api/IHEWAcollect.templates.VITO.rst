@@ -12,6 +12,14 @@ IHEWAcollect.templates.VITO.ASCAT module
    :undoc-members:
    :show-inheritance:
 
+IHEWAcollect.templates.VITO.PROBAV module
+-----------------------------------------
+
+.. automodule:: IHEWAcollect.templates.VITO.PROBAV
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------

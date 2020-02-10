@@ -44,6 +44,22 @@ IHEWAcollect.templates.IHE.HiHydroSoil module
    :undoc-members:
    :show-inheritance:
 
+IHEWAcollect.templates.IHE.SEBS module
+--------------------------------------
+
+.. automodule:: IHEWAcollect.templates.IHE.SEBS
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IHEWAcollect.templates.IHE.TWC module
+-------------------------------------
+
+.. automodule:: IHEWAcollect.templates.IHE.TWC
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------
