@@ -262,8 +262,8 @@ Read the Docs
 Upload to PyPI
 
 1. In IDE, **commit** the changes
-2. In IDE, add version tag, select **VCS -> Git -> tag**
-3. In IDE, **Version Control -> Log**, select this commit
+2. In IDE, **Version Control -> Log**, select this commit
+3. In IDE, add version tag, select **VCS -> Git -> tag**
 4. In IDE, **Tag window -> Tag Name**, type "**v0.0.1**"
 
 5. In cmd, build package, type ``python setup.py sdist bdist_wheel``
