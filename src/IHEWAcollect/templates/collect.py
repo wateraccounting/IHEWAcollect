@@ -72,7 +72,7 @@ def Convert_nc_to_tiff(input_nc, output_folder):
     return ()
 
 
-def Convert_grb2_to_nc(input_wgrib, output_nc, band):
+def Convert_grb2_to_nc(input_wgrib, output_nc, band, scale=1.0):
     # Get environmental variable
     # WA_env_paths = os.environ["GDAL_DRIVER"].split(';')
     # GDAL_env_path = WA_env_paths[0]
@@ -81,11 +81,13 @@ def Convert_grb2_to_nc(input_wgrib, output_nc, band):
 
     # Create command
     FullCmd = '{exe} ' \
+              '-a_scale {scale} ' \
               '-of netcdf ' \
               '-b {band} ' \
               '"{file_i}" ' \
               '"{file_o}"'.format(
                   exe=GDAL_TRANSLATE_PATH,
+                  scale=scale,
                   band=band,
                   file_i=input_wgrib.replace('"', '""'),
                   file_o=output_nc.replace('"', '""'))
@@ -99,7 +101,7 @@ def Convert_grb2_to_nc(input_wgrib, output_nc, band):
     return ()
 
 
-def Convert_adf_to_tiff(input_adf, output_tiff):
+def Convert_adf_to_tiff(input_adf, output_tiff, scale=1.0):
     """
     This function converts the adf files into tiff files
 
@@ -118,10 +120,13 @@ def Convert_adf_to_tiff(input_adf, output_tiff):
               '-co COMPRESS=DEFLATE ' \
               '-co PREDICTOR=1 ' \
               '-co ZLEVEL=1 ' \
+              '-a_scale {scale} ' \
+              '-ot Float32 ' \
               '-of GTiff ' \
               '"{file_i}" ' \
               '"{file_o}"'.format(
                   exe=GDAL_TRANSLATE_PATH,
+                  scale=scale,
                   file_i=input_adf.replace('"', '""'),
                   file_o=output_tiff.replace('"', '""'))
     # FullCmd = ('"%s" -co COMPRESS=DEFLATE -co PREDICTOR=1 -co '
@@ -152,7 +157,7 @@ def Convert_bil_to_tiff(input_bil, output_tiff):
 
 
 def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scaling_factor,
-                         geo_out):
+                         geo_out, scale=1.0):
     """
     This function converts the hdf5 files into tiff files
 
@@ -175,7 +180,7 @@ def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scaling_factor,
 
     if isinstance(Band, str):
         for i in range(0, len(g.GetSubDatasets()), 1):
-            if Band == g.GetSubDatasets()[i][0].split(':')[-1]:
+            if Band in g.GetSubDatasets()[i][0].split(':')[-1]:
                 Band_number = i
 
     name_in = g.GetSubDatasets()[Band_number][0]
@@ -189,10 +194,13 @@ def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scaling_factor,
     # run gdal translate command
     # os.path.join
     FullCmd = '{exe} ' \
+              '-a_scale {scale} ' \
+              '-ot Float32 ' \
               '-of GTiff ' \
               '"{file_i}" ' \
               '"{file_o}"'.format(
                   exe=GDAL_TRANSLATE_PATH,
+                  scale=scale,
                   file_i=name_in.replace('"', '""'),
                   file_o=Filename_tiff_end.replace('"', '""'))
     # FullCmd = '%s -of GTiff %s %s' % (GDAL_TRANSLATE_PATH, name_in, Filename_tiff_end)
@@ -253,7 +261,7 @@ def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scaling_factor,
 #     return ()
 
 
-def Extract_Data(input_file, output_folder):
+def Extract_Data_zip(input_file, output_folder):
     """
     This function extract the zip files
 
@@ -1060,7 +1068,7 @@ def Open_nc_dict(input_netcdf, group_name, startdate='', enddate=''):
     return (dictionary)
 
 
-def Clip_Dataset_GDAL(input_name, output_name, latlim, lonlim):
+def Clip_Dataset_GDAL(input_name, output_name, latlim, lonlim, scale=1.0):
     """
     Clip the data to the defined extend of the user (latlim, lonlim)
      by using the gdal_translate executable of gdal.
@@ -1080,6 +1088,8 @@ def Clip_Dataset_GDAL(input_name, output_name, latlim, lonlim):
     # find path to the executable
     FullCmd = '{exe} ' \
               '-projwin {lon_w} {lat_n} {lon_e} {lat_s} ' \
+              '-a_scale {scale} ' \
+              '-ot Float32 ' \
               '-of GTiff ' \
               '"{file_i}" ' \
               '"{file_o}"'.format(
@@ -1087,7 +1097,8 @@ def Clip_Dataset_GDAL(input_name, output_name, latlim, lonlim):
                   lon_w=lonlim[0],
                   lat_n=latlim[1],
                   lon_e=lonlim[1],
-                  lat_s=latlim[1],
+                  lat_s=latlim[0],
+                  scale=scale,
                   file_i=input_name.replace('"', '""'),
                   file_o=output_name.replace('"', '""'))
     # FullCmd = ' '.join([

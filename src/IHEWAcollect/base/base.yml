@@ -5014,14 +5014,15 @@ products:
           freq: 'D'
           variables:
             NDVI:
-              variable: null
+              # variable: '//LEVEL3/NDVI/NDVI'
+              variable: 'NDVI'
               name: 'Daily NDVI'
               description:
                 ''
               dir: '/PDF/datapool/Free_Data/PROBA-V_100m/S1_TOC_100_m_C1/{dtime:%Y/%m/%d}/PV_S1_TOC-{dtime:%Y%m%d}_100M_V101/'
               fname:
-                r: 'PROBAV_S1_TOC_{lon}{lat}_{dtime:%Y%m%d}_100M_V101_NDVI.HDF5'
-                t: 'PROBAV_S1_TOC_{dtime:%Y%m%d}_100M_V101_NDVI.{ipart}.HDF5'
+                r: 'PROBAV_S1_TOC_{lon}{lat}_{dtime:%Y%m%d}_100M_V101.HDF5'
+                t: 'PROBAV_S1_TOC_{dtime:%Y%m%d}_100M_V101.{ipart}.tif'
                 l: 'PROBAV_v1.01_._D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
@@ -5172,7 +5173,7 @@ products:
           freq: 'MS'
           variables:
             ETM:
-              variable: null
+              variable: 'ETm'
               name: 'Monthly Enhanced Thematic Mapper'
               description:
                 ''
@@ -5219,7 +5220,7 @@ products:
   # BDRLOG, CLYPPT, CRFVOL, SLTPPT, SNDPPT
   #  multiplier: ubyte to float32, 0.01 => percent
   SoilGrids:
-    account: null'
+    account: null
     template: 'ISRIC'
     meta:
       owner: 'ISRIC - World Soil Information'
@@ -7593,20 +7594,21 @@ products:
               dir: '/data/TRMM_L3/TRMM_3B43.7/{dtime:%Y}/'
               fname:
                 r: '3B43.{dtime:%Y%m01}.7.HDF'
-                t: null
+                t: '3B43.{dtime:%Y%m01}.7.tif'
                 l: 'TRMM_v7_mm.d_MS-{dtime:%Y%m}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
-                t: null
+                t: 'dtime'
                 l: 'dtime'
               ftype:
-                r: 'NetCDF.Grid'
-                t: null
+                # r: 'NetCDF.Grid'
+                r: 'HDF4'
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'float32'
-                t: null
+                t: 'float32'
                 l: 'float32'
               units:
                 r: 'mm.hr'
@@ -7643,20 +7645,21 @@ products:
               dir: '/data/TRMM_L3/TRMM_3B43.7/{dtime:%Y}/'
               fname:
                 r: '3B43.{dtime:%Y%m01}.7A.HDF'
-                t: null
+                t: '3B43.{dtime:%Y%m01}.7A.tif'
                 l: 'TRMM_v7_mm.d_MS-{dtime:%Y%m}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
-                t: null
+                t: 'dtime'
                 l: 'dtime'
               ftype:
-                r: 'NetCDF.Grid'
-                t: null
+                # r: 'NetCDF.Grid'
+                r: 'HDF4'
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'float32'
-                t: null
+                t: 'float32'
                 l: 'float32'
               units:
                 r: 'mm.hr'

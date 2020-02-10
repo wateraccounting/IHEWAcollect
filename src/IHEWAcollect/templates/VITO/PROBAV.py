@@ -10,7 +10,7 @@ import datetime
 import re
 from bs4 import BeautifulSoup
 import requests
-# from requests.auth import HTTPBasicAuth => .netrc
+from requests.auth import HTTPBasicAuth
 from joblib import Parallel, delayed
 
 import numpy as np
@@ -361,6 +361,7 @@ def start_download(args) -> int:
         # Download the data from server if the file not exists
         remote_fnames, remote_files, lonlat = start_download_tiles(date,
                                                                    url_server, url_dir,
+                                                                   username, password,
                                                                    latlim, lonlim,
                                                                    remote_fname,
                                                                    remote_file)
@@ -385,13 +386,13 @@ def start_download(args) -> int:
             if is_download:
                 # https://disc.gsfc.nasa.gov/data-access#python
                 # C:\Users\qpa001\.netrc
-                file_conn_auth = os.path.join(os.path.expanduser("~"), ".netrc")
-                with open(file_conn_auth, 'w+') as fp:
-                    fp.write('machine {m} login {u} password {p}\n'.format(
-                        m='urs.earthdata.nasa.gov',
-                        u=username,
-                        p=password
-                    ))
+                # file_conn_auth = os.path.join(os.path.expanduser("~"), ".netrc")
+                # with open(file_conn_auth, 'w+') as fp:
+                #     fp.write('machine {m} login {u} password {p}\n'.format(
+                #         m='urs.earthdata.nasa.gov',
+                #         u=username,
+                #         p=password
+                #     ))
 
                 url = '{sr}{dr}{fl}'.format(sr=url_server,
                                             dr=url_dir,
@@ -400,8 +401,16 @@ def start_download(args) -> int:
 
                 try:
                     # Connect to server
-                    conn = requests.get(url)
-                    conn.raise_for_status()
+                    try:
+                        conn = requests.get(url, auth=HTTPBasicAuth(username, password))
+                    except BaseException:
+                        from requests.packages.urllib3.exceptions \
+                            import InsecureRequestWarning
+                        requests.packages.urllib3.disable_warnings(
+                            InsecureRequestWarning)
+                        conn = requests.get(url, auth=(username, password),
+                                            verify=False)
+                    # conn.raise_for_status()
                 except requests.exceptions.RequestException as err:
                     # Connect error
                     msg = 'Not able to download {fn}, from {sr}{dr}'.format(
@@ -449,25 +458,36 @@ def start_download(args) -> int:
     return status_cod
 
 
-def start_download_scan(url, fname_r, lat, lon) -> tuple:
+def start_download_scan(url, username, password,
+                        lat, lon) -> tuple:
     """Scan tile name
     """
     ctime = ''
 
-    # Get files on FTP server
-    conn = requests.get(url)
+    # Connect to server
+    try:
+        conn = requests.get(url, auth=HTTPBasicAuth(username, password))
+    except BaseException:
+        from requests.packages.urllib3.exceptions \
+            import InsecureRequestWarning
+        requests.packages.urllib3.disable_warnings(
+            InsecureRequestWarning)
+        conn = requests.get(url, auth=(username, password),
+                            verify=False)
+    conn.raise_for_status()
 
     # Sum all the files on the server
-    soup = BeautifulSoup(conn.content, "lxml")
+    soup = BeautifulSoup(conn.content, "html.parser")
     for ele in soup.findAll('a', attrs={'href': re.compile('(?i)(HDF5)$')}):
-        # print('{lon}{lat}'.format(lat=lat, lon=lon) == ele['href'].split('_')[-3], ele)
-        if '{lon}{lat}'.format(lat=lat, lon=lon) == ele['href'].split('_')[-3]:
-            ctime = ele['href'].split('_')[-2]
+        # print('{lon}{lat}'.format(lat=lat, lon=lon) == ele['href'].split('_')[-4],
+        #       ele)
+        if '{lon}{lat}'.format(lat=lat, lon=lon) == ele['href'].split('_')[-4]:
+            ctime = ele['href'].split('_')[-3]
 
     return ctime
 
 
-def start_download_tiles(date, url_server, url_dir,
+def start_download_tiles(date, url_server, url_dir, username, password,
                          latlim, lonlim, fname_r, file_r) -> tuple:
     """Get tile name
     """
@@ -491,7 +511,7 @@ def start_download_tiles(date, url_server, url_dir,
             string_lat = 'Y{:02d}'.format(lat_step)
             lonlat.append([lon_step * 10.0 - 180.0, 90.0 - lat_step * 10.0])
 
-            ctime = start_download_scan(url, fname_r,
+            ctime = start_download_scan(url, username, password,
                                         string_lat, string_long)
 
             if ctime != '':
@@ -538,6 +558,7 @@ def convert_data(args):
     # From downloaded remote file
     remote_fnames, remote_files, lonlat = start_download_tiles(date,
                                                                url_server, url_dir,
+                                                               username, password,
                                                                latlim, lonlim,
                                                                remote_fname,
                                                                remote_file)
@@ -567,11 +588,11 @@ def convert_data(args):
         data_tmp, geo_one = Clip_Data(temp_file_part, latmerge, lonmerge)
 
         y_start = int((geo_one[3] - latlim[1]) / geo_one[5])
-        y_end = int(y_start + np.shape(data_tmp)[0])
+        y_end = np.minimum(np.shape(data)[0], y_start + np.shape(data_tmp)[0])
         x_start = int((geo_one[0] - lonlim[0]) / geo_one[1])
-        x_end = int(x_start + np.shape(data_tmp)[1])
+        x_end = np.minimum(np.shape(data)[1], x_start + np.shape(data_tmp)[1])
 
-        data[y_start:y_end, x_start:x_end] = data_tmp
+        data[y_start:y_end, x_start:x_end] = data_tmp[y_start:y_end, x_start:x_end]
 
         # Convert meta data to float
         # if np.logical_or(isinstance(data_raw_missing, str),

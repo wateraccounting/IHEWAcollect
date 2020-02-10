@@ -2,6 +2,8 @@
 """
 
 """
+import glob
+import urllib
 # General modules
 import os
 import sys
@@ -19,7 +21,7 @@ import gdal
 try:
     from ..collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
-        Extract_Data, Convert_adf_to_tiff, Convert_bil_to_tiff, Open_array_info, Clip_Data
+        Extract_Data_zip, Convert_adf_to_tiff, Convert_bil_to_tiff, Open_array_info, Clip_Data
     from ..gis import GIS
     from ..dtime import Dtime
     from ..util import Log
@@ -115,7 +117,7 @@ def DownloadData(status, conf) -> int:
                                                    para_name, resolution)
 
             # extract zip data
-            Extract_Data(output_file, output_folder_trash)
+            Extract_Data_zip(output_file, output_folder_trash)
 
             # Converts the data with a adf extention to a tiff extension.
             # The input is the file name and in which directory the data must be stored

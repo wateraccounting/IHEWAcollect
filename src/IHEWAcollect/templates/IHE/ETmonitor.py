@@ -464,6 +464,8 @@ def convert_data(args):
     # --------- #
     # Clip data #
     # --------- #
+    Clip_Dataset_GDAL(remote_file, local_file, latlim, lonlim, data_multiplier)
+
     # get data to 2D matrix
     # data_tmp = data_raw[y_id[0]:y_id[1], x_id[0]:x_id[1]]
     # # data_tmp = np.squeeze(data_tmp, axis=0)
@@ -495,8 +497,25 @@ def convert_data(args):
     # #   |      |
     # # [e,s]--[e,n]
     # # data = np.rot90(data, k=1, axes=(0, 1))
-
-    Clip_Dataset_GDAL(temp_file_part, local_file, latlim, lonlim)
+    #
+    # # close file
+    # # fh.close()
+    #
+    # # ------- #
+    # # Convert #
+    # # ------- #
+    # # scale, units
+    # # data[data < 0] = data_ndv
+    # data = data * data_multiplier
+    #
+    # # novalue data
+    # # data[data == np.nan] = data_ndv
+    #
+    # # ------------ #
+    # # Saveas GTiff #
+    # # ------------ #
+    # geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
+    # Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
     status_cod = 0
     return status_cod

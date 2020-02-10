@@ -313,12 +313,12 @@ class User(Base):
             with open(file_org, 'rb') as fp_in:
                 data = fp_in.read()
 
-            with open(file_enc, 'wb') as fp_out:
+            with open(file_enc, 'wb', buffering=0) as fp_out:
                 fernet = Fernet(key)
                 encrypted = fernet.encrypt(data)
                 fp_out.write(encrypted)
 
-            with open(file_crd, 'w') as fp_out:
+            with open(file_crd, 'w', buffering=0) as fp_out:
                 fp_out.write('# password should be deleted!\n')
                 fp_out.write('# password: "{}"\n'.format(pswd.decode()))
                 fp_out.write('key: "{}"\n'.format(key.decode()))
