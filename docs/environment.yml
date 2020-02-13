@@ -1,11 +1,11 @@
 name: _IHEWAcollect
 channels:
-- defaults
-- conda-forge
+  - defaults
+  - conda-forge
 dependencies:
-- python>=3.6
-- numpy=1.16.*
-- pandas=0.24.*
-- libgdal=3.0.*
-- gdal=3.0.*
-- pyyaml=5.1
+  - python>=3.6
+  - numpy=1.16.*
+  - pandas=0.24.*
+  - libgdal=3.0.*
+  - gdal=3.0.*
+  - pyyaml=5.1
