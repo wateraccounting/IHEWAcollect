@@ -18,8 +18,8 @@ also be used as template for Python modules.
 """
 
 import argparse
-import sys
 import logging
+import sys
 
 from IHEWAcollect import __version__
 

@@ -12,7 +12,6 @@
     e.g. 0.0.1 or 0.1.
 """
 import sys
-
 from pkg_resources import VersionConflict, require
 from setuptools import setup
 

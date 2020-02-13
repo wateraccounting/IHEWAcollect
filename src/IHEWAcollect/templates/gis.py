@@ -28,12 +28,13 @@ in the ``WaterAccounting/accounts.yml`` file.
     #. Save key to ``credential.yml``.
 
 """
-import os
 # import sys
 import inspect
+import os
 import subprocess
 
 import numpy as np
+
 # import pandas as pd
 
 try:

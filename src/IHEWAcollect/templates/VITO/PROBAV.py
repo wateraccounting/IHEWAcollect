@@ -2,19 +2,19 @@
 """
 
 """
+import datetime
 # General modules
 import os
-import sys
-import datetime
-
 import re
-from bs4 import BeautifulSoup
-import requests
-from requests.auth import HTTPBasicAuth
-from joblib import Parallel, delayed
+import sys
 
 import numpy as np
 import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+from joblib import Parallel, delayed
+from requests.auth import HTTPBasicAuth
+
 # from netCDF4 import Dataset
 
 # IHEWAcollect Modules
@@ -592,7 +592,8 @@ def convert_data(args):
         x_start = int((geo_one[0] - lonlim[0]) / geo_one[1])
         x_end = np.minimum(np.shape(data)[1], x_start + np.shape(data_tmp)[1])
 
-        data[y_start:y_end, x_start:x_end] = data_tmp[y_start:y_end, x_start:x_end]
+        data[y_start:y_end, x_start:x_end] = data_tmp[0:(y_end - y_start),
+                                                      0:(x_end - x_start)]
 
         # Convert meta data to float
         # if np.logical_or(isinstance(data_raw_missing, str),

@@ -1,5 +1,6 @@
-import os
+# -*- coding: utf-8 -*-
 import inspect
+import os
 
 import IHEWAcollect
 

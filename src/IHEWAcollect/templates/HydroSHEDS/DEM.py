@@ -2,20 +2,21 @@
 """
 
 """
+import datetime
 import glob
-import urllib
 # General modules
 import os
 import sys
-import datetime
+import urllib
 
+import gdal
+import numpy as np
 import requests
+
 # from requests.auth import HTTPBasicAuth => .netrc
 # from joblib import Parallel, delayed
 
-import numpy as np
 
-import gdal
 
 # IHEWAcollect Modules
 try:
@@ -191,8 +192,7 @@ def DownloadData(status, conf) -> int:
                           0.0, -0.0008333333333333333333]
 
                 # save chunk as tiff file
-                Save_as_tiff(name=output_tiff, data=data, geo=geo_in,
-                                projection="WGS84")
+                Save_as_tiff(name=output_tiff, data=data, geo=geo_in, projection="WGS84")
 
         except:
 
@@ -227,8 +227,7 @@ def DownloadData(status, conf) -> int:
                           0.0, -0.0008333333333333333333]
 
                 # save chunk as tiff file
-                Save_as_tiff(name=output_tiff, data=data, geo=geo_in,
-                                projection="WGS84")
+                Save_as_tiff(name=output_tiff, data=data, geo=geo_in, projection="WGS84")
 
             if resolution == '15s':
                 print('no 15s data is in dataset')
@@ -236,7 +235,7 @@ def DownloadData(status, conf) -> int:
         if resolution == '3s':
 
             # clip data
-            Data, Geo_data = clip_data(output_tiff, latlim, lonlim)
+            Data, Geo_data = Clip_Data(output_tiff, latlim, lonlim)
             size_Y_out = int(np.shape(Data)[0])
             size_X_out = int(np.shape(Data)[1])
 
@@ -257,8 +256,7 @@ def DownloadData(status, conf) -> int:
             nameResults.append(str(nameForEnd))
 
             # save chunk as tiff file
-            Save_as_tiff(name=nameForEnd, data=Data, geo=Geo_data,
-                            projection="WGS84")
+            Save_as_tiff(name=nameForEnd, data=Data, geo=Geo_data, projection="WGS84")
 
     if resolution == '3s':
         # size_X_end = int(size_X_tot) #!

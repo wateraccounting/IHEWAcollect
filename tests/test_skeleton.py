@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+
 from IHEWAcollect.scripts.skeleton import fib
 
 __author__ = "Quan Pan"

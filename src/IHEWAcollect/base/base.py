@@ -18,13 +18,15 @@ in the ``IHEWAcollect/accounts.yml`` file.
     from IHEWAcollect.base.base import Base
     base = Base(is_print=True)
 """
+import inspect
 import os
 import sys
-import inspect
+
+import yaml
+
 # import shutil
 # import datetime
 
-import yaml
 
 # try:
 #     # setup.py

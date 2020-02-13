@@ -96,7 +96,7 @@ cd /notebooks
 gdalinfo --version
 GDAL 3.1.0dev-650fc42f344a6a4c65f11eefc47c473e9b445a68, released 2019/08/25
 
-python3 wa_gdalwarp.py 
+python3 wa_gdalwarp.py
 ```
 
 ## Copy data to docker

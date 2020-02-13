@@ -2,18 +2,19 @@
 """
 
 """
+import datetime
+import ftplib
 # General modules
 import os
 import sys
-import datetime
-
-import ftplib
 from urllib.parse import urlparse
-# from joblib import Parallel, delayed
 
 import numpy as np
 import pandas as pd
 import scipy.io as spio
+
+# from joblib import Parallel, delayed
+
 
 # IHEWAcollect Modules
 try:
@@ -514,4 +515,3 @@ def convert_data(args):
 
     status_cod = 0
     return status_cod
-

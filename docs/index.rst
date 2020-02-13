@@ -245,6 +245,22 @@ Format scripts by PEP8
 
     $ autopep8 --in-place --aggressive src/IHEWAcollect/base/base.py
 
+Flake8, pre-commit
+
+.. code-block:: console
+
+    $ pre-commit install
+
+    $ pre-commit run --all-files
+    [INFO] Initializing environment for git://github.com/pre-commit/pre-commit-hooks.
+    [INFO] Initializing environment for https://github.com/pre-commit/mirrors-isort.
+    [INFO] Installing environment for git://github.com/pre-commit/pre-commit-hooks.
+    [INFO] Once installed this environment will be reused.
+    [INFO] This may take a few minutes...
+    [INFO] Installing environment for https://github.com/pre-commit/mirrors-isort.
+    [INFO] Once installed this environment will be reused.
+    [INFO] This may take a few minutes...
+
 Unit test
 
 .. code-block:: console
@@ -261,7 +277,7 @@ Read the Docs
 
 Upload to PyPI
 
-1. In IDE, **commit** the changes
+1. In IDE, **commit** the changes "**v0.0.1**"
 2. In IDE, **Version Control -> Log**, select this commit
 3. In IDE, add version tag, select **VCS -> Git -> tag**
 4. In IDE, **Tag window -> Tag Name**, type "**v0.0.1**"

@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
-import os
-import sys
 import glob
-import subprocess
-import time
-
 import gzip
-import zipfile
+import os
+import subprocess
+import sys
 import tarfile
-
-import pandas as pd
-import numpy as np
-import scipy.interpolate
+import time
+import zipfile
 
 import netCDF4
-
+import numpy as np
+import pandas as pd
+import scipy.interpolate
 from pyproj import Proj, transform
+
 try:
     import gdal
     import osr

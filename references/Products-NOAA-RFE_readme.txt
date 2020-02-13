@@ -1,12 +1,12 @@
 #
-# This is the README file for the Rainfall Estimator (RFE) for data over Africa.  
-# 
+# This is the README file for the Rainfall Estimator (RFE) for data over Africa.
+#
 
 OVERVIEW:
 
 - The RFE algorithm is based on the PingPing Xie method currently being employed
 as an operational product at the NOAA/Climate Prediction Center in association
-with USAID/FEWS-NET. Maps of rainfall estimates over varying timescales may be 
+with USAID/FEWS-NET. Maps of rainfall estimates over varying timescales may be
 found at:
 
 http://www.cpc.ncep.noaa.gov/products/international/africa/africa.shtml
@@ -18,21 +18,21 @@ Caveats with Data: Updated April, 2010
 - There are some days in 2005 where daily RFE estimates exceed
 the 300mm threshold for a limited number of pixels. Please include any
 conditional statements to remove and/or substitute these pixels upon reading
-the binary data.   
+the binary data.
 
 
-1.  filename 
-    
-    all_products.bin.YYYYMMDD 
+1.  filename
+
+    all_products.bin.YYYYMMDD
 
     YYYY == 4 digit year
     MM   == month
-    DD   == date 
+    DD   == date
 
-2.  description of the data 
-    
-    content: 
-    rain  ==   daily precipitation analysis by merging       
+2.  description of the data
+
+    content:
+    rain  ==   daily precipitation analysis by merging
                GTS gauge observations and  3 kinds of satellite estimates.
                (GPI,SSM/I and AMSU) Units are in millimeters (mm)
 
@@ -44,29 +44,21 @@ the binary data.
     encompassing the Africa continent.  Missing data is denoted as -999.0.
 
 
-3.  example program   
-    
-c     program     :     example.f  
-c     objective   :     to read the daily estimates  
-c 
-      dimension    rain(751,801) 
+3.  example program
+
+c     program     :     example.f
+c     objective   :     to read the daily estimates
 c
-c     1.  to open the data file 
+      dimension    rain(751,801)
 c
-      open  (unit=10,file='all_products.bin.20000601', 
-     #       access='direct',status='readonly',recl=751*801) 
+c     1.  to open the data file
 c
-c     2.  to read the data 
-c 
-      read (10,rec=1)   rain 
+      open  (unit=10,file='all_products.bin.20000601',
+     #       access='direct',status='readonly',recl=751*801)
 c
-      stop 
-      end  
-
-  
-
-
-
-
-
-        
+c     2.  to read the data
+c
+      read (10,rec=1)   rain
+c
+      stop
+      end

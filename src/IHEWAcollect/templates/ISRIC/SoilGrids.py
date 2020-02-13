@@ -2,17 +2,18 @@
 """
 
 """
+import datetime
 # General modules
 import os
 import sys
-import datetime
-
-import requests
-from requests.auth import HTTPBasicAuth
-# from joblib import Parallel, delayed
 
 import numpy as np
 import pandas as pd
+import requests
+from requests.auth import HTTPBasicAuth
+
+# from joblib import Parallel, delayed
+
 
 # IHEWAcollect Modules
 try:
@@ -519,4 +520,3 @@ def convert_data(args):
 
     status_cod = 0
     return status_cod
-

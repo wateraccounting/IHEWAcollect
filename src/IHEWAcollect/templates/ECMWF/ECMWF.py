@@ -2,22 +2,20 @@
 """
 
 """
+import datetime
 # General modules
 import os
 import sys
-import datetime
-
-import requests
-# from requests.auth import HTTPBasicAuth
-from joblib import Parallel, delayed
 
 import numpy as np
 import pandas as pd
-from netCDF4 import Dataset
-
+import requests
+import watools.Collect.ECMWF.ECMWFdownload as Download
 # Water Accounting modules
 import watools.General.data_conversions as DC
-import watools.Collect.ECMWF.ECMWFdownload as Download
+# from requests.auth import HTTPBasicAuth
+from joblib import Parallel, delayed
+from netCDF4 import Dataset
 
 
 def DownloadData(Dir, Var, Startdate, Enddate, latlim, lonlim, Waitbar, cores,

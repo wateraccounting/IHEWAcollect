@@ -28,19 +28,21 @@ in the ``accounts.yml`` file.
     #. Save key to ``credential.yml``.
 
 """
+import base64
+import inspect
 import os
 import sys
-import inspect
-# import shutil
-# import datetime
 
 import yaml
-
-import base64
 from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+
+# import shutil
+# import datetime
+
+
 
 try:
     from .base.exception import IHEClassInitError,\
