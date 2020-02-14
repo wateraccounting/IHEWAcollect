@@ -1,10 +1,19 @@
 # -*- coding: utf-8 -*-
+"""
+**Dtime**
 
-import datetime
-# -*- coding: utf-8 -*-
-# import sys
+**Examples:**
+::
+
+    import os
+    from IHEWAcollect.base.dtime import Dtime
+    dtime = Dtime(workspace=path, is_print=True)
+"""
 import inspect
 import os
+# import sys
+# import shutil
+import datetime
 
 import numpy as np
 import pandas as pd
@@ -141,7 +150,7 @@ class Dtime(object):
         return dtime_r
 
 
-def main():
+if __name__ == "__main__":
     from pprint import pprint
 
     # @classmethod
@@ -165,7 +174,3 @@ def main():
     # Dtime methods
     # print('\ndtime.Base.get_status()\n=====')
     # pprint(dtime.get_status())
-
-
-if __name__ == "__main__":
-    main()

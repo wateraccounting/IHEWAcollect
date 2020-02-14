@@ -2,39 +2,22 @@
 """
 **GIS**
 
-`Restrictions`
-
-The data and this python file may not be distributed to others without
-permission of the WA+ team.
-
-`Description`
-
-Before use this module, set account information
-in the ``WaterAccounting/accounts.yml`` file.
-
 **Examples:**
 ::
 
     import os
     from IHEWAcollect.base.gis import GIS
-    gis = GIS(os.getcwd(), is_print=True)
-
-.. note::
-
-    1. Create ``accounts.yml`` under root folder of the project,
-       based on the ``config-example.yml``.
-    #. Run ``Collect.credential.encrypt_cfg(path, file, password)``
-       to generate ``accounts.yml-encrypted`` file.
-    #. Save key to ``credential.yml``.
-
+    gis = GIS(workspace=path, is_print=True)
 """
-# import sys
 import inspect
 import os
+# import sys
+# import shutil
+# import datetime
+
 import subprocess
 
 import numpy as np
-
 # import pandas as pd
 
 try:

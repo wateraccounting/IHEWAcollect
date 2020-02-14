@@ -2,16 +2,17 @@
 """
 
 """
-import datetime
 # General modules
 import os
 import sys
+import datetime
+
+import paramiko
 from urllib.parse import urlparse
+from joblib import Parallel, delayed
 
 import numpy as np
 import pandas as pd
-import paramiko
-from joblib import Parallel, delayed
 from netCDF4 import Dataset
 
 # IHEWAcollect Modules

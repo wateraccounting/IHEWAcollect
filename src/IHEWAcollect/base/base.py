@@ -2,31 +2,20 @@
 """
 **Base**
 
-`Restrictions`
-
-The data and this python file may not be distributed to others without
-permission of the WA+ team.
-
-`Description`
-
-Before use this module, set account information
-in the ``IHEWAcollect/accounts.yml`` file.
-
 **Examples:**
 ::
 
-    from IHEWAcollect.base.base import Base
-    base = Base(is_print=True)
+    from IHEWAcollect.base import Base
+
+    base = Base(product='CFSR', is_print=True)
 """
 import inspect
 import os
 import sys
-
-import yaml
-
 # import shutil
 # import datetime
 
+import yaml
 
 # try:
 #     # setup.py
@@ -63,6 +52,8 @@ except ImportError:
 
 class Base(object):
     """This Base class
+
+    Load base.yml file.
 
     Args:
         product (str): Product name of data products.
@@ -285,7 +276,7 @@ class Base(object):
         return cls(is_print).get_conf(key)
 
 
-def main():
+if __name__ == "__main__":
     from pprint import pprint
 
     print('\n__location__\n=====')
@@ -321,7 +312,3 @@ def main():
     # pprint(base._Base__conf)
 
     # # Base methods
-
-
-if __name__ == "__main__":
-    main()

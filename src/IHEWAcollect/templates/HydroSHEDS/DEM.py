@@ -2,21 +2,19 @@
 """
 
 """
-import datetime
 import glob
 # General modules
 import os
 import sys
+import datetime
+
 import urllib
-
-import gdal
-import numpy as np
 import requests
-
 # from requests.auth import HTTPBasicAuth => .netrc
 # from joblib import Parallel, delayed
 
-
+import gdal
+import numpy as np
 
 # IHEWAcollect Modules
 try:

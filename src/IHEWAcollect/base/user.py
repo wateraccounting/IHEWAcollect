@@ -2,47 +2,37 @@
 """
 **Accounts**
 
-`Restrictions`
-
-The data and this python file may not be distributed to others without
-permission of the WA+ team.
-
-`Description`
-
-Before use this module, set account information
-in the ``accounts.yml`` file.
+Before use this module, set account information in the ``accounts.yml`` file.
 
 **Examples:**
 ::
 
-    import os
     from IHEWAcollect.base.accounts import Accounts
-    accounts = Accounts(os.getcwd(), 'FTP_WA_GUESS', is_print=True)
+
+    accounts = Accounts(workspace=path, product='CFSR', is_print=True)
 
 .. note::
 
     1. Create ``accounts.yml`` under root folder of the project,
        based on the ``config-example.yml``.
-    #. Run ``Accounts.credential.encrypt_cfg(path, file, password)``
+    2. Run ``User.credential.encrypt_cfg(path, file, password)``
        to generate ``accounts.yml-encrypted`` file.
-    #. Save key to ``credential.yml``.
+    3. Save key to ``credential.yml``.
 
 """
-import base64
 import inspect
 import os
 import sys
+# import shutil
+# import datetime
 
 import yaml
+
+import base64
 from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-
-# import shutil
-# import datetime
-
-
 
 try:
     from .base.exception import IHEClassInitError,\

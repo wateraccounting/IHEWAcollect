@@ -2,19 +2,19 @@
 """
 
 """
-import datetime
 # General modules
 import os
-import re
 import sys
+import datetime
 
+from bs4 import BeautifulSoup
+import requests
+from requests.auth import HTTPBasicAuth
+from joblib import Parallel, delayed
+
+import re
 import numpy as np
 import pandas as pd
-import requests
-from bs4 import BeautifulSoup
-from joblib import Parallel, delayed
-from requests.auth import HTTPBasicAuth
-
 # from netCDF4 import Dataset
 
 # IHEWAcollect Modules
