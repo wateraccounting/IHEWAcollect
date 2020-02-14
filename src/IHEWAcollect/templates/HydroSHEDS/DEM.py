@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """
+**DEM Module**
 
 """
 import glob
@@ -54,8 +55,7 @@ def _init(status, conf):
 
 
 def DownloadData(status, conf) -> int:
-    """
-    This function downloads DEM data from HydroSHED
+    """This is main interface.
 
     Args:
       status (dict): Status.

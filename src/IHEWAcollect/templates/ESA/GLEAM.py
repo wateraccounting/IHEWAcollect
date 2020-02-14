@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """
+**GLEAM Module**
 
 """
 # General modules
@@ -53,8 +54,7 @@ def _init(status, conf):
 
 
 def DownloadData(status, conf) -> int:
-    """
-    This function downloads GLEAM ET data
+    """This is main interface.
 
     Args:
         status (dict): Status.

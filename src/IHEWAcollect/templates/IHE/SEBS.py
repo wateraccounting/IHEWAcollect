@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """
+**SEBS Module**
 
 """
 # General modules
@@ -53,10 +54,7 @@ def _init(status, conf):
 
 
 def DownloadData(status, conf) -> int:
-    """
-    This scripts downloads CMRSET ET data from the UNESCO-IHE ftp server.
-    The output files display the total ET in mm for a period of one month.
-    The name of the file corresponds to the first day of the month.
+    """This is main interface.
 
     Args:
         status (dict): Status.

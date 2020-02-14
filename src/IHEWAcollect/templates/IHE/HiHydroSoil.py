@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """
+**HiHydroSoil Module**
 
 """
 # General modules
@@ -52,9 +53,7 @@ def _init(status, conf):
 
 
 def DownloadData(status, conf) -> int:
-    """
-    This scripts downloads HiHydroSoil Saturated Theta soil data
-    from the UNESCO-IHE ftp server.
+    """This is main interface.
 
     Args:
         status (dict): Status.

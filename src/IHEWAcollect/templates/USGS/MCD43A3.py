@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """
+**MCD43A3 Module**
 
 """
 # General modules
@@ -57,8 +58,7 @@ def _init(status, conf):
 
 
 def DownloadData(status, conf) -> int:
-    """
-    This function downloads GLEAM ET data
+    """This is main interface.
 
     Args:
         status (dict): Status.

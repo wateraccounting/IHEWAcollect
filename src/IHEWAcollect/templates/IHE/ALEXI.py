@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """
+**ALEXI Module**
 
 """
 # General modules
@@ -56,11 +57,7 @@ def _init(status, conf) -> tuple:
 
 
 def DownloadData(status, conf) -> int:
-    """Downloads ALEXI ET data
-
-    This scripts downloads ALEXI ET data from the UNESCO-IHE ftp server.
-    The output files display the total ET in mm for a period of one week.
-    The name of the file corresponds to the first day of the week.
+    """This is main interface.
 
     Args:
         status (dict): Status.

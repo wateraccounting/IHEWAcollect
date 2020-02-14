@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """
+**TRMM Module**
 
 """
 # General modules
@@ -54,8 +55,7 @@ def _init(status, conf):
 
 
 def DownloadData(status, conf) -> int:
-    """
-    This function downloads TRMM daily or monthly data
+    """This is main interface.
 
     Args:
         status (dict): Status.

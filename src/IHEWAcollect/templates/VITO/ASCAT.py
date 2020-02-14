@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """
+**ASCAT Module**
 
 """
 # General modules
@@ -53,9 +54,7 @@ def _init(status, conf) -> tuple:
 
 
 def DownloadData(status, conf) -> int:
-    """
-    This scripts downloads ASCAT SWI data from the VITO server.
-    The output files display the Surface Water Index.
+    """This is main interface.
 
     Args:
         status (dict): Status.

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """
+**CFSR Module**
 
 """
 # General modules
@@ -55,8 +56,7 @@ def _init(status, conf):
 
 
 def DownloadData(status, conf) -> int:
-    """
-    This function collects daily CFSR data in geotiff format
+    """This is main interface.
 
     Args:
         status (dict): Status.

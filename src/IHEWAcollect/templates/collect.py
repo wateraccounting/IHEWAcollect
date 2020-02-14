@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 import glob
-import gzip
 import os
-import subprocess
 import sys
-import tarfile
 import time
+
+import gzip
+import tarfile
 import zipfile
 
-import netCDF4
+import subprocess
 import numpy as np
 import pandas as pd
 import scipy.interpolate
+import netCDF4
+
 from pyproj import Proj, transform
 
 try:

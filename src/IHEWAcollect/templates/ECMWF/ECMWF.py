@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """
+**ECMWF Module**
 
 """
 # General modules
@@ -22,13 +23,12 @@ from netCDF4 import Dataset
 
 def DownloadData(Dir, Var, Startdate, Enddate, latlim, lonlim, Waitbar, cores,
                  TimeCase, CaseParameters):
+    """This is main interface.
+
+    Args:
+        status (dict): Status.
+        conf (dict): Configuration.
     """
-    This function downloads ECMWF six-hourly, daily or monthly data
-
-    Keyword arguments:
-
-    """
-
     # correct latitude and longitude limits
     latlim_corr_one = np.floor(latlim[0] / 0.125) * 0.125
     latlim_corr_two = np.ceil(latlim[1] / 0.125) * 0.125

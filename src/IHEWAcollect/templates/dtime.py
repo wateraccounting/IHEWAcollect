@@ -5,7 +5,7 @@
 **Examples:**
 ::
 
-    from IHEWAcollect.base.dtime import Dtime
+    from IHEWAcollect.templates.dtime import Dtime
 
     dtime = Dtime(workspace=path, is_print=True)
 """

@@ -3,6 +3,11 @@
 **utils**
 
 Utilities for IHEWAcollect template modules.
+
+**Examples:**
+::
+
+    from IHEWAcollect.templates.util import Extract, Plot, Waitbar, Log
 """
 import inspect
 import os

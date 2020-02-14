@@ -5,7 +5,7 @@
 **Examples:**
 ::
 
-    from IHEWAcollect.base.gis import GIS
+    from IHEWAcollect.templates.gis import GIS
 
     gis = GIS(workspace=path, is_print=True)
 """
