@@ -5,8 +5,8 @@
 **Examples:**
 ::
 
-    import os
     from IHEWAcollect.base.gis import GIS
+
     gis = GIS(workspace=path, is_print=True)
 """
 import inspect

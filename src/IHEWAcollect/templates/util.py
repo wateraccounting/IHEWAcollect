@@ -2,13 +2,6 @@
 """
 **utils**
 
-`Restrictions`
-
-The data and this python file may not be distributed to others without
-permission of the WA+ team.
-
-`Description`
-
 Utilities for IHEWAcollect template modules.
 """
 import inspect
@@ -33,12 +26,14 @@ except ImportError:
 
 
 class Extract(object):
-    """This util.Extract class
+    """Extract class
 
     File pre-process, extract.
 
     Args:
-        is_clean (bool): Is to clean all files in the folder.
+        file (str): File.
+        folder (str): Folder.
+        is_print (bool): Is to print status message.
     """
     __status = {
         'messages': {
@@ -63,6 +58,8 @@ class Extract(object):
     }
 
     def __init__(self, file, folder, is_print):
+        """Class instantiation
+        """
         self.__status['is_print'] = is_print
         self.__conf['file'] = file
         self.__conf['folder'] = folder
@@ -113,12 +110,17 @@ class Extract(object):
 
 
 class Plot(object):
-    """This util.Plot class
+    """Plot class
 
     File post-process, save or show.
 
     Args:
-        is_save (bool): Is to clean all files in the folder.
+        data
+        file
+        folder
+        is_print (bool): Is to print status message.
+        is_save (bool): Is to save files in the folder.
+        is_show (bool): Is to show files in the folder.
     """
     __status = {
         'messages': {
@@ -156,12 +158,12 @@ class Plot(object):
 
 
 class Waitbar(object):
-    """This util.Waitbar class
+    """Waitbar class
 
     Waitbar on the cmd window.
 
     Args:
-        is_save (bool): Is to clean all files in the folder.
+        is_print (bool): Is to print status message.
     """
     __status = {
         'messages': {
@@ -183,6 +185,8 @@ class Waitbar(object):
     }
 
     def __init__(self, is_print):
+        """Class instantiation
+        """
         self.__status['is_print'] = is_print
 
     @staticmethod
@@ -219,6 +223,13 @@ class Waitbar(object):
 
 
 class Log(object):
+    """Log class
+
+    Write message to log file.
+
+    Args:
+        config (dict): Is to print status message.
+    """
     __conf = {}
     data = {}
 

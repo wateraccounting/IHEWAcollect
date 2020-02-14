@@ -5,8 +5,8 @@
 **Examples:**
 ::
 
-    import os
     from IHEWAcollect.base.dtime import Dtime
+
     dtime = Dtime(workspace=path, is_print=True)
 """
 import inspect

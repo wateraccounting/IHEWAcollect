@@ -62,9 +62,9 @@ class User(Base):
 
     __status = {
         'messages': {
-            0: 'S: WA.Accounts {f:>20} : status {c}, {m}',
-            1: 'E: WA.Accounts {f:>20} : status {c}: {m}',
-            2: 'W: WA.Accounts {f:>20} : status {c}: {m}',
+            0: 'S: WA.User     {f:>20} : status {c}, {m}',
+            1: 'E: WA.User     {f:>20} : status {c}: {m}',
+            2: 'W: WA.User     {f:>20} : status {c}: {m}',
         },
         'code': 0,
         'message': '',
@@ -401,7 +401,7 @@ class User(Base):
     # @staticmethod
 
 
-def main():
+if __name__ == "__main__":
     from pprint import pprint
 
     # @classmethod
@@ -434,7 +434,3 @@ def main():
     # User methods
     print('\naccounts.get_status()\n=====')
     pprint(user.get_status())
-
-
-if __name__ == "__main__":
-    main()

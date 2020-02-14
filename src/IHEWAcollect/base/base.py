@@ -9,6 +9,7 @@
 
     base = Base(product='CFSR', is_print=True)
 """
+# General modules
 import inspect
 import os
 import sys
@@ -303,7 +304,7 @@ if __name__ == "__main__":
 
     # Base __init__
     print('\nBase\n=====')
-    product = 'GLEAM'
+    product = 'CFSR'
     base = Base(product, is_print=True)
 
     # Base attributes

@@ -2,19 +2,20 @@
 """
 **Exception**
 
-`Restrictions`
-
-The data and this python file may not be distributed to others without
-permission of the WA+ team.
-
-`Description`
-
 https://julien.danjou.info/python-exceptions-guide/
 """
 import os
 
+# General modules
+
 
 class IHEClassInitError(Exception):
+    """IHEClassInitError Class
+
+    Args:
+        mod (str): Module name.
+        msg (bool): Extra message.
+    """
     def __init__(self, mod, msg=None):
         if msg is None:
             self.msg = 'Class "{m}" init error.'.format(
@@ -27,6 +28,12 @@ class IHEClassInitError(Exception):
 
 
 class IHEFileError(Exception):
+    """IHEFileError Class
+
+    Args:
+        file (str): File name.
+        msg (bool): Extra message.
+    """
     def __init__(self, file, msg=None):
         fpath, fname = os.path.split(file)
         if msg is None:
@@ -43,6 +50,13 @@ class IHEFileError(Exception):
 
 
 class IHEKeyError(Exception):
+    """IHEKeyError Class
+
+    Args:
+        key (str): Key name.
+        val (list): Key name list.
+        msg (bool): Extra message.
+    """
     def __init__(self, key, val, msg=None):
         if msg is None:
             self.msg = '"{k}" not found in "{v}".'.format(
@@ -58,6 +72,14 @@ class IHEKeyError(Exception):
 
 
 class IHETypeError(Exception):
+    """IHETypeError Class
+
+    Args:
+        vname (str): Variable name.
+        rtype (str): Required type.
+        vdata (float): Variable value.
+        msg (bool): Extra message.
+    """
     def __init__(self, vname, rtype, vdata, msg=None):
         if msg is None:
             self.msg = '"{n}" requires {t}, received "{d}".'.format(
@@ -75,6 +97,12 @@ class IHETypeError(Exception):
 
 
 class IHEStringError(Exception):
+    """IHEStringError Class
+
+    Args:
+        vname (str): Variable name.
+        msg (bool): Extra message.
+    """
     def __init__(self, vname, msg=None):
         if msg is None:
             self.msg = '"{k}" received empty string.'.format(
