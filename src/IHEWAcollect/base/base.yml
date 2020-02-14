@@ -2645,40 +2645,40 @@ products:
                 h: 8520
 
   # API
-  ECMWF:
-    # http://apps.ecmwf.int/codes/grib/format/mars/type/
-    # http://apps.ecmwf.int/codes/grib/format/mars/class/
-    account: 'ECMWF'
-    template: 'ECMWF'
-    meta:
-      owner: 'European Centre for Medium-Range Weather Forecasts'
-      description:
-        'We are both a research institute and a 24/7 operational service, producing global
-         numerical weather predictions and other data for our Member and Co-operating States
-         and the broader community. The Centre has one of the largest supercomputer facilities
-         and meteorological data archives in the world. Other strategic activities include
-         delivering advanced training and assisting the WMO in implementing its programmes.
-
-         We operate two services from the EU’s Copernicus Earth observation programme, the
-         Copernicus Atmosphere Monitoring Service (CAMS) and the Copernicus Climate Change
-         Service (C3S). We also contribute to the Copernicus Emergency Management Service (CEMS).'
-      websites:
-        - 'https://www.ecmwf.int/'
-      protocols:
-        - 'ECMWF'
-      methods:
-        - 'api'
-      ftypes:
-        - ''
-      versions:
-        - ''
-      datasets:
-        - ''
-      resolutions:
-        - ''
-      projection:
-        - 'WGS84'
-    v1:
+  #ECMWF:
+  #  # http://apps.ecmwf.int/codes/grib/format/mars/type/
+  #  # http://apps.ecmwf.int/codes/grib/format/mars/class/
+  #  account: 'ECMWF'
+  #  template: 'ECMWF'
+  #  meta:
+  #    owner: 'European Centre for Medium-Range Weather Forecasts'
+  #    description:
+  #      'We are both a research institute and a 24/7 operational service, producing global
+  #       numerical weather predictions and other data for our Member and Co-operating States
+  #       and the broader community. The Centre has one of the largest supercomputer facilities
+  #       and meteorological data archives in the world. Other strategic activities include
+  #       delivering advanced training and assisting the WMO in implementing its programmes.
+  #
+  #       We operate two services from the EU’s Copernicus Earth observation programme, the
+  #       Copernicus Atmosphere Monitoring Service (CAMS) and the Copernicus Climate Change
+  #       Service (C3S). We also contribute to the Copernicus Emergency Management Service (CEMS).'
+  #    websites:
+  #      - 'https://www.ecmwf.int/'
+  #    protocols:
+  #      - 'ECMWF'
+  #    methods:
+  #      - 'api'
+  #    ftypes:
+  #      - ''
+  #    versions:
+  #      - ''
+  #    datasets:
+  #      - ''
+  #    resolutions:
+  #      - ''
+  #    projection:
+  #      - 'WGS84'
+  #  v1:
 
   # ETA, ETP, ..., T
   # ftp.wateraccounting.unesco-ihe.org

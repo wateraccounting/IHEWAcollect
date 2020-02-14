@@ -517,3 +517,167 @@ class Download(User):
             self.__tmp['name'] = template['name']
             self.__tmp['module'] = template['module']
         return template
+
+    def get_products(self):
+        import pandas as pd
+
+        products = self._Base__conf['data']['products']
+
+        # df_products = pd.DataFrame.from_dict(products)
+        # print(df_products)
+        str_col = ['id',
+                   'product',
+                   'account',
+                   'protocol',
+                   'version',
+                   'parameter',
+                   'resolution',
+                   'variable',
+                   'lat_s', 'lat_n', 'lat_r',
+                   'lon_w', 'lon_e', 'lon_r',
+                   'time_s', 'time_e']
+        str_size = 10
+        str_fmt = ''
+        str_fmt_cel = '| {col[%d]:>' + str(str_size) + '}%s'
+        for icol in range(len(str_col)):
+            str_fmt += str_fmt_cel % (icol, ' ')
+        str_fmt +='|'
+
+        # str_tmp = ''
+        # for icol in range(len(str_col)):
+        #     str_tmp += '+{sep:->' + str(str_size + 2) + 's}'
+        # str_tmp += '+'
+        # print(str_tmp.format(sep=''))
+
+        print(str_fmt.format(col=str_col))
+
+        # str_tmp = ''
+        # for icol in range(len(str_col)):
+        #     str_tmp += '+{sep:=>' + str(str_size + 2) + 's}'
+        # str_tmp += '+'
+        # print(str_tmp.format(sep=''))
+
+        i = 0
+        for pd_n, pd_d in products.items():
+            pd_a = pd_d['account']
+
+            for pd_ver_n, pd_ver_d in pd_d.items():
+                if pd_ver_n not in ['account', 'template', 'meta']:
+
+                    for pd_par_n, pd_par_d in pd_ver_d.items():
+
+                        for pd_res_n, pd_res_d in pd_par_d.items():
+                            pd_res_d_pro = pd_res_d['protocol']
+
+                            for pd_var_n, pd_var_d in pd_res_d['variables'].items():
+                                i += 1
+
+                                # pd_var_d_nam = pd_var_d['name']
+                                pd_var_d_lat_s = pd_var_d['lat']['s']
+                                pd_var_d_lat_n = pd_var_d['lat']['n']
+                                pd_var_d_lat_r = pd_var_d['lat']['r']
+                                pd_var_d_lon_w = pd_var_d['lon']['w']
+                                pd_var_d_lon_e = pd_var_d['lon']['e']
+                                pd_var_d_lon_r = pd_var_d['lon']['r']
+                                pd_var_d_tim_s = pd_var_d['time']['s']
+                                pd_var_d_tim_e = pd_var_d['time']['e']
+
+                                str_col = [i,
+                                           pd_n,
+                                           pd_a,
+                                           pd_res_d_pro,
+                                           pd_ver_n,
+                                           pd_par_n,
+                                           pd_res_n,
+                                           pd_var_n,
+                                           pd_var_d_lat_s,
+                                           pd_var_d_lat_n,
+                                           pd_var_d_lat_r,
+                                           pd_var_d_lon_w,
+                                           pd_var_d_lon_e,
+                                           pd_var_d_lon_r,
+                                           pd_var_d_tim_s,
+                                           pd_var_d_tim_e]
+
+                                for j in range(len(str_col)):
+                                    if isinstance(str_col[j], datetime.datetime):
+                                        str_col[j] = str_col[j].strftime('%Y-%m-%d')
+
+                                    if str_col[j] is None:
+                                        str_col[j] = ''
+
+                                    str_col[j] = str(str_col[j])
+
+                                    if len(str_col[j]) > str_size:
+                                        str_col[j] = str_col[j][0:str_size - 1] + '~'
+
+                                print(str_fmt.format(col=str_col))
+
+                                # str_tmp = ''
+                                # for icol in range(len(str_col)):
+                                #     str_tmp += '+{sep:->' + str(str_size + 2) + 's}'
+                                # str_tmp += '+'
+                                # print(str_tmp.format(sep=''))
+
+        return products
+
+
+def main(path, test_args):
+    # Download __init__
+    for key, value in test_args.items():
+        print('\n{:>4s}'
+              '{:>20s}{:>6s}{:>20s}{:>20s}{:>20s}\n'
+              '{:->90s}'.format(key,
+                                value['product'],
+                                value['version'],
+                                value['parameter'],
+                                value['resolution'],
+                                value['variable'],
+                                '-'))
+
+        download = Download(workspace=path,
+                            product=value['product'],
+                            version=value['version'],
+                            parameter=value['parameter'],
+                            resolution=value['resolution'],
+                            variable=value['variable'],
+                            bbox=value['bbox'],
+                            period=value['period'],
+                            nodata=value['nodata'],
+                            is_status=False)
+
+        download.get_products()
+
+
+if __name__ == "__main__":
+    print('\nDownload\n=====')
+    path = os.path.join(
+        os.getcwd(),
+        os.path.dirname(
+            inspect.getfile(
+                inspect.currentframe())),
+        '../', '../', 'tests'
+    )
+
+    test_args = {
+        '1a': {
+            'product': 'ALEXI',
+            'version': 'v1',
+            'parameter': 'evapotranspiration',
+            'resolution': 'daily',
+            'variable': 'ETA',
+            'bbox': {
+                'w': -19.0,
+                'n': 38.0,
+                'e': 55.0,
+                's': -35.0
+            },
+            'period': {
+                's': '2005-01-01',
+                'e': '2005-01-02'
+            },
+            'nodata': -9999
+        }
+    }
+
+    main(path, test_args)
