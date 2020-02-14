@@ -180,7 +180,7 @@ def download_product(latlim, lonlim, dates,
 def get_download_args(latlim, lonlim, date,
                       account, folder, product) -> tuple:
     msg = 'Collecting  "{f}"'.format(f=date)
-    print('{}'.format(msg))
+    print('\33[95m{}\33[0m'.format(msg))
     __this.Log.write(datetime.datetime.now(), msg=msg)
 
     # Define arg_account
@@ -465,7 +465,7 @@ def convert_data(args):
     # --------- #
     # Clip data #
     # --------- #
-    Clip_Dataset_GDAL(remote_file, local_file, latlim, lonlim, data_multiplier)
+    Clip_Dataset_GDAL(temp_file_part, local_file, latlim, lonlim, data_multiplier)
 
     # get data to 2D matrix
     # data_tmp = data_raw[y_id[0]:y_id[1], x_id[0]:x_id[1]]

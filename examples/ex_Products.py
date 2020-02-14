@@ -2,9 +2,8 @@
 import inspect
 import os
 
-import yaml
-
 import IHEWAcollect
+import yaml
 
 
 def main(path, test_args):
@@ -182,7 +181,7 @@ if __name__ == "__main__":
             },
             'nodata': -9999
         },
-        # TODO, 20200120, QPan, ex_DEM_Merge
+        # TODO, 20200120, QPan, DEM
         #  rewrite, and re-design base.yml
         '6a': {
             'product': 'DEM',
@@ -245,8 +244,8 @@ if __name__ == "__main__":
         #     },
         #     'nodata': -9999
         # },
-        # TODO, 20200129-END, QPan, FEWS (SEBS), multiplier
-        #  uint16 to float32, 0.01
+        # TODO, 20200129-END, QPan, FEWS (SEBS)
+        #  multiplier: uint16 to float32, 0.01
         '9a': {
             'product': 'FEWS',
             'version': 'v4',
@@ -319,7 +318,7 @@ if __name__ == "__main__":
             },
             'nodata': -9999
         },
-        # TODO, 20200128-END, QPan, ex_GLEAM_NetCDF
+        # TODO, 20200128-END, QPan, GLEAM
         #  date_id = (total month from time['s'])
         '11b': {
             'product': 'GLEAM',
@@ -393,7 +392,7 @@ if __name__ == "__main__":
             },
             'nodata': -9999
         },
-        # TODO, 20200120-END, QPan, ex_GPM_HDF5
+        # TODO, 20200120-END, QPan, GPM
         #  product['data']['ftype']['r'].split('.')
         '12b': {
             'product': 'GPM',
@@ -796,8 +795,8 @@ if __name__ == "__main__":
             },
             'nodata': -9999
         },
-        # TODO, 20200129, QPan, SEBS (FEWS), multiplier
-        #  uint16 to float32, 0.01
+        # TODO, 20200129, QPan, SEBS (FEWS)
+        #  multiplier: uint16 to float32, 0.01
         '27a': {
             'product': 'SEBS',
             'version': 'v1',
@@ -816,9 +815,9 @@ if __name__ == "__main__":
             },
             'nodata': -9999
         },
-        # TODO, 20200129, QPan, ex_SoilGrids_BigTIFF, multiplier
+        # TODO, 20200129, QPan, ex_SoilGrids_BigTIFF, Docker
         #  BDRLOG, CLYPPT, CRFVOL, SLTPPT, SNDPPT
-        #  ubyte to float32, 0.01 => percent
+        #  multiplier: ubyte to float32, 0.01 => percent
         # '28a': {
         #     'product': 'SoilGrids',
         #     'version': 'v1',
@@ -877,4 +876,3 @@ if __name__ == "__main__":
 
     dump_to_yaml(path, test_args)
     main(path, test_args)
-

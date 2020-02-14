@@ -178,7 +178,7 @@ def download_product(latlim, lonlim, dates,
 def get_download_args(latlim, lonlim, date,
                       account, folder, product) -> tuple:
     msg = 'Collecting  "{f}"'.format(f=date)
-    print('{}'.format(msg))
+    print('\33[95m{}\33[0m'.format(msg))
     __this.Log.write(datetime.datetime.now(), msg=msg)
 
     # Define arg_account
