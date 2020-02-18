@@ -4561,7 +4561,7 @@ products:
           method: 'crawl.get'
           freq: '8D'
           variables:
-            ET:
+            ETA:
               variable: 'ET_500m'
               name: 'Eight Daily Evapotranspiration'
               description:
