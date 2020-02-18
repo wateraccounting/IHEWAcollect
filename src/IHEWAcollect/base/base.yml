@@ -34,9 +34,8 @@ products:
         ''
       websites:
         - 'https://www.wateraccounting.org'
-        - 'https://ceres.larc.nasa.gov/order_data.php'
-        - 'https://eosweb.larc.nasa.gov/project/ceres/ceres_table'
-        - 'https://lpdaac.usgs.gov/products/eco3etalexiuv001/'
+        - 'https://glodet.nebraska.edu'
+        - 'https://lpdaac.usgs.gov/products/eco3etalexiuv001'
       protocols:
         - 'FTP'
       methods:
