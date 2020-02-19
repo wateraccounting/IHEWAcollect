@@ -190,6 +190,10 @@ def download_product_daily(latlim, lonlim, dates,
     for date in dates:
         if date == pd.Timestamp(year=2008, month=12, day=31):
             pass
+        elif date == pd.Timestamp(year=2012, month=12, day=31):
+            pass
+        elif date == pd.Timestamp(year=2016, month=12, day=31):
+            pass
         else:
             args = get_download_args(latlim, lonlim, date,
                                      account, folder, product)
