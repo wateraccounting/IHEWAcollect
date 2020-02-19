@@ -3,17 +3,18 @@
 **ALEXI Module**
 
 """
+import datetime
+import ftplib
 # General modules
 import os
 import sys
-import datetime
-
-import ftplib
 from urllib.parse import urlparse
-# from joblib import Parallel, delayed
 
 import numpy as np
 import pandas as pd
+
+# from joblib import Parallel, delayed
+
 # from netCDF4 import Dataset
 
 # IHEWAcollect Modules
@@ -187,10 +188,13 @@ def download_product_daily(latlim, lonlim, dates,
     #                     length=50)
 
     for date in dates:
-        args = get_download_args(latlim, lonlim, date,
-                                 account, folder, product)
+        if date == pd.Timestamp(year=2008, month=12, day=31):
+            pass
+        else:
+            args = get_download_args(latlim, lonlim, date,
+                                     account, folder, product)
 
-        status_cod = start_download(args)
+            status_cod = start_download(args)
 
         # Update waitbar
         # if is_waitbar == 1:
