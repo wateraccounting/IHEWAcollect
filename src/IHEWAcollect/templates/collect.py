@@ -682,7 +682,7 @@ def Run_command_window(argument):
     Keyword Arguments:
     argument -- string, name of the adf file
     """
-    print('\n{}'.format(argument))
+    print('\t{}'.format(argument))
 
     if os.name == 'posix':
         argument = argument.replace(".exe", "")
