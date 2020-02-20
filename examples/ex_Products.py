@@ -7,7 +7,7 @@ import yaml
 
 
 def main(path, test_args):
-    from pprint import pprint
+    # from pprint import pprint
 
     # Download __init__
     for key, value in test_args.items():
@@ -56,14 +56,10 @@ if __name__ == "__main__":
             'resolution': 'daily',
             'variable': 'ETA',
             'bbox': {
-                'w': -180.0,
-                'n': 90.0,
-                'e': 180.0,
-                's': -90.0
-                # 'w': -19.0,
-                # 'n': 38.0,
-                # 'e': 55.0,
-                # 's': -35.0
+                'w': -19.0,
+                'n': 38.0,
+                'e': 55.0,
+                's': -35.0
             },
             'period': {
                 's': '2005-01-01',

@@ -116,7 +116,7 @@ products:
               fname:
                 r: 'ALEXI_weekly_mm_{dtime:%j_%Y}.tif'
                 t: null
-                l: 'ALEXI_v1_mm.d_7D-{dtime:%Y%m%d}.tif'
+                l: 'ALEXI_v1_mm.7d_7D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -132,7 +132,7 @@ products:
                 l: 'float32'
               units:
                 r: 'MJ.m2.d'
-                l: 'mm.d'
+                l: 'mm.7d'
                 m: 0.408
               lat:
                 s: -60.0
