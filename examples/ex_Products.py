@@ -56,10 +56,14 @@ if __name__ == "__main__":
             'resolution': 'daily',
             'variable': 'ETA',
             'bbox': {
-                'w': -19.0,
-                'n': 38.0,
-                'e': 55.0,
-                's': -35.0
+                'w': -180.0,
+                'n': 90.0,
+                'e': 180.0,
+                's': -90.0
+                # 'w': -19.0,
+                # 'n': 38.0,
+                # 'e': 55.0,
+                # 's': -35.0
             },
             'period': {
                 's': '2005-01-01',
@@ -689,7 +693,7 @@ if __name__ == "__main__":
             'version': 'v6',
             'parameter': 'evapotranspiration',
             'resolution': 'eight_daily',
-            'variable': 'ET',
+            'variable': 'ETA',
             'bbox': {
                 'w': -5.0,
                 'n': 30.0,

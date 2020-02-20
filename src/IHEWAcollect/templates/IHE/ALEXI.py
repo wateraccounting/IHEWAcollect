@@ -559,6 +559,7 @@ def convert_data(args):
 
         data_raw = np.fromfile(temp_file_part, dtype="<f4")
         data_raw = np.resize(data_raw, [pixel_h, pixel_w])
+        data_raw = np.flipud(data_raw)
 
         # data = np.flipud(data_tmp[y_id[0]:y_id[1], x_id[0]:x_id[1]])
     if product['resolution'] == "weekly":
