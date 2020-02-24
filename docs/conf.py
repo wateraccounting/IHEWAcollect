@@ -156,8 +156,8 @@ pygments_style = 'sphinx'
 # -- Options for HTML output ---------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-html_theme = 'alabaster'
+# a list of builtin themes. https://github.com/readthedocs/rtd-sphinx-themes-examples
+html_theme = 'master'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

@@ -1,11 +1,12 @@
+# https://github.com/readthedocs/readthedocs.org/blob/master/docs/guides/build-using-too-many-resources.rst#use-pip-when-possible
 name: _IHEWAcollect
-channels:
-  - defaults
-  - conda-forge
+# channels:
+#   - defaults
+#   - conda-forge
 dependencies:
   - python>=3.6
-  - pyyaml
   - numpy
   - pandas
+  - pyyaml
   # - libgdal=3.0.*
   # - gdal=3.0.*
