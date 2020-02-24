@@ -64,7 +64,7 @@ Products
 ALEXI
 ^^^^^
 
-IHEWAcollect.ALEXI() functioin
+IHEWAcollect.Download(path, 'ALEXI', para) functioin
 
 ...
 ^^^
@@ -72,7 +72,7 @@ IHEWAcollect.ALEXI() functioin
 WAPOR
 ^^^^^
 
-IHEWAcollect.WAPOR() functioin
+IHEWAcollect.Download(path, 'WAPOR', para) functioin
 
 
 Note

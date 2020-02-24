@@ -159,13 +159,12 @@ And edit account information in the file.
     148,TRMM,NASA,HTTPS,v7a,precipita~,monthly,PCP,-50.0,50.0,0.25,-180.0,180.0,0.25,2000-01-01,2010-09-30
     149,TWC,IHEWA,FTP,v1,water,5m,WPL,-55.99499~,83.671666~,0.0833333~,-180.0,180.0,0.0833333~,None,None
 """
+# import shutil
+import datetime
+import importlib
 import inspect
 import os
 import sys
-# import shutil
-import datetime
-
-import importlib
 
 try:
     from .base.exception import IHEClassInitError,\
@@ -843,4 +842,3 @@ if __name__ == "__main__":
                             is_status=False)
 
         download.get_products()
-
