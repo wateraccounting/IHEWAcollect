@@ -8,6 +8,8 @@ This is the documentation of **IHEWAcollect**.
 Products
 ========
 
+Details can be found at https://ihewacollect.readthedocs.io/en/latest/api/IHEWAcollect.html#module-IHEWAcollect.download
+
 +------------+---------------------------------+----------------------------------------------+------------+
 | Product    |  Image                          | Link                                         | Checked    |
 +============+=================================+==============================================+============+
