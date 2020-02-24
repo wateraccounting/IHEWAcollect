@@ -3,7 +3,6 @@ import inspect
 import os
 
 import IHEWAcollect
-import yaml
 
 
 def main(path, test_args):
@@ -31,13 +30,6 @@ def main(path, test_args):
                               period=value['period'],
                               nodata=value['nodata'],
                               is_status=False)
-
-
-def dump_to_yaml(path, test_args):
-    fp = open(os.path.join(path, 'config.yml'), 'w+')
-    yaml.dump(test_args, fp,
-              default_flow_style=False, sort_keys=False,
-              allow_unicode=True)
 
 
 if __name__ == "__main__":
@@ -874,5 +866,4 @@ if __name__ == "__main__":
         }
     }
 
-    dump_to_yaml(path, test_args)
     main(path, test_args)

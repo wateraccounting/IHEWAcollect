@@ -842,3 +842,10 @@ if __name__ == "__main__":
                             is_status=False)
 
         download.get_products()
+
+    # Export yaml
+    import yaml
+    fp = open(os.path.join(path, 'config.yml'), 'w+')
+    yaml.dump(test_args, fp,
+              default_flow_style=False, sort_keys=False,
+              allow_unicode=True)
