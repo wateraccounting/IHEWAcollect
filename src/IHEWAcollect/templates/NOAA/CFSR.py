@@ -19,15 +19,15 @@ from netCDF4 import Dataset
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
+        Save_as_tiff, \
         Convert_grb2_to_nc
 
-    from ..gis import GIS
+    from ..gis import GIStotal
     from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
+        Save_as_tiff, \
         Convert_grb2_to_nc
 
     from IHEWAcollect.templates.gis import GIS
@@ -151,7 +151,7 @@ def download_product(latlim, lonlim, dates,
                      is_waitbar) -> int:
     # Define local variable
     status_cod = -1
-    total = len(dates)
+    # total = len(dates)
     cores = 1
 
     # Create Waitbar
@@ -260,7 +260,7 @@ def get_download_args(latlim, lonlim, date,
 
     # Define arg_IDs
     prod_lon_w = product['data']['lon']['w']
-    prod_lat_n = product['data']['lat']['n']
+    # prod_lat_n = product['data']['lat']['n']
     prod_lon_e = product['data']['lon']['e']
     prod_lat_s = product['data']['lat']['s']
     prod_lat_size = abs(product['data']['lat']['r'])

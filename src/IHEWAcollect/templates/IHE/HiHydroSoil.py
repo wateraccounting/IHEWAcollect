@@ -18,14 +18,14 @@ import pandas as pd
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        Extract_Data_gz, Open_tiff_array, Save_as_tiff
+        Open_tiff_array, Save_as_tiff
 
     from ..gis import GIS
     from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        Extract_Data_gz, Open_tiff_array, Save_as_tiff
+        Open_tiff_array, Save_as_tiff
 
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
@@ -146,7 +146,7 @@ def download_product(latlim, lonlim, dates,
                      is_waitbar) -> int:
     # Define local variable
     status_cod = -1
-    total = len(dates)
+    # total = len(dates)
 
     # Create Waitbar
     # amount = 0
@@ -247,8 +247,8 @@ def get_download_args(latlim, lonlim, date,
     # Define arg_IDs
     prod_lon_w = product['data']['lon']['w']
     prod_lat_n = product['data']['lat']['n']
-    prod_lon_e = product['data']['lon']['e']
-    prod_lat_s = product['data']['lat']['s']
+    # prod_lon_e = product['data']['lon']['e']
+    # prod_lat_s = product['data']['lat']['s']
     prod_lat_size = abs(product['data']['lat']['r'])
     prod_lon_size = abs(product['data']['lon']['r'])
 
@@ -364,7 +364,7 @@ def start_download(args) -> int:
         if is_download:
             url_parse = urlparse(url_server)
             url_host = url_parse.hostname
-            url_port = url_parse.port
+            # url_port = url_parse.port
             url = '{sr}{dr}{fn}'.format(sr=url_host,
                                         dr='',
                                         fn='')

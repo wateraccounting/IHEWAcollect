@@ -18,7 +18,7 @@ import pandas as pd
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
+        Save_as_tiff, \
         Open_bil_array, Extract_Data_tar_gz
 
     from ..gis import GIS
@@ -26,7 +26,7 @@ try:
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
+        Save_as_tiff, \
         Open_bil_array, Extract_Data_tar_gz
 
     from IHEWAcollect.templates.gis import GIS
@@ -148,7 +148,7 @@ def download_product(latlim, lonlim, dates,
                      is_waitbar) -> int:
     # Define local variable
     status_cod = -1
-    total = len(dates)
+    # total = len(dates)
 
     # Create Waitbar
     # amount = 0
@@ -249,8 +249,8 @@ def get_download_args(latlim, lonlim, date,
     # Define arg_IDs
     prod_lon_w = product['data']['lon']['w']
     prod_lat_n = product['data']['lat']['n']
-    prod_lon_e = product['data']['lon']['e']
-    prod_lat_s = product['data']['lat']['s']
+    # prod_lon_e = product['data']['lon']['e']
+    # prod_lat_s = product['data']['lat']['s']
     prod_lat_size = abs(product['data']['lat']['r'])
     prod_lon_size = abs(product['data']['lon']['r'])
 
@@ -427,13 +427,13 @@ def convert_data(args):
     """
     # Unpack the arguments
     latlim, lonlim, date, \
-    product, \
-    username, password, apitoken, \
-    url_server, url_dir, \
-    remote_fname, temp_fname, local_fname, \
-    remote_file, temp_file, local_file, \
-    y_id, x_id, pixel_size, pixel_w, pixel_h, \
-    data_ndv, data_type, data_multiplier, data_variable = args
+        product, \
+        username, password, apitoken, \
+        url_server, url_dir, \
+        remote_fname, temp_fname, local_fname, \
+        remote_file, temp_file, local_file, \
+        y_id, x_id, pixel_size, pixel_w, pixel_h, \
+        data_ndv, data_type, data_multiplier, data_variable = args
 
     # Define local variable
     status_cod = -1

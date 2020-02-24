@@ -4,119 +4,35 @@ IHEWAcollect
 
 This is the documentation of **IHEWAcollect**.
 
+**IHEWAcollect** is a collection of tools to download remote sensing data.
+This project is fully developed by Water Accounting team at IHE-Delft.
 
-Products
-========
-
-Details can be found at https://ihewacollect.readthedocs.io/en/latest/api/IHEWAcollect.html#module-IHEWAcollect.download
-
-+------------+---------------------------------+----------------------------------------------+------------+
-| Product    |  Image                          | Link                                         | Checked    |
-+============+=================================+==============================================+============+
-| ALEXI      | .. image:: ./img/ALEXI.png      | https://www.wateraccounting.org              | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| ASCAT      | .. image:: ./img/ASCAT.png      | https://www.copernicus.eu                    | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| CFSR       | .. image:: ./img/CFSR.png       | https://www.noaa.gov                         | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| CHIRPS     | .. image:: ./img/CHIRPS.png     | https://geog.ucsb.edu                        | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| CMRSET     | .. image:: ./img/CMRSET.png     | https://www.wateraccounting.org              | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| DEM        | .. image:: ./img/DEM.png        | http://earlywarning.usgs.gov                 | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| ECMWF      | API Required                    | https://www.ecmwf.int                        | 2020-01-14 |
-+------------+---------------------------------+----------------------------------------------+------------+
-| ETmonitor  | .. image:: ./img/ETmonitor.png  | https://www.wateraccounting.org              | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| FEWS       | .. image:: ./img/FEWS.png       | https://earlywarning.usgs.gov/fews           | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| GLDAS      | .. image:: ./img/GLDAS.png      | https://ldas.gsfc.nasa.gov/gldas             | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| GLEAM      | .. image:: ./img/GLEAM.png      | http://www.gleam.eu                          | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| GPM        | .. image:: ./img/GPM.png        | https://pmm.gsfc.nasa.gov/GPM                | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| GPM, nc4   | .. image:: ./img/GPM-lonlat.png | https://pmm.gsfc.nasa.gov/GPM                | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| HiHydroSoil| .. image:: ./img/HiHydroSoil.png| https://www.wateraccounting.org              | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| JRC        | .. image:: ./img/JRC.png        | https://global-surface-water.appspot.com     | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| MCD12Q1    | .. image:: ./img/MCD12Q1.png    | https://lpdaac.usgs.gov/products/mcd12q1v006 | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| MCD43A3    | .. image:: ./img/MCD43A3.png    | https://lpdaac.usgs.gov/products/mcd43a3v006 | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| MOD09GQ    | .. image:: ./img/MOD09GQ.png    | https://lpdaac.usgs.gov/products/mod09gqv006 | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| MOD10A2    | .. image:: ./img/MOD10A2.png    | https://nsidc.org/data/MOD10A2/versions/6    | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| MOD11A2    | .. image:: ./img/MOD11A2.png    | https://lpdaac.usgs.gov/products/mod11a2v006 | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| MOD13Q1    | .. image:: ./img/MOD13Q1.png    | https://lpdaac.usgs.gov/products/mod13q1v006 | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| MOD15A2H   | .. image:: ./img/MOD15A2H.png   | https://lpdaac.usgs.gov/products/mod15a2hv006| 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| MOD16A2    | .. image:: ./img/MOD16A2.png    | https://lpdaac.usgs.gov/products/mod16a2v006 | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| MOD17A2H   | .. image:: ./img/MOD17A2H.png   | https://lpdaac.usgs.gov/products/mod17a2hv006| 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| MOD17A3H   | Unavailable                     | https://lpdaac.usgs.gov/products/mod17a3hv006| 2020-01-14 |
-+------------+---------------------------------+----------------------------------------------+------------+
-| MSWEP      | Commercial                      | https://princetonclimate.com                 | 2020-01-14 |
-+------------+---------------------------------+----------------------------------------------+------------+
-| PROBAV     | .. image:: ./img/PROBAV.png     | http://proba-v.vgt.vito.be/en                | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| RFE        | .. image:: ./img/RFE.png        | https://data.noaa.gov/dataset                | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| SEBS       | .. image:: ./img/SEBS.png       | https://www.wateraccounting.org              | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| SoilGrids  | .. image:: ./img/SoilGrids.png  | https://www.isric.org                        | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| TRMM       | .. image:: ./img/TRMM.png       | https://pmm.nasa.gov/trmm                    | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-| TWC        | .. image:: ./img/TWC.png        | https://www.wateraccounting.org              | 2020-01-14 |
-|            |    :height: 40pt                |                                              |            |
-+------------+---------------------------------+----------------------------------------------+------------+
-
-.. warning::
-
-    GDAL library is required.
-    Set gdal executable files to system "PATH".
-
-    Must contain **accounts.yml-credential** and **accounts.yml-encrypted** file.
+GDAL library is required, see `How to install GDAL
+<https://sandbox.idre.ucla.edu/sandbox/tutorials/installing-gdal-for-windows>`_.
 
 
 Installation
 ============
+
+.. warning::
+
+    Set gdal executable files to system "PATH".
+
+    Must contain **accounts.yml** file,
+    for security reason, we don't suggest you to share **accounts.yml**,
+    see `accounts.yml-example <https://github.com/wateraccounting/IHEWAcollect/tree/master/examples>`_.
+
+    **accounts.yml-encrypted** is safe to be shared,
+    it can be generated by generate_encrypt() function.
+
+    **accounts.yml-credential** contains your password and key,
+    to encrypt **accounts.yml-encrypted**.
+
+Install from pip
+^^^^^^^^^^^^^^^^
+
+IHEWAcollect Python package is hosted on `Python Package Index (PyPI)
+<https://pypi.org/project/IHEWAcollect/>`_.
 
 Install from pip.
 
@@ -124,27 +40,37 @@ Install from pip.
 
     $ pip install IHEWAcollect
 
-Install from source codes.
+Install from source code
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-Source code, Github: https://github.com/wateraccounting/IHEWAcollect.
-
-Optional test data, IHE FTP: ftp://ftp.wateraccounting.unesco-ihe.org/WaterAccounting_Guest/Products
-, save the downloaded data to "IHEWAcollect/tests/data/Products"
-
-Go to IHEWAcollect folder.
+Download source code from `Github
+<https://github.com/wateraccounting/IHEWAcollect>`_.
 
 .. code-block:: console
 
     $ git clone https://github.com/wateraccounting/IHEWAcollect.git
     $ cd IHEWAcollect
 
+Install from source code.
+
+.. code-block:: console
+
     $ python setup.py install
 
-Uninstall IHEWAcollect.
+Uninstall IHEWAcollect
+^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: console
 
     $ pip uninstall IHEWAcollect
+
+Optional data
+^^^^^^^^^^^^^
+
+Test data can be download from `IHE FTP
+<ftp://ftp.wateraccounting.unesco-ihe.org/WaterAccounting_Guest/Products>`_.
+
+Save the test data to "IHEWAcollect/tests/data/Products" folder.
 
 
 Docker
@@ -159,7 +85,8 @@ Set "Shared Folders" in Virtual Machine.
 - Auto-mount: Yes
 - Make Permanent: Yes
 
-Go to IHEWAcollect folder.
+Download source code from `Github
+<https://github.com/wateraccounting/IHEWAcollect>`_.
 
 .. code-block:: console
 
@@ -229,6 +156,9 @@ Remove image.
 Use
 ===
 
+Examples can be found at `examples
+<https://github.com/wateraccounting/IHEWAcollect/tree/master/examples>`_.
+
 .. code-block:: python
 
     import os
@@ -272,6 +202,9 @@ Development
 ===========
 
 In the PyCharm, change "Project Structure -> Source Folders" to "src"
+
+Download source code from `Github
+<https://github.com/wateraccounting/IHEWAcollect>`_.
 
 .. code-block:: console
 
@@ -338,6 +271,110 @@ Upload to PyPI
 12. In Github, **Publish release**
 
 
+Products
+========
+
+Details can be found at `Products
+<https://ihewacollect.readthedocs.io/en/latest/products.html>`_.
+
++------------+---------------------------------+-----------------------------------------------+
+| Product    |  Image                          | Link                                          |
++============+=================================+===============================================+
+| ALEXI      | .. image:: ./img/ALEXI.png      | https://www.wateraccounting.org               |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| ASCAT      | .. image:: ./img/ASCAT.png      | https://www.copernicus.eu                     |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| CFSR       | .. image:: ./img/CFSR.png       | https://www.noaa.gov                          |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| CHIRPS     | .. image:: ./img/CHIRPS.png     | https://geog.ucsb.edu                         |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| CMRSET     | .. image:: ./img/CMRSET.png     | https://www.wateraccounting.org               |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| DEM        | .. image:: ./img/DEM.png        | http://earlywarning.usgs.gov                  |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| ECMWF      | API Required                    | https://www.ecmwf.int                         |
++------------+---------------------------------+-----------------------------------------------+
+| ETmonitor  | .. image:: ./img/ETmonitor.png  | https://www.wateraccounting.org               |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| FEWS       | .. image:: ./img/FEWS.png       | https://earlywarning.usgs.gov/fews            |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| GLDAS      | .. image:: ./img/GLDAS.png      | https://ldas.gsfc.nasa.gov/gldas              |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| GLEAM      | .. image:: ./img/GLEAM.png      | http://www.gleam.eu                           |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| GPM        | .. image:: ./img/GPM.png        | https://pmm.gsfc.nasa.gov/GPM                 |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| GPM, nc4   | .. image:: ./img/GPM-lonlat.png | https://pmm.gsfc.nasa.gov/GPM                 |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| HiHydroSoil| .. image:: ./img/HiHydroSoil.png| https://www.wateraccounting.org               |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| JRC        | .. image:: ./img/JRC.png        | https://global-surface-water.appspot.com      |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| MCD12Q1    | .. image:: ./img/MCD12Q1.png    | https://lpdaac.usgs.gov/products/mcd12q1v006  |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| MCD43A3    | .. image:: ./img/MCD43A3.png    | https://lpdaac.usgs.gov/products/mcd43a3v006  |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| MOD09GQ    | .. image:: ./img/MOD09GQ.png    | https://lpdaac.usgs.gov/products/mod09gqv006  |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| MOD10A2    | .. image:: ./img/MOD10A2.png    | https://nsidc.org/data/MOD10A2/versions/6     |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| MOD11A2    | .. image:: ./img/MOD11A2.png    | https://lpdaac.usgs.gov/products/mod11a2v006  |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| MOD13Q1    | .. image:: ./img/MOD13Q1.png    | https://lpdaac.usgs.gov/products/mod13q1v006  |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| MOD15A2H   | .. image:: ./img/MOD15A2H.png   | https://lpdaac.usgs.gov/products/mod15a2hv006 |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| MOD16A2    | .. image:: ./img/MOD16A2.png    | https://lpdaac.usgs.gov/products/mod16a2v006  |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| MOD17A2H   | .. image:: ./img/MOD17A2H.png   | https://lpdaac.usgs.gov/products/mod17a2hv006 |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| MOD17A3H   | Unavailable                     | https://lpdaac.usgs.gov/products/mod17a3hv006 |
++------------+---------------------------------+-----------------------------------------------+
+| MSWEP      | Commercial                      | https://princetonclimate.com                  |
++------------+---------------------------------+-----------------------------------------------+
+| PROBAV     | .. image:: ./img/PROBAV.png     | http://proba-v.vgt.vito.be/en                 |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| RFE        | .. image:: ./img/RFE.png        | https://data.noaa.gov/dataset                 |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| SEBS       | .. image:: ./img/SEBS.png       | https://www.wateraccounting.org               |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| SoilGrids  | .. image:: ./img/SoilGrids.png  | https://www.isric.org                         |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| TRMM       | .. image:: ./img/TRMM.png       | https://pmm.nasa.gov/trmm                     |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+| TWC        | .. image:: ./img/TWC.png        | https://www.wateraccounting.org               |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
+
+
 Code of Conduct
 ===============
 
@@ -359,6 +396,7 @@ Contents
    Authors <authors>
    Contributing <contributing>
    Changelog <changelog>
+   Products <products>
    Module Reference <api/modules>
 
 

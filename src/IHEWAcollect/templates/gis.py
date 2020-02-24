@@ -21,18 +21,19 @@ import numpy as np
 # import pandas as pd
 
 try:
-    from osgeo import gdal, osr, gdalconst
+    # from osgeo import gdal, osr, gdalconst
+    from osgeo import gdal, osr
 except ImportError:
     import gdal
     import osr
-    import gdalconst
 
 try:
-    from .base.exception import IHEClassInitError,\
-        IHEStringError, IHETypeError, IHEKeyError, IHEFileError
+    # IHEClassInitError, IHEStringError, IHETypeError, IHEKeyError, IHEFileError
+    from .base.exception import \
+        IHEKeyError, IHEFileError
 except ImportError:
-    from IHEWAcollect.base.exception import IHEClassInitError,\
-        IHEStringError, IHETypeError, IHEKeyError, IHEFileError
+    from IHEWAcollect.base.exception import \
+        IHEKeyError, IHEFileError
 
 
 class GIS(object):
@@ -158,7 +159,7 @@ class GIS(object):
     def get_latlon_lim(self, arg_bbox):
         prod_lat = self.product['data']['lat']
         prod_lon = self.product['data']['lon']
-        prod_dem = self.product['data']['dem']
+        # prod_dem = self.product['data']['dem']
 
         # from osgeo import osr
         #
@@ -203,9 +204,9 @@ class GIS(object):
         return arg_lat, arg_lon
 
     def get_latlon_index(self, arg_lat, arg_lon) -> tuple:
-        prod_lat = self.product['data']['lat']
-        prod_lon = self.product['data']['lon']
-        prod_dem = self.product['data']['dem']
+        # prod_lat = self.product['data']['lat']
+        # prod_lon = self.product['data']['lon']
+        # prod_dem = self.product['data']['dem']
 
         y_id = np.int16(
             np.array([
@@ -267,8 +268,8 @@ class GIS(object):
                 's': -56.0
             },
         }
-        continents = []
-        return continents
+        # continents = []
+        return continent_list
 
     def load_file(self, file, band=1) -> np.ndarray:
         """Get tif band data
@@ -301,7 +302,7 @@ class GIS(object):
                     else:
                         ds_band_ndv = ds_band.GetNoDataValue()
                         ds_band_scale = ds_band.GetScale()
-                        ds_band_unit = ds_band.GetUnitType()
+                        # ds_band_unit = ds_band.GetUnitType()
 
                         data = ds_band.ReadAsArray()
 
@@ -325,7 +326,7 @@ class GIS(object):
                         if ds_band_scale is not None:
                             data = data * ds_band_scale
 
-                except BaseException as err:
+                except BaseException:
                     raise IHEKeyError('Band {b}'.format(b=band), file) from None
             else:
                 raise IHEFileError(file) from None

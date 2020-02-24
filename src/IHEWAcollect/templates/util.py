@@ -23,6 +23,7 @@ import numpy as np
 import pandas as pd
 
 try:
+    # IHEClassInitError, IHEStringError, IHETypeError, IHEKeyError, IHEFileError
     from .exception import \
         IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 except ImportError:

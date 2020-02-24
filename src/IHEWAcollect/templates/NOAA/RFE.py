@@ -146,7 +146,7 @@ def download_product(latlim, lonlim, dates,
                      is_waitbar) -> int:
     # Define local variable
     status_cod = -1
-    total = len(dates)
+    # total = len(dates)
     cores = 1
 
     # Create Waitbar
@@ -256,8 +256,8 @@ def get_download_args(latlim, lonlim, date,
     # Define arg_IDs
     prod_lon_w = product['data']['lon']['w']
     prod_lat_n = product['data']['lat']['n']
-    prod_lon_e = product['data']['lon']['e']
-    prod_lat_s = product['data']['lat']['s']
+    # prod_lon_e = product['data']['lon']['e']
+    # prod_lat_s = product['data']['lat']['s']
     prod_lat_size = abs(product['data']['lat']['r'])
     prod_lon_size = abs(product['data']['lon']['r'])
 
@@ -373,7 +373,7 @@ def start_download(args) -> int:
         if is_download:
             url_parse = urlparse(url_server)
             url_host = url_parse.hostname
-            url_port = url_parse.port
+            # url_port = url_parse.port
             url = '{sr}{dr}{fn}'.format(sr=url_host,
                                         dr='',
                                         fn='')

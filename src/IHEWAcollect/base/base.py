@@ -44,6 +44,7 @@ import yaml
 # OK
 
 try:
+    # IHEClassInitError, IHEStringError, IHETypeError, IHEKeyError, IHEFileError
     from .base.exception import IHEClassInitError,\
         IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 except ImportError:

@@ -8,13 +8,13 @@ import os
 import sys
 import datetime
 
-import paramiko
-from urllib.parse import urlparse
-from joblib import Parallel, delayed
+# import paramiko
+# from urllib.parse import urlparse
+# from joblib import Parallel, delayed
 
 import numpy as np
 import pandas as pd
-from netCDF4 import Dataset
+# from netCDF4 import Dataset
 
 # IHEWAcollect Modules
 try:
@@ -62,7 +62,7 @@ def DownloadData(status, conf) -> int:
     """
     # Define local variable
     status_cod = -1
-    is_waitbar = False
+    # is_waitbar = False
 
     # ================ #
     # 1. Init function #

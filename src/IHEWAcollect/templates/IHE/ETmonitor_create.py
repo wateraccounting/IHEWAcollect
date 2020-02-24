@@ -7,11 +7,10 @@ import os
 import numpy as np
 
 try:
-    from osgeo import gdal, osr, gdalconst
+    # from osgeo import gdal, osr, gdalconst
+    from osgeo import gdal
 except ImportError:
     import gdal
-    import osr
-    import gdalconst
 
 
 def main():
@@ -57,13 +56,13 @@ def main():
             for htile in range(7, 33):
                 for vtile in range(0, 15):
                     file_name = "ETmonitor_%d_%02d_h%02dv%02d.tif" % (
-                    year, month, htile, vtile)
+                        year, month, htile, vtile)
                     total_name = os.path.join(output_folder, file_name)
                     if os.path.exists(total_name):
                         dest = gdal.Open(total_name)
                         data = dest.GetRasterBand(1).ReadAsArray()
                         Hstart = (htile - 7) * 1200
-                        Vstart = (vtile) * 1200
+                        Vstart = vtile * 1200
                         ETmonitor_tot[Vstart:Vstart + 1200, Hstart:Hstart + 1200] = data
 
             ETmonitor_tot[ETmonitor_tot < 0] = np.nan
@@ -97,4 +96,3 @@ def main():
             dst_ds.SetGeoTransform(geo_t)
             dst_ds.GetRasterBand(1).WriteArray(0.1 * ETmonitor_tot)
             dst_ds = None
-            sds = None
