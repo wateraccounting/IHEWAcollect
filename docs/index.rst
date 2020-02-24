@@ -10,10 +10,6 @@ This project is fully developed by Water Accounting team at IHE-Delft.
 GDAL library is required, see `How to install GDAL
 <https://sandbox.idre.ucla.edu/sandbox/tutorials/installing-gdal-for-windows>`_.
 
-
-Installation
-============
-
 .. warning::
 
     Set gdal executable files to system "PATH".
@@ -27,6 +23,10 @@ Installation
 
     **accounts.yml-credential** contains your password and key,
     to encrypt **accounts.yml-encrypted**.
+
+
+Installation
+============
 
 Install from pip
 ^^^^^^^^^^^^^^^^
