@@ -132,9 +132,9 @@ def DownloadData(status, conf) -> int:
                      pd.Timestamp(date_e) is pd.NaT):
         date_s = pd.Timestamp.now()
         date_e = pd.Timestamp.now()
-        date_dates = pd.date_range(date_s, date_e)
-    else:
-        date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
+    date_dates = pd.date_range(date_s, date_e, freq='D')
+    # else:
+    #     date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
 
     # =========== #
     # 3. Download #
