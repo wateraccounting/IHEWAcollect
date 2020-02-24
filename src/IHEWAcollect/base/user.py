@@ -35,11 +35,12 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 try:
+    # IHEClassInitError, IHEStringError, IHETypeError, IHEKeyError, IHEFileError
     from .base.exception import IHEClassInitError,\
-        IHEStringError, IHETypeError, IHEKeyError, IHEFileError
+        IHEStringError, IHEKeyError, IHEFileError
 except ImportError:
     from IHEWAcollect.base.exception import IHEClassInitError,\
-        IHEStringError, IHETypeError, IHEKeyError, IHEFileError
+        IHEStringError, IHEKeyError, IHEFileError
 
 try:
     from .base import Base
@@ -73,14 +74,15 @@ class User(Base):
 
     __conf = {
         'credential': {
-            'file': 'accounts.yml-credential',
+            'file_crd': 'accounts.yml-credential',
+            'file_enc': 'accounts.yml-encrypted',
             'password': b'',
             'length': 32,
             'iterations': 100000,
             'salt': b'WaterAccounting_',
             'key': b''
         },
-        'file': 'accounts.yml-encrypted',
+        'file': 'accounts.yml',
         'path': '',
         'data': {
             'accounts': {},
@@ -124,8 +126,7 @@ class User(Base):
         # Class self.__conf['account']['data']
         if self.__status['code'] == 0:
             self._user()
-            self.__status['message'] = '"{f}" key is: "{v}"'.format(
-                f=self.__conf['file'],
+            self.__status['message'] = 'Key is: "{v}"'.format(
                 v=self.__conf['credential']['key'])
         else:
             raise IHEClassInitError('Accounts') from None
@@ -141,23 +142,30 @@ class User(Base):
         - File to read: ``accounts.yml-encrypted``
         """
         conf_enc = None
-        fname_org = 'accounts.yml'
-        fname_enc = 'accounts.yml-encrypted'
-        fname_crd = 'accounts.yml-credential'
-        f_cfg_org = os.path.join(self.__conf['path'], fname_org)
-        f_cfg_enc = os.path.join(self.__conf['path'], fname_enc)
-        f_cfg_crd = os.path.join(self.__conf['path'], fname_crd)
+        fname_org = self.__conf['file']
+        fname_enc = self.__conf['credential']['file_enc']
+        fname_crd = self.__conf['credential']['file_crd']
+        file_org = os.path.join(self.__conf['path'], fname_org)
+        file_enc = os.path.join(self.__conf['path'], fname_enc)
+        file_crd = os.path.join(self.__conf['path'], fname_crd)
 
-        if os.path.exists(f_cfg_crd):
-            is_enc = self._user_key(f_cfg_crd)
-            if is_enc:
-                self._user_encrypt(f_cfg_org)
+        if os.path.exists(file_org):
+            conf_enc = yaml.load(open(file_org, 'r'),
+                                 Loader=yaml.FullLoader)
         else:
-            self.__status['code'] = 1
-            raise IHEFileError(f_cfg_crd) from None
+            conf_enc = None
 
-        if os.path.exists(f_cfg_enc):
-            conf_enc = yaml.load(self._user_decrypt(f_cfg_enc), Loader=yaml.FullLoader)
+        if conf_enc is None:
+            if os.path.exists(file_enc):
+                self._user_key(file_crd)
+
+                conf_enc = yaml.load(self._user_decrypt(file_enc),
+                                     Loader=yaml.FullLoader)
+            else:
+                self.__status['code'] = 1
+                raise IHEFileError(file_enc) from None
+
+        if conf_enc is not None and isinstance(conf_enc, dict):
             for key in conf_enc:
                 try:
                     self.__conf['data'][key] = conf_enc[key]
@@ -176,9 +184,6 @@ class User(Base):
                     else:
                         self.__conf['account']['name'] = ''
                         self.__status['code'] = 0
-        else:
-            self.__status['code'] = 1
-            raise IHEFileError(f_cfg_enc) from None
 
         self.set_status(
             inspect.currentframe().f_code.co_name,
@@ -198,7 +203,10 @@ class User(Base):
             file (str): File name.
         """
         is_renew = False
-        conf = yaml.load(open(file, 'r'), Loader=yaml.FullLoader)
+        if os.path.exists(file):
+            conf = yaml.load(open(file, 'r'), Loader=yaml.FullLoader)
+        else:
+            conf = None
 
         if conf is None:
             is_renew = True
@@ -229,16 +237,18 @@ class User(Base):
         try:
             key = conf['key']
         except KeyError:
-            is_key = input('\33[91m'
-                           'IHEWAcollect: Generate your key (y/n): '
-                           '\33[0m')
-            is_key = is_key.strip()
-            if is_key not in ['', 'Y', 'YES', 'y', 'Yes']:
-                print(IHEStringError('key'))
-                sys.exit(1)
-            else:
-                is_renew = True
-                key = self._user_key_generator()
+            key = self._user_key_generator()
+            # is_key = input('\33[91m'
+            #                'IHEWAcollect: Generate your key (y/n): '
+            #                '\33[0m')
+            # is_key = is_key.strip()
+            # if is_key not in ['', 'Y', 'YES', 'y', 'Yes']:
+            #     print(IHEStringError('key'))
+            #     sys.exit(1)
+            # else:
+            #     is_renew = True
+            #     key = self._user_key_generator()
+
         key = key.strip()
         if key == '' or key is None:
             print(IHEStringError('key'))
@@ -310,7 +320,7 @@ class User(Base):
                 encrypted = fernet.encrypt(data)
                 fp_out.write(encrypted)
 
-            with open(file_crd, 'w', buffering=0) as fp_out:
+            with open(file_crd, 'w', buffering=1) as fp_out:
                 fp_out.write('# password should be deleted!\n')
                 fp_out.write('# password: "{}"\n'.format(pswd.decode()))
                 fp_out.write('key: "{}"\n'.format(key.decode()))
@@ -353,6 +363,44 @@ class User(Base):
                                    self.__status['code'],
                                    fun, prt, ext)
 
+    def generate_encrypt(self):
+        """Generate encrypted files
+        """
+        fname_org = self.__conf['file']
+        fname_enc = self.__conf['credential']['file_enc']
+        fname_crd = self.__conf['credential']['file_crd']
+        file_org = os.path.join(self.__conf['path'], fname_org)
+        file_enc = os.path.join(self.__conf['path'], fname_enc)
+        file_crd = os.path.join(self.__conf['path'], fname_crd)
+
+        pswd = input('\33[91m'
+                     'IHEWAcollect: Enter your password: '
+                     '\33[0m')
+        pswd = pswd.strip()
+
+        if pswd == '' or pswd is None:
+            print(IHEStringError('password'))
+            sys.exit(1)
+        else:
+            self.__conf['credential']['password'] = str.encode(pswd)
+            key = self._user_key_generator()
+
+            if os.path.exists(file_org):
+                with open(file_org, 'rb') as fp_in:
+                    data = fp_in.read()
+
+                with open(file_enc, 'wb', buffering=0) as fp_out:
+                    fernet = Fernet(key)
+                    encrypted = fernet.encrypt(data)
+                    fp_out.write(encrypted)
+
+                with open(file_crd, 'w', buffering=1) as fp_out:
+                    fp_out.write('# password should be deleted!\n')
+                    fp_out.write('# password: "{}"\n'.format(pswd))
+                    fp_out.write('key: "{}"\n'.format(key))
+            else:
+                raise IHEFileError(file_org) from None
+
     def get_user(self, key):
         """Get user information
 
@@ -374,12 +422,12 @@ class User(Base):
         :Example:
 
             >>> import os
-            >>> from IHEWAcollect.base.accounts import Accounts
-            >>> accounts = Accounts(os.getcwd(), 'FTP_WA_GUESS', is_print=False)
-            >>> account = accounts.get_user('account')
+            >>> from IHEWAcollect.base.user import User
+            >>> user = User(os.getcwd(), 'FTP_WA_GUESS', is_print=False)
+            >>> account = user.get_user('account')
             >>> account['FTP_WA_GUESS']
             {'username': 'wateraccountingguest', 'password': 'W@t3r@ccounting', ...
-            >>> accounts = accounts.get_user('accounts')
+            >>> accounts = user.get_user('accounts')
             Traceback (most recent call last):
             ...
             KeyError:

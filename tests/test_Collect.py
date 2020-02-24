@@ -3,9 +3,9 @@
 """
 # General modules
 import os
-import sys
+# import sys
 
-import pytest
+# import pytest
 
 # IHEWAcollect Modules
 import IHEWAcollect
