@@ -12,6 +12,7 @@ import os
 import sys
 import inspect
 import shutil
+import sphinx_rtd_theme
 
 __location__ = os.path.join(os.getcwd(), os.path.dirname(
     inspect.getfile(inspect.currentframe())))
@@ -84,7 +85,8 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.ifconfig',
     'sphinx.ext.mathjax',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
+    'sphinx_rtd_theme'
 ]
 
 # Active to do rst.
@@ -156,16 +158,18 @@ pygments_style = 'sphinx'
 # -- Options for HTML output ---------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes. https://github.com/readthedocs/rtd-sphinx-themes-examples
-html_theme = 'master'
+# a list of builtin themes.
+# https://github.com/readthedocs/rtd-sphinx-themes-examples
+html_theme = "sphinx_rtd_theme"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-html_theme_options = {
-    'sidebar_width': '300px',
-    'page_width': '1200px'
-}
+# html_theme = 'alabaster'
+# html_theme_options = {
+#     'sidebar_width': '300px',
+#     'page_width': '1200px'
+# }
 
 # Add any paths that contain custom themes here, relative to this directory.
 # html_theme_path = []
