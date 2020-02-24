@@ -1,5 +1,6 @@
 # Configuration yaml
 tests/accounts.yml
+tests/0accounts.yml
 
 # tests download
 tests/data/Products/
