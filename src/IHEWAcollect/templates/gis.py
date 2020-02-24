@@ -352,35 +352,6 @@ class GIS(object):
             geo (list): Geospatial dataset, [minimum lon, pixelsize, rotation,
                 maximum lat, rotation, pixelsize].
             projection (int): EPSG code.
-
-        :Example:
-
-            >>> from IHEWAcollect.templates.gis import GIS
-            >>> gis = GIS(os.getcwd(), is_print=False)
-            >>> path = os.path.join(os.getcwd(), 'tests', 'data', 'BigTIFF')
-            >>> file = os.path.join(path, 'Classic.tif')
-            >>> test = os.path.join(path, 'test.tif')
-
-            >>> data = gis.load_file(file, 1)
-            >>> data
-            array([[255, 255, 255, ...   0,   0,   0],
-                   [255, 255, 255, ...   0,   0,   0],
-                   [255, 255, 255, ...   0,   0,   0],
-                   ...,
-                   [  0,   0,   0, ...,   0,   0,   0],
-                   [  0,   0,   0, ...,   0,   0,   0],
-                   [  0,   0,   0, ...,   0,   0,   0]], dtype=uint8)
-
-            >>> gis.saveas_GTiff(test, data, [0, 1, 0, 0, 1, 0], "WGS84", -9999)
-            >>> data = gis.load_file(test, 1)
-            >>> data
-            array([[255., 255., 255., ...   0.,   0.,   0.],
-                   [255., 255., 255., ...   0.,   0.,   0.],
-                   [255., 255., 255., ...   0.,   0.,   0.],
-                   ...,
-                   [  0.,   0.,   0., ...,   0.,   0.,   0.],
-                   [  0.,   0.,   0., ...,   0.,   0.,   0.],
-                   [  0.,   0.,   0., ...,   0.,   0.,   0.]], dtype=float32)
         """
         status = -1
 
