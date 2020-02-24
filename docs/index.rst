@@ -165,10 +165,11 @@ Examples can be found at `examples
     import IHEWAcollect
 
     path = os.getcwd()
+    file_accounts = os.path.join(path, 'accounts.yml')
     file_credential = os.path.join(path, 'accounts.yml-credential')
     file_encrypted = os.path.join(path, 'accounts.yml-encrypted')
 
-    if os.path.exists(file_credential) and os.path.exists(file_encrypted):
+    if os.path.exists(file_accounts) or os.path.exists(file_encrypted):
         product = 'CFSR'
         version = 'v1'
         parameter = 'radiation'
