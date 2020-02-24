@@ -109,7 +109,8 @@ Details can be found at https://ihewacollect.readthedocs.io/en/latest/api/IHEWAc
 
 .. warning::
 
-    GDAL library is required. Set gdal executable files to system "PATH".
+    GDAL library is required.
+    Set gdal executable files to system "PATH".
 
     Must contain **accounts.yml-credential** and **accounts.yml-encrypted** file.
 
@@ -210,7 +211,7 @@ Access to running image, in the new cmd window.
     $ cd /notebooks/
 
     $ python3 setup.py install
-    $ python3 ./examples/ex_ETmonitor_BigTIFF.py
+    $ python3 ./examples/ex_CFSR_GRIB.py
 
 Clean running cache.
 
