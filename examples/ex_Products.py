@@ -748,7 +748,7 @@ if __name__ == "__main__":
             },
             'nodata': -9999
         },
-        # TODO, 20200207, QPan, ex_PROBAV_HDF5, Docker
+        # TODO, 20200207-END, QPan, ex_PROBAV_HDF5, Docker
         #  GDAL and libhdf5 version
         #  https://github.com/OSGeo/gdal/issues/1428
         # '25a': {
@@ -769,6 +769,7 @@ if __name__ == "__main__":
         #     },
         #     'nodata': -9999
         # },
+        # TODO, 20200129-END, QPan, RFE, Afirca
         '26a': {
             'product': 'RFE',
             'version': 'v2',
@@ -776,10 +777,10 @@ if __name__ == "__main__":
             'resolution': 'daily',
             'variable': 'PCP',
             'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
+                'w': -5.0,
+                'n': 30.0,
+                'e': 5.0,
+                's': 25.0
             },
             'period': {
                 's': '2008-01-01',

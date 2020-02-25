@@ -10,15 +10,15 @@ import datetime
 import importlib
 import inspect
 import os
-import sys
+# import sys
 
 try:
     # IHEClassInitError, IHEStringError, IHETypeError, IHEKeyError, IHEFileError
     from .base.exception import IHEClassInitError,\
-        IHEStringError, IHETypeError, IHEKeyError, IHEFileError
+        IHEKeyError
 except ImportError:
     from IHEWAcollect.base.exception import IHEClassInitError,\
-        IHEStringError, IHETypeError, IHEKeyError, IHEFileError
+        IHEKeyError
 
 try:
     from .base.user import User
@@ -368,7 +368,7 @@ class Download(User):
         if self.__status['code'] == 0:
             path = self.__conf['path']
             time = self.__conf['time']['start']
-            time_str = time.strftime('%Y-%m-%d %H:%M:%S.%f')
+            # time_str = time.strftime('%Y-%m-%d %H:%M:%S.%f')
 
             fname = log['name'].format(prod=product, var=variable, res=resolution)
             file = os.path.join(path, fname)
@@ -554,7 +554,6 @@ class Download(User):
             str_tmp += str_tmp_cel % (str_size, ',')
         str_tmp += str_tmp_cel % (str_size, '\n')
         print(str_tmp)
-
 
         i = 0
         for pd_n, pd_d in products.items():

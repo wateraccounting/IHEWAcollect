@@ -134,7 +134,7 @@ def DownloadData(status, conf) -> int:
         freq = np.fromstring(product['freq'], dtype=float, sep='D')
         if len(freq) > 0:
             date_s_doy = int(np.floor(date_s.dayofyear / freq[0])) * int(freq[0]) + 1
-            date_e_doy = int(np.ceil(date_e.dayofyear / freq[0])) * int(freq[0]) + 1
+            date_e_doy = int(np.floor(date_e.dayofyear / freq[0])) * int(freq[0]) + 1
 
             date_s = pd.to_datetime('{}-{}'.format(date_s.year, date_s_doy),
                                     format='%Y-%j')
@@ -468,13 +468,13 @@ def convert_data(args):
     """
     # Unpack the arguments
     latlim, lonlim, date,\
-    product, \
-    username, password, apitoken, \
-    url_server, url_dir, \
-    remote_fname, temp_fname, local_fname,\
-    remote_file, temp_file, local_file,\
-    y_id, x_id, pixel_size, pixel_w, pixel_h, \
-    data_ndv, data_type, data_multiplier, data_variable = args
+        product, \
+        username, password, apitoken, \
+        url_server, url_dir, \
+        remote_fname, temp_fname, local_fname,\
+        remote_file, temp_file, local_file,\
+        y_id, x_id, pixel_size, pixel_w, pixel_h, \
+        data_ndv, data_type, data_multiplier, data_variable = args
 
     # Define local variable
     status_cod = -1

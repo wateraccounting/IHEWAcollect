@@ -139,7 +139,7 @@ def DownloadData(status, conf) -> int:
         freq = np.fromstring(product['freq'], dtype=float, sep='D')
         if len(freq) > 0:
             date_s_doy = int(np.floor(date_s.dayofyear / freq[0])) * int(freq[0]) + 1
-            date_e_doy = int(np.ceil(date_e.dayofyear / freq[0])) * int(freq[0]) + 1
+            date_e_doy = int(np.floor(date_e.dayofyear / freq[0])) * int(freq[0]) + 1
 
             date_s = pd.to_datetime('{}-{}'.format(date_s.year, date_s_doy),
                                     format='%Y-%j')
@@ -187,7 +187,7 @@ def download_product(latlim, lonlim, dates,
                      is_waitbar) -> int:
     # Define local variable
     status_cod = -1
-    total = len(dates)
+    # total = len(dates)
     cores = 1
 
     # Create Waitbar
@@ -297,8 +297,8 @@ def get_download_args(latlim, lonlim, date,
     # Define arg_IDs
     prod_lon_w = product['data']['lon']['w']
     prod_lat_n = product['data']['lat']['n']
-    prod_lon_e = product['data']['lon']['e']
-    prod_lat_s = product['data']['lat']['s']
+    # prod_lon_e = product['data']['lon']['e']
+    # prod_lat_s = product['data']['lat']['s']
     prod_lat_size = abs(product['data']['lat']['r'])
     prod_lon_size = abs(product['data']['lon']['r'])
 

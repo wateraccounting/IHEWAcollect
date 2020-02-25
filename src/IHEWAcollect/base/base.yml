@@ -4937,7 +4937,7 @@ products:
               fname:
                 r: 'MOD13Q1.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD13Q1.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD13Q1_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MYD13_v6_._D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'

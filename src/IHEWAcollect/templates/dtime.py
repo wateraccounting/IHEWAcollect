@@ -18,13 +18,11 @@ import datetime
 # import numpy as np
 import pandas as pd
 
-# try:
-#     # IHEClassInitError, IHEStringError, IHETypeError, IHEKeyError, IHEFileError
-#     from .base.exception import IHEClassInitError,\
-#         IHEStringError, IHETypeError, IHEKeyError, IHEFileError
-# except ImportError:
-#     from IHEWAcollect.base.exception import IHEClassInitError,\
-#         IHEStringError, IHETypeError, IHEKeyError, IHEFileError
+try:
+    # IHEClassInitError, IHEStringError, IHETypeError, IHEKeyError, IHEFileError
+    from .base.exception import IHEClassInitError
+except ImportError:
+    from IHEWAcollect.base.exception import IHEClassInitError
 
 
 class Dtime(object):

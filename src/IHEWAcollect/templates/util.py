@@ -9,7 +9,7 @@ Utilities for IHEWAcollect template modules.
 
     from IHEWAcollect.templates.util import Extract, Plot, Waitbar, Log
 """
-import inspect
+# import inspect
 import os
 import sys
 # import shutil
@@ -20,15 +20,15 @@ import tarfile
 import zipfile
 
 import numpy as np
-import pandas as pd
+# import pandas as pd
 
-try:
-    # IHEClassInitError, IHEStringError, IHETypeError, IHEKeyError, IHEFileError
-    from .exception import \
-        IHEStringError, IHETypeError, IHEKeyError, IHEFileError
-except ImportError:
-    from IHEWAcollect.base.exception \
-        import IHEStringError, IHETypeError, IHEKeyError, IHEFileError
+# try:
+#     # IHEClassInitError, IHEStringError, IHETypeError, IHEKeyError, IHEFileError
+#     from .exception import \
+#         IHEStringError, IHETypeError, IHEKeyError, IHEFileError
+# except ImportError:
+#     from IHEWAcollect.base.exception \
+#         import IHEStringError, IHETypeError, IHEKeyError, IHEFileError
 
 
 class Extract(object):

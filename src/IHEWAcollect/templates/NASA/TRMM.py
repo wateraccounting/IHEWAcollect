@@ -20,7 +20,7 @@ import pandas as pd
 try:
     from ..collect import \
         Save_as_tiff, \
-        Convert_hdf5_to_tiff, Open_array_info
+        Convert_hdf5_to_tiff, Open_tiff_array
 
     from ..gis import GIS
     from ..dtime import Dtime
@@ -28,7 +28,7 @@ try:
 except ImportError:
     from IHEWAcollect.templates.collect import \
         Save_as_tiff, \
-        Convert_hdf5_to_tiff, Open_array_info
+        Convert_hdf5_to_tiff, Open_tiff_array
 
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
@@ -136,7 +136,7 @@ def DownloadData(status, conf) -> int:
         freq = np.fromstring(product['freq'], dtype=float, sep='D')
         if len(freq) > 0:
             date_s_doy = int(np.floor(date_s.dayofyear / freq[0])) * int(freq[0]) + 1
-            date_e_doy = int(np.ceil(date_e.dayofyear / freq[0])) * int(freq[0]) + 1
+            date_e_doy = int(np.floor(date_e.dayofyear / freq[0])) * int(freq[0]) + 1
 
             date_s = pd.to_datetime('{}-{}'.format(date_s.year, date_s_doy),
                                     format='%Y-%j')
@@ -504,7 +504,7 @@ def convert_data(args):
     geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
 
     Convert_hdf5_to_tiff(remote_file, temp_file_part,
-                         data_variable, data_multiplier, geo)
+                         data_variable)
 
     data_raw = Open_tiff_array(temp_file_part)
 

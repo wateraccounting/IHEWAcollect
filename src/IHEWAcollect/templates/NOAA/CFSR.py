@@ -22,7 +22,7 @@ try:
         Save_as_tiff, \
         Convert_grb2_to_nc
 
-    from ..gis import GIStotal
+    from ..gis import GIS
     from ..dtime import Dtime
     from ..util import Log
 except ImportError:
@@ -139,7 +139,7 @@ def DownloadData(status, conf) -> int:
         freq = np.fromstring(product['freq'], dtype=float, sep='D')
         if len(freq) > 0:
             date_s_doy = int(np.floor(date_s.dayofyear / freq[0])) * int(freq[0]) + 1
-            date_e_doy = int(np.ceil(date_e.dayofyear / freq[0])) * int(freq[0]) + 1
+            date_e_doy = int(np.floor(date_e.dayofyear / freq[0])) * int(freq[0]) + 1
 
             date_s = pd.to_datetime('{}-{}'.format(date_s.year, date_s_doy),
                                     format='%Y-%j')
