@@ -599,22 +599,30 @@ def convert_data(args):
                                                                remote_fname,
                                                                remote_file)
     temp_file_part = []
+    temp_file_part_4326 = []
     for ifile in range(len(remote_fnames)):
         # From downloaded remote file
 
         # From generated temporary file
         temp_file_part.append(
             temp_file.format(dtime=date, ipart=str(ifile + 1)))
-        # temp_file_part_4326.append(
-        #     temp_file.format(dtime=date, ipart='{}_4326'.format(str(ifile + 1))))
+        temp_file_part_4326.append(
+            temp_file.format(dtime=date, ipart='{}_4326'.format(str(ifile + 1))))
 
         # Generate temporary files
-        Convert_hdf5_to_tiff(remote_files[ifile], temp_file_part[ifile],
-                             data_variable)
+        geo = {
+            'scaling_factor': 1.0,
+            'transform': [lonlat[ifile][0], pixel_size, 0,
+                          lonlat[ifile][1], 0, -pixel_size]
+        }
+
+        Convert_hdf5_to_tiff(remote_files[ifile], temp_file_part_4326[ifile],
+                             data_variable, geo=geo)
+
         #
         # reproject_MODIS(temp_file_part[ifile], temp_file_part_4326[ifile], '4326')
         #
-        Clip_Dataset_GDAL(remote_files[ifile], temp_file_part[ifile],
+        Clip_Dataset_GDAL(temp_file_part_4326[ifile], temp_file_part[ifile],
                           latlim, lonlim, data_multiplier)
 
         # Convert meta data to float

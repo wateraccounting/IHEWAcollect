@@ -156,7 +156,7 @@ def Convert_bil_to_tiff(input_bil, output_tiff):
     return (output_tiff)
 
 
-def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scale=1.0):
+def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scale=1.0, geo=None):
     """
     This function converts the hdf5 files into tiff files
 
@@ -205,16 +205,17 @@ def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scale=1.0):
     # FullCmd = '%s -of GTiff %s %s' % (GDAL_TRANSLATE_PATH, name_in, Filename_tiff_end)
     Run_command_window(FullCmd)
 
-    # # Get the data array
-    # dest = gdal.Open(Filename_tiff_end)
-    # Data = dest.GetRasterBand(1).ReadAsArray()
-    # dest = None
-    #
-    # # If the band data is not SM change the DN values into PROBA-V values and write into the spectral_reflectance_PROBAV
-    # Data_scaled = Data * scaling_factor
-    #
-    # # Save the PROBA-V as a tif file
-    # Save_as_tiff(Filename_tiff_end, Data_scaled, geo_out, "WGS84")
+    if isinstance(geo, dict):
+        # Get the data array
+        dest = gdal.Open(Filename_tiff_end)
+        Data = dest.GetRasterBand(1).ReadAsArray()
+        dest = None
+
+        # If the band data is not SM change the DN values into PROBA-V values and write into the spectral_reflectance_PROBAV
+        Data_scaled = Data * geo['scaling_factor']
+
+        # Save the PROBA-V as a tif file
+        Save_as_tiff(Filename_tiff_end, Data_scaled, geo['transform'], "WGS84")
 
     return ()
 
