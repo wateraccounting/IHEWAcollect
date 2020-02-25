@@ -19,7 +19,7 @@ import pandas as pd
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        Convert_hdf5_to_tiff, reproject_MODIS, Clip_Dataset_GDAL, \
+        Clip_Dataset_GDAL, \
         Merge_Dataset_GDAL
 
     from ..gis import GIS
@@ -27,7 +27,7 @@ try:
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        Convert_hdf5_to_tiff, reproject_MODIS, Clip_Dataset_GDAL, \
+        Clip_Dataset_GDAL, \
         Merge_Dataset_GDAL
 
     from IHEWAcollect.templates.gis import GIS
@@ -300,50 +300,50 @@ def get_download_args(latlim, lonlim, date,
     # [w,n]--[e,n]
     #   |      |
     # [w,s]--[e,s]
-    y_id = np.int16(np.array([
+    y_id = np.array([
         np.floor((prod_lat_n - latlim[1]) / prod_lat_size),
         np.ceil((prod_lat_n - latlim[0]) / prod_lat_size)
-    ]))
-    x_id = np.int16(np.array([
+    ], dtype=np.int)
+    x_id = np.array([
         np.floor((lonlim[0] - prod_lon_w) / prod_lon_size),
         np.ceil((lonlim[1] - prod_lon_w) / prod_lon_size)
-    ]))
+    ], dtype=np.int)
 
     # [w,s]--[e,s]
     #   |      |
     # [w,n]--[e,n]
-    # y_id = np.int16(np.array([
+    # y_id = np.array([
     #     np.floor((latlim[0] - prod_lat_s) / prod_lat_size),
     #     np.ceil((latlim[1] - prod_lat_s) / prod_lat_size)
-    # ]))
-    # x_id = np.int16(np.array([
+    # ], dtype=np.int)
+    # x_id = np.array([
     #     np.floor((lonlim[0] - prod_lon_w) / prod_lon_size),
     #     np.ceil((lonlim[1] - prod_lon_w) / prod_lon_size)
-    # ]))
+    # ], dtype=np.int)
 
     # [w,n]--[w,s]
     #   |      |
     # [e,n]--[e,s]
-    # y_id = np.int16(np.array([
+    # y_id = np.array([
     #     np.floor((lonlim[0] - prod_lon_w) / prod_lon_size),
     #     np.ceil((lonlim[1] - prod_lon_w) / prod_lon_size)
-    # ]))
-    # x_id = np.int16(np.array([
+    # ], dtype=np.int)
+    # x_id = np.array([
     #     np.floor((prod_lat_n - latlim[1]) / prod_lat_size),
     #     np.ceil((prod_lat_n - latlim[0]) / prod_lat_size)
-    # ]))
+    # ], dtype=np.int)
 
     # [w,s]--[w,n]
     #   |      |
     # [e,s]--[e,n]
-    # y_id = np.int16(np.array([
+    # y_id = np.array([
     #     np.floor((lonlim[0] - prod_lon_w) / prod_lon_size),
     #     np.ceil((lonlim[1] - prod_lon_w) / prod_lon_size)
-    # ]))
-    # x_id = np.int16(np.array([
+    # ], dtype=np.int)
+    # x_id = np.array([
     #     np.floor((latlim[0] - prod_lat_s) / prod_lat_size),
     #     np.ceil((latlim[1] - prod_lat_s) / prod_lat_size)
-    # ]))
+    # ], dtype=np.int)
 
     return latlim, lonlim, date, \
         product, \
@@ -521,7 +521,7 @@ def convert_data(args):
                                                        remote_fname,
                                                        remote_file)
     temp_file_part = []
-    temp_file_part_4326 = []
+    # temp_file_part_4326 = []
     for ifile in range(len(remote_fnames)):
         # From downloaded remote file
 
