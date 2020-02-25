@@ -3658,12 +3658,12 @@ products:
               dir: '/global-surface-water/downloads2/occurrence/'
               fname:
                 r: 'occurrence_{lon}_{lat}_v1_1.tif'
-                t: null
+                t: 'occurrence_v1_1.{ipart}.tif'
                 l: 'JRC_v1_percent.tif'
               fmt:
                 d: null
                 r: 'latlon'
-                t: null
+                t: 'ipart'
                 l: null
               ftype:
                 r: 'GTiff'
@@ -3784,7 +3784,7 @@ products:
               fname:
                 r: 'MCD12Q1.A{dtime:%Y}001.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MCD12Q1.A{dtime:%Y}001.006.{ipart}.tif'
-                l: 'MCD12Q1_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MCD12Q1_v6_._D-{dtime:%Y}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'

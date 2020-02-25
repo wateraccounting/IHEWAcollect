@@ -128,7 +128,43 @@ def DownloadData(status, conf) -> int:
                      pd.Timestamp(date_e) is pd.NaT):
         date_s = pd.Timestamp.now()
         date_e = pd.Timestamp.now()
-        date_dates = pd.date_range(date_s, date_e)
+
+    if product['freq'] is None:
+        date_dates = pd.date_range(date_e, date_e, periods=1)
+    elif 'D' in product['freq']:
+        freq = np.fromstring(product['freq'], dtype=float, sep='D')
+        if len(freq) > 0:
+            date_s_doy = int(np.floor(date_s.dayofyear / freq[0])) * int(freq[0]) + 1
+            date_e_doy = int(np.ceil(date_e.dayofyear / freq[0])) * int(freq[0]) + 1
+
+            date_s = pd.to_datetime('{}-{}'.format(date_s.year, date_s_doy),
+                                    format='%Y-%j')
+            date_e = pd.to_datetime('{}-{}'.format(date_e.year, date_e_doy),
+                                    format='%Y-%j')
+
+            date_years = date_e.year - date_s.year
+            if date_years > 0:
+                date_s_year = date_s.year
+
+                i = 0
+                date_ey = pd.Timestamp('{}-12-31'.format(date_s_year + i))
+                date_dates = pd.date_range(
+                    date_s, date_ey, freq=product['freq'])
+
+                for i in range(1, date_years):
+                    date_sy = pd.Timestamp('{}-01-01'.format(date_s_year + i))
+                    date_ey = pd.Timestamp('{}-12-31'.format(date_s_year + i))
+                    date_dates = date_dates.union(pd.date_range(
+                        date_sy, date_ey, freq=product['freq']))
+
+                i = date_years
+                date_sy = pd.Timestamp('{}-01-01'.format(date_s_year + i))
+                date_dates = date_dates.union(pd.date_range(
+                    date_sy, date_e, freq=product['freq']))
+            else:
+                date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
+        else:
+            date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
     else:
         date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
     # if version == '2.1':

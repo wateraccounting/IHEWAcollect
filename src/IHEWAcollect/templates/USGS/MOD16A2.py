@@ -16,26 +16,26 @@ from joblib import Parallel, delayed
 import re
 import numpy as np
 import pandas as pd
+
 # from netCDF4 import Dataset
 
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        Save_as_tiff, \
-        Open_array_info, Clip_Data, Convert_hdf5_to_tiff
+        Convert_hdf5_to_tiff, reproject_MODIS, Clip_Dataset_GDAL, \
+        Merge_Dataset_GDAL
 
     from ..gis import GIS
     from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        Save_as_tiff, \
-        Open_array_info, Clip_Data, Convert_hdf5_to_tiff
+        Convert_hdf5_to_tiff, reproject_MODIS, Clip_Dataset_GDAL, \
+        Merge_Dataset_GDAL
 
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
     from IHEWAcollect.templates.util import Log
-
 
 __this = sys.modules[__name__]
 
@@ -133,9 +133,45 @@ def DownloadData(status, conf) -> int:
                      pd.Timestamp(date_e) is pd.NaT):
         date_s = pd.Timestamp.now()
         date_e = pd.Timestamp.now()
-    date_dates = pd.date_range(date_s, date_e, freq='D')
-    # else:
-    #     date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
+
+    if product['freq'] is None:
+        date_dates = pd.date_range(date_e, date_e, periods=1)
+    elif 'D' in product['freq']:
+        freq = np.fromstring(product['freq'], dtype=float, sep='D')
+        if len(freq) > 0:
+            date_s_doy = int(np.floor(date_s.dayofyear / freq[0])) * int(freq[0]) + 1
+            date_e_doy = int(np.ceil(date_e.dayofyear / freq[0])) * int(freq[0]) + 1
+
+            date_s = pd.to_datetime('{}-{}'.format(date_s.year, date_s_doy),
+                                    format='%Y-%j')
+            date_e = pd.to_datetime('{}-{}'.format(date_e.year, date_e_doy),
+                                    format='%Y-%j')
+
+            date_years = date_e.year - date_s.year
+            if date_years > 0:
+                date_s_year = date_s.year
+
+                i = 0
+                date_ey = pd.Timestamp('{}-12-31'.format(date_s_year + i))
+                date_dates = pd.date_range(
+                    date_s, date_ey, freq=product['freq'])
+
+                for i in range(1, date_years):
+                    date_sy = pd.Timestamp('{}-01-01'.format(date_s_year + i))
+                    date_ey = pd.Timestamp('{}-12-31'.format(date_s_year + i))
+                    date_dates = date_dates.union(pd.date_range(
+                        date_sy, date_ey, freq=product['freq']))
+
+                i = date_years
+                date_sy = pd.Timestamp('{}-01-01'.format(date_s_year + i))
+                date_dates = date_dates.union(pd.date_range(
+                    date_sy, date_e, freq=product['freq']))
+            else:
+                date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
+        else:
+            date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
+    else:
+        date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
 
     # =========== #
     # 3. Download #
@@ -326,7 +362,7 @@ def get_download_args(latlim, lonlim, date,
         username, password, apitoken, \
         url_server, url_dir, \
         fname_r, fname_t, fname_l, \
-        file_r, file_t, file_l,\
+        file_r, file_t, file_l, \
         y_id, x_id, pixel_size, pixel_w, pixel_h, \
         data_ndv, data_type, data_multiplier, data_variable
 
@@ -339,8 +375,8 @@ def start_download(args) -> int:
         product, \
         username, password, apitoken, \
         url_server, url_dir, \
-        remote_fname, temp_fname, local_fname,\
-        remote_file, temp_file, local_file,\
+        remote_fname, temp_fname, local_fname, \
+        remote_file, temp_file, local_file, \
         y_id, x_id, pixel_size, pixel_w, pixel_h, \
         data_ndv, data_type, data_multiplier, data_variable = args
 
@@ -514,8 +550,8 @@ def convert_data(args):
         product, \
         username, password, apitoken, \
         url_server, url_dir, \
-        remote_fname, temp_fname, local_fname,\
-        remote_file, temp_file, local_file,\
+        remote_fname, temp_fname, local_fname, \
+        remote_file, temp_file, local_file, \
         y_id, x_id, pixel_size, pixel_w, pixel_h, \
         data_ndv, data_type, data_multiplier, data_variable = args
 
@@ -545,38 +581,25 @@ def convert_data(args):
                                                                latlim, lonlim,
                                                                remote_fname,
                                                                remote_file)
-
-    data = np.zeros([int((latlim[1] - latlim[0]) / pixel_size),
-                     int((lonlim[1] - lonlim[0]) / pixel_size)])
-
+    temp_file_part = []
+    temp_file_part_4326 = []
     for ifile in range(len(remote_fnames)):
         # From downloaded remote file
 
         # From generated temporary file
-        temp_file_part = temp_file.format(dtime=date, ipart=str(ifile + 1))
+        temp_file_part.append(
+            temp_file.format(dtime=date, ipart=str(ifile + 1)))
+        temp_file_part_4326.append(
+            temp_file.format(dtime=date, ipart='{}_4326'.format(str(ifile + 1))))
+
         # Generate temporary files
-        geo = [lonlat[ifile][0], pixel_size, 0, lonlat[ifile][1], 0, -pixel_size]
+        Convert_hdf5_to_tiff(remote_files[ifile], temp_file_part[ifile],
+                             data_variable)
 
-        Convert_hdf5_to_tiff(remote_files[ifile], temp_file_part,
-                             data_variable, data_multiplier, geo)
+        reproject_MODIS(temp_file_part[ifile], temp_file_part_4326[ifile], '4326')
 
-        geo_trans, geo_proj, size_x, size_y = Open_array_info(temp_file_part)
-        lat_min_merge = np.maximum(latlim[0], geo_trans[3] + size_y * geo_trans[5])
-        lat_max_merge = np.minimum(latlim[1], geo_trans[3])
-        lon_min_merge = np.maximum(lonlim[0], geo_trans[0])
-        lon_max_merge = np.minimum(lonlim[1], geo_trans[0] + size_x * geo_trans[1])
-
-        lonmerge = [lon_min_merge, lon_max_merge]
-        latmerge = [lat_min_merge, lat_max_merge]
-        data_tmp, geo_one = Clip_Data(temp_file_part, latmerge, lonmerge)
-
-        y_start = int((geo_one[3] - latlim[1]) / geo_one[5])
-        y_end = np.minimum(np.shape(data)[0], y_start + np.shape(data_tmp)[0])
-        x_start = int((geo_one[0] - lonlim[0]) / geo_one[1])
-        x_end = np.minimum(np.shape(data)[1], x_start + np.shape(data_tmp)[1])
-
-        data[y_start:y_end, x_start:x_end] = data_tmp[0:(y_end - y_start),
-                                                      0:(x_end - x_start)]
+        Clip_Dataset_GDAL(temp_file_part_4326[ifile], temp_file_part[ifile],
+                          latlim, lonlim, data_multiplier)
 
         # Convert meta data to float
         # if np.logical_or(isinstance(data_raw_missing, str),
@@ -584,11 +607,12 @@ def convert_data(args):
         #     data_raw_missing = float(data_raw_missing)
         #     data_raw_scale = float(data_raw_scale)
 
+    Merge_Dataset_GDAL(temp_file_part, local_file)
     # transfer matrix to GTiff matrix
     # [w,n]--[e,n]
     #   |      |
     # [w,s]--[e,s]
-    data = np.asarray(data)
+    # data = np.asarray(data)
 
     # [w,s]--[e,s]
     #   |      |
@@ -613,7 +637,7 @@ def convert_data(args):
     # ------- #
     # scale, units
     # data[data == data_raw_missing] = np.nan
-    data = data * data_multiplier
+    # data = data * data_multiplier
 
     # novalue data
     # data[data == np.nan] = data_ndv
@@ -621,8 +645,8 @@ def convert_data(args):
     # ------------ #
     # Saveas GTiff #
     # ------------ #
-    geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
-    Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
+    # geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
+    # Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
     status_cod = 0
     return status_cod

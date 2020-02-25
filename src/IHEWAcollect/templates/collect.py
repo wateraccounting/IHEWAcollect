@@ -156,8 +156,7 @@ def Convert_bil_to_tiff(input_bil, output_tiff):
     return (output_tiff)
 
 
-def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scaling_factor,
-                         geo_out, scale=1.0):
+def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scale=1.0):
     """
     This function converts the hdf5 files into tiff files
 
@@ -206,16 +205,16 @@ def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scaling_factor,
     # FullCmd = '%s -of GTiff %s %s' % (GDAL_TRANSLATE_PATH, name_in, Filename_tiff_end)
     Run_command_window(FullCmd)
 
-    # Get the data array
-    dest = gdal.Open(Filename_tiff_end)
-    Data = dest.GetRasterBand(1).ReadAsArray()
-    dest = None
-
-    # If the band data is not SM change the DN values into PROBA-V values and write into the spectral_reflectance_PROBAV
-    Data_scaled = Data * scaling_factor
-
-    # Save the PROBA-V as a tif file
-    Save_as_tiff(Filename_tiff_end, Data_scaled, geo_out, "WGS84")
+    # # Get the data array
+    # dest = gdal.Open(Filename_tiff_end)
+    # Data = dest.GetRasterBand(1).ReadAsArray()
+    # dest = None
+    #
+    # # If the band data is not SM change the DN values into PROBA-V values and write into the spectral_reflectance_PROBAV
+    # Data_scaled = Data * scaling_factor
+    #
+    # # Save the PROBA-V as a tif file
+    # Save_as_tiff(Filename_tiff_end, Data_scaled, geo_out, "WGS84")
 
     return ()
 
@@ -682,7 +681,7 @@ def Run_command_window(argument):
     Keyword Arguments:
     argument -- string, name of the adf file
     """
-    print('\t{}'.format(argument))
+    # print('\t{}'.format(argument))
 
     if os.name == 'posix':
         argument = argument.replace(".exe", "")
@@ -1066,6 +1065,35 @@ def Open_nc_dict(input_netcdf, group_name, startdate='', enddate=''):
     in_nc.close()
 
     return (dictionary)
+
+
+def Merge_Dataset_GDAL(input_names, output_name):
+    GDALWARP_PATH = 'gdalwarp.exe'
+
+    input_name = ''
+    for file in input_names:
+        input_name += '"{f}" '.format(f=file)
+
+    FullCmd = '{exe} ' \
+              '{file_i} ' \
+              '"{file_o}"'.format(
+        exe=GDALWARP_PATH,
+        file_i=input_name,
+        file_o=output_name.replace('"', '""'))
+    # FullCmd = ' '.join([GDALWARP_PATH,
+    #                     '-overwrite -s_srs '
+    #                     '"+proj=sinu '
+    #                     '+lon_0=0 '
+    #                     '+x_0=0 '
+    #                     '+y_0=0 '
+    #                     '+a=6371007.181 '
+    #                     '+b=6371007.181 '
+    #                     '+units=m +no_defs"',
+    #                     '-t_srs EPSG:%s'
+    #                     ' -of GTiff' % (epsg_to), input_name, output_name])
+    Run_command_window(FullCmd)
+
+    return output_name
 
 
 def Clip_Dataset_GDAL(input_name, output_name, latlim, lonlim, scale=1.0):
