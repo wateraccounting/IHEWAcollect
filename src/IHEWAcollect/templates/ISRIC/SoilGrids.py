@@ -18,14 +18,16 @@ import pandas as pd
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        Clip_Dataset_GDAL, Open_tiff_array, Save_as_tiff
+        Clip_Dataset_GDAL, \
+        Open_array_info, Open_tiff_array, Save_as_tiff
 
     from ..gis import GIS
     from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        Clip_Dataset_GDAL, Open_tiff_array, Save_as_tiff
+        Clip_Dataset_GDAL, \
+        Open_array_info, Open_tiff_array, Save_as_tiff
 
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
@@ -500,6 +502,16 @@ def convert_data(args):
     Clip_Dataset_GDAL(remote_file, temp_file, latlim, lonlim)
 
     # get data to 2D matrix
+    geo_trans, geo_proj, \
+        size_x, size_y = Open_array_info(temp_file)
+    lat_min_merge = np.maximum(latlim[0], geo_trans[3] + size_y * geo_trans[5])
+    lat_max_merge = np.minimum(latlim[1], geo_trans[3])
+    lon_min_merge = np.maximum(lonlim[0], geo_trans[0])
+    lon_max_merge = np.minimum(lonlim[1], geo_trans[0] + size_x * geo_trans[1])
+
+    lonmerge = [lon_min_merge, lon_max_merge]
+    latmerge = [lat_min_merge, lat_max_merge]
+
     data_tmp = Open_tiff_array(temp_file)
 
     # check data type
@@ -546,7 +558,7 @@ def convert_data(args):
     # ------------ #
     # Saveas GTiff #
     # ------------ #
-    geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
+    geo = [lonmerge[0], geo_trans[1], 0, latmerge[1], 0, geo_trans[5]]
     Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
     status_cod = 0

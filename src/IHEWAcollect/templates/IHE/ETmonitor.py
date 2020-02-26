@@ -19,7 +19,7 @@ import pandas as pd
 try:
     from ..collect import \
         reproject_MODIS, Clip_Dataset_GDAL, \
-        Open_tiff_array, Save_as_tiff
+        Open_array_info, Open_tiff_array, Save_as_tiff
 
     from ..gis import GIS
     from ..dtime import Dtime
@@ -27,7 +27,7 @@ try:
 except ImportError:
     from IHEWAcollect.templates.collect import \
         reproject_MODIS, Clip_Dataset_GDAL, \
-        Open_tiff_array, Save_as_tiff
+        Open_array_info, Open_tiff_array, Save_as_tiff
 
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
@@ -471,6 +471,12 @@ def convert_data(args):
 
     # Define local variable
     status_cod = -1
+    if abs(pixel_size - 231) < 1:
+        pixel_size = 10.0 / 4800.0
+    if abs(pixel_size - 463) < 1:
+        pixel_size = 10.0 / 2400.0
+    if abs(pixel_size - 926) < 1:
+        pixel_size = 10.0 / 1200.0
 
     # post-process remote (from server)
     #  -> temporary (unzip)
@@ -500,9 +506,32 @@ def convert_data(args):
     # --------- #
     # Clip data #
     # --------- #
-    Clip_Dataset_GDAL(temp_file_part_4326, temp_file_part, latlim, lonlim)
+    # Clip_Dataset_GDAL(temp_file_part_4326, temp_file_part,
+    #                   latlim, lonlim)
+    geo_trans, geo_proj, \
+        size_x, size_y = Open_array_info(temp_file_part_4326)
+    lat_min_merge = np.maximum(latlim[0], geo_trans[3] + size_y * geo_trans[5])
+    lat_max_merge = np.minimum(latlim[1], geo_trans[3])
+    lon_min_merge = np.maximum(lonlim[0], geo_trans[0])
+    lon_max_merge = np.minimum(lonlim[1], geo_trans[0] + size_x * geo_trans[1])
+
+    lonmerge = [lon_min_merge, lon_max_merge]
+    latmerge = [lat_min_merge, lat_max_merge]
+
+    Clip_Dataset_GDAL(temp_file_part_4326, temp_file_part,
+                      latmerge, lonmerge)
 
     # get data to 2D matrix
+    geo_trans, geo_proj, \
+        size_x, size_y = Open_array_info(temp_file_part)
+    lat_min_merge = np.maximum(latlim[0], geo_trans[3] + size_y * geo_trans[5])
+    lat_max_merge = np.minimum(latlim[1], geo_trans[3])
+    lon_min_merge = np.maximum(lonlim[0], geo_trans[0])
+    lon_max_merge = np.minimum(lonlim[1], geo_trans[0] + size_x * geo_trans[1])
+
+    lonmerge = [lon_min_merge, lon_max_merge]
+    latmerge = [lat_min_merge, lat_max_merge]
+
     data_tmp = Open_tiff_array(temp_file_part)
 
     # check data type
@@ -549,7 +578,7 @@ def convert_data(args):
     # ------------ #
     # Saveas GTiff #
     # ------------ #
-    geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
+    geo = [lonmerge[0], geo_trans[1], 0, latmerge[1], 0, geo_trans[5]]
     Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
     status_cod = 0
