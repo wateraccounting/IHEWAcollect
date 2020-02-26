@@ -18,16 +18,14 @@ import pandas as pd
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        Save_as_tiff, \
-        Open_bil_array, Extract_Data_tar_gz
+        Extract_Data_tar_gz, Open_bil_array, Save_as_tiff
 
     from ..gis import GIS
     from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        Save_as_tiff, \
-        Open_bil_array, Extract_Data_tar_gz
+        Extract_Data_tar_gz, Open_bil_array, Save_as_tiff
 
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
@@ -545,7 +543,7 @@ def convert_data(args):
     data = data * data_multiplier
 
     # novalue data
-    # data[data == np.nan] = data_ndv
+    data[data == np.nan] = data_ndv
 
     # Save as GTiff
     geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]

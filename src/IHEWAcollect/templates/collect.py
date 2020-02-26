@@ -745,6 +745,10 @@ def Open_tiff_array(filename, band=1) -> np.ndarray:
         if ds.RasterCount > 0:
             try:
                 ds_band = ds.GetRasterBand(band)
+                ds_band_ndv = None
+                ds_band_scale = None
+                ds_band_unit = None
+
                 if ds_band is None:
                     pass
                 else:
@@ -768,10 +772,14 @@ def Open_tiff_array(filename, band=1) -> np.ndarray:
                         ds_band_ndv = float(ds_band_ndv)
                         ds_band_scale = float(ds_band_scale)
 
-                    # Convert units, set NVD
+                    # Convert scale, set NVD
                     if ds_band_ndv is not None:
+                        print('Set total {} pixel with NVD({}) to np.nan'.format(
+                            np.count_nonzero(data == ds_band_ndv), ds_band_ndv
+                        ))
                         data[data == ds_band_ndv] = np.nan
                     if ds_band_scale is not None:
+                        print('Multiply scale {}'.format(ds_band_scale))
                         data = data * ds_band_scale
 
             except RuntimeError as err:
@@ -1097,7 +1105,7 @@ def Merge_Dataset_GDAL(input_names, output_name):
     return output_name
 
 
-def Clip_Dataset_GDAL(input_name, output_name, latlim, lonlim, scale=1.0):
+def Clip_Dataset_GDAL(input_name, output_name, latlim, lonlim):
     """
     Clip the data to the defined extend of the user (latlim, lonlim)
      by using the gdal_translate executable of gdal.
@@ -1117,7 +1125,6 @@ def Clip_Dataset_GDAL(input_name, output_name, latlim, lonlim, scale=1.0):
     # find path to the executable
     FullCmd = '{exe} ' \
               '-projwin {lon_w} {lat_n} {lon_e} {lat_s} ' \
-              '-a_scale {scale} ' \
               '-ot Float32 ' \
               '-of GTiff ' \
               '"{file_i}" ' \
@@ -1127,7 +1134,6 @@ def Clip_Dataset_GDAL(input_name, output_name, latlim, lonlim, scale=1.0):
                   lat_n=latlim[1],
                   lon_e=lonlim[1],
                   lat_s=latlim[0],
-                  scale=scale,
                   file_i=input_name.replace('"', '""'),
                   file_o=output_name.replace('"', '""'))
     # FullCmd = ' '.join([

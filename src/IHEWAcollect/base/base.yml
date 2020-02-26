@@ -2721,12 +2721,12 @@ products:
               dir: '/WaterAccounting/Data_Satellite/Evaporation/ETmonitor/Global/'
               fname:
                 r: 'ET_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
-                t: 'ET_ETmonitor_mm-month_{dtime:%Y_%m_01}_4326.tif'
+                t: 'ET_ETmonitor_mm-month_{dtime:%Y_%m_01}.{ipart}.tif'
                 l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
-                t: 'dtime'
+                t: 'dtime.ipart'
                 l: 'dtime'
               ftype:
                 r: 'GTiff'
@@ -5268,7 +5268,7 @@ products:
               dir: '/soilgrids/data/recent/'
               fname:
                 r: 'BDRICM_M_250m_ll.tif'
-                t: null
+                t: 'BDRICM_M_250m_ll.tif'
                 l: 'BDRICM_v1_m.tif'
               fmt:
                 d: null
@@ -5277,7 +5277,7 @@ products:
                 l: null
               ftype:
                 r: 'GTiff'
-                t: null
+                t: 'GTiff'
                 l: 'GTiff'
               dtype:
                 r: 'ubyte'

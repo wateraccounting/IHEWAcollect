@@ -18,14 +18,16 @@ import pandas as pd
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        reproject_MODIS, Clip_Dataset_GDAL
+        reproject_MODIS, Clip_Dataset_GDAL, \
+        Open_tiff_array, Save_as_tiff
 
     from ..gis import GIS
     from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        reproject_MODIS, Clip_Dataset_GDAL
+        reproject_MODIS, Clip_Dataset_GDAL, \
+        Open_tiff_array, Save_as_tiff
 
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
@@ -483,9 +485,11 @@ def convert_data(args):
     # From downloaded remote file
 
     # From generated temporary file
-    temp_file_part = temp_file.format(dtime=date)
+    temp_file_part = temp_file.format(dtime=date, ipart=0)
+    temp_file_part_4326 = temp_file.format(dtime=date, ipart='{}_4326'.format(0))
+
     # Generate temporary files
-    reproject_MODIS(remote_file, temp_file_part, '4326')
+    reproject_MODIS(remote_file, temp_file_part_4326, '4326')
 
     # Convert meta data to float
     # if np.logical_or(isinstance(data_raw_missing, str),
@@ -496,58 +500,57 @@ def convert_data(args):
     # --------- #
     # Clip data #
     # --------- #
-    Clip_Dataset_GDAL(temp_file_part, local_file, latlim, lonlim, data_multiplier)
+    Clip_Dataset_GDAL(temp_file_part_4326, temp_file_part, latlim, lonlim)
 
     # get data to 2D matrix
-    # data_tmp = data_raw[y_id[0]:y_id[1], x_id[0]:x_id[1]]
-    # # data_tmp = np.squeeze(data_tmp, axis=0)
+    data_tmp = Open_tiff_array(temp_file_part)
 
     # check data type
     # filled numpy.ma.MaskedArray as numpy.ndarray
-    # if isinstance(data_tmp, np.ma.MaskedArray):
-    #     data = data_tmp.filled()
-    # else:
-    #     data = np.asarray(data_tmp)
+    if isinstance(data_tmp, np.ma.MaskedArray):
+        data = data_tmp.filled()
+    else:
+        data = np.asarray(data_tmp)
 
     # transfer matrix to GTiff matrix
-    # # [w,n]--[e,n]
-    # #   |      |
-    # # [w,s]--[e,s]
-    # data = np.asarray(data)
-    #
-    # # [w,s]--[e,s]
-    # #   |      |
-    # # [w,n]--[e,n]
-    # # data = np.flipud(data)
-    #
-    # # [w,n]--[w,s]
-    # #   |      |
-    # # [e,n]--[e,s]
-    # # data = np.transpose(a=data, axes=(1, 0))
-    #
-    # # [w,s]--[w,n]
-    # #   |      |
-    # # [e,s]--[e,n]
-    # # data = np.rot90(data, k=1, axes=(0, 1))
-    #
-    # # close file
-    # # fh.close()
-    #
-    # # ------- #
-    # # Convert #
-    # # ------- #
-    # # scale, units
-    # # data[data < 0] = data_ndv
-    # data = data * data_multiplier
-    #
-    # # novalue data
-    # # data[data == np.nan] = data_ndv
-    #
-    # # ------------ #
-    # # Saveas GTiff #
-    # # ------------ #
-    # geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
-    # Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
+    # [w,n]--[e,n]
+    #   |      |
+    # [w,s]--[e,s]
+    data = np.asarray(data)
+
+    # [w,s]--[e,s]
+    #   |      |
+    # [w,n]--[e,n]
+    # data = np.flipud(data)
+
+    # [w,n]--[w,s]
+    #   |      |
+    # [e,n]--[e,s]
+    # data = np.transpose(a=data, axes=(1, 0))
+
+    # [w,s]--[w,n]
+    #   |      |
+    # [e,s]--[e,n]
+    # data = np.rot90(data, k=1, axes=(0, 1))
+
+    # close file
+    # fh.close()
+
+    # ------- #
+    # Convert #
+    # ------- #
+    # scale, units
+    # data[data < 0] = data_ndv
+    data = data * data_multiplier
+
+    # novalue data
+    data[data == np.nan] = data_ndv
+
+    # ------------ #
+    # Saveas GTiff #
+    # ------------ #
+    geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
+    Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
     status_cod = 0
     return status_cod

@@ -19,16 +19,14 @@ from netCDF4 import Dataset
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        Save_as_tiff, \
-        Convert_grb2_to_nc
+        Convert_grb2_to_nc, Save_as_tiff
 
     from ..gis import GIS
     from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        Save_as_tiff, \
-        Convert_grb2_to_nc
+        Convert_grb2_to_nc, Save_as_tiff
 
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime

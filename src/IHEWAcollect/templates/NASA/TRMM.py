@@ -19,16 +19,14 @@ import pandas as pd
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        Save_as_tiff, \
-        Convert_hdf5_to_tiff, Open_tiff_array
+        Convert_hdf5_to_tiff, Open_tiff_array, Save_as_tiff
 
     from ..gis import GIS
     from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        Save_as_tiff, \
-        Convert_hdf5_to_tiff, Open_tiff_array
+        Convert_hdf5_to_tiff, Open_tiff_array, Save_as_tiff
 
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
@@ -519,7 +517,6 @@ def convert_data(args):
     # --------- #
     # get data to 2D matrix
     data_tmp = data_raw[y_id[0]:y_id[1], x_id[0]:x_id[1]]
-    # data_tmp = np.squeeze(data_tmp, axis=0)
 
     # check data type
     # filled numpy.ma.MaskedArray as numpy.ndarray

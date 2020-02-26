@@ -21,16 +21,16 @@ import pandas as pd
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        Convert_hdf5_to_tiff, Clip_Dataset_GDAL, \
-        Merge_Dataset_GDAL
+        Convert_hdf5_to_tiff, Clip_Dataset_GDAL, Merge_Dataset_GDAL, \
+        Open_tiff_array, Save_as_tiff
 
     from ..gis import GIS
     from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        Convert_hdf5_to_tiff, Clip_Dataset_GDAL, \
-        Merge_Dataset_GDAL
+        Convert_hdf5_to_tiff, Clip_Dataset_GDAL, Merge_Dataset_GDAL, \
+        Open_tiff_array, Save_as_tiff
 
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
@@ -619,11 +619,10 @@ def convert_data(args):
         Convert_hdf5_to_tiff(remote_files[ifile], temp_file_part_4326[ifile],
                              data_variable, geo=geo)
 
-        #
         # reproject_MODIS(temp_file_part[ifile], temp_file_part_4326[ifile], '4326')
-        #
+
         Clip_Dataset_GDAL(temp_file_part_4326[ifile], temp_file_part[ifile],
-                          latlim, lonlim, data_multiplier)
+                          latlim, lonlim)
         # geo_trans, geo_proj, \
         #     size_x, size_y = Open_array_info(temp_file_part_4326[ifile])
         # lat_min_merge = np.maximum(latlim[0], geo_trans[3] + size_y * geo_trans[5])
@@ -635,7 +634,7 @@ def convert_data(args):
         # latmerge = [lat_min_merge, lat_max_merge]
         #
         # Clip_Dataset_GDAL(temp_file_part_4326[ifile], temp_file_part[ifile],
-        #                   latmerge, lonmerge, data_multiplier)
+        #                   latmerge, lonmerge)
 
         # Convert meta data to float
         # if np.logical_or(isinstance(data_raw_missing, str),
@@ -643,12 +642,24 @@ def convert_data(args):
         #     data_raw_missing = float(data_raw_missing)
         #     data_raw_scale = float(data_raw_scale)
 
-    Merge_Dataset_GDAL(temp_file_part, local_file)
+    temp_file_part_all = temp_file.format(dtime=date, ipart=0)
+    Merge_Dataset_GDAL(temp_file_part, temp_file_part_all)
+
+    # get data to 2D matrix
+    data_tmp = Open_tiff_array(temp_file_part_all)
+
+    # check data type
+    # filled numpy.ma.MaskedArray as numpy.ndarray
+    if isinstance(data_tmp, np.ma.MaskedArray):
+        data = data_tmp.filled()
+    else:
+        data = np.asarray(data_tmp)
+
     # transfer matrix to GTiff matrix
     # [w,n]--[e,n]
     #   |      |
     # [w,s]--[e,s]
-    # data = np.asarray(data)
+    data = np.asarray(data)
 
     # [w,s]--[e,s]
     #   |      |
@@ -673,16 +684,16 @@ def convert_data(args):
     # ------- #
     # scale, units
     # data[data == data_raw_missing] = np.nan
-    # data = data * data_multiplier
+    data = data * data_multiplier
 
     # novalue data
-    # data[data == np.nan] = data_ndv
+    data[data == np.nan] = data_ndv
 
     # ------------ #
     # Saveas GTiff #
     # ------------ #
-    # geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
-    # Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
+    geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
+    Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
     status_cod = 0
     return status_cod

@@ -117,6 +117,13 @@ Check images.
 
     $ docker images
 
+Check ip address.
+
+.. code-block:: console
+
+    $ docker-machine env
+    export DOCKER_HOST="tcp://192.168.99.100:2376"
+
 Run the image with Jupyter Notebook. To access Jupyter http://192.168.99.100:8888/
 
 .. code-block:: console

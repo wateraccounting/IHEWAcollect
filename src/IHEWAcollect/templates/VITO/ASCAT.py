@@ -520,7 +520,6 @@ def convert_data(args):
     # get data to 2D matrix
     date_id = 0
     data_tmp = data_raw[date_id, y_id[0]: y_id[1], x_id[0]: x_id[1]]
-    # data_tmp = np.squeeze(data_tmp, axis=0)
 
     # check data type
     # filled numpy.ma.MaskedArray as numpy.ndarray
