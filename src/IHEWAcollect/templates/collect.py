@@ -777,7 +777,7 @@ def Open_tiff_array(filename, band=1) -> np.ndarray:
                         print('Set total {} pixel with NVD({}) to np.nan'.format(
                             np.count_nonzero(data == ds_band_ndv), ds_band_ndv
                         ))
-                        data[data == ds_band_ndv] = np.nan
+                        data = np.where(data == ds_band_ndv, np.nan, data)
                     if ds_band_scale is not None:
                         print('Multiply scale {}'.format(ds_band_scale))
                         data = data * ds_band_scale

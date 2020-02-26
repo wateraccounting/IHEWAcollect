@@ -539,11 +539,11 @@ def convert_data(args):
     # Convert #
     # ------- #
     # scale, units
-    # data[data == data_raw_missing] = np.nan
+    # data = np.where(data < 0, np.nan, data)
     data = data * data_multiplier
 
     # novalue data
-    data[data == np.nan] = data_ndv
+    data = np.where(np.isnan(data), data_ndv, data)
 
     # Save as GTiff
     geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]

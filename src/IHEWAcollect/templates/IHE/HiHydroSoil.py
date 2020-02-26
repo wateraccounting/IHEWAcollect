@@ -533,11 +533,11 @@ def convert_data(args):
     # Convert #
     # ------- #
     # scale, units
-    # data[data == data_raw_missing] = np.nan
+    # data = np.where(data < 0, np.nan, data)
     data = data * data_multiplier
 
     # novalue data
-    data[data == np.nan] = data_ndv
+    data = np.where(np.isnan(data), data_ndv, data)
 
     # ------------ #
     # Saveas GTiff #
