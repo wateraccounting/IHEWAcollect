@@ -624,6 +624,18 @@ def convert_data(args):
         #
         Clip_Dataset_GDAL(temp_file_part_4326[ifile], temp_file_part[ifile],
                           latlim, lonlim, data_multiplier)
+        # geo_trans, geo_proj, \
+        #     size_x, size_y = Open_array_info(temp_file_part_4326[ifile])
+        # lat_min_merge = np.maximum(latlim[0], geo_trans[3] + size_y * geo_trans[5])
+        # lat_max_merge = np.minimum(latlim[1], geo_trans[3])
+        # lon_min_merge = np.maximum(lonlim[0], geo_trans[0])
+        # lon_max_merge = np.minimum(lonlim[1], geo_trans[0] + size_x * geo_trans[1])
+        #
+        # lonmerge = [lon_min_merge, lon_max_merge]
+        # latmerge = [lat_min_merge, lat_max_merge]
+        #
+        # Clip_Dataset_GDAL(temp_file_part_4326[ifile], temp_file_part[ifile],
+        #                   latmerge, lonmerge, data_multiplier)
 
         # Convert meta data to float
         # if np.logical_or(isinstance(data_raw_missing, str),

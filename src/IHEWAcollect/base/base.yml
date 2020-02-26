@@ -4570,7 +4570,7 @@ products:
               fname:
                 r: 'MOD16A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD16A2.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD16A2_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MOD16A2_v6_mm.d_D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'

@@ -19,7 +19,7 @@ import pandas as pd
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        Clip_Dataset_GDAL, \
+        Open_array_info, Clip_Dataset_GDAL, \
         Merge_Dataset_GDAL
 
     from ..gis import GIS
@@ -27,7 +27,7 @@ try:
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        Clip_Dataset_GDAL, \
+        Open_array_info, Clip_Dataset_GDAL, \
         Merge_Dataset_GDAL
 
     from IHEWAcollect.templates.gis import GIS
@@ -537,8 +537,18 @@ def convert_data(args):
         #
         # reproject_MODIS(temp_file_part[ifile], temp_file_part_4326[ifile], '4326')
         #
+
+        geo_trans, geo_proj, size_x, size_y = Open_array_info(remote_files[ifile])
+        lat_min_merge = np.maximum(latlim[0], geo_trans[3] + size_y * geo_trans[5])
+        lat_max_merge = np.minimum(latlim[1], geo_trans[3])
+        lon_min_merge = np.maximum(lonlim[0], geo_trans[0])
+        lon_max_merge = np.minimum(lonlim[1], geo_trans[0] + size_x * geo_trans[1])
+
+        lonmerge = [lon_min_merge, lon_max_merge]
+        latmerge = [lat_min_merge, lat_max_merge]
+
         Clip_Dataset_GDAL(remote_files[ifile], temp_file_part[ifile],
-                          latlim, lonlim, data_multiplier)
+                          latmerge, lonmerge, data_multiplier)
 
         # Convert meta data to float
         # if np.logical_or(isinstance(data_raw_missing, str),
