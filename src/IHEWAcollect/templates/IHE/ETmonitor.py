@@ -508,6 +508,7 @@ def convert_data(args):
     # --------- #
     # Clip_Dataset_GDAL(temp_file_part_4326, temp_file_part,
     #                   latlim, lonlim)
+
     geo_trans, geo_proj, \
         size_x, size_y = Open_array_info(temp_file_part_4326)
     lat_min_merge = np.maximum(latlim[0], geo_trans[3] + size_y * geo_trans[5])

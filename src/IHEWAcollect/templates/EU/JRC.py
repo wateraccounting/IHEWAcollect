@@ -539,6 +539,7 @@ def convert_data(args):
 
         # Clip_Dataset_GDAL(remote_files[ifile], temp_file_part[ifile],
         #                   latlim, lonlim)
+
         geo_trans, geo_proj, size_x, size_y = Open_array_info(remote_files[ifile])
         lat_min_merge = np.maximum(latlim[0], geo_trans[3] + size_y * geo_trans[5])
         lat_max_merge = np.minimum(latlim[1], geo_trans[3])
