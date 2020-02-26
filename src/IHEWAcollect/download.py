@@ -367,7 +367,7 @@ class Download(User):
 
         if self.__status['code'] == 0:
             path = self.__conf['path']
-            time = self.__conf['time']['start']
+            # time = self.__conf['time']['start']
             # time_str = time.strftime('%Y-%m-%d %H:%M:%S.%f')
 
             fname = log['name'].format(prod=product, var=variable, res=resolution)

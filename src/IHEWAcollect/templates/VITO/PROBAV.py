@@ -21,7 +21,7 @@ import pandas as pd
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        Convert_hdf5_to_tiff, reproject_MODIS, Clip_Dataset_GDAL, \
+        Convert_hdf5_to_tiff, Clip_Dataset_GDAL, \
         Merge_Dataset_GDAL
 
     from ..gis import GIS
@@ -29,7 +29,7 @@ try:
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        Convert_hdf5_to_tiff, reproject_MODIS, Clip_Dataset_GDAL, \
+        Convert_hdf5_to_tiff, Clip_Dataset_GDAL, \
         Merge_Dataset_GDAL
 
     from IHEWAcollect.templates.gis import GIS
