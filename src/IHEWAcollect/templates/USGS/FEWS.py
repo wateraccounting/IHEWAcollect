@@ -546,7 +546,8 @@ def convert_data(args):
     data = np.where(np.isnan(data), data_ndv, data)
 
     # Save as GTiff
-    geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
+    geo = [lonlim[0] - latlim[1] / 2., pixel_size, 0,
+           latlim[1], 0, -pixel_size]
     Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
     status_cod = 0
