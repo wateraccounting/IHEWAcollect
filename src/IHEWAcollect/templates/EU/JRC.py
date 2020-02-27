@@ -618,7 +618,8 @@ def convert_data(args):
     # ------------ #
     # Saveas GTiff #
     # ------------ #
-    geo = [lonmerge[0], geo_trans[1], 0, latmerge[1], 0, geo_trans[5]]
+    geo = [lonmerge[0] - geo_trans[1], geo_trans[1], 0,
+           latmerge[1] - geo_trans[5], 0, geo_trans[5]]
     Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
     status_cod = 0

@@ -742,6 +742,11 @@ def Open_tiff_array(filename, band=1) -> np.ndarray:
             band = 1
         # data = fp.GetRasterBand(band).ReadAsArray()
 
+        ds_meta = ds.GetMetadata()
+        ds_range = None
+        if isinstance(ds_meta, dict):
+            if 'valid_range' in ds_meta.keys():
+                ds_range = np.fromstring(ds_meta['valid_range'], dtype=float, sep=',')
         if ds.RasterCount > 0:
             try:
                 ds_band = ds.GetRasterBand(band)
@@ -772,15 +777,45 @@ def Open_tiff_array(filename, band=1) -> np.ndarray:
                         ds_band_ndv = float(ds_band_ndv)
                         ds_band_scale = float(ds_band_scale)
 
-                    # Convert scale, set NVD
+                    # Set range
+                    if ds_range is not None:
+                        if len(ds_range) > 1:
+                            # print('Set valid_range {}'.format(ds_range))
+                            # print('  Before min {} mean {} max {}'.format(
+                            #     np.min(data), np.mean(data), np.max(data)
+                            # ))
+                            data = np.where(
+                                np.logical_or(
+                                    data < np.min(ds_range),
+                                    data > np.max(ds_range)),
+                                np.nan, data)
+                            # print('  After nanmin {} nanmean {} nanmax {}'.format(
+                            #     np.nanmin(data), np.nanmean(data), np.nanmax(data)
+                            # ))
+
+                    # Set NVD
                     if ds_band_ndv is not None:
-                        print('Set total {} pixel with NVD({}) to np.nan'.format(
-                            np.count_nonzero(data == ds_band_ndv), ds_band_ndv
-                        ))
+                        # print('Set total {} pixel with NVD({}) to np.nan'.format(
+                        #     np.count_nonzero(data == ds_band_ndv), ds_band_ndv
+                        # ))
+                        # print('  Before min {} mean {} max {}'.format(
+                        #     np.min(data), np.mean(data), np.max(data)
+                        # ))
                         data = np.where(data == ds_band_ndv, np.nan, data)
+                        # print('  After nanmin {} nanmean {} nanmax {}'.format(
+                        #     np.nanmin(data), np.nanmean(data), np.nanmax(data)
+                        # ))
+
+                    # Set scale
                     if ds_band_scale is not None:
-                        print('Multiply scale {}'.format(ds_band_scale))
+                        # print('Multiply scale {}'.format(ds_band_scale))
+                        # print('  Before min {} mean{} max {}'.format(
+                        #     np.min(data), np.mean(data), np.max(data)
+                        # ))
                         data = data * ds_band_scale
+                        # print('  After nanmin {} nanmean {} nanmax {}'.format(
+                        #     np.nanmin(data), np.nanmean(data), np.nanmax(data)
+                        # ))
 
             except RuntimeError as err:
                 print('No band %i found' % band)
