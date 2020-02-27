@@ -686,14 +686,21 @@ def Run_command_window(argument):
 
     if os.name == 'posix':
         argument = argument.replace(".exe", "")
-        rtn_cod = os.system(argument)
+        # rtn_cod = os.system(argument)
+        rtn_cod = os.system('{} {}'.format(argument, '> /dev/null'))
 
     else:
         startupinfo = subprocess.STARTUPINFO()
         startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
-        process = subprocess.Popen(argument, startupinfo=startupinfo,
-                                   stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        # process = subprocess.Popen(argument,
+        #                            startupinfo=startupinfo,
+        #                            stderr=subprocess.PIPE,
+        #                            stdout=subprocess.PIPE)
+        process = subprocess.Popen(argument,
+                                   startupinfo=startupinfo,
+                                   stderr=subprocess.PIPE,
+                                   stdout=subprocess.DEVNULL)
         rtn_cod = process.wait()
 
     if rtn_cod != 0:
