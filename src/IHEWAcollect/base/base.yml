@@ -3091,7 +3091,7 @@ products:
               fname:
                 r: 'GLDAS_NOAH025_3H.A{dtime:%Y%m%d.%H%M}.021.nc4'
                 t: null
-                l: 'GLDAS_v2.1_mm.d_3H-{dtime:%Y%m%d_%H%M}.tif'
+                l: 'GLDAS_v2.1_mm.3h_3H-{dtime:%Y%m%d_%H%M}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -3107,8 +3107,8 @@ products:
                 l: 'float32'
               units:
                 r: 'kg.m2.s'
-                l: 'mm.d'
-                m: 86400.0
+                l: 'mm.3h'
+                m: 10800.0
               lat:
                 s: -60.0
                 n: 90.0
