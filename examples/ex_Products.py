@@ -40,6 +40,27 @@ if __name__ == "__main__":
                 inspect.currentframe()))
     )
 
+    nodata = -9999
+
+    area_bbox_gl = {
+        'w': -180.0,
+        'n': 90.0,
+        'e': 180.0,
+        's': -90.0
+    }
+    area_bbox_af = {
+        'w': -5.0,
+        'n': 30.0,
+        'e': 5.0,
+        's': 25.0
+    }
+    area_bbox = {
+        'w': 118.0642363480000085,
+        'n': 10.4715946960000679,
+        'e': 126.6049655970000458,
+        's': 4.5872944970000731
+    }
+
     test_args = {
         '1a': {
             'product': 'ALEXI',
@@ -47,17 +68,12 @@ if __name__ == "__main__":
             'parameter': 'evapotranspiration',
             'resolution': 'daily',
             'variable': 'ETA',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2005-01-01',
                 'e': '2005-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '1b': {
             'product': 'ALEXI',
@@ -65,17 +81,12 @@ if __name__ == "__main__":
             'parameter': 'evapotranspiration',
             'resolution': 'weekly',
             'variable': 'ETA',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2005-01-01',
                 'e': '2005-01-15'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '2a': {
             'product': 'ASCAT',
@@ -83,17 +94,12 @@ if __name__ == "__main__":
             'parameter': 'soil_water_index',
             'resolution': 'daily',
             'variable': 'SWI_010',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2007-01-01',
                 'e': '2007-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         # TODO, 20200120-END, QPan, ex_CFSR_GRIB, Docker
         #  dec_jpeg2000
@@ -107,17 +113,12 @@ if __name__ == "__main__":
         #     'parameter': 'radiation',
         #     'resolution': 'daily',
         #     'variable': 'dlwsfc',
-        #     'bbox': {
-        #         'w': 118.0642363480000085,
-        #         'n': 10.4715946960000679,
-        #         'e': 126.6049655970000458,
-        #         's': 4.5872944970000731
-        #     },
+        #     'bbox': area_bbox,
         #     'period': {
         #         's': '2007-01-01',
         #         'e': '2007-01-02'
         #     },
-        #     'nodata': -9999
+        #     'nodata': nodata
         # },
         '4a': {
             'product': 'CHIRPS',
@@ -125,17 +126,12 @@ if __name__ == "__main__":
             'parameter': 'precipitation',
             'resolution': 'daily',
             'variable': 'PCP',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2007-01-01',
                 'e': '2007-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '4b': {
             'product': 'CHIRPS',
@@ -143,17 +139,12 @@ if __name__ == "__main__":
             'parameter': 'precipitation',
             'resolution': 'monthly',
             'variable': 'PCP',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2007-01-01',
                 'e': '2007-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '5a': {
             'product': 'CMRSET',
@@ -161,17 +152,12 @@ if __name__ == "__main__":
             'parameter': 'evapotranspiration',
             'resolution': 'monthly',
             'variable': 'ETA',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2007-01-01',
                 'e': '2007-01-31'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         # TODO, 20200120, QPan, DEM
         #  rewrite, and re-design base.yml
@@ -181,17 +167,12 @@ if __name__ == "__main__":
             'parameter': 'DEM',
             'resolution': '30s',
             'variable': 'as',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': None,
                 'e': None
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '6b': {
             'product': 'DEM',
@@ -199,17 +180,12 @@ if __name__ == "__main__":
             'parameter': 'DIR',
             'resolution': '30s',
             'variable': 'as',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': None,
                 'e': None
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         # TODO, 20200120, QPan, ECMWF
         # '7a': {
@@ -224,17 +200,12 @@ if __name__ == "__main__":
         #     'resolution': 'monthly',
         #     'variable': 'ETA',
         #     # variable': 'ETP',
-        #     'bbox': {
-        #         'w': 118.0642363480000085,
-        #         'n': 10.4715946960000679,
-        #         'e': 126.6049655970000458,
-        #         's': 4.5872944970000731
-        #     },
+        #     'bbox': area_bbox,
         #     'period': {
         #         's': '2008-01-01',
         #         'e': '2008-01-31'
         #     },
-        #     'nodata': -9999
+        #     'nodata': nodata
         # },
         # TODO, 20200129-END, QPan, FEWS (SEBS)
         #  multiplier: uint16 to float32, 0.01
@@ -244,17 +215,12 @@ if __name__ == "__main__":
             'parameter': 'evapotranspiration',
             'resolution': 'daily',
             'variable': 'ETP',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '10a': {
             'product': 'GLDAS',
@@ -262,17 +228,12 @@ if __name__ == "__main__":
             'parameter': 'evapotranspiration',
             'resolution': 'three_hourly',
             'variable': 'ETA',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '10b': {
             'product': 'GLDAS',
@@ -280,17 +241,12 @@ if __name__ == "__main__":
             'parameter': 'evapotranspiration',
             'resolution': 'monthly',
             'variable': 'ETA',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '11a': {
             'product': 'GLEAM',
@@ -298,17 +254,12 @@ if __name__ == "__main__":
             'parameter': 'evapotranspiration',
             'resolution': 'daily',
             'variable': 'ETA',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         # TODO, 20200128-END, QPan, GLEAM
         #  date_id = (total month from time['s'])
@@ -318,17 +269,12 @@ if __name__ == "__main__":
             'parameter': 'evapotranspiration',
             'resolution': 'monthly',
             'variable': 'ETA',
-            'bbox': {
-                'w': -180.0,
-                'n': 90.0,
-                'e': 180.0,
-                's': -90.0
-            },
+            'bbox': area_bbox_gl,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '11c': {
             'product': 'GLEAM',
@@ -336,17 +282,12 @@ if __name__ == "__main__":
             'parameter': 'evapotranspiration',
             'resolution': 'daily',
             'variable': 'ETA',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '11d': {
             'product': 'GLEAM',
@@ -354,17 +295,12 @@ if __name__ == "__main__":
             'parameter': 'evapotranspiration',
             'resolution': 'monthly',
             'variable': 'ETA',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '12a': {
             'product': 'GPM',
@@ -372,17 +308,12 @@ if __name__ == "__main__":
             'parameter': 'precipitation',
             'resolution': 'daily',
             'variable': 'PCP',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         # TODO, 20200120-END, QPan, GPM
         #  product['data']['ftype']['r'].split('.')
@@ -392,17 +323,12 @@ if __name__ == "__main__":
             'parameter': 'precipitation',
             'resolution': 'monthly',
             'variable': 'PCP',
-            'bbox': {
-                'w': -180.0,
-                'n': 90.0,
-                'e': 180.0,
-                's': -90.0
-            },
+            'bbox': area_bbox_gl,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '13a': {
             'product': 'HiHydroSoil',
@@ -410,17 +336,12 @@ if __name__ == "__main__":
             'parameter': 'soil',
             'resolution': '30s',
             'variable': 'wcsat_topsoil',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': None,
                 'e': None
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         # TODO, 20200130-END, QPan, JRC
         #  Tiles, sn_gring_10deg.csv, memory usage
@@ -430,17 +351,12 @@ if __name__ == "__main__":
             'parameter': 'water',
             'resolution': '1s',
             'variable': 'occurrence',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': None,
                 'e': None
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '15a': {
             'product': 'MCD12Q1',
@@ -448,17 +364,12 @@ if __name__ == "__main__":
             'parameter': 'land',
             'resolution': 'yearly',
             'variable': 'LC',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-12-31'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '15b': {
             'product': 'MCD12Q1',
@@ -466,17 +377,12 @@ if __name__ == "__main__":
             'parameter': 'land',
             'resolution': 'yearly',
             'variable': 'LU',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-12-31'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '16a': {
             'product': 'MCD43A3',
@@ -484,17 +390,12 @@ if __name__ == "__main__":
             'parameter': 'land',
             'resolution': 'daily',
             'variable': 'AlbedoBSA',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '16b': {
             'product': 'MCD43A3',
@@ -502,17 +403,12 @@ if __name__ == "__main__":
             'parameter': 'land',
             'resolution': 'daily',
             'variable': 'AlbedoWSA',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '17a': {
             'product': 'MOD09GQ',
@@ -520,17 +416,12 @@ if __name__ == "__main__":
             'parameter': 'land',
             'resolution': 'daily',
             'variable': 'REFb01',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '17b': {
             'product': 'MOD09GQ',
@@ -538,17 +429,12 @@ if __name__ == "__main__":
             'parameter': 'land',
             'resolution': 'daily',
             'variable': 'REFb02',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '18a': {
             'product': 'MOD10A2',
@@ -556,17 +442,12 @@ if __name__ == "__main__":
             'parameter': 'land',
             'resolution': 'eight_daily',
             'variable': 'SnowFrac',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-09'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '18b': {
             'product': 'MOD10A2',
@@ -574,17 +455,12 @@ if __name__ == "__main__":
             'parameter': 'land',
             'resolution': 'eight_daily',
             'variable': 'SnowExt',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-09'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '19a': {
             'product': 'MOD11A2',
@@ -592,17 +468,12 @@ if __name__ == "__main__":
             'parameter': 'land',
             'resolution': 'eight_daily',
             'variable': 'LSTday',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-09'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '19b': {
             'product': 'MOD11A2',
@@ -610,17 +481,12 @@ if __name__ == "__main__":
             'parameter': 'land',
             'resolution': 'eight_daily',
             'variable': 'LSTnight',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-09'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '20a': {
             'product': 'MOD13Q1',
@@ -628,17 +494,12 @@ if __name__ == "__main__":
             'parameter': 'land',
             'resolution': 'sixteen_daily',
             'variable': 'NDVI',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-17'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '21a': {
             'product': 'MOD15A2H',
@@ -646,17 +507,12 @@ if __name__ == "__main__":
             'parameter': 'land',
             'resolution': 'eight_daily',
             'variable': 'Fpar',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-09'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '21b': {
             'product': 'MOD15A2H',
@@ -664,17 +520,12 @@ if __name__ == "__main__":
             'parameter': 'land',
             'resolution': 'eight_daily',
             'variable': 'Lai',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-09'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '22a': {
             'product': 'MOD16A2',
@@ -682,17 +533,12 @@ if __name__ == "__main__":
             'parameter': 'evapotranspiration',
             'resolution': 'eight_daily',
             'variable': 'ETA',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-09'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '22b': {
             'product': 'MOD16A2',
@@ -700,17 +546,12 @@ if __name__ == "__main__":
             'parameter': 'evapotranspiration',
             'resolution': 'eight_daily',
             'variable': 'ETP',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-09'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '23a': {
             'product': 'MOD17A2H',
@@ -718,17 +559,12 @@ if __name__ == "__main__":
             'parameter': 'land',
             'resolution': 'eight_daily',
             'variable': 'GPP',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-09'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '24a': {
             'product': 'MYD13',
@@ -736,17 +572,12 @@ if __name__ == "__main__":
             'parameter': 'land',
             'resolution': 'sixteen_daily',
             'variable': 'NDVI',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-18'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         # TODO, 20200207-END, QPan, ex_PROBAV_HDF5, Docker
         #  GDAL and libhdf5 version
@@ -757,17 +588,12 @@ if __name__ == "__main__":
         #     'parameter': 'land',
         #     'resolution': 'daily',
         #     'variable': 'NDVI',
-        #     'bbox': {
-        #         'w': 118.0642363480000085,
-        #         'n': 10.4715946960000679,
-        #         'e': 126.6049655970000458,
-        #         's': 4.5872944970000731
-        #     },
+        #     'bbox': area_bbox,
         #     'period': {
         #         's': '2014-03-12',
         #         'e': '2014-03-13'
         #     },
-        #     'nodata': -9999
+        #     'nodata': nodata
         # },
         # TODO, 20200129-END, QPan, RFE, Afirca
         '26a': {
@@ -776,17 +602,12 @@ if __name__ == "__main__":
             'parameter': 'precipitation',
             'resolution': 'daily',
             'variable': 'PCP',
-            'bbox': {
-                'w': -5.0,
-                'n': 30.0,
-                'e': 5.0,
-                's': 25.0
-            },
+            'bbox': area_bbox_af,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         # TODO, 20200129, QPan, SEBS (FEWS)
         #  multiplier: uint16 to float32, 0.01
@@ -796,17 +617,12 @@ if __name__ == "__main__":
             'parameter': 'energy',
             'resolution': 'monthly',
             'variable': 'ETM',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         # TODO, 20200129, QPan, ex_SoilGrids_BigTIFF, Docker
         #  BDRLOG, CLYPPT, CRFVOL, SLTPPT, SNDPPT
@@ -817,17 +633,12 @@ if __name__ == "__main__":
         #     'parameter': 'soil',
         #     'resolution': '9s',
         #     'variable': 'BDRICM',
-        #     'bbox': {
-        #         'w': 118.0642363480000085,
-        #         'n': 10.4715946960000679,
-        #         'e': 126.6049655970000458,
-        #         's': 4.5872944970000731
-        #     },
+        #     'bbox': area_bbox,
         #     'period': {
         #         's': None,
         #         'e': None
         #     },
-        #     'nodata': -9999
+        #     'nodata': nodata
         # }
         '29a': {
             'product': 'TRMM',
@@ -835,17 +646,12 @@ if __name__ == "__main__":
             'parameter': 'precipitation',
             'resolution': 'monthly',
             'variable': 'PCP',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': '2008-01-01',
                 'e': '2008-01-02'
             },
-            'nodata': -9999
+            'nodata': nodata
         },
         '30a': {
             'product': 'TWC',
@@ -853,17 +659,12 @@ if __name__ == "__main__":
             'parameter': 'water',
             'resolution': '5m',
             'variable': 'WPL',
-            'bbox': {
-                'w': 118.0642363480000085,
-                'n': 10.4715946960000679,
-                'e': 126.6049655970000458,
-                's': 4.5872944970000731
-            },
+            'bbox': area_bbox,
             'period': {
                 's': None,
                 'e': None
             },
-            'nodata': -9999
+            'nodata': nodata
         }
     }
 
