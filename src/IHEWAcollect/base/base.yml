@@ -4694,7 +4694,7 @@ products:
               fname:
                 r: 'MOD17A2H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD17A2H.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD17A2H_v6_kgC.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'MOD17A2H_v6_kgC.m2.d_8D-{dtime:%Y%m%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4710,8 +4710,8 @@ products:
                 t: null
                 l: 'float32'
               units:
-                r: 'kgC.m2'
-                l: 'kgC.m2'
+                r: 'kgC.m2.8d'
+                l: 'kgC.m2.d'
                 m: 0.125
               lat:
                 s: -10007554.677
