@@ -179,8 +179,10 @@ def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scale=1.0, geo=
 
     if isinstance(Band, str):
         for i in range(0, len(g.GetSubDatasets()), 1):
-            if Band in g.GetSubDatasets()[i][0].split(':')[-1]:
+            print('    ', g.GetSubDatasets()[i][0].split(':')[-1])
+            if Band == g.GetSubDatasets()[i][0].split(':')[-1]:
                 Band_number = i
+                print(Band, g.GetSubDatasets()[i][0].split(':')[-1], Band_number)
 
     name_in = g.GetSubDatasets()[Band_number][0]
 
