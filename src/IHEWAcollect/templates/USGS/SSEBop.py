@@ -539,7 +539,7 @@ def convert_data(args):
     # Convert #
     # ------- #
     # scale, units
-    data = np.where(data < 0, np.nan, data)
+    # data = np.where(data < 0, np.nan, data)
     data = data * data_multiplier
 
     # novalue data
