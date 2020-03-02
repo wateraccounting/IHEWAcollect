@@ -687,7 +687,7 @@ if __name__ == "__main__":
                             nodata=value['nodata'],
                             is_status=False)
 
-    # download.get_products()
+    download.get_products()
 
     # download.generate_encrypt()
 
