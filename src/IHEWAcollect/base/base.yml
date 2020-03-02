@@ -4360,7 +4360,7 @@ products:
           freq: '16D'
           variables:
             NDVI:
-              variable: '250m_16_days_NDVI'
+              variable: '250m 16 days NDVI'
               name: 'Sixteen Daily NDVI'
               description:
                 ''
@@ -4929,7 +4929,7 @@ products:
           freq: '16D'
           variables:
             NDVI:
-              variable: '250m_16_days_NDVI'
+              variable: '250m 16 days NDVI'
               name: 'Sixteen Daily NDVI'
               description:
                 ''
@@ -5013,8 +5013,8 @@ products:
           freq: 'D'
           variables:
             NDVI:
-              # variable: '//LEVEL3/NDVI/NDVI'
-              variable: 'NDVI'
+              # variable: 'NDVI'
+              variable: '//LEVEL3/NDVI/NDVI'
               name: 'Daily NDVI'
               description:
                 ''
