@@ -109,7 +109,7 @@ products:
           variables:
             ETA:
               variable: null
-              name: 'Weekly Evaporation'
+              name: 'Weekly Evapotranspiration'
               description:
                 ''
               dir: '/WaterAccounting/Data_Satellite/Evaporation/ALEXI/World/'
@@ -805,7 +805,7 @@ products:
           variables:
             ETA:
               variable: null
-              name: 'Monthly Evaporation'
+              name: 'Monthly Evapotranspiration'
               description:
                 'The CMRSET product provides estimates of actual (not potential) evapotranspiration
                  based on MODIS reflectance and short wave infra-red data, and gridded meteorological
@@ -2715,7 +2715,7 @@ products:
           variables:
             ETA:
               variable: null
-              name: 'Monthly Actual Evaporation'
+              name: 'Monthly Actual Evapotranspiration'
               description:
                 ''
               dir: '/WaterAccounting/Data_Satellite/Evaporation/ETmonitor/Global/'
@@ -3000,7 +3000,7 @@ products:
           variables:
             ETP:
               variable: null
-              name: 'Daily Potential Evaporation'
+              name: 'Daily Potential Evapotranspiration'
               description:
                 ''
               dir: '/downloads/sciweb1/shared/fews/web/global/daily/pet/downloads/daily/'
@@ -5212,6 +5212,83 @@ products:
               dem:
                 w: 7200
                 h: 3600
+
+  SSEBop:
+    account: null
+    template: 'USGS'
+    meta:
+      owner: 'United States Agency for International Development'
+      description:
+        'The USGS FEWS NET Data Portal provides access to geo-spatial data, satellite image
+         products, and derived data products in support of FEWS NET drought monitoring efforts
+         throughout the world. This portal is provided by the USGS FEWS NET Project, part of
+         the Early Warning Focus Area at the USGS Earth Resources Observation and Science
+         (EROS) Center.'
+      websites:
+        - 'https://earlywarning.usgs.gov/fews'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'get'
+      ftypes:
+        - 'zip'
+      versions:
+        - 'v4'
+      datasets:
+        - 'Evapotranspiration'
+      resolutions:
+        - 'monthly'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
+    v4:
+      evapotranspiration:
+        monthly:
+          url: 'https://edcintl.cr.usgs.gov'
+          protocol: 'HTTPS'
+          method: 'get'
+          freq: 'MS'
+          variables:
+            ETA:
+              variable: null
+              name: 'Monthly Actual Evapotranspiration'
+              description:
+                ''
+              dir: '/downloads/sciweb1/shared/fews/web/global/monthly/eta/downloads/'
+              fname:
+                r: 'm{dtime:%Y%m}.zip'
+                t: 'm{dtime:%Y%m}_modisSSEBopETv4_actual_mm.tif'
+                l: 'SSEBop_v4_mm_MS-{dtime:%Y%m}.tif'
+              fmt:
+                d: null
+                r: 'dtime'
+                t: 'dtime'
+                l: 'dtime'
+              ftype:
+                r: 'zip'
+                t: 'GTiff'
+                l: 'GTiff'
+              dtype:
+                r: 'binary'
+                t: 'int16'
+                l: 'float32'
+              units:
+                r: 'mm'
+                l: 'mm'
+                m: 1.0
+              lat:
+                s: -60.0
+                n: 80.0
+                r: 0.009651999899999999522
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 0.009651999899999999522
+              time:
+                s: 2003-01-01 00:00:00
+                e: null
+              dem:
+                w: 37298
+                h: 14505
 
   # Spatial resolution
   # Soil

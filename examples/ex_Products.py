@@ -665,7 +665,21 @@ if __name__ == "__main__":
                 'e': None
             },
             'nodata': nodata
-        }
+        },
+
+        '31a': {
+            'product': 'SSEBop',
+            'version': 'v4',
+            'parameter': 'evapotranspiration',
+            'resolution': 'monthly',
+            'variable': 'ETA',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': nodata
+        },
     }
 
     main(path, test_args)
