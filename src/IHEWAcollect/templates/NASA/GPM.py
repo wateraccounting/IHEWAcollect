@@ -580,15 +580,20 @@ def convert_data(args):
     geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
     Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
-    clean(remote_file)
-    clean(temp_file)
+    path = os.path.dirname(os.path.realpath(remote_file))
+    if 'remote' != path[-6:]:
+        path = os.path.join(path, 'remote')
+    clean(path)
+    path = os.path.dirname(os.path.realpath(temp_file))
+    if 'temporary' != path[-9:]:
+        path = os.path.join(path, 'temporary')
+    clean(path)
 
     status_cod = 0
     return status_cod
 
 
-def clean(file):
-    path = os.path.dirname(os.path.realpath(file))
+def clean(path):
     msg = 'Cleaning    "{f}"'.format(f=path)
     print('{}'.format(msg))
     __this.Log.write(datetime.datetime.now(), msg=msg)
