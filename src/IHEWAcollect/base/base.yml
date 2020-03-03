@@ -4707,12 +4707,12 @@ products:
                 l: 'GTiff'
               dtype:
                 r: 'int16'
-                t: null
+                t: 'float32'
                 l: 'float32'
               units:
                 r: 'kgC.m2.8d'
                 l: 'kgC.m2.d'
-                m: 0.125
+                m: 0.000125
               lat:
                 s: -10007554.677
                 n: 10007554.677
