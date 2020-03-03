@@ -195,7 +195,6 @@ class Download(User):
         self._folder()
         self._log()
         self._template()
-        # _folder_clean
         return status
 
     def _download_start(self) -> int:
@@ -209,6 +208,7 @@ class Download(User):
         # self.__tmp['module'].download()
         # self.__tmp['module'].convert()
         # self.__tmp['module'].saveas()
+        # self.__tmp['module'].clean()
         return status
 
     def _download_finish(self) -> int:
@@ -219,7 +219,7 @@ class Download(User):
         """
         status = -1
         self._log_close()
-        # _folder_clean
+        # self._folder_clean()
         return status
 
     def _time(self) -> dict:
@@ -342,7 +342,7 @@ class Download(User):
             self.__conf['folder'] = folder
         return folder
 
-    def _folder_clean(self, name):
+    def _folder_clean(self):
         statue = 1
 
         # shutil
@@ -350,6 +350,12 @@ class Download(User):
         # re = glob.glob(os.path.join(folder['r'], '*'))
         # for f in re:
         #     os.remove(os.path.join(folder['r'], f))
+
+        # for r, d, f in os.walk(path):
+        #     for file in f:
+        #         if '.txt' in file:
+        #             files.append(os.path.join(r, file))
+
         return statue
 
     def _log(self) -> dict:

@@ -628,5 +628,20 @@ def convert_data(args):
     geo = [lonlim[0], pixel_size, 0, latlim[1], 0, -pixel_size]
     Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
+    clean(remote_file)
+    clean(temp_file)
+
     status_cod = 0
     return status_cod
+
+
+def clean(file):
+    path = os.path.dirname(os.path.realpath(file))
+    msg = 'Cleaning    "{f}"'.format(f=path)
+    print('{}'.format(msg))
+    __this.Log.write(datetime.datetime.now(), msg=msg)
+
+    for root, dirs, files in os.walk(path):
+        for filename in files:
+            # print(filename)
+            os.remove(os.path.join(root, filename))

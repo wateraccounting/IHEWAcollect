@@ -100,6 +100,14 @@ IHEWAcollect.templates.USGS.MYD13 module
    :undoc-members:
    :show-inheritance:
 
+IHEWAcollect.templates.USGS.SSEBop module
+-----------------------------------------
+
+.. automodule:: IHEWAcollect.templates.USGS.SSEBop
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------
