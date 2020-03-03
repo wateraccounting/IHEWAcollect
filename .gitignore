@@ -3,9 +3,10 @@ tests/accounts.yml
 tests/0accounts.yml
 
 # tests download
-tests/data/Products/
 tests/data/Download/
 tests/data/Notebooks/
+tests/data/Products/
+tests/data/Shapefile/
 tests/IHEWAcollect/
 
 # examples
