@@ -2,19 +2,21 @@
 """
 **ECMWF Module**
 
+https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets
+
+$HOME/.ecmwfapirc
+{
+    "url"   : "https://api.ecmwf.int/v1",
+    "key"   : "4fe81af725d8f7647e10d35cadf7825e",
+    "email" : "quanpan302@hotmail.com"
+}
 """
 # General modules
 import os
 import sys
 import datetime
 
-import watools.Collect.ECMWF.ECMWFdownload as Download
-# Water Accounting modules
-import watools.General.data_conversions as DC
-
-import requests
-# from requests.auth import HTTPBasicAuth
-from joblib import Parallel, delayed
+from ecmwfapi import ECMWFDataServer
 
 import numpy as np
 import pandas as pd

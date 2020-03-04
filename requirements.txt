@@ -22,6 +22,7 @@
 affine>=2.3
 attrs>=19.0
 beautifulsoup4>=4.8
+cdsapi
 cftime>=1.0.3
 Click==7.0
 click-plugins==1.1.1

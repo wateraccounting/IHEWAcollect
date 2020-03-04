@@ -187,8 +187,11 @@ if __name__ == "__main__":
             },
             'nodata': nodata
         },
-        # TODO, 20200120, QPan, ECMWF
+        # TODO, 20200120, QPan, Copernicus and ECMWF
         # '7a': {
+        #     'product': 'Copernicus',
+        # },
+        # '7b': {
         #     'product': 'ECMWF',
         # },
         # TODO, 20200120-END, QPan, ex_ETmonitor_BigTIFF, Docker

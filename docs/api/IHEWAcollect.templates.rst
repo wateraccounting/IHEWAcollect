@@ -6,8 +6,6 @@ Subpackages
 
 .. toctree::
 
-   IHEWAcollect.templates.ECMWF
-   IHEWAcollect.templates.ESA
    IHEWAcollect.templates.EU
    IHEWAcollect.templates.FAO
    IHEWAcollect.templates.HydroSHEDS
