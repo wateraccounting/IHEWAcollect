@@ -880,7 +880,58 @@ products:
         - ''
       projection:
         - 'WGS84'
-    # v1:
+#    v1:
+#      evapotranspiration:
+#        monthly:
+#          url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
+#          protocol: 'FTP'
+#          method: 'get'
+#          freq: 'MS'
+#          variables:
+#            ETA:
+#              variable: null
+#              name: 'Monthly Evapotranspiration'
+#              description:
+#                'The CMRSET product provides estimates of actual (not potential) evapotranspiration
+#                 based on MODIS reflectance and short wave infra-red data, and gridded meteorological
+#                 surfaces. User''s are cautioned that these data products are still under test and
+#                 may change with little notice.'
+#              dir: '/WaterAccounting/Data_Satellite/Evaporation/CMRSET/Global/'
+#              fname:
+#                r: 'M01CMRSETGlobal{dtime:Y%YM%m}.tif'
+#                t: null
+#                l: 'CMRSET_v1_mm.m_MS-{dtime:%Y%m}.tif'
+#              fmt:
+#                d: null
+#                r: 'dtime'
+#                t: null
+#                l: 'dtime'
+#              ftype:
+#                r: 'GTiff'
+#                t: null
+#                l: 'GTiff'
+#              dtype:
+#                r: 'float64'
+#                t: null
+#                l: 'float32'
+#              units:
+#                r: 'mm.m'
+#                l: 'mm.m'
+#                m: 1.0
+#              lat:
+#                s: -90.0
+#                n: 90.0
+#                r: 0.05
+#              lon:
+#                w: -180.0
+#                e: 180.0
+#                r: 0.05
+#              time:
+#                s: 2000-01-01 00:00:00
+#                e: 2012-12-31 23:59:59
+#              dem:
+#                w: 7200
+#                h: 3600
 
   # Spatial resolution
   # DEM, DIR
@@ -2709,7 +2760,58 @@ products:
         - ''
       projection:
         - 'WGS84'
-    # v1:
+#    v1:
+#      evapotranspiration:
+#        monthly:
+#          url: 'ftp://ftp.wateraccounting.unesco-ihe.org'
+#          protocol: 'FTP'
+#          method: 'get'
+#          freq: 'MS'
+#          variables:
+#            ETA:
+#              variable: null
+#              name: 'Monthly Evapotranspiration'
+#              description:
+#                'The CMRSET product provides estimates of actual (not potential) evapotranspiration
+#                 based on MODIS reflectance and short wave infra-red data, and gridded meteorological
+#                 surfaces. User''s are cautioned that these data products are still under test and
+#                 may change with little notice.'
+#              dir: '/WaterAccounting/Data_Satellite/Evaporation/CMRSET/Global/'
+#              fname:
+#                r: 'M01CMRSETGlobal{dtime:Y%YM%m}.tif'
+#                t: null
+#                l: 'CMRSET_v1_mm.m_MS-{dtime:%Y%m}.tif'
+#              fmt:
+#                d: null
+#                r: 'dtime'
+#                t: null
+#                l: 'dtime'
+#              ftype:
+#                r: 'GTiff'
+#                t: null
+#                l: 'GTiff'
+#              dtype:
+#                r: 'float64'
+#                t: null
+#                l: 'float32'
+#              units:
+#                r: 'mm.m'
+#                l: 'mm.m'
+#                m: 1.0
+#              lat:
+#                s: -90.0
+#                n: 90.0
+#                r: 0.05
+#              lon:
+#                w: -180.0
+#                e: 180.0
+#                r: 0.05
+#              time:
+#                s: 2000-01-01 00:00:00
+#                e: 2012-12-31 23:59:59
+#              dem:
+#                w: 7200
+#                h: 3600
 
   # ETA, ETP, ..., T
   # ftp.wateraccounting.unesco-ihe.org
