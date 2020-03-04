@@ -673,6 +673,7 @@ def convert_data(args):
     # scale, units
     # data = np.where(data < 0, np.nan, data)
     data = data * data_multiplier
+    data = np.array(data, dtype=np.uint8)
 
     # novalue data
     data = np.where(np.isnan(data), data_ndv, data)
