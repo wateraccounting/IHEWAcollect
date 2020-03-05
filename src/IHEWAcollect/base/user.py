@@ -150,7 +150,7 @@ class User(Base):
         file_crd = os.path.join(self.__conf['path'], fname_crd)
 
         if os.path.exists(file_org):
-            conf_enc = yaml.load(open(file_org, 'r'),
+            conf_enc = yaml.load(open(file_org, 'r', encoding='UTF8'),
                                  Loader=yaml.FullLoader)
         else:
             conf_enc = None
@@ -204,7 +204,8 @@ class User(Base):
         """
         is_renew = False
         if os.path.exists(file):
-            conf = yaml.load(open(file, 'r'), Loader=yaml.FullLoader)
+            conf = yaml.load(open(file, 'r', encoding='UTF8'),
+                             Loader=yaml.FullLoader)
         else:
             conf = None
 
