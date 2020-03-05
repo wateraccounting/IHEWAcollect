@@ -125,7 +125,7 @@ class Base(object):
 
         # self.__conf['data']
         if os.path.exists(f_in):
-            conf = yaml.load(open(f_in, 'r'), Loader=yaml.FullLoader)
+            conf = yaml.load(open(f_in, 'r', encoding='UTF8'), Loader=yaml.FullLoader)
             # try:
             #     conf = yaml.load(open(f_in, 'r'), Loader=yaml.FullLoader)
             # except yaml.YAMLError as err:
