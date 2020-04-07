@@ -5404,7 +5404,7 @@ products:
               fname:
                 r: 'm{dtime:%Y%m}.zip'
                 t: 'm{dtime:%Y%m}_modisSSEBopETv4_actual_mm.tif'
-                l: 'SSEBop_v4_._MS-{dtime:%Y%m}.tif'
+                l: 'SSEBop_v4_mm.m_MS-{dtime:%Y%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -5419,8 +5419,8 @@ products:
                 t: 'int16'
                 l: 'float32'
               units:
-                r: '.'
-                l: '.'
+                r: 'mm'
+                l: 'mm.m'
                 m: 1.0
               lat:
                 s: -60.0
