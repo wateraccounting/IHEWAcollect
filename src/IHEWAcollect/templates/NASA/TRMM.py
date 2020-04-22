@@ -3,17 +3,17 @@
 **TRMM Module**
 
 """
+import datetime
 # General modules
 import os
 import sys
-import datetime
 
+import numpy as np
+import pandas as pd
 import requests
 # from requests.auth import HTTPBasicAuth => .netrc
 from joblib import Parallel, delayed
 
-import numpy as np
-import pandas as pd
 # from netCDF4 import Dataset
 
 # IHEWAcollect Modules
@@ -389,6 +389,16 @@ def start_download(args) -> int:
             __this.Log.write(datetime.datetime.now(), msg=msg)
 
     if is_start_download:
+        # https://disc.gsfc.nasa.gov/data-access#python
+        # C:\Users\qpa001\.netrc
+        file_conn_auth = os.path.join(os.path.expanduser("~"), ".netrc")
+        with open(file_conn_auth, 'w+') as fp:
+            fp.write('machine {m} login {u} password {p}\n'.format(
+                m='urs.earthdata.nasa.gov',
+                u=username,
+                p=password
+            ))
+
         # Download the data from server if the file not exists
         msg = 'Downloading "{f}"'.format(f=remote_fname)
         print('{}'.format(msg))
@@ -407,16 +417,6 @@ def start_download(args) -> int:
         # Download data #
         # ------------- #
         if is_download:
-            # https://disc.gsfc.nasa.gov/data-access#python
-            # C:\Users\qpa001\.netrc
-            file_conn_auth = os.path.join(os.path.expanduser("~"), ".netrc")
-            with open(file_conn_auth, 'w+') as fp:
-                fp.write('machine {m} login {u} password {p}\n'.format(
-                    m='urs.earthdata.nasa.gov',
-                    u=username,
-                    p=password
-                ))
-
             url = '{sr}{dr}{fl}'.format(sr=url_server,
                                         dr=url_dir,
                                         fl=remote_fname)
@@ -566,14 +566,16 @@ def convert_data(args):
            latlim[1], 0, -pixel_size]
     Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
-    path = os.path.dirname(os.path.realpath(remote_file))
-    if 'remote' != path[-6:]:
-        path = os.path.join(path, 'remote')
-    clean(path)
-    path = os.path.dirname(os.path.realpath(temp_file))
-    if 'temporary' != path[-9:]:
-        path = os.path.join(path, 'temporary')
-    clean(path)
+    if __this.conf['is_save_remote']:
+        path = os.path.dirname(os.path.realpath(remote_file))
+        if 'remote' != path[-6:]:
+            path = os.path.join(path, 'remote')
+        clean(path)
+    if __this.conf['is_save_temp']:
+        path = os.path.dirname(os.path.realpath(temp_file))
+        if 'temporary' != path[-9:]:
+            path = os.path.join(path, 'temporary')
+        clean(path)
 
     status_cod = 0
     return status_cod

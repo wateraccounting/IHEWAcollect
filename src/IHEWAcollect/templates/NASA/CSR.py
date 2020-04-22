@@ -1,35 +1,43 @@
 # -*- coding: utf-8 -*-
 """
-**CHIRPS Module**
+**CSR Module**
+
+`podaacpy on Github<https://github.com/nasa/podaacpy>`_
 
 """
 import datetime
-import ftplib
 # General modules
+import inspect
 import os
+import re
 import sys
-from urllib.parse import urlparse
 
 import numpy as np
 import pandas as pd
+
+import pycurl
+from bs4 import BeautifulSoup
+# import requests
+# # from requests.auth import HTTPBasicAuth => .netrc
 from joblib import Parallel, delayed
+
+# from netCDF4 import Dataset
 
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        Extract_Data_gz, Open_tiff_array, Save_as_tiff
+        Open_tiff_array, Save_as_tiff
 
     from ..gis import GIS
     from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        Extract_Data_gz, Open_tiff_array, Save_as_tiff
+        Open_tiff_array, Save_as_tiff
 
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
     from IHEWAcollect.templates.util import Log
-
 
 __this = sys.modules[__name__]
 
@@ -38,6 +46,12 @@ def _init(status, conf):
     # From download.py
     __this.status = status
     __this.conf = conf
+    __this.path = os.path.join(
+        os.getcwd(),
+        os.path.dirname(
+            inspect.getfile(
+                inspect.currentframe()))
+    )
 
     account = conf['account']
     folder = conf['folder']
@@ -52,7 +66,8 @@ def _init(status, conf):
 
 
 def DownloadData(status, conf) -> int:
-    """This is main interface.
+    """
+    This function downloads GLEAM ET data
 
     Args:
         status (dict): Status.
@@ -355,7 +370,7 @@ def get_download_args(latlim, lonlim, date,
         username, password, apitoken, \
         url_server, url_dir, \
         fname_r, fname_t, fname_l, \
-        file_r, file_t, file_l,\
+        file_r, file_t, file_l, \
         y_id, x_id, pixel_size, pixel_w, pixel_h, \
         data_ndv, data_type, data_multiplier, data_variable
 
@@ -368,8 +383,8 @@ def start_download(args) -> int:
         product, \
         username, password, apitoken, \
         url_server, url_dir, \
-        remote_fname, temp_fname, local_fname,\
-        remote_file, temp_file, local_file,\
+        remote_fname, temp_fname, local_fname, \
+        remote_file, temp_file, local_file, \
         y_id, x_id, pixel_size, pixel_w, pixel_h, \
         data_ndv, data_type, data_multiplier, data_variable = args
 
@@ -388,63 +403,100 @@ def start_download(args) -> int:
             __this.Log.write(datetime.datetime.now(), msg=msg)
 
     if is_start_download:
+        # https://disc.gsfc.nasa.gov/data-access#python
+        # C:\Users\qpa001\.netrc
+        file_conn_auth = os.path.join(os.path.expanduser("~"), ".netrc")
+        with open(file_conn_auth, 'w+') as fp:
+            fp.write('machine {m} login {u} password {p}\n'.format(
+                m='urs.earthdata.nasa.gov',
+                u=username,
+                p=password
+            ))
+
         # Download the data from server if the file not exists
-        msg = 'Downloading "{f}"'.format(f=remote_fname)
-        print('{}'.format(msg))
-        __this.Log.write(datetime.datetime.now(), msg=msg)
+        remote_files = []
+        remote_fnames = []
+        url = '{sr}{dr}'.format(sr=url_server, dr=url_dir)
+        file = os.path.join(__this.path, '{p}-{v}.html'.format(
+            p=product['name'],
+            v=product['version']
+        ))
+        ctime = start_download_scan(url, file, username, password, date)
+        if len(ctime) == 2:
+            remote_files.append(remote_file.format(
+                dtime_s=ctime[0],
+                dtime_e=ctime[1]
+            ))
+            remote_fnames.append(remote_fname.format(
+                dtime_s=ctime[0],
+                dtime_e=ctime[1]
+            ))
 
-        is_download = True
-        if os.path.exists(remote_file):
-            if np.ceil(os.stat(remote_file).st_size / 1024) > 0:
-                is_download = False
-
-                msg = 'Exist "{f}"'.format(f=remote_file)
-                print('\33[93m{}\33[0m'.format(msg))
+            for ifile in range(len(remote_fnames)):
+                msg = 'Downloading "{f}"'.format(f=remote_fnames[ifile])
+                print('{}'.format(msg))
                 __this.Log.write(datetime.datetime.now(), msg=msg)
 
-        # ------------- #
-        # Download data #
-        # ------------- #
-        if is_download:
-            url_parse = urlparse(url_server)
-            url_host = url_parse.hostname
-            # url_port = url_parse.port
-            url = '{sr}{dr}{fn}'.format(sr=url_host,
-                                        dr='',
-                                        fn='')
-            # print('url: "{f}"'.format(f=url))
+                is_download = True
+                if os.path.exists(remote_files[ifile]):
+                    if np.ceil(os.stat(remote_files[ifile]).st_size / 1024) > 0:
+                        is_download = False
 
-            try:
-                # Connect to server
-                conn = ftplib.FTP(url)
-                conn.login()
-                # conn.login(username, password) Error 530
-                conn.cwd(url_dir)
-            except ftplib.all_errors as err:
-                # Connect error
-                msg = 'Not able to download {fn}, from {sr}{dr}'.format(
-                    sr=url_server,
-                    dr=url_dir,
-                    fn=remote_fname)
-                print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
-                __this.Log.write(datetime.datetime.now(),
-                                 msg='{}\n{}'.format(msg, str(err)))
-                remote_file_status += 1
-            else:
-                # Fetch data
-                # conn.status_code == ftplib.FTP.codes.ok
-                with open(remote_file, "wb") as fp:
-                    conn.retrbinary("RETR " + remote_fname, fp.write)
-                    conn.close()
-                    remote_file_status += 0
+                        msg = 'Exist "{f}"'.format(f=remote_files[ifile])
+                        print('\33[93m{}\33[0m'.format(msg))
+                        __this.Log.write(datetime.datetime.now(), msg=msg)
+
+                # ------------- #
+                # Download data #
+                # ------------- #
+                if is_download:
+                    url = '{sr}{dr}{fl}'.format(sr=url_server,
+                                                dr=url_dir,
+                                                fl=remote_fnames[ifile])
+                    # print('url: "{f}"'.format(f=url))
+
+                    with open(remote_files[ifile], 'wb') as fp:
+                        conn = pycurl.Curl()
+                        conn.setopt(conn.URL, url)
+                        conn.setopt(conn.USERPWD, '%s:%s' % (username, password))
+                        conn.setopt(conn.WRITEDATA, fp)
+                        conn.perform()
+                        conn.close()
+
+                    # try:
+                    #     # Connect to server
+                    #     conn = requests.post(url)
+                    #     # conn.raise_for_status()
+                    # except requests.exceptions.RequestException as err:
+                    #     # Connect error
+                    #     msg = 'Not able to download {fn}, from {sr}{dr}'.format(
+                    #         sr=url_server,
+                    #         dr=url_dir,
+                    #         fn=remote_fnames[ifile])
+                    #     print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
+                    #     __this.Log.write(datetime.datetime.now(),
+                    #                      msg='{}\n{}'.format(msg, str(err)))
+                    #     remote_file_status += 1
+                    # else:
+                    #     # Fetch data
+                    #     # conn.status_code == requests.codes.ok
+                    #     with open(remote_files[ifile], 'wb') as fp:
+                    #         fp.write(conn.content)
+                    #         conn.close()
+                    #         remote_file_status += 0
         else:
             remote_file_status += 0
 
         # ---------------- #
         # Download success #
         # ---------------- #
-        if remote_file_status == 0:
-            local_file_status = convert_data(args)
+        if len(remote_fnames) > 0:
+            if remote_file_status == 0:
+                local_file_status += convert_data(args)
+        else:
+            msg = 'No tiles found!'
+            print('{}'.format(msg))
+            __this.Log.write(datetime.datetime.now(), msg=msg)
 
         # --------------- #
         # Download finish #
@@ -462,16 +514,53 @@ def start_download(args) -> int:
     return status_cod
 
 
+def start_download_scan(url, file, username, password, date) -> tuple:
+    """Scan tile name
+    """
+    ctime = []
+
+    # # Connect to server
+    # # Curl or Menually to CSR-v3.1.html
+    # with open(file, 'wb') as fp:
+    #     conn = pycurl.Curl()
+    #     conn.setopt(conn.URL, url)
+    #     conn.setopt(conn.USERPWD, '%s:%s' % (username, password))
+    #     conn.setopt(conn.WRITEDATA, fp)
+    #     conn.perform()
+    #     conn.close()
+
+    # Scan available files on the server
+    conn = open(file, 'r', encoding='UTF8')
+    soup = BeautifulSoup(conn, "html.parser")
+
+    for ele in soup.findAll('a', attrs={'href': re.compile('(?i)(tif)$')}):
+        # print('{lon}{lat}'.format(lat=lat, lon=lon) == ele['href'].split('.')[-4],
+        #       ele)
+        fname = ele['href'].split('/')[-1]
+        date_s = pd.to_datetime(fname.split('-')[1][2:], format='%Y%j')
+        date_e = pd.to_datetime(fname.split('-')[2][:7], format='%Y%j')
+        date_r = pd.date_range(date_s, date_e, freq='D')
+
+        if date in date_r:
+            ctime = [
+                pd.to_datetime(date_s, format='%Y%j'),
+                pd.to_datetime(date_e, format='%Y%j')
+            ]
+            # print(ctime)
+
+    return ctime
+
+
 def convert_data(args):
     """
     """
     # Unpack the arguments
-    latlim, lonlim, date,\
+    latlim, lonlim, date, \
         product, \
         username, password, apitoken, \
         url_server, url_dir, \
-        remote_fname, temp_fname, local_fname,\
-        remote_file, temp_file, local_file,\
+        remote_fname, temp_fname, local_fname, \
+        remote_file, temp_file, local_file, \
         y_id, x_id, pixel_size, pixel_w, pixel_h, \
         data_ndv, data_type, data_multiplier, data_variable = args
 
@@ -489,13 +578,20 @@ def convert_data(args):
     # Load data #
     # --------- #
     # From downloaded remote file
+    url = '{sr}{dr}'.format(sr=url_server, dr=url_dir)
+    file = os.path.join(__this.path, '{p}-{v}.html'.format(
+        p=product['name'],
+        v=product['version']
+    ))
+    ctime = start_download_scan(url, file, username, password, date)
+
+    data_raw = Open_tiff_array(remote_file.format(
+            dtime_s=ctime[0],
+            dtime_e=ctime[1]
+        ))
 
     # From generated temporary file
-    temp_file_part = temp_file.format(dtime=date)
     # Generate temporary files
-    Extract_Data_gz(remote_file, temp_file_part)
-
-    data_raw = Open_tiff_array(temp_file_part)
 
     # Convert meta data to float
     # if np.logical_or(isinstance(data_raw_missing, str),
@@ -544,11 +640,11 @@ def convert_data(args):
     # Convert #
     # ------- #
     # scale, units
-    data = np.where(data < 0, np.nan, data)
+    # data = np.where(data < 0, np.nan, data)
     data = data * data_multiplier
 
     # novalue data
-    data = np.where(data < 0, np.nan, data)
+    data = np.where(np.isnan(data), data_ndv, data)
 
     # ------------ #
     # Saveas GTiff #

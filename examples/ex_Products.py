@@ -29,7 +29,9 @@ def main(path, test_args):
                               bbox=value['bbox'],
                               period=value['period'],
                               nodata=value['nodata'],
-                              is_status=False)
+                              is_status=False,
+                              is_save_temp=True,
+                              is_save_remote=True)
 
 
 if __name__ == "__main__":
@@ -669,7 +671,6 @@ if __name__ == "__main__":
             },
             'nodata': nodata
         },
-
         '31a': {
             'product': 'SSEBop',
             'version': 'v4',
@@ -683,6 +684,46 @@ if __name__ == "__main__":
             },
             'nodata': nodata
         },
+        # 20200421-END, QPan, PO.DAAC
+        '32a': {
+            'product': 'CSR',
+            'version': 'v3.1',
+            'parameter': 'grace',
+            'resolution': 'daily',
+            'variable': 'EWH',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': nodata
+        },
+        '32b': {
+            'product': 'GFZ',
+            'version': 'v3.1',
+            'parameter': 'grace',
+            'resolution': 'daily',
+            'variable': 'EWH',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': nodata
+        },
+        '32c': {
+            'product': 'JPL',
+            'version': 'v3.1',
+            'parameter': 'grace',
+            'resolution': 'daily',
+            'variable': 'EWH',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': nodata
+        }
     }
 
     main(path, test_args)

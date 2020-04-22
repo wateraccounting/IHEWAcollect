@@ -45,7 +45,9 @@ def main():
                           bbox=bbox,
                           period=period,
                           nodata=nodata,
-                          is_status=False)
+                          is_status=False,
+                          is_save_temp=True,
+                          is_save_remote=True)
 
 
 if __name__ == "__main__":

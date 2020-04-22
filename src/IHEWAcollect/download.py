@@ -10,6 +10,7 @@ import datetime
 import importlib
 import inspect
 import os
+
 # import sys
 
 try:
@@ -59,6 +60,8 @@ class Download(User):
 
     __conf = {
         'path': '',
+        'is_save_temp': True,
+        'is_save_remote': True,
         'time': {
             'start': None,
             'now': None,
@@ -105,7 +108,8 @@ class Download(User):
     def __init__(self, workspace='',
                  product='', version='', parameter='', resolution='', variable='',
                  bbox={}, period={}, nodata=-9999,
-                 is_status=True, **kwargs):
+                 is_status=True, is_save_temp=True, is_save_remote=True,
+                 **kwargs):
         """Class instantiation
         """
         tmp_product_conf = {
@@ -119,6 +123,18 @@ class Download(User):
         vname, rtype, vdata = 'is_status', bool, is_status
         if self.check_input(vname, rtype, vdata):
             self.__status['is_print'] = vdata
+        else:
+            self.__status['code'] = 1
+
+        vname, rtype, vdata = 'is_save_temp', bool, is_status
+        if self.check_input(vname, rtype, vdata):
+            self.__conf['is_save_temp'] = vdata
+        else:
+            self.__status['code'] = 1
+
+        vname, rtype, vdata = 'is_save_remote', bool, is_status
+        if self.check_input(vname, rtype, vdata):
+            self.__conf['is_save_remote'] = vdata
         else:
             self.__status['code'] = 1
 
@@ -447,33 +463,43 @@ class Download(User):
             template['name'] = module_name_base
 
             if is_reload_module:
+                print('Reloading module '
+                      '.{p}.{m}'.format(p=product['template'],
+                                        m=product['name']))
                 try:
                     module_obj = importlib.reload(module_obj)
                 except ImportError:
                     raise IHEClassInitError('Templates') from None
                 else:
                     template['module'] = module_obj
-                    print('Reloaded module'
-                          '.{p}.{m}'.format(p=product['template'],
-                                            m=product['name']))
             else:
+                print('Loading module '
+                      '{p}.{m}'.format(p=product['template'],
+                                       m=product['name']))
+                # importlib.import_module('.ALEXI',
+                #                         '.templates.IHE')
+                #
+                # importlib.import_module('templates.IHE.ALEXI')
+
+                # importlib.import_module('IHEWAcollect.templates.IHE.ALEXI')
                 try:
                     # def template_load(self) -> dict:
                     module_obj = \
-                        importlib.import_module('IHEWAcollect.templates'
-                                                '.{p}.{m}'.format(p=product['template'],
-                                                                  m=product['name']))
-                    print('Loaded module from IHEWAcollect.templates'
-                          '.{p}.{m}'.format(p=product['template'],
-                                            m=product['name']))
+                        importlib.import_module('.{m}'.format(m=product['name']),
+                                                '.templates.{p}'.format(
+                                                    p=product['template']))
+                    # print('Loaded module from .templates.{p}.{m}'.format(
+                    #     p=product['template'],
+                    #     m=template['name']))
                 except ImportError:
                     module_obj = \
                         importlib.import_module('IHEWAcollect.templates'
-                                                '.{p}.{m}'.format(p=product['template'],
-                                                                  m=product['name']))
-                    print('Loaded module from IHEWAcollect.templates'
-                          '.{p}.{m}'.format(p=product['template'],
-                                            m=product['name']))
+                                                '.{p}.{n}'.format(
+                                                    p=product['template'],
+                                                    n=product['name']))
+                    # print('Loaded module from .templates.{p}.{n}'.format(
+                    #     p=product['template'],
+                    #     n=product['name']))
                 finally:
                     # def template_init(self) -> dict:
                     if module_obj is not None:
@@ -649,24 +675,71 @@ if __name__ == "__main__":
         '../', '../', 'tests'
     )
 
+    area_bbox = {
+        'w': 118.0642363480000085,
+        'n': 10.4715946960000679,
+        'e': 126.6049655970000458,
+        's': 4.5872944970000731
+    }
+    nodata = -9999
     test_args = {
-        '1a': {
-            'product': 'ALEXI',
-            'version': 'v1',
-            'parameter': 'evapotranspiration',
+        # '1a': {
+        #     'product': 'ALEXI',
+        #     'version': 'v1',
+        #     'parameter': 'evapotranspiration',
+        #     'resolution': 'daily',
+        #     'variable': 'ETA',
+        #     'bbox': {
+        #         'w': -19.0,
+        #         'n': 38.0,
+        #         'e': 55.0,
+        #         's': -35.0
+        #     },
+        #     'period': {
+        #         's': '2005-01-01',
+        #         'e': '2005-01-02'
+        #     },
+        #     'nodata': -9999
+        # }
+
+        # '32a': {
+        #     'product': 'CSR',
+        #     'version': 'v3.1',
+        #     'parameter': 'grace',
+        #     'resolution': 'daily',
+        #     'variable': 'EWH',
+        #     'bbox': area_bbox,
+        #     'period': {
+        #         's': '2004-12-01',
+        #         'e': '2016-01-01'
+        #     },
+        #     'nodata': nodata
+        # },
+        '32b': {
+            'product': 'GFZ',
+            'version': 'v3.1',
+            'parameter': 'grace',
             'resolution': 'daily',
-            'variable': 'ETA',
-            'bbox': {
-                'w': -19.0,
-                'n': 38.0,
-                'e': 55.0,
-                's': -35.0
-            },
+            'variable': 'EWH',
+            'bbox': area_bbox,
             'period': {
-                's': '2005-01-01',
-                'e': '2005-01-02'
+                's': '2004-12-01',
+                'e': '2016-01-01'
             },
-            'nodata': -9999
+            'nodata': nodata
+        },
+        '32c': {
+            'product': 'JPL',
+            'version': 'v3.1',
+            'parameter': 'grace',
+            'resolution': 'daily',
+            'variable': 'EWH',
+            'bbox': area_bbox,
+            'period': {
+                's': '2004-12-01',
+                'e': '2016-01-01'
+            },
+            'nodata': nodata
         }
     }
 
@@ -691,9 +764,12 @@ if __name__ == "__main__":
                             bbox=value['bbox'],
                             period=value['period'],
                             nodata=value['nodata'],
-                            is_status=False)
+                            is_status=False,
+                            is_save_temp=True,
+                            is_save_remote=True
+        )
 
-    download.get_products()
+    # download.get_products()
 
     # download.generate_encrypt()
 

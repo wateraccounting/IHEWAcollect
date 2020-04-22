@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 import glob
-import os
-import sys
-import time
-
 import gzip
+import os
+import subprocess
+import sys
 import tarfile
+import time
 import zipfile
 
-import subprocess
+import netCDF4
 import numpy as np
 import pandas as pd
 import scipy.interpolate
-import netCDF4
-
 from pyproj import Proj, transform
 
 try:
@@ -721,7 +719,7 @@ def Open_array_info(filename=''):
     """
     f = gdal.Open(r"%s" % filename)
     if f is None:
-        print('%s does not exists' % filename)
+        print('%s does not exist' % filename)
     else:
         geo_out = f.GetGeoTransform()
         proj = f.GetProjection()
@@ -745,7 +743,7 @@ def Open_tiff_array(filename, band=1) -> np.ndarray:
 
     ds = gdal.Open(filename)
     if ds is None:
-        print('%s does not exists' % filename)
+        print('%s does not exist' % filename)
     else:
         if band is None:
             band = 1

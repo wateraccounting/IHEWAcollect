@@ -303,6 +303,9 @@ Details can be found at `Products
 | CMRSET     | .. image:: ./img/CMRSET.png     | https://www.wateraccounting.org               |
 |            |    :height: 40pt                |                                               |
 +------------+---------------------------------+-----------------------------------------------+
+| CSR        | .. image:: ./img/CSR.png        | https://podaac.jpl.nasa.gov                   |
+|            |    :height: 40pt                |                                               |
++------------+---------------------------------+-----------------------------------------------+
 | DEM        | .. image:: ./img/DEM.png        | http://earlywarning.usgs.gov                  |
 |            |    :height: 40pt                |                                               |
 +------------+---------------------------------+-----------------------------------------------+

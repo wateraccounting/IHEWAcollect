@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-**Accounts**
+**User**
 
 Before use this module, set account information in the ``accounts.yml`` file.
 
 **Examples:**
 ::
 
-    from IHEWAcollect.base.accounts import Accounts
+    from IHEWAcollect.base.user import User
 
-    accounts = Accounts(workspace=path, product='CFSR', is_print=True)
+    user = User(workspace=path, product='CFSR', is_print=True)
 
 .. note::
 
@@ -20,19 +20,21 @@ Before use this module, set account information in the ``accounts.yml`` file.
     3. Save key to ``credential.yml``.
 
 """
+import base64
 import inspect
 import os
 import sys
-# import shutil
-# import datetime
 
 import yaml
-
-import base64
 from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+
+# import shutil
+# import datetime
+
+
 
 try:
     # IHEClassInitError, IHEStringError, IHETypeError, IHEKeyError, IHEFileError
@@ -129,7 +131,7 @@ class User(Base):
             self.__status['message'] = 'Key is: "{v}"'.format(
                 v=self.__conf['credential']['key'])
         else:
-            raise IHEClassInitError('Accounts') from None
+            raise IHEClassInitError('User') from None
 
     def _user(self):
         """Get user information
@@ -153,19 +155,25 @@ class User(Base):
             conf_enc = yaml.load(open(file_org, 'r', encoding='UTF8'),
                                  Loader=yaml.FullLoader)
         else:
+            print('"{}" not exist'.format(file_org))
             conf_enc = None
 
         if conf_enc is None:
             if os.path.exists(file_enc):
-                self._user_key(file_crd)
+                key = self._user_key(file_crd)
 
-                conf_enc = yaml.load(self._user_decrypt(file_enc),
-                                     Loader=yaml.FullLoader)
+                if len(key) > 0:
+                    # Load encrypted file
+                    conf_enc = yaml.load(self._user_decrypt(file_enc),
+                                         Loader=yaml.FullLoader)
+                else:
+                    # Generate encrypted file
+                    conf_enc = self._user_encrypt(file_org)
             else:
                 self.__status['code'] = 1
                 raise IHEFileError(file_enc) from None
 
-        if conf_enc is not None and isinstance(conf_enc, dict):
+        if isinstance(conf_enc, dict):
             for key in conf_enc:
                 try:
                     self.__conf['data'][key] = conf_enc[key]
@@ -184,13 +192,15 @@ class User(Base):
                     else:
                         self.__conf['account']['name'] = ''
                         self.__status['code'] = 0
+        else:
+            self.__status['code'] = 1
 
         self.set_status(
             inspect.currentframe().f_code.co_name,
             prt=self.__status['is_print'],
             ext='')
 
-    def _user_key(self, file) -> bytes:
+    def _user_key(self, file) -> str:
         """Getting a key
 
         This function fun.
@@ -202,71 +212,50 @@ class User(Base):
         Args:
             file (str): File name.
         """
-        is_renew = False
+        pswd = None
+        key = None
+        conf = None
+
         if os.path.exists(file):
             conf = yaml.load(open(file, 'r', encoding='UTF8'),
                              Loader=yaml.FullLoader)
         else:
-            conf = None
-
-        if conf is None:
-            is_renew = True
-            print('W: {f} is empty.'.format(f=file))
-            pswd = input('\33[91m'
-                         'IHEWAcollect: Enter your password: '
-                         '\33[0m')
-            pswd = pswd.strip()
-            conf = {
-                'password': pswd
-            }
+            print('"{}" not exist'.format(file))
 
         # password, Yaml load/Python input
-        try:
-            pswd = conf['password']
-        except KeyError:
+        if conf is not None and isinstance(conf, dict):
+            if 'password' in conf.keys():
+                pswd = conf['password']
+            else:
+                pswd = input('\33[91m'
+                             'IHEWAcollect: Enter your password: '
+                             '\33[0m')
+        else:
             pswd = input('\33[91m'
                          'IHEWAcollect: Enter your password: '
                          '\33[0m')
         pswd = pswd.strip()
-        if pswd == '' or pswd is None:
-            print(IHEStringError('password'))
-            sys.exit(1)
-        else:
-            self.__conf['credential']['password'] = str.encode(pswd)
+        key_from_pswd = self._user_key_generator(pswd)
+        # self.__conf['credential']['password'] = str.encode(pswd)
 
         # key, Yaml load/Python input/Python generate
-        try:
-            key = conf['key']
-        except KeyError:
-            key = self._user_key_generator()
-            # is_key = input('\33[91m'
-            #                'IHEWAcollect: Generate your key (y/n): '
-            #                '\33[0m')
-            # is_key = is_key.strip()
-            # if is_key not in ['', 'Y', 'YES', 'y', 'Yes']:
-            #     print(IHEStringError('key'))
-            #     sys.exit(1)
-            # else:
-            #     is_renew = True
-            #     key = self._user_key_generator()
-
-        key = key.strip()
-        if key == '' or key is None:
-            print(IHEStringError('key'))
-            sys.exit(1)
+        if conf is not None and isinstance(conf, dict):
+            if 'key' in conf.keys():
+                key = conf['key']
+            else:
+                key = ''
         else:
+            key = ''
+
+        # Final check keys
+        self.__conf['credential']['password'] = str.encode(pswd)
+        if key_from_pswd == key:
             self.__conf['credential']['key'] = str.encode(key)
-
-        # Final check
-        key_from_pswd = str.encode(self._user_key_generator())
-        key_from_conf = self.__conf['credential']['key']
-        if key_from_pswd == key_from_conf:
-            return is_renew
+            return key
         else:
-            print('E: "password" not correct.')
-            sys.exit(1)
+            return ''
 
-    def _user_key_generator(self) -> str:
+    def _user_key_generator(self, pswd) -> str:
         """Getting a key
 
         This function fun.
@@ -284,7 +273,11 @@ class User(Base):
         length = self.__conf['credential']['length']
         iterations = self.__conf['credential']['iterations']
         salt = self.__conf['credential']['salt']
-        pswd = self.__conf['credential']['password']
+        # pswd = self.__conf['credential']['password']
+        # if isinstance(pswd, bytes):
+        #     pass
+        if isinstance(pswd, str):
+            pswd = str.encode(pswd)
 
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
@@ -297,16 +290,20 @@ class User(Base):
 
         return key.decode()
 
-    def _user_encrypt(self, file):
+    def _user_encrypt(self, file) -> dict:
         """Encrypt file with given key
 
         This function encrypt accounts.yml file.
 
         Args:
             file (str): Encrypted file name.
+
+        Returns:
+          dict: data
         """
         pswd = self.__conf['credential']['password']
-        key = self.__conf['credential']['key']
+        # key = self.__conf['credential']['key']
+        key = str.encode(self._user_key_generator(pswd.decode()))
 
         file_org = file
         file_enc = file_org + '-encrypted'
@@ -325,6 +322,9 @@ class User(Base):
                 fp_out.write('# password should be deleted!\n')
                 fp_out.write('# password: "{}"\n'.format(pswd.decode()))
                 fp_out.write('key: "{}"\n'.format(key.decode()))
+
+            return yaml.load(open(file_org, 'r', encoding='UTF8'),
+                             Loader=yaml.FullLoader)
         else:
             raise IHEFileError(file_org) from None
 
@@ -454,8 +454,8 @@ if __name__ == "__main__":
     from pprint import pprint
 
     # @classmethod
-    # print('\nAccounts.check_conf()\n=====')
-    # pprint(Accounts.check_conf('data', is_print=False))
+    # print('\nUser.check_conf()\n=====')
+    # pprint(User.check_conf('data', is_print=False))
 
     # User __init__
     print('\nUser\n=====')
@@ -471,15 +471,15 @@ if __name__ == "__main__":
     user = User(path, product, is_print=True)
 
     # Base attributes
-    print('\naccounts._Base__conf\n=====')
-    # pprint(accounts._Base__conf)
+    print('\nuser._Base__conf\n=====')
+    # pprint(user._Base__conf)
 
     # User attributes
-    print('\naccounts._User__conf\n=====')
+    print('\nuser._User__conf\n=====')
     print(product, user._User__conf['account'])
     # print(user._User__conf['data']['accounts'].keys())
     # pprint(user._User__conf)
 
     # User methods
-    print('\naccounts.get_status()\n=====')
+    print('\nuser.get_status()\n=====')
     pprint(user.get_status())

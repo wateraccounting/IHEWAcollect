@@ -152,7 +152,8 @@ products:
   # SWI, VITO
   # land.copernicus.vgt.vito.be
   ASCAT:
-    account: 'Copernicus'
+    # account: 'Copernicus'
+    account: 'VITO'
     template: 'VITO'
     meta:
       owner: 'Copernicus'
@@ -932,6 +933,86 @@ products:
 #              dem:
 #                w: 7200
 #                h: 3600
+
+  # GRACE, Spherical Harmonic
+  CSR:
+    account: 'PODAAC'
+    template: 'NASA'
+    meta:
+      owner: 'Center for Space Research at University of Texas'
+      description:
+        'The CSR monthly land mass grids contain land water mass anomaly given as equivalent water
+         thickness derived from GRACE time-variable gravity observations during the specified timespan
+         in ASCII/netCDF/GeoTIFF formats. The Equivalent water thickness represents the total
+         terrestrial water storage anomalies from soil moisture, snow, surface water (incl. rivers,
+         lakes, reservoirs etc.), as well as groundwater and aquifers. The time coverage for the
+         monthly grids are determined by GRACE months.'
+      websites:
+        - 'https://podaac.jpl.nasa.gov/dataset/TELLUS_GRAC_L3_CSR_RL06_LND'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'get'
+      ftypes:
+        - 'GTiff'
+        - 'NetCDF'
+      versions:
+        - 'v3'
+      datasets:
+        - 'GRACE'
+      resolutions:
+        - 'daily'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
+    v3.1:
+      grace:
+        daily:
+          url: 'https://podaac-tools.jpl.nasa.gov'
+          protocol: 'HTTPS'
+          method: 'get'
+          freq: 'D'
+          variables:
+            EWH:
+              variable: null
+              name: 'equivalent water height'
+              description:
+                ''
+              dir: '/drive/files/allData/tellus/L3/grace/land_mass/RL06/v03/CSR/'
+              fname:
+                r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRAC_UTCSR_BA01_0600_LND_v03.tif'
+                t: ''
+                l: 'CSR_v3.1_mm_D-{dtime:%Y%m%d}.tif'
+              fmt:
+                d: null
+                r: 'dtime.dtime'
+                t: null
+                l: 'dtime'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'm'
+                l: 'mm'
+                m: 1000.0
+              lat:
+                s: -90.0
+                n: 90.0
+                r: 1.0
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 1.0
+              time:
+                s: 2002-04-01 00:00:00
+                e: 2017-06-30 00:00:00
+              dem:
+                w: 360
+                h: 180
 
   # Spatial resolution
   # DEM, DIR
@@ -2728,38 +2809,38 @@ products:
                 w: 7320
                 h: 8520
 
-  # API
-  ECMWF:
-    account: 'ECMWF'
-    template: 'EU'
-    meta:
-      owner: 'European Centre for Medium-Range Weather Forecasts'
-      description:
-        'We are both a research institute and a 24/7 operational service, producing global
-         numerical weather predictions and other data for our Member and Co-operating States
-         and the broader community. The Centre has one of the largest supercomputer facilities
-         and meteorological data archives in the world. Other strategic activities include
-         delivering advanced training and assisting the WMO in implementing its programmes.
-
-         We operate two services from the EU’s Copernicus Earth observation programme, the
-         Copernicus Atmosphere Monitoring Service (CAMS) and the Copernicus Climate Change
-         Service (C3S). We also contribute to the Copernicus Emergency Management Service (CEMS).'
-      websites:
-        - 'https://www.ecmwf.int/'
-      protocols:
-        - 'ECMWF'
-      methods:
-        - 'api'
-      ftypes:
-        - ''
-      versions:
-        - ''
-      datasets:
-        - ''
-      resolutions:
-        - ''
-      projection:
-        - 'WGS84'
+#  # API
+#  ECMWF:
+#    account: 'ECMWF'
+#    template: 'EU'
+#    meta:
+#      owner: 'European Centre for Medium-Range Weather Forecasts'
+#      description:
+#        'We are both a research institute and a 24/7 operational service, producing global
+#         numerical weather predictions and other data for our Member and Co-operating States
+#         and the broader community. The Centre has one of the largest supercomputer facilities
+#         and meteorological data archives in the world. Other strategic activities include
+#         delivering advanced training and assisting the WMO in implementing its programmes.
+#
+#         We operate two services from the EU’s Copernicus Earth observation programme, the
+#         Copernicus Atmosphere Monitoring Service (CAMS) and the Copernicus Climate Change
+#         Service (C3S). We also contribute to the Copernicus Emergency Management Service (CEMS).'
+#      websites:
+#        - 'https://www.ecmwf.int/'
+#      protocols:
+#        - 'ECMWF'
+#      methods:
+#        - 'api'
+#      ftypes:
+#        - ''
+#      versions:
+#        - ''
+#      datasets:
+#        - ''
+#      resolutions:
+#        - ''
+#      projection:
+#        - 'WGS84'
 #    v1:
 #      evapotranspiration:
 #        monthly:
@@ -3173,6 +3254,86 @@ products:
               dem:
                 w: 360
                 h: 181
+
+  # GRACE, Spherical Harmonic
+  GFZ:
+    account: 'PODAAC'
+    template: 'NASA'
+    meta:
+      owner: 'Das Helmholtz-Zentrum Potsdam - Deutsches GeoForschungsZentrum'
+      description:
+        'The GFZ monthly land mass grids contain land water mass anomaly given as equivalent water
+         thickness derived from GRACE time-variable gravity observations during the specified timespan
+         in ASCII/netCDF/GeoTIFF formats. The Equivalent water thickness represents the total
+         terrestrial water storage anomalies from soil moisture, snow, surface water (incl. rivers,
+         lakes, reservoirs etc.), as well as groundwater and aquifers. The time coverage for the
+         monthly grids are determined by GRACE months.'
+      websites:
+        - 'https://podaac.jpl.nasa.gov/dataset/TELLUS_GRAC_L3_GFZ_RL06_LND'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'get'
+      ftypes:
+        - 'GTiff'
+        - 'NetCDF'
+      versions:
+        - 'v3'
+      datasets:
+        - 'GRACE'
+      resolutions:
+        - 'daily'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
+    v3.1:
+      grace:
+        daily:
+          url: 'https://podaac-tools.jpl.nasa.gov'
+          protocol: 'HTTPS'
+          method: 'get'
+          freq: 'D'
+          variables:
+            EWH:
+              variable: null
+              name: 'equivalent water height'
+              description:
+                ''
+              dir: '/drive/files/allData/tellus/L3/grace/land_mass/RL06/v03/GFZ/'
+              fname:
+                r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRAC_GFZOP_BA01_0600_LND_v03.tif'
+                t: ''
+                l: 'GFZ_v3.1_mm_D-{dtime:%Y%m%d}.tif'
+              fmt:
+                d: null
+                r: 'dtime.dtime'
+                t: null
+                l: 'dtime'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'm'
+                l: 'mm'
+                m: 1000.0
+              lat:
+                s: -90.0
+                n: 90.0
+                r: 1.0
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 1.0
+              time:
+                s: 2002-04-01 00:00:00
+                e: 2017-06-30 00:00:00
+              dem:
+                w: 360
+                h: 180
 
   # E, ..., Variable list
   # hydro1.gesdisc.eosdis.nasa.gov
@@ -3747,6 +3908,86 @@ products:
               dem:
                 w: 43200
                 h: 21600
+
+  # GRACE, Spherical Harmonic
+  JPL:
+    account: 'PODAAC'
+    template: 'NASA'
+    meta:
+      owner: 'NASA Jet Propulsion Laboratory'
+      description:
+        'The JPL monthly land mass grids contain land water mass anomaly given as equivalent water
+         thickness derived from GRACE time-variable gravity observations during the specified timespan
+         in ASCII/netCDF/GeoTIFF formats. The Equivalent water thickness represents the total
+         terrestrial water storage anomalies from soil moisture, snow, surface water (incl. rivers,
+         lakes, reservoirs etc.), as well as groundwater and aquifers. The time coverage for the
+         monthly grids are determined by GRACE months.'
+      websites:
+        - 'https://podaac.jpl.nasa.gov/dataset/TELLUS_GRAC_L3_JPL_RL06_LND'
+      protocols:
+        - 'HTTPS'
+      methods:
+        - 'get'
+      ftypes:
+        - 'GTiff'
+        - 'NetCDF'
+      versions:
+        - 'v3'
+      datasets:
+        - 'GRACE'
+      resolutions:
+        - 'daily'
+      projection:
+        - 'EPSG:4326 - WGS 84 - Geographic'
+    v3.1:
+      grace:
+        daily:
+          url: 'https://podaac-tools.jpl.nasa.gov'
+          protocol: 'HTTPS'
+          method: 'get'
+          freq: 'D'
+          variables:
+            EWH:
+              variable: null
+              name: 'equivalent water height'
+              description:
+                ''
+              dir: '/drive/files/allData/tellus/L3/grace/land_mass/RL06/v03/JPL/'
+              fname:
+                r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRAC_JPLEM_BA01_0600_LND_v03.tif'
+                t: ''
+                l: 'JPL_v3.1_mm_D-{dtime:%Y%m%d}.tif'
+              fmt:
+                d: null
+                r: 'dtime.dtime'
+                t: null
+                l: 'dtime'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'm'
+                l: 'mm'
+                m: 1000.0
+              lat:
+                s: -90.0
+                n: 90.0
+                r: 1.0
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 1.0
+              time:
+                s: 2002-04-01 00:00:00
+                e: 2017-06-30 00:00:00
+              dem:
+                w: 360
+                h: 180
 
   # Spatial resolution
   # Water occurrence

@@ -3,19 +3,20 @@
 **DEM Module**
 
 """
+import datetime
 import glob
 # General modules
 import os
 import sys
-import datetime
-
 import urllib
-import requests
-# from requests.auth import HTTPBasicAuth => .netrc
-# from joblib import Parallel, delayed
 
 import gdal
 import numpy as np
+import requests
+
+# from requests.auth import HTTPBasicAuth => .netrc
+# from joblib import Parallel, delayed
+
 
 # IHEWAcollect Modules
 try:
@@ -352,7 +353,12 @@ def Merge_DEM_15s_30s(output_folder_trash, output_file_merged, latlim, lonlim,
 
         inFile = os.path.join(output_folder_trash, tiff_file)
         geo, proj, size_X, size_Y = Open_array_info(inFile)
-        Data = Open_tiff_array(inFile)
+        data_tmp = Open_tiff_array(inFile)
+        if isinstance(data_tmp, np.ma.MaskedArray):
+            Data = data_tmp.filled()
+        else:
+            Data = np.asarray(data_tmp)
+
         lonmin_tiff = geo[0]
         latmax_tiff = geo[3]
         lon_tiff_position = int(np.round((lonmin_clip - lonmin_tiff) / resolution_geo))
@@ -360,7 +366,8 @@ def Merge_DEM_15s_30s(output_folder_trash, output_file_merged, latlim, lonlim,
         lon_data_tot_position = int(np.round((lonmin_clip - lonmin) / resolution_geo))
         lat_data_tot_position = int(np.round((latmax - latmax_clip) / resolution_geo))
 
-        Data[Data < -9999.] = -9999.
+        # Data[Data < -9999.] = -9999.
+        Data = np.where(Data < -9999.0, -9999.0, Data)
         data_tot[lat_data_tot_position:lat_data_tot_position + size_y_clip,
         lon_data_tot_position:lon_data_tot_position + size_x_clip][
             data_tot[lat_data_tot_position:lat_data_tot_position + size_y_clip,
@@ -372,7 +379,8 @@ def Merge_DEM_15s_30s(output_folder_trash, output_file_merged, latlim, lonlim,
 
     geo_out = [lonmin, resolution_geo, 0.0, latmax, 0.0, -1 * resolution_geo]
     geo_out = tuple(geo_out)
-    data_tot[data_tot < -9999.] = -9999.
+    # data_tot[data_tot < -9999.] = -9999.
+    data_tot = np.where(data_tot < -9999.0, -9999.0, data_tot)
 
     return (data_tot, geo_out)
 

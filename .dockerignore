@@ -4,3 +4,5 @@
 tests/data/Products/*
 tests/data/Download/*
 tests/IHEWAcollect/*
+
+examples/IHEWAcollect/*

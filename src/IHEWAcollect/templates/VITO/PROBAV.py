@@ -3,19 +3,19 @@
 **PROBAV Module**
 
 """
+import datetime
 # General modules
 import os
-import sys
-import datetime
-
-from bs4 import BeautifulSoup
-import requests
-from requests.auth import HTTPBasicAuth
-from joblib import Parallel, delayed
-
 import re
+import sys
+
 import numpy as np
 import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+from joblib import Parallel, delayed
+from requests.auth import HTTPBasicAuth
+
 # from netCDF4 import Dataset
 
 # IHEWAcollect Modules
@@ -394,6 +394,16 @@ def start_download(args) -> int:
             __this.Log.write(datetime.datetime.now(), msg=msg)
 
     if is_start_download:
+        # https://disc.gsfc.nasa.gov/data-access#python
+        # C:\Users\qpa001\.netrc
+        # file_conn_auth = os.path.join(os.path.expanduser("~"), ".netrc")
+        # with open(file_conn_auth, 'w+') as fp:
+        #     fp.write('machine {m} login {u} password {p}\n'.format(
+        #         m='urs.earthdata.nasa.gov',
+        #         u=username,
+        #         p=password
+        #     ))
+
         # Download the data from server if the file not exists
         remote_fnames, remote_files, lonlat = start_download_tiles(date,
                                                                    url_server, url_dir,
@@ -420,16 +430,6 @@ def start_download(args) -> int:
             # Download data #
             # ------------- #
             if is_download:
-                # https://disc.gsfc.nasa.gov/data-access#python
-                # C:\Users\qpa001\.netrc
-                # file_conn_auth = os.path.join(os.path.expanduser("~"), ".netrc")
-                # with open(file_conn_auth, 'w+') as fp:
-                #     fp.write('machine {m} login {u} password {p}\n'.format(
-                #         m='urs.earthdata.nasa.gov',
-                #         u=username,
-                #         p=password
-                #     ))
-
                 url = '{sr}{dr}{fl}'.format(sr=url_server,
                                             dr=url_dir,
                                             fl=remote_fnames[ifile])
@@ -707,14 +707,16 @@ def convert_data(args):
            latmerge[1] - geo_trans[5] / 3. * 2., 0, geo_trans[5]]
     Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
-    path = os.path.dirname(os.path.realpath(remote_file))
-    if 'remote' != path[-6:]:
-        path = os.path.join(path, 'remote')
-    clean(path)
-    path = os.path.dirname(os.path.realpath(temp_file))
-    if 'temporary' != path[-9:]:
-        path = os.path.join(path, 'temporary')
-    clean(path)
+    if __this.conf['is_save_remote']:
+        path = os.path.dirname(os.path.realpath(remote_file))
+        if 'remote' != path[-6:]:
+            path = os.path.join(path, 'remote')
+        clean(path)
+    if __this.conf['is_save_temp']:
+        path = os.path.dirname(os.path.realpath(temp_file))
+        if 'temporary' != path[-9:]:
+            path = os.path.join(path, 'temporary')
+        clean(path)
 
     status_cod = 0
     return status_cod

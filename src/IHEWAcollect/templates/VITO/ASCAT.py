@@ -3,18 +3,19 @@
 **ASCAT Module**
 
 """
+import datetime
 # General modules
 import os
 import sys
-import datetime
-
-import requests
-from requests.auth import HTTPBasicAuth
-# from joblib import Parallel, delayed
 
 import numpy as np
 import pandas as pd
+import requests
 from netCDF4 import Dataset
+from requests.auth import HTTPBasicAuth
+
+# from joblib import Parallel, delayed
+
 
 # IHEWAcollect Modules
 try:
@@ -413,7 +414,8 @@ def start_download(args) -> int:
                         import InsecureRequestWarning
                     requests.packages.urllib3.disable_warnings(
                         InsecureRequestWarning)
-                    conn = requests.get(url, auth=(username, password), verify=False)
+                    conn = requests.get(url, auth=(username, password),
+                                        verify=False)
                 # conn.raise_for_status()
             except requests.exceptions.RequestException as err:
                 # Connect error
@@ -570,14 +572,16 @@ def convert_data(args):
            latlim[1], 0, -pixel_size]
     Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
-    path = os.path.dirname(os.path.realpath(remote_file))
-    if 'remote' != path[-6:]:
-        path = os.path.join(path, 'remote')
-    clean(path)
-    path = os.path.dirname(os.path.realpath(temp_file))
-    if 'temporary' != path[-9:]:
-        path = os.path.join(path, 'temporary')
-    clean(path)
+    if __this.conf['is_save_remote']:
+        path = os.path.dirname(os.path.realpath(remote_file))
+        if 'remote' != path[-6:]:
+            path = os.path.join(path, 'remote')
+        clean(path)
+    if __this.conf['is_save_temp']:
+        path = os.path.dirname(os.path.realpath(temp_file))
+        if 'temporary' != path[-9:]:
+            path = os.path.join(path, 'temporary')
+        clean(path)
 
     status_cod = 0
     return status_cod

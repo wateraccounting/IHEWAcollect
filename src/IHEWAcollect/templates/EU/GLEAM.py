@@ -3,17 +3,16 @@
 **GLEAM Module**
 
 """
+import datetime
 # General modules
 import os
 import sys
-import datetime
-
-import paramiko
 from urllib.parse import urlparse
-from joblib import Parallel, delayed
 
 import numpy as np
 import pandas as pd
+import paramiko
+from joblib import Parallel, delayed
 from netCDF4 import Dataset
 
 # IHEWAcollect Modules
@@ -588,14 +587,16 @@ def convert_data(args):
            latlim[1] + pixel_size, 0, -pixel_size]
     Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
-    path = os.path.dirname(os.path.realpath(remote_file))
-    if 'remote' != path[-6:]:
-        path = os.path.join(path, 'remote')
-    clean(path)
-    path = os.path.dirname(os.path.realpath(temp_file))
-    if 'temporary' != path[-9:]:
-        path = os.path.join(path, 'temporary')
-    clean(path)
+    if __this.conf['is_save_remote']:
+        path = os.path.dirname(os.path.realpath(remote_file))
+        if 'remote' != path[-6:]:
+            path = os.path.join(path, 'remote')
+        clean(path)
+    if __this.conf['is_save_temp']:
+        path = os.path.dirname(os.path.realpath(temp_file))
+        if 'temporary' != path[-9:]:
+            path = os.path.join(path, 'temporary')
+        clean(path)
 
     status_cod = 0
     return status_cod
