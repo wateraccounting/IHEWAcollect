@@ -952,12 +952,13 @@ products:
       protocols:
         - 'HTTPS'
       methods:
-        - 'get'
+        - 'post'
       ftypes:
         - 'GTiff'
         - 'NetCDF'
       versions:
-        - 'v3'
+        - 'v3.1'
+        - 'v3.2'
       datasets:
         - 'GRACE'
       resolutions:
@@ -969,7 +970,7 @@ products:
         daily:
           url: 'https://podaac-tools.jpl.nasa.gov'
           protocol: 'HTTPS'
-          method: 'get'
+          method: 'post'
           freq: 'D'
           variables:
             EWH:
@@ -1010,6 +1011,55 @@ products:
               time:
                 s: 2002-04-01 00:00:00
                 e: 2017-06-30 00:00:00
+              dem:
+                w: 360
+                h: 180
+    v3.2:
+      grace:
+        daily:
+          url: 'https://podaac-tools.jpl.nasa.gov'
+          protocol: 'HTTPS'
+          method: 'post'
+          freq: 'D'
+          variables:
+            EWH:
+              variable: null
+              name: 'equivalent water height'
+              description:
+                ''
+              dir: '/drive/files/allData/tellus/L3/gracefo/land_mass/RL06/v03/CSR/'
+              fname:
+                r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRAC_UTCSR_BA01_0600_LND_v03.tif'
+                t: ''
+                l: 'CSR_v3.2_mm_D-{dtime:%Y%m%d}.tif'
+              fmt:
+                d: null
+                r: 'dtime.dtime'
+                t: null
+                l: 'dtime'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'm'
+                l: 'mm'
+                m: 1000.0
+              lat:
+                s: -90.0
+                n: 90.0
+                r: 1.0
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 1.0
+              time:
+                s: 2018-06-01 00:00:00
+                e: null
               dem:
                 w: 360
                 h: 180
@@ -3273,12 +3323,13 @@ products:
       protocols:
         - 'HTTPS'
       methods:
-        - 'get'
+        - 'post'
       ftypes:
         - 'GTiff'
         - 'NetCDF'
       versions:
-        - 'v3'
+        - 'v3.1'
+        - 'v3.2'
       datasets:
         - 'GRACE'
       resolutions:
@@ -3290,7 +3341,7 @@ products:
         daily:
           url: 'https://podaac-tools.jpl.nasa.gov'
           protocol: 'HTTPS'
-          method: 'get'
+          method: 'post'
           freq: 'D'
           variables:
             EWH:
@@ -3331,6 +3382,55 @@ products:
               time:
                 s: 2002-04-01 00:00:00
                 e: 2017-06-30 00:00:00
+              dem:
+                w: 360
+                h: 180
+    v3.2:
+      grace:
+        daily:
+          url: 'https://podaac-tools.jpl.nasa.gov'
+          protocol: 'HTTPS'
+          method: 'post'
+          freq: 'D'
+          variables:
+            EWH:
+              variable: null
+              name: 'equivalent water height'
+              description:
+                ''
+              dir: '/drive/files/allData/tellus/L3/gracefo/land_mass/RL06/v03/GFZ/'
+              fname:
+                r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRAC_GFZOP_BA01_0600_LND_v03.tif'
+                t: ''
+                l: 'GFZ_v3.2_mm_D-{dtime:%Y%m%d}.tif'
+              fmt:
+                d: null
+                r: 'dtime.dtime'
+                t: null
+                l: 'dtime'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'm'
+                l: 'mm'
+                m: 1000.0
+              lat:
+                s: -90.0
+                n: 90.0
+                r: 1.0
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 1.0
+              time:
+                s: 2018-06-01 00:00:00
+                e: null
               dem:
                 w: 360
                 h: 180
@@ -3927,12 +4027,13 @@ products:
       protocols:
         - 'HTTPS'
       methods:
-        - 'get'
+        - 'post'
       ftypes:
         - 'GTiff'
         - 'NetCDF'
       versions:
-        - 'v3'
+        - 'v3.1'
+        - 'v3.2'
       datasets:
         - 'GRACE'
       resolutions:
@@ -3944,7 +4045,7 @@ products:
         daily:
           url: 'https://podaac-tools.jpl.nasa.gov'
           protocol: 'HTTPS'
-          method: 'get'
+          method: 'post'
           freq: 'D'
           variables:
             EWH:
@@ -3985,6 +4086,55 @@ products:
               time:
                 s: 2002-04-01 00:00:00
                 e: 2017-06-30 00:00:00
+              dem:
+                w: 360
+                h: 180
+    v3.2:
+      grace:
+        daily:
+          url: 'https://podaac-tools.jpl.nasa.gov'
+          protocol: 'HTTPS'
+          method: 'post'
+          freq: 'D'
+          variables:
+            EWH:
+              variable: null
+              name: 'equivalent water height'
+              description:
+                ''
+              dir: '/drive/files/allData/tellus/L3/gracefo/land_mass/RL06/v03/JPL/'
+              fname:
+                r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRAC_JPLEM_BA01_0600_LND_v03.tif'
+                t: ''
+                l: 'JPL_v3.2_mm_D-{dtime:%Y%m%d}.tif'
+              fmt:
+                d: null
+                r: 'dtime.dtime'
+                t: null
+                l: 'dtime'
+              ftype:
+                r: 'GTiff'
+                t: null
+                l: 'GTiff'
+              dtype:
+                r: 'float32'
+                t: null
+                l: 'float32'
+              units:
+                r: 'm'
+                l: 'mm'
+                m: 1000.0
+              lat:
+                s: -90.0
+                n: 90.0
+                r: 1.0
+              lon:
+                w: -180.0
+                e: 180.0
+                r: 1.0
+              time:
+                s: 2018-06-01 00:00:00
+                e: null
               dem:
                 w: 360
                 h: 180

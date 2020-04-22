@@ -711,7 +711,7 @@ if __name__ == "__main__":
         #     'bbox': area_bbox,
         #     'period': {
         #         's': '2004-12-01',
-        #         'e': '2016-01-01'
+        #         'e': '2013-01-01'
         #     },
         #     'nodata': nodata
         # },
@@ -724,7 +724,7 @@ if __name__ == "__main__":
             'bbox': area_bbox,
             'period': {
                 's': '2004-12-01',
-                'e': '2016-01-01'
+                'e': '2013-01-01'
             },
             'nodata': nodata
         },
@@ -737,7 +737,7 @@ if __name__ == "__main__":
             'bbox': area_bbox,
             'period': {
                 's': '2004-12-01',
-                'e': '2016-01-01'
+                'e': '2013-01-01'
             },
             'nodata': nodata
         }
