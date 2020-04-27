@@ -702,45 +702,21 @@ if __name__ == "__main__":
         #     'nodata': -9999
         # }
 
-        # '32a': {
-        #     'product': 'CSR',
-        #     'version': 'v3.1',
-        #     'parameter': 'grace',
-        #     'resolution': 'daily',
-        #     'variable': 'EWH',
-        #     'bbox': area_bbox,
-        #     'period': {
-        #         's': '2004-12-01',
-        #         'e': '2013-01-01'
-        #     },
-        #     'nodata': nodata
-        # },
-        '32b': {
-            'product': 'GFZ',
+        '32a': {
+            'product': 'CSR',
             'version': 'v3.1',
             'parameter': 'grace',
             'resolution': 'daily',
             'variable': 'EWH',
             'bbox': area_bbox,
             'period': {
-                's': '2004-12-01',
-                'e': '2013-01-01'
+                's': '2005-01-01',
+                'e': '2005-01-02'
+                # 's': '2004-12-01',
+                # 'e': '2013-01-01'
             },
             'nodata': nodata
         },
-        '32c': {
-            'product': 'JPL',
-            'version': 'v3.1',
-            'parameter': 'grace',
-            'resolution': 'daily',
-            'variable': 'EWH',
-            'bbox': area_bbox,
-            'period': {
-                's': '2004-12-01',
-                'e': '2013-01-01'
-            },
-            'nodata': nodata
-        }
     }
 
     # Download __init__
@@ -769,7 +745,7 @@ if __name__ == "__main__":
                             is_save_remote=True
         )
 
-    # download.get_products()
+    download.get_products()
 
     # download.generate_encrypt()
 
