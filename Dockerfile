@@ -89,6 +89,7 @@ RUN pip3 install -r requirements.txt
 
 # Install package
 RUN pip3 install IHEWAcollect
+RUN pip3 show IHEWAcollect
 
 # Workspace
 RUN mkdir /notebooks
