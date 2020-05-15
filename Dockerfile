@@ -87,6 +87,9 @@ RUN apt-get install -y \
 # Install python dependencies
 RUN pip3 install -r requirements.txt
 
+# Install package
+RUN pip3 install IHEWAcollect
+
 # Workspace
 RUN mkdir /notebooks
 
