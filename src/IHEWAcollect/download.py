@@ -675,77 +675,77 @@ if __name__ == "__main__":
         '../', '../', 'tests'
     )
 
-    area_bbox = {
-        'w': 118.0642363480000085,
-        'n': 10.4715946960000679,
-        'e': 126.6049655970000458,
-        's': 4.5872944970000731
-    }
-    nodata = -9999
-    test_args = {
-        # '1a': {
-        #     'product': 'ALEXI',
-        #     'version': 'v1',
-        #     'parameter': 'evapotranspiration',
-        #     'resolution': 'daily',
-        #     'variable': 'ETA',
-        #     'bbox': {
-        #         'w': -19.0,
-        #         'n': 38.0,
-        #         'e': 55.0,
-        #         's': -35.0
-        #     },
-        #     'period': {
-        #         's': '2005-01-01',
-        #         'e': '2005-01-02'
-        #     },
-        #     'nodata': -9999
-        # }
-
-        '32a': {
-            'product': 'CSR',
-            'version': 'v3.1',
-            'parameter': 'grace',
-            'resolution': 'daily',
-            'variable': 'EWH',
-            'bbox': area_bbox,
-            'period': {
-                's': '2005-01-01',
-                'e': '2005-01-02'
-                # 's': '2004-12-01',
-                # 'e': '2013-01-01'
-            },
-            'nodata': nodata
-        },
-    }
-
-    # Download __init__
-    for key, value in test_args.items():
-        print('\n{:>4s}'
-              '{:>20s}{:>6s}{:>20s}{:>20s}{:>20s}\n'
-              '{:->90s}'.format(key,
-                                value['product'],
-                                value['version'],
-                                value['parameter'],
-                                value['resolution'],
-                                value['variable'],
-                                '-'))
-
-        download = Download(workspace=path,
-                            product=value['product'],
-                            version=value['version'],
-                            parameter=value['parameter'],
-                            resolution=value['resolution'],
-                            variable=value['variable'],
-                            bbox=value['bbox'],
-                            period=value['period'],
-                            nodata=value['nodata'],
-                            is_status=False,
-                            is_save_temp=True,
-                            is_save_remote=True
-        )
-
-    download.get_products()
+    # area_bbox = {
+    #     'w': 118.0642363480000085,
+    #     'n': 10.4715946960000679,
+    #     'e': 126.6049655970000458,
+    #     's': 4.5872944970000731
+    # }
+    # nodata = -9999
+    # test_args = {
+    #     # '1a': {
+    #     #     'product': 'ALEXI',
+    #     #     'version': 'v1',
+    #     #     'parameter': 'evapotranspiration',
+    #     #     'resolution': 'daily',
+    #     #     'variable': 'ETA',
+    #     #     'bbox': {
+    #     #         'w': -19.0,
+    #     #         'n': 38.0,
+    #     #         'e': 55.0,
+    #     #         's': -35.0
+    #     #     },
+    #     #     'period': {
+    #     #         's': '2005-01-01',
+    #     #         'e': '2005-01-02'
+    #     #     },
+    #     #     'nodata': -9999
+    #     # }
+    #
+    #     '32a': {
+    #         'product': 'CSR',
+    #         'version': 'v3.1',
+    #         'parameter': 'grace',
+    #         'resolution': 'daily',
+    #         'variable': 'EWH',
+    #         'bbox': area_bbox,
+    #         'period': {
+    #             's': '2005-01-01',
+    #             'e': '2005-01-02'
+    #             # 's': '2004-12-01',
+    #             # 'e': '2013-01-01'
+    #         },
+    #         'nodata': nodata
+    #     },
+    # }
+    #
+    # # Download __init__
+    # for key, value in test_args.items():
+    #     print('\n{:>4s}'
+    #           '{:>20s}{:>6s}{:>20s}{:>20s}{:>20s}\n'
+    #           '{:->90s}'.format(key,
+    #                             value['product'],
+    #                             value['version'],
+    #                             value['parameter'],
+    #                             value['resolution'],
+    #                             value['variable'],
+    #                             '-'))
+    #
+    #     download = Download(workspace=path,
+    #                         product=value['product'],
+    #                         version=value['version'],
+    #                         parameter=value['parameter'],
+    #                         resolution=value['resolution'],
+    #                         variable=value['variable'],
+    #                         bbox=value['bbox'],
+    #                         period=value['period'],
+    #                         nodata=value['nodata'],
+    #                         is_status=False,
+    #                         is_save_temp=True,
+    #                         is_save_remote=True
+    #     )
+    #
+    # download.get_products()
 
     # download.generate_encrypt()
 
@@ -754,3 +754,81 @@ if __name__ == "__main__":
     # yaml.dump(test_args, fp,
     #           default_flow_style=False, sort_keys=False,
     #           allow_unicode=True)
+
+    # ##### #
+    # ECMWF #
+    # ##### #
+    from ecmwfapi import ECMWFDataServer
+
+    file_conn_auth = os.path.join(os.path.expanduser("~"), ".ecmwfapirc")
+    with open(file_conn_auth, 'w+') as fp:
+        fp.write('{{"url": "{m}", "key": "{k}", "email": "{u}"}}'.format(
+            m='https://api.ecmwf.int/v1',
+            u='quanpan302@hotmail.com',
+            k='4fe81af725d8f7647e10d35cadf7825e'
+        ))
+
+    server = ECMWFDataServer()
+
+    server.retrieve({
+        # Specify the ERA-Interim data archive. Don't change.
+        "stream": "oper",
+        "dataset": "interim",
+        # all available parameters, for codes see http://apps.ecmwf.int/codes/grib/param-db
+        "param": "60.128/129.128/130.128/131.128/132.128/133.128/135.128/138.128/155.128/157.128/203.128/246.128/247.128/248.128",
+        "step": "3/6/9/12/15/18/21/24/30/36/42/48/60/72/84/96/108/120/132/144/156/168/180/192/204/216/228/240",
+        # in 0.75 degrees lat/lon
+        "grid": "0.75/0.75",
+        # optionally restrict area to Europe (in N/W/S/E).
+        "time": "00:00:00/12:00:00",
+        # two days worth of data
+        "date": "2016-01-01/to/2016-01-02",
+
+        # forecast (type:fc), from both daily forecast runs (time) with all available forecast steps (step, in hours)
+        "type": "fc",
+        "class": "ei",
+        # "area": "75/-20/10/60",
+        # "format" : "netcdf",
+
+        # Optionally get output in NetCDF format. However, for NetCDF timestamps (time+step) must not overlap, so use e.g. "time":"00:00:00/12:00:00","step":"12"
+        # set an output file name
+        'target': "era40_2002-08-01to2002-08-31_00061218.grib",
+
+        "levelist": "1/2/3/5/7/10/20/30/50/70/100/125/150/175/200/225/250/300/350/400/450/500/550/600/650/700/750/775/800/825/850/875/900/925/950/975/1000",
+        # pressure levels (levtype:pl), all available levels (levelist)
+        "levtype": "pl",
+        "expver": "1",
+    })
+
+    # ### #
+    # CDS #
+    # ### #
+    # import cdsapi
+    #
+    # file_conn_auth = os.path.join(os.path.expanduser("~"), ".cdsapirc")
+    # with open(file_conn_auth, 'w+') as fp:
+    #     fp.write('url: {m} key: {u}:{k}'.format(
+    #         m='https://cds.climate.copernicus.eu/api/v2',
+    #         u='17821',
+    #         k='5e791c0b-9c10-4167-b849-402b0947aea9'
+    #     ))
+    #
+    # c = cdsapi.Client()
+    #
+    # c.retrieve(
+    #     'reanalysis-era5-pressure-levels',
+    #     {
+    #         'product_type': 'reanalysis',
+    #         'variable': 'temperature',
+    #         'pressure_level': '1000',
+    #         'year': '2008',
+    #         'month': '01',
+    #         'day': '01',
+    #         'time': '12:00',
+    #         'format': 'netcdf',  # Supported format: grib and netcdf. Default: grib
+    #         'area': [60, -10, 50, 2],
+    #         # North, West, South, East.          Default: global
+    #         'grid': [1.0, 1.0],
+    #         # Latitude/longitude grid.           Default: 0.25 x 0.25
+    #     },
+    #     'era5_temperature_sub_area.nc')  # Output file. Adapt as you wish.
