@@ -76,9 +76,6 @@ except Exception as e:
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
-    'matplotlib.sphinxext.plot_directive',
-    # 'IPython.sphinxext.ipython_directive',
-    # 'IPython.sphinxext.ipython_console_highlighting',
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
@@ -93,6 +90,16 @@ extensions = [
     'sphinx_rtd_theme',
     'numpydoc'
 ]
+try:
+    import matplotlib
+except ImportError:
+    pass
+else:
+    extensions += [
+        # 'IPython.sphinxext.ipython_directive',
+        # 'IPython.sphinxext.ipython_console_highlighting',
+        'matplotlib.sphinxext.only_directives',
+        'matplotlib.sphinxext.plot_directive']
 
 # Active to do rst.
 todo_include_todos=True
