@@ -87,10 +87,10 @@ RUN pip3 install -r requirements.txt
 
 # git clone reporsitory
 RUN git clone --recursive https://github.com/wateraccounting/IHEWAcollect.git
-RUN cd IHEWAcollect
 
 # Install python dependencies
-RUN pip3 install -r requirements.txt
+RUN cd IHEWAcollect && \
+    pip3 install -r requirements.txt
 
 # Install package
 
