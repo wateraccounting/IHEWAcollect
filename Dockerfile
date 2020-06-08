@@ -82,9 +82,6 @@ RUN apt-get install -y \
     python3-dev \
     python3-pip
 
-# Install python dependencies
-RUN pip3 install -r requirements.txt
-
 # git clone reporsitory
 RUN git clone --recursive https://github.com/wateraccounting/IHEWAcollect.git
 
