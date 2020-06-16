@@ -3,14 +3,16 @@
 """
 # General modules
 import os
-# import sys
-
-# import pytest
 
 # IHEWAcollect Modules
 import IHEWAcollect
 import numpy as np
 import pandas as pd
+
+# import sys
+
+# import pytest
+
 
 # from IHEWAcollect.base.user import User
 # from IHEWAcollect.templates.gis import GIS
@@ -82,7 +84,9 @@ def test_CFSR():
                               bbox=value['bbox'],
                               period=value['period'],
                               nodata=value['nodata'],
-                              is_status=False)
+                              is_status=True,
+                              is_save_temp=True,
+                              is_save_remote=True)
 
         date_s = pd.Timestamp(value['period']['s'])
         date_e = pd.Timestamp(value['period']['e'])

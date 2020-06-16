@@ -675,77 +675,77 @@ if __name__ == "__main__":
         '../', '../', 'tests'
     )
 
-    # area_bbox = {
-    #     'w': 118.0642363480000085,
-    #     'n': 10.4715946960000679,
-    #     'e': 126.6049655970000458,
-    #     's': 4.5872944970000731
-    # }
-    # nodata = -9999
-    # test_args = {
-    #     # '1a': {
-    #     #     'product': 'ALEXI',
-    #     #     'version': 'v1',
-    #     #     'parameter': 'evapotranspiration',
-    #     #     'resolution': 'daily',
-    #     #     'variable': 'ETA',
-    #     #     'bbox': {
-    #     #         'w': -19.0,
-    #     #         'n': 38.0,
-    #     #         'e': 55.0,
-    #     #         's': -35.0
-    #     #     },
-    #     #     'period': {
-    #     #         's': '2005-01-01',
-    #     #         'e': '2005-01-02'
-    #     #     },
-    #     #     'nodata': -9999
-    #     # }
-    #
-    #     '32a': {
-    #         'product': 'CSR',
-    #         'version': 'v3.1',
-    #         'parameter': 'grace',
-    #         'resolution': 'daily',
-    #         'variable': 'EWH',
-    #         'bbox': area_bbox,
-    #         'period': {
-    #             's': '2005-01-01',
-    #             'e': '2005-01-02'
-    #             # 's': '2004-12-01',
-    #             # 'e': '2013-01-01'
-    #         },
-    #         'nodata': nodata
-    #     },
-    # }
-    #
-    # # Download __init__
-    # for key, value in test_args.items():
-    #     print('\n{:>4s}'
-    #           '{:>20s}{:>6s}{:>20s}{:>20s}{:>20s}\n'
-    #           '{:->90s}'.format(key,
-    #                             value['product'],
-    #                             value['version'],
-    #                             value['parameter'],
-    #                             value['resolution'],
-    #                             value['variable'],
-    #                             '-'))
-    #
-    #     download = Download(workspace=path,
-    #                         product=value['product'],
-    #                         version=value['version'],
-    #                         parameter=value['parameter'],
-    #                         resolution=value['resolution'],
-    #                         variable=value['variable'],
-    #                         bbox=value['bbox'],
-    #                         period=value['period'],
-    #                         nodata=value['nodata'],
-    #                         is_status=False,
-    #                         is_save_temp=True,
-    #                         is_save_remote=True
-    #     )
-    #
-    # download.get_products()
+    area_bbox = {
+        'w': 118.0642363480000085,
+        'n': 10.4715946960000679,
+        'e': 126.6049655970000458,
+        's': 4.5872944970000731
+    }
+    nodata = -9999
+    test_args = {
+        # '1a': {
+        #     'product': 'ALEXI',
+        #     'version': 'v1',
+        #     'parameter': 'evapotranspiration',
+        #     'resolution': 'daily',
+        #     'variable': 'ETA',
+        #     'bbox': {
+        #         'w': -19.0,
+        #         'n': 38.0,
+        #         'e': 55.0,
+        #         's': -35.0
+        #     },
+        #     'period': {
+        #         's': '2005-01-01',
+        #         'e': '2005-01-02'
+        #     },
+        #     'nodata': -9999
+        # }
+
+        '32a': {
+            'product': 'CSR',
+            'version': 'v3.1',
+            'parameter': 'grace',
+            'resolution': 'daily',
+            'variable': 'EWH',
+            'bbox': area_bbox,
+            'period': {
+                's': '2005-01-01',
+                'e': '2005-01-02'
+                # 's': '2004-12-01',
+                # 'e': '2013-01-01'
+            },
+            'nodata': nodata
+        },
+    }
+
+    # Download __init__
+    for key, value in test_args.items():
+        print('\n{:>4s}'
+              '{:>20s}{:>6s}{:>20s}{:>20s}{:>20s}\n'
+              '{:->90s}'.format(key,
+                                value['product'],
+                                value['version'],
+                                value['parameter'],
+                                value['resolution'],
+                                value['variable'],
+                                '-'))
+
+        download = Download(workspace=path,
+                            product=value['product'],
+                            version=value['version'],
+                            parameter=value['parameter'],
+                            resolution=value['resolution'],
+                            variable=value['variable'],
+                            bbox=value['bbox'],
+                            period=value['period'],
+                            nodata=value['nodata'],
+                            is_status=False,
+                            is_save_temp=True,
+                            is_save_remote=True
+        )
+
+    download.get_products()
 
     # download.generate_encrypt()
 
