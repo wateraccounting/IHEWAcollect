@@ -269,7 +269,8 @@ products:
     v1:
       radiation:
         daily:
-          url: 'https://nomads.ncdc.noaa.gov'
+          # url: 'https://nomads.ncdc.noaa.gov'  # Before 20200615
+          url: 'https://www.ncei.noaa.gov'
           protocol: 'HTTPS'
           method: 'get'
           freq: 'D'
@@ -283,7 +284,8 @@ products:
                  system to provide the best estimate of the state of these coupled domains over
                  the 32-year period of record from January 1979 to March 2011. It has been
                  extended as an operational real-time product.'
-              dir: '/data/cfsr/{dtime:%Y%m}/'
+              # dir: '/data/cfsr/{dtime:%Y%m}/'  # Before 20200615
+              dir: '/data/climate-forecast-system/access/reanalysis/time-series/{dtime:%Y%m}/'
               fname:
                 r: 'dlwsfc.gdas.{dtime:%Y%m}.grb2'
                 t: 'dlwsfc-{dtime:%Y%m%d}-{ipart}.nc'
