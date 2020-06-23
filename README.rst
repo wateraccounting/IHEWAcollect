@@ -1,6 +1,6 @@
 .. -*- mode: rst -*-
 
-|CoverAlls|_ |Travis|_ |ReadTheDocs|_ |DockerHub|_ |PyPI|_
+|CoverAlls|_ |Travis|_ |ReadTheDocs|_ |DockerHub|_ |PyPI|_ |Zenodo|_
 
 .. |CoverAlls| image:: https://coveralls.io/repos/github/wateraccounting/IHEWAcollect/badge.svg?branch=master
 .. _CoverAlls: https://coveralls.io/github/wateraccounting/IHEWAcollect?branch=master
@@ -16,6 +16,9 @@
 
 .. |PyPI| image:: https://img.shields.io/pypi/v/IHEWAcollect
 .. _PyPI: https://pypi.org/project/IHEWAcollect/
+
+.. |Zenodo| image:: https://zenodo.org/badge/221895385.svg
+   :target: https://zenodo.org/badge/latestdoi/221895385
 
 
 IHEWAcollect
