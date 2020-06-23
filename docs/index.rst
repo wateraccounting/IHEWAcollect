@@ -2,6 +2,26 @@
 IHEWAcollect
 ============
 
+|CoverAlls|_ |Travis|_ |ReadTheDocs|_ |DockerHub|_ |PyPI|_ |Zenodo|_
+
+.. |CoverAlls| image:: https://coveralls.io/repos/github/wateraccounting/IHEWAcollect/badge.svg?branch=master
+.. _CoverAlls: https://coveralls.io/github/wateraccounting/IHEWAcollect?branch=master
+
+.. |Travis| image:: https://travis-ci.org/wateraccounting/IHEWAcollect.svg?branch=master
+.. _Travis: https://travis-ci.org/wateraccounting/IHEWAcollect
+
+.. |ReadTheDocs| image:: https://readthedocs.org/projects/ihewacollect/badge/?version=latest
+.. _ReadTheDocs: https://ihewacollect.readthedocs.io/en/latest/
+
+.. |DockerHub| image:: https://img.shields.io/docker/cloud/build/wateraccounting/ihewacollect
+.. _DockerHub: https://hub.docker.com/r/wateraccounting/ihewacollect
+
+.. |PyPI| image:: https://img.shields.io/pypi/v/IHEWAcollect
+.. _PyPI: https://pypi.org/project/IHEWAcollect/
+
+.. |Zenodo| image:: https://zenodo.org/badge/221895385.svg
+.. _Zenodo: https://zenodo.org/badge/latestdoi/221895385
+
 This is the documentation of **IHEWAcollect**.
 
 **IHEWAcollect** is a collection of tools to download remote sensing data.

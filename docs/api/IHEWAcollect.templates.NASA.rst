@@ -44,14 +44,6 @@ IHEWAcollect.templates.NASA.JPL module
    :undoc-members:
    :show-inheritance:
 
-IHEWAcollect.templates.NASA.PODAAC module
------------------------------------------
-
-.. automodule:: IHEWAcollect.templates.NASA.PODAAC
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 IHEWAcollect.templates.NASA.TRMM module
 ---------------------------------------
 
