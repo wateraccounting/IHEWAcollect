@@ -18,7 +18,7 @@
 .. _PyPI: https://pypi.org/project/IHEWAcollect/
 
 .. |Zenodo| image:: https://zenodo.org/badge/221895385.svg
-   :target: https://zenodo.org/badge/latestdoi/221895385
+.. _Zenodo: https://zenodo.org/badge/latestdoi/221895385
 
 
 IHEWAcollect
