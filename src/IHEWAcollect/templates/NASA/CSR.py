@@ -14,7 +14,6 @@ import sys
 
 import numpy as np
 import pandas as pd
-
 import pycurl
 from bs4 import BeautifulSoup
 # import requests
@@ -520,6 +519,7 @@ def start_download_scan(url, file, username, password, date) -> tuple:
     ctime = []
 
     # # Connect to server
+    # # Scan available data on the server
     # # Curl or Menually to CSR-v3.1.html
     # with open(file, 'wb') as fp:
     #     conn = pycurl.Curl()
@@ -529,13 +529,12 @@ def start_download_scan(url, file, username, password, date) -> tuple:
     #     conn.perform()
     #     conn.close()
 
-    # Scan available files on the server
+    # Scan available data on local drive
     conn = open(file, 'r', encoding='UTF8')
     soup = BeautifulSoup(conn, "html.parser")
 
     for ele in soup.findAll('a', attrs={'href': re.compile('(?i)(tif)$')}):
-        # print('{lon}{lat}'.format(lat=lat, lon=lon) == ele['href'].split('.')[-4],
-        #       ele)
+        # print('{dtime}'.format(dtime=ele['href'].split('/')[-1]))
         fname = ele['href'].split('/')[-1]
         date_s = pd.to_datetime(fname.split('-')[1][2:], format='%Y%j')
         date_e = pd.to_datetime(fname.split('-')[2][:7], format='%Y%j')

@@ -14,6 +14,7 @@ python:
   - "3.5"
   - "3.6"
   - "3.7"
+  - "3.8"
 
 #virtualenv:
 #  system_site_packages: false
@@ -100,6 +101,10 @@ before_install:
       3.7)
         export PYTHON_VERSION="3.7"
         export TOX_PYTHON_VERSION="py37"
+        ;;
+      3.8)
+        export PYTHON_VERSION="3.8"
+        export TOX_PYTHON_VERSION="py38"
         ;;
       *)
         echo "Unknown TRAVIS_PYTHON_VERSION $TRAVIS_PYTHON_VERSION"

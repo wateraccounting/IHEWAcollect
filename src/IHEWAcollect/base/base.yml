@@ -1034,7 +1034,7 @@ products:
                 ''
               dir: '/drive/files/allData/tellus/L3/gracefo/land_mass/RL06/v03/CSR/'
               fname:
-                r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRAC_UTCSR_BA01_0600_LND_v03.tif'
+                r : 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRFO_UTCSR_BA01_0600_LND_v03.tif'
                 t: ''
                 l: 'CSR_v3.2_mm_D-{dtime:%Y%m%d}.tif'
               fmt:
@@ -3405,7 +3405,7 @@ products:
                 ''
               dir: '/drive/files/allData/tellus/L3/gracefo/land_mass/RL06/v03/GFZ/'
               fname:
-                r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRAC_GFZOP_BA01_0600_LND_v03.tif'
+                r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRFO_GFZOP_BA01_0600_LND_v03.tif'
                 t: ''
                 l: 'GFZ_v3.2_mm_D-{dtime:%Y%m%d}.tif'
               fmt:
@@ -4109,7 +4109,7 @@ products:
                 ''
               dir: '/drive/files/allData/tellus/L3/gracefo/land_mass/RL06/v03/JPL/'
               fname:
-                r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRAC_JPLEM_BA01_0600_LND_v03.tif'
+                r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRFO_JPLEM_BA01_0600_LND_v03.tif'
                 t: ''
                 l: 'JPL_v3.2_mm_D-{dtime:%Y%m%d}.tif'
               fmt:

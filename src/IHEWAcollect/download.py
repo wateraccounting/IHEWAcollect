@@ -717,6 +717,75 @@ if __name__ == "__main__":
             },
             'nodata': nodata
         },
+        '32b': {
+            'product': 'CSR',
+            'version': 'v3.2',
+            'parameter': 'grace',
+            'resolution': 'daily',
+            'variable': 'EWH',
+            'bbox': area_bbox,
+            'period': {
+                's': '2019-01-01',
+                'e': '2019-01-02'
+            },
+            'nodata': nodata
+        },
+        '33a': {
+            'product': 'GFZ',
+            'version': 'v3.1',
+            'parameter': 'grace',
+            'resolution': 'daily',
+            'variable': 'EWH',
+            'bbox': area_bbox,
+            'period': {
+                's': '2005-01-01',
+                'e': '2005-01-02'
+                # 's': '2004-12-01',
+                # 'e': '2013-01-01'
+            },
+            'nodata': nodata
+        },
+        '33b': {
+            'product': 'GFZ',
+            'version': 'v3.2',
+            'parameter': 'grace',
+            'resolution': 'daily',
+            'variable': 'EWH',
+            'bbox': area_bbox,
+            'period': {
+                's': '2019-01-01',
+                'e': '2019-01-02'
+            },
+            'nodata': nodata
+        },
+        '34a': {
+            'product': 'JPL',
+            'version': 'v3.1',
+            'parameter': 'grace',
+            'resolution': 'daily',
+            'variable': 'EWH',
+            'bbox': area_bbox,
+            'period': {
+                's': '2005-01-01',
+                'e': '2005-01-02'
+                # 's': '2004-12-01',
+                # 'e': '2013-01-01'
+            },
+            'nodata': nodata
+        },
+        '34b': {
+            'product': 'JPL',
+            'version': 'v3.2',
+            'parameter': 'grace',
+            'resolution': 'daily',
+            'variable': 'EWH',
+            'bbox': area_bbox,
+            'period': {
+                's': '2019-01-01',
+                'e': '2019-01-02'
+            },
+            'nodata': nodata
+        },
     }
 
     # Download __init__
