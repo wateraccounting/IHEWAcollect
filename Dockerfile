@@ -79,7 +79,7 @@ RUN apt-get install -y \
 
 # Install python libraries
 RUN apt-get install -y \
-    python3-dev \
+    python3.7-dev \
     python3-pip
 
 # git clone reporsitory
