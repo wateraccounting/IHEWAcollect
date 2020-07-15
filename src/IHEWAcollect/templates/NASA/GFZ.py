@@ -2,7 +2,7 @@
 """
 **GFZ Module**
 
-`podaacpy on Github<https://github.com/nasa/podaacpy>`_
+`podaacpy on Github <https://github.com/nasa/podaacpy>`_
 
 """
 import datetime

@@ -127,19 +127,19 @@ class Download(User):
         else:
             self.__status['code'] = 1
 
-        vname, rtype, vdata = 'is_save_temp', bool, is_status
+        vname, rtype, vdata = 'is_save_temp', bool, is_save_temp
         if self.check_input(vname, rtype, vdata):
             self.__conf['is_save_temp'] = vdata
         else:
             self.__status['code'] = 1
 
-        vname, rtype, vdata = 'is_save_remote', bool, is_status
+        vname, rtype, vdata = 'is_save_remote', bool, is_save_remote
         if self.check_input(vname, rtype, vdata):
             self.__conf['is_save_remote'] = vdata
         else:
             self.__status['code'] = 1
 
-        vname, rtype, vdata = 'is_save_list', bool, is_status
+        vname, rtype, vdata = 'is_save_list', bool, is_save_list
         if self.check_input(vname, rtype, vdata):
             self.__conf['is_save_list'] = vdata
         else:
@@ -1042,11 +1042,10 @@ if __name__ == "__main__":
                             is_save_temp=True,
                             is_save_remote=True,
                             is_save_list=True
-        )
+                            )
 
+    print('\n=====\nGet Products table for Docs\n')
     download.get_products()
-
-    # download.generate_encrypt()
 
     # import yaml
     # fp = open(os.path.join(path, 'config.yml'), 'w+')
@@ -1057,6 +1056,7 @@ if __name__ == "__main__":
     # ##### #
     # ECMWF #
     # ##### #
+    print('\n=====\nTest ECMWF\n')
     from ecmwfapi import ECMWFDataServer
 
     file_conn_auth = os.path.join(os.path.expanduser("~"), ".ecmwfapirc")
@@ -1102,6 +1102,7 @@ if __name__ == "__main__":
     # ### #
     # CDS #
     # ### #
+    # print('\n=====\nTest CDS\n')
     # import cdsapi
     #
     # file_conn_auth = os.path.join(os.path.expanduser("~"), ".cdsapirc")

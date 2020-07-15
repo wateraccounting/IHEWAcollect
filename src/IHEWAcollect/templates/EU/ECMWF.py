@@ -4,22 +4,24 @@
 
 https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets
 
-$HOME/.ecmwfapirc
-{
-    "url"   : "https://api.ecmwf.int/v1",
-    "key"   : "4fe81af725d8f7647e10d35cadf7825e",
-    "email" : "quanpan302@hotmail.com"
-}
+.. code-block::
+
+    $HOME/.ecmwfapirc
+    {
+        "url"   : "https://api.ecmwf.int/v1",
+        "key"   : "4fe81af725d8f7647e10d35cadf7825e",
+        "email" : "quanpan302@hotmail.com"
+    }
+
 """
+import datetime
 # General modules
 import os
 import sys
-import datetime
-
-from ecmwfapi import ECMWFDataServer
 
 import numpy as np
 import pandas as pd
+from ecmwfapi import ECMWFDataServer
 from netCDF4 import Dataset
 
 # IHEWAcollect Modules
