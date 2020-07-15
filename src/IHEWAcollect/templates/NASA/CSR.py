@@ -518,16 +518,17 @@ def start_download_scan(url, file, username, password, date) -> tuple:
     """
     ctime = []
 
-    # # Connect to server
-    # # Scan available data on the server
-    # # Curl or Menually to CSR-v3.1.html
-    # with open(file, 'wb') as fp:
-    #     conn = pycurl.Curl()
-    #     conn.setopt(conn.URL, url)
-    #     conn.setopt(conn.USERPWD, '%s:%s' % (username, password))
-    #     conn.setopt(conn.WRITEDATA, fp)
-    #     conn.perform()
-    #     conn.close()
+    # Connect to server
+    if __this.conf['is_save_list']:
+        # Scan available data on the server
+        # Curl or Menually to CSR-v3.1.html
+        with open(file, 'wb') as fp:
+            conn = pycurl.Curl()
+            conn.setopt(conn.URL, url)
+            conn.setopt(conn.USERPWD, '%s:%s' % (username, password))
+            conn.setopt(conn.WRITEDATA, fp)
+            conn.perform()
+            conn.close()
 
     # Scan available data on local drive
     conn = open(file, 'r', encoding='UTF8')
@@ -653,11 +654,15 @@ def convert_data(args):
     Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
     if __this.conf['is_save_remote']:
+        pass
+    else:
         path = os.path.dirname(os.path.realpath(remote_file))
         if 'remote' != path[-6:]:
             path = os.path.join(path, 'remote')
         clean(path)
     if __this.conf['is_save_temp']:
+        pass
+    else:
         path = os.path.dirname(os.path.realpath(temp_file))
         if 'temporary' != path[-9:]:
             path = os.path.join(path, 'temporary')

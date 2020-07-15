@@ -60,8 +60,9 @@ class Download(User):
 
     __conf = {
         'path': '',
-        'is_save_temp': True,
-        'is_save_remote': True,
+        'is_save_temp': False,
+        'is_save_remote': False,
+        'is_save_list': False,
         'time': {
             'start': None,
             'now': None,
@@ -108,7 +109,7 @@ class Download(User):
     def __init__(self, workspace='',
                  product='', version='', parameter='', resolution='', variable='',
                  bbox={}, period={}, nodata=-9999,
-                 is_status=True, is_save_temp=True, is_save_remote=True,
+                 is_status=True, is_save_temp=False, is_save_remote=False, is_save_list=False,
                  **kwargs):
         """Class instantiation
         """
@@ -135,6 +136,12 @@ class Download(User):
         vname, rtype, vdata = 'is_save_remote', bool, is_status
         if self.check_input(vname, rtype, vdata):
             self.__conf['is_save_remote'] = vdata
+        else:
+            self.__status['code'] = 1
+
+        vname, rtype, vdata = 'is_save_list', bool, is_status
+        if self.check_input(vname, rtype, vdata):
+            self.__conf['is_save_list'] = vdata
         else:
             self.__status['code'] = 1
 
@@ -702,6 +709,228 @@ if __name__ == "__main__":
         #     'nodata': -9999
         # }
 
+        '15a': {
+            'product': 'MCD12Q1',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'yearly',
+            'variable': 'LC',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-12-31'
+            },
+            'nodata': nodata
+        },
+        '15b': {
+            'product': 'MCD12Q1',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'yearly',
+            'variable': 'LU',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-12-31'
+            },
+            'nodata': nodata
+        },
+        '16a': {
+            'product': 'MCD43A3',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'daily',
+            'variable': 'AlbedoBSA',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': nodata
+        },
+        '16b': {
+            'product': 'MCD43A3',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'daily',
+            'variable': 'AlbedoWSA',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': nodata
+        },
+        '17a': {
+            'product': 'MOD09GQ',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'daily',
+            'variable': 'REFb01',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': nodata
+        },
+        '17b': {
+            'product': 'MOD09GQ',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'daily',
+            'variable': 'REFb02',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-02'
+            },
+            'nodata': nodata
+        },
+        '18a': {
+            'product': 'MOD10A2',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'eight_daily',
+            'variable': 'SnowFrac',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': nodata
+        },
+        '18b': {
+            'product': 'MOD10A2',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'eight_daily',
+            'variable': 'SnowExt',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': nodata
+        },
+        '19a': {
+            'product': 'MOD11A2',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'eight_daily',
+            'variable': 'LSTday',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': nodata
+        },
+        '19b': {
+            'product': 'MOD11A2',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'eight_daily',
+            'variable': 'LSTnight',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': nodata
+        },
+        '20a': {
+            'product': 'MOD13Q1',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'sixteen_daily',
+            'variable': 'NDVI',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-17'
+            },
+            'nodata': nodata
+        },
+        '21a': {
+            'product': 'MOD15A2H',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'eight_daily',
+            'variable': 'Fpar',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': nodata
+        },
+        '21b': {
+            'product': 'MOD15A2H',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'eight_daily',
+            'variable': 'Lai',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': nodata
+        },
+        '22a': {
+            'product': 'MOD16A2',
+            'version': 'v6',
+            'parameter': 'evapotranspiration',
+            'resolution': 'eight_daily',
+            'variable': 'ETA',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': nodata
+        },
+        '22b': {
+            'product': 'MOD16A2',
+            'version': 'v6',
+            'parameter': 'evapotranspiration',
+            'resolution': 'eight_daily',
+            'variable': 'ETP',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': nodata
+        },
+        '23a': {
+            'product': 'MOD17A2H',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'eight_daily',
+            'variable': 'GPP',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-09'
+            },
+            'nodata': nodata
+        },
+        '24a': {
+            'product': 'MYD13',
+            'version': 'v6',
+            'parameter': 'land',
+            'resolution': 'sixteen_daily',
+            'variable': 'NDVI',
+            'bbox': area_bbox,
+            'period': {
+                's': '2008-01-01',
+                'e': '2008-01-18'
+            },
+            'nodata': nodata
+        },
+
         '32a': {
             'product': 'CSR',
             'version': 'v3.1',
@@ -809,9 +1038,10 @@ if __name__ == "__main__":
                             bbox=value['bbox'],
                             period=value['period'],
                             nodata=value['nodata'],
-                            is_status=False,
+                            is_status=True,
                             is_save_temp=True,
-                            is_save_remote=True
+                            is_save_remote=True,
+                            is_save_list=True
         )
 
     download.get_products()

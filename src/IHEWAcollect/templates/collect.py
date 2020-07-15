@@ -416,7 +416,7 @@ def Save_as_NC(namenc, DataCube, Var, Reference_filename, Startdate='', Enddate=
         nco.createDimension('latitude', size_Y)
 
         # Create time dimension if the parameter is time dependent
-        if Startdate is not '':
+        if Startdate != '':
             if Time_steps == 'monthly':
                 Dates = pd.date_range(Startdate, Enddate, freq='MS')
             if Time_steps == 'daily':
@@ -454,7 +454,7 @@ def Save_as_NC(namenc, DataCube, Var, Reference_filename, Startdate='', Enddate=
         crso.geo_reference = geo_out
 
         # Create the data variable
-        if Startdate is not '':
+        if Startdate != '':
             preco = nco.createVariable('%s' % Var, 'f8',
                                        ('time', 'latitude', 'longitude'), zlib=True,
                                        least_significant_digit=1)
@@ -474,7 +474,7 @@ def Save_as_NC(namenc, DataCube, Var, Reference_filename, Startdate='', Enddate=
         lato[:] = lat
 
         # Set the data variable
-        if Startdate is not '':
+        if Startdate != '':
             for i in range(len(Dates)):
                 preco[i, :, :] = DataCube[i, :, :] * 1. / np.float(Scaling_factor)
         else:
@@ -885,17 +885,17 @@ def Open_nc_array(NC_filename, Var=None, Startdate='', Enddate=''):
     Var -- string
         Defines the band name that must be opened.
     Startdate -- "yyyy-mm-dd"
-        Defines the startdate (default is from beginning of array)
+        Defines the startdate (default == from beginning of array)
     Enddate -- "yyyy-mm-dd"
         Defines the enddate (default is from end of array)
     """
     from netCDF4 import Dataset
 
     fh = Dataset(NC_filename, mode='r')
-    if Var == None:
+    if Var is None:
         Var = fh.variables.keys()[-1]
 
-    if Startdate is not '':
+    if Startdate != '':
         Time = fh.variables['time'][:]
         Array_check_start = np.ones(np.shape(Time))
         Date = pd.Timestamp(Startdate)
@@ -905,7 +905,7 @@ def Open_nc_array(NC_filename, Var=None, Startdate='', Enddate=''):
     else:
         Start = 0
 
-    if Enddate is not '':
+    if Enddate != '':
         Time = fh.variables['time'][:]
         Array_check_end = np.zeros(np.shape(Time))
         Date = pd.Timestamp(Enddate)
@@ -919,7 +919,7 @@ def Open_nc_array(NC_filename, Var=None, Startdate='', Enddate=''):
         except:
             End = ''
 
-    if (Enddate is not '' or Startdate is not ''):
+    if (Enddate != '' or Startdate != ''):
         Data = fh.variables[Var][int(Start):int(End), :, :]
 
     else:
@@ -1082,7 +1082,7 @@ def Open_nc_dict(input_netcdf, group_name, startdate='', enddate=''):
     # Clip the dynamic dataset if a start and enddate is defined
     if kind_of_data == 'dynamic':
 
-        if startdate is not '':
+        if startdate != '':
             Array_check_start = np.ones(np.shape(time_dates))
             Date = pd.Timestamp(startdate)
             Startdate_ord = Date.toordinal()
@@ -1091,7 +1091,7 @@ def Open_nc_dict(input_netcdf, group_name, startdate='', enddate=''):
         else:
             Start = 0
 
-        if enddate is not '':
+        if enddate != '':
             Array_check_end = np.zeros(np.shape(time_dates))
             Date = pd.Timestamp(enddate)
             Enddate_ord = Date.toordinal()
@@ -1325,16 +1325,16 @@ def reproject_dataset_epsg(dataset, pixel_spacing, epsg_to, method=2):
     dest.SetProjection(osng.ExportToWkt())
 
     # Perform the projection/resampling
-    if method is 1:
+    if method == 1:
         gdal.ReprojectImage(g, dest, wgs84.ExportToWkt(), osng.ExportToWkt(),
                             gdal.GRA_NearestNeighbour)
-    if method is 2:
+    if method == 2:
         gdal.ReprojectImage(g, dest, wgs84.ExportToWkt(), osng.ExportToWkt(),
                             gdal.GRA_Bilinear)
-    if method is 3:
+    if method == 3:
         gdal.ReprojectImage(g, dest, wgs84.ExportToWkt(), osng.ExportToWkt(),
                             gdal.GRA_Lanczos)
-    if method is 4:
+    if method == 4:
         gdal.ReprojectImage(g, dest, wgs84.ExportToWkt(), osng.ExportToWkt(),
                             gdal.GRA_Average)
     return dest, ulx, lry, lrx, uly, epsg_to
@@ -1455,16 +1455,16 @@ def reproject_dataset_example(dataset, dataset_example, method=1):
     dest1.SetProjection(osng.ExportToWkt())
 
     # Perform the projection/resampling
-    if method is 1:
+    if method == 1:
         gdal.ReprojectImage(g, dest1, wgs84.ExportToWkt(), osng.ExportToWkt(),
                             gdal.GRA_NearestNeighbour)
-    if method is 2:
+    if method == 2:
         gdal.ReprojectImage(g, dest1, wgs84.ExportToWkt(), osng.ExportToWkt(),
                             gdal.GRA_Bilinear)
-    if method is 3:
+    if method == 3:
         gdal.ReprojectImage(g, dest1, wgs84.ExportToWkt(), osng.ExportToWkt(),
                             gdal.GRA_Lanczos)
-    if method is 4:
+    if method == 4:
         gdal.ReprojectImage(g, dest1, wgs84.ExportToWkt(), osng.ExportToWkt(),
                             gdal.GRA_Average)
     return (dest1)

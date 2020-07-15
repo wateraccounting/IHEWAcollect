@@ -5,6 +5,7 @@
 """
 import datetime
 # General modules
+import inspect
 import os
 import re
 import sys
@@ -43,6 +44,12 @@ def _init(status, conf):
     # From download.py
     __this.status = status
     __this.conf = conf
+    __this.path = os.path.join(
+        os.getcwd(),
+        os.path.dirname(
+            inspect.getfile(
+                inspect.currentframe()))
+    )
 
     account = conf['account']
     folder = conf['folder']
@@ -405,7 +412,11 @@ def start_download(args) -> int:
             ))
 
         # Download the data from server if the file not exists
-        remote_fnames, remote_files, lonlat = start_download_tiles(date,
+        file = os.path.join(__this.path, '{p}-{v}.html'.format(
+            p=product['name'],
+            v=product['version']
+        ))
+        remote_fnames, remote_files, lonlat = start_download_tiles(date, file,
                                                                    url_server, url_dir,
                                                                    username, password,
                                                                    latlim, lonlim,
@@ -486,16 +497,25 @@ def start_download(args) -> int:
     return status_cod
 
 
-def start_download_scan(url, username, password, lat, lon) -> tuple:
+def start_download_scan(url, file, username, password, lat, lon) -> tuple:
     """Scan tile name
     """
     ctime = ''
 
     # Connect to server
-    conn = requests.get(url)
+    # conn = requests.get(url)
+    # soup = BeautifulSoup(conn.content, "html.parser")
+    if __this.conf['is_save_list']:
+        # Scan available data on the server
+        # Curl or Menually to CSR-v3.1.html
+        with open(file, 'w') as fp:
+            conn = requests.get(url)
+            fp.write(conn.text)
 
-    # Scan available files on the server
-    soup = BeautifulSoup(conn.content, "html.parser")
+    # Scan available data on local drive
+    conn = open(file, 'r', encoding='UTF8')
+    soup = BeautifulSoup(conn, "html.parser")
+
     for ele in soup.findAll('a', attrs={'href': re.compile('(?i)(hdf)$')}):
         # print('{lon}{lat}'.format(lat=lat, lon=lon) == ele['href'].split('.')[-4],
         #       ele)
@@ -505,7 +525,8 @@ def start_download_scan(url, username, password, lat, lon) -> tuple:
     return ctime
 
 
-def start_download_tiles(date, url_server, url_dir, username, password,
+def start_download_tiles(date, file,
+                         url_server, url_dir, username, password,
                          latlim, lonlim, fname_r, file_r) -> tuple:
     """Get tile name
     """
@@ -529,7 +550,7 @@ def start_download_tiles(date, url_server, url_dir, username, password,
             string_lat = 'v{:02d}'.format(lat_step)
             lonlat.append([lon_step * 10.0 - 180.0, 90.0 - lat_step * 10.0])
 
-            ctime = start_download_scan(url, username, password,
+            ctime = start_download_scan(url, file, username, password,
                                         string_lat, string_long)
 
             if ctime != '':
@@ -574,7 +595,11 @@ def convert_data(args):
     # Load data #
     # --------- #
     # From downloaded remote file
-    remote_fnames, remote_files, lonlat = start_download_tiles(date,
+    file = os.path.join(__this.path, '{p}-{v}.html'.format(
+        p=product['name'],
+        v=product['version']
+    ))
+    remote_fnames, remote_files, lonlat = start_download_tiles(date, file,
                                                                url_server, url_dir,
                                                                username, password,
                                                                latlim, lonlim,
@@ -684,11 +709,15 @@ def convert_data(args):
     Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
     if __this.conf['is_save_remote']:
+        pass
+    else:
         path = os.path.dirname(os.path.realpath(remote_file))
         if 'remote' != path[-6:]:
             path = os.path.join(path, 'remote')
         clean(path)
     if __this.conf['is_save_temp']:
+        pass
+    else:
         path = os.path.dirname(os.path.realpath(temp_file))
         if 'temporary' != path[-9:]:
             path = os.path.join(path, 'temporary')

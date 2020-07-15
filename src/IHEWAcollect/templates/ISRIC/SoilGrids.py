@@ -564,11 +564,15 @@ def convert_data(args):
     Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
     if __this.conf['is_save_remote']:
+        pass
+    else:
         path = os.path.dirname(os.path.realpath(remote_file))
         if 'remote' != path[-6:]:
             path = os.path.join(path, 'remote')
         clean(path)
     if __this.conf['is_save_temp']:
+        pass
+    else:
         path = os.path.dirname(os.path.realpath(temp_file))
         if 'temporary' != path[-9:]:
             path = os.path.join(path, 'temporary')
