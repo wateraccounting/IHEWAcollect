@@ -1,8 +1,18 @@
+.eggs
 .git
+.idea
+.pytest_cache
 .DS_Store
 
-tests/data/Products/*
-tests/data/Download/*
-tests/IHEWAcollect/*
+build
+dist
 
-examples/IHEWAcollect/*
+ci
+Docker
+docs
+issues
+
+xamples/IHEWAcollect
+
+tests/data/Products
+tests/IHEWAcollect

@@ -78,16 +78,19 @@ RUN apt-get install -y \
     libhdf5-serial-dev
 
 # Install python libraries
+# RUN add-apt-repository ppa:ubuntu-toolchain-r/ppa
 RUN apt-get install -y \
-    python3.7-dev \
+    python3-dev \
     python3-pip
 
-# git clone reporsitory
-RUN git clone --recursive https://github.com/wateraccounting/IHEWAcollect.git
-
-# Install python dependencies
-RUN cd IHEWAcollect && \
-    pip3 install -r requirements.txt \
+# copy for test
+# ADD requirements.txt . && \
+#     pip3 install -r requirements.txt && \
+#     python3 setup.py install
+# git clone reporsitory for prod
+RUN git clone --recursive https://github.com/wateraccounting/IHEWAcollect.git && \
+    cd IHEWAcollect && \
+    pip3 install -r requirements.txt && \
     python3 setup.py install
 
 # Install package
