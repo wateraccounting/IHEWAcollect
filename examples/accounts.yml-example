@@ -1,5 +1,11 @@
 accounts:
-  NASA:
+
+  Copernicus:
+    username: ''
+    password: ''
+    apitoken: ''
+
+  ECMWF:
     username: ''
     password: ''
     apitoken: ''
@@ -7,29 +13,29 @@ accounts:
   GLEAM:
     username: ''
     password: ''
-    apitoken: ''
+    apitoken: null
 
-  FTP_WA:
+  IHEWA:
     username: ''
-    password: ''
-    apitoken: ''
+    password: '!'
+    apitoken: null
 
-  FTP_WA_GUESS:
+  IHEWA_GUESS:
     username: 'wateraccountingguest'
     password: 'W@t3r@ccounting'
-    apitoken: ''
+    apitoken: null
 
-  MSWEP:
+  NASA:
     username: ''
     password: ''
-    apitoken: ''
+    apitoken: null
 
-  Copernicus:
+  PODAAC:
     username: ''
     password: ''
-    apitoken: ''
+    apitoken: null
 
   VITO:
     username: ''
     password: ''
-    apitoken: ''
+    apitoken: null
