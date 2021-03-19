@@ -24,15 +24,23 @@
 IHEWAcollect
 ============
 
-IHE WaterAccounting Collect Tool.
+IHE WaterAccounting Collect Tool. Tool to download open access remote sensing datasets for a geographical area and time period of interest.
+Data is converted from original file format to .tiff format. 
 
-Collect
+
+Products
+--------
+List of products which can be downloaded through the IHEWAcollect package: 
+https://ihewacollect.readthedocs.io/en/latest/products.html
+
+
+Installation
 -------
+See installation notes on our wiki page: https://github.com/wateraccounting/IHEWAcollect/wiki/Installation
 
-Products requires `username, password` or `apitoken`.
+In order to have access to all products, accounts are needed from the following providers:
+(`username, password` or `apitoken`)
 
-Free products
-^^^^^^^^^^^^^
 
 +------------+-----------------------------------------------------------------------+
 | Accounts   | Link                                                                  |
@@ -43,8 +51,6 @@ Free products
 +------------+-----------------------------------------------------------------------+
 | GLEAM      | http://www.gleam.eu                                                   |
 +------------+-----------------------------------------------------------------------+
-| IHEWA      | https://www.wateraccounting.org                                       |
-+------------+-----------------------------------------------------------------------+
 | NASA       | https://www.nasa.gov                                                  |
 +------------+-----------------------------------------------------------------------+
 | VITO       | https://www.vito-eodata.be/PDF/datapool                               |
@@ -52,33 +58,15 @@ Free products
 | WaPOR      | http://www.fao.org/in-action/remote-sensing-for-water-productivity/en |
 +------------+-----------------------------------------------------------------------+
 
-Commercial products
-^^^^^^^^^^^^^^^^^^^
-
-+------------+-----------------------------------------------------------------------+
-| Accounts   | Link                                                                  |
-+============+=======================================================================+
-| MSWEP      | https://princetonclimate.com                                          |
-+------------+-----------------------------------------------------------------------+
-
-Products
---------
-
-ALEXI
-^^^^^
-
-IHEWAcollect.Download(path, 'ALEXI', para) functioin
-
-...
-^^^
-
-WAPOR
-^^^^^
-
-IHEWAcollect.Download(path, 'WAPOR', para) functioin
+Usage
+-------
 
 
-Note
-====
+Licence
+-------
+This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
+http://creativecommons.org/licenses/by-nc-sa/4.0/
 
-For details, see https://www.wateraccounting.org/.
+.. image:: https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png
+   :width: 450
+   :alt: "Creative Commons License"
