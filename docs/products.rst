@@ -25,7 +25,7 @@ Products
     15, NDVI, MOD13Q1, NASA, HTTPS, v6, 16-day, NDVI, 250m, Global, Global, 24/02/2000, continues
     16, NDVI, MYD13, NASA, HTTPS, v6, 16-day, NDVI, 250m, Global, Global, 24/02/2000, continues
     17, NDVI, PROBAV, VITO, HTTPS, v1.01, daily, NDVI, 100m, Global, Global, 12/03/2014, continues
-    18, Net Primari Production, MOD17A3H, NASA, HTTPS, v6, 8-day, NPP, 500m, Global, Global, 18/02/2000, continues
+    18, Net Primary Production, MOD17A3H, NASA, HTTPS, v6, 8-day, NPP, 500m, Global, Global, 18/02/2000, continues
     19, Potential Evaporation, MOD16A2, NASA, HTTPS, v6, 8-day, ETP, 500m, Global, Global, 01/01/2001, continues
     20, Precipitation, CHIRPS, None, FTP, v2.0, daily - monthly, P, 0.05°, -50, 50, 01/01/1981, continues
     21, Precipitation, GPM, NASA, HTTPS, v6, daily monthly, P, 0.1°, -90, 90, 01/06/2000, 30/09/2019
