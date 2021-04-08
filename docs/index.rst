@@ -256,8 +256,6 @@ Details can be found at `Products
 +------------+-----------------------------------------------+
 | GPM        | https://pmm.gsfc.nasa.gov/GPM                 |
 +------------+-----------------------------------------------+
-| GPM, nc4   | https://pmm.gsfc.nasa.gov/GPM                 |
-+------------+-----------------------------------------------+
 | HiHydroSoil||No longer provided.                           |
 |            ||Download current version from:                |
 |            ||www.futurewater.eu/projects/hihydrosoil/      |
@@ -277,7 +275,7 @@ Details can be found at `Products
 | MOD13Q1    | https://lpdaac.usgs.gov/products/mod13q1v006  |
 +------------+-----------------------------------------------+
 | MOD15A2H   | https://lpdaac.usgs.gov/products/mod15a2hv006 |
-+------------+----------------------------------------------+
++------------+-----------------------------------------------+
 | MOD16A2    | https://lpdaac.usgs.gov/products/mod16a2v006  |
 +------------+-----------------------------------------------+
 | MOD17A2H   | https://lpdaac.usgs.gov/products/mod17a2hv006 |
