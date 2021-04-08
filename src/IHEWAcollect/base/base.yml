@@ -3255,7 +3255,7 @@ products:
       versions:
         - 'v4'
       datasets:
-        - 'Evapotranspiration'
+        - 'Potential Evaporation'
       resolutions:
         - 'daily'
       projection:
@@ -3270,7 +3270,7 @@ products:
           variables:
             ETP:
               variable: null
-              name: 'Daily Potential Evapotranspiration'
+              name: 'Daily Potential Evaporation'
               description:
                 ''
               dir: '/downloads/sciweb1/shared/fews/web/global/daily/pet/downloads/daily/'
