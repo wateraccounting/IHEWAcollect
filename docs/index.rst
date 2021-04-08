@@ -236,9 +236,6 @@ Details can be found at `Products
 +------------+---------------------------------+-----------------------------------------------+
 | Product    |  Image                          | Link                                          |
 +============+=================================+===============================================+
-| ALEXI      | .. image:: ./img/ALEXI.png      | https://www.wateraccounting.org               |
-|            |    :height: 40pt                |                                               |
-+------------+---------------------------------+-----------------------------------------------+
 | ASCAT      | .. image:: ./img/ASCAT.png      | https://www.copernicus.eu                     |
 |            |    :height: 40pt                |                                               |
 +------------+---------------------------------+-----------------------------------------------+
@@ -248,9 +245,6 @@ Details can be found at `Products
 | CHIRPS     | .. image:: ./img/CHIRPS.png     | https://geog.ucsb.edu                         |
 |            |    :height: 40pt                |                                               |
 +------------+---------------------------------+-----------------------------------------------+
-| CMRSET     | .. image:: ./img/CMRSET.png     | https://www.wateraccounting.org               |
-|            |    :height: 40pt                |                                               |
-+------------+---------------------------------+-----------------------------------------------+
 | CSR        | .. image:: ./img/CSR.png        | https://podaac.jpl.nasa.gov                   |
 |            |    :height: 40pt                |                                               |
 +------------+---------------------------------+-----------------------------------------------+
@@ -258,9 +252,6 @@ Details can be found at `Products
 |            |    :height: 40pt                |                                               |
 +------------+---------------------------------+-----------------------------------------------+
 | ECMWF      | API Required                    | https://www.ecmwf.int                         |
-+------------+---------------------------------+-----------------------------------------------+
-| ETmonitor  | .. image:: ./img/ETmonitor.png  | https://www.wateraccounting.org               |
-|            |    :height: 40pt                |                                               |
 +------------+---------------------------------+-----------------------------------------------+
 | FEWS       | .. image:: ./img/FEWS.png       | https://earlywarning.usgs.gov/fews            |
 |            |    :height: 40pt                |                                               |
@@ -277,8 +268,9 @@ Details can be found at `Products
 | GPM, nc4   | .. image:: ./img/GPM-lonlat.png | https://pmm.gsfc.nasa.gov/GPM                 |
 |            |    :height: 40pt                |                                               |
 +------------+---------------------------------+-----------------------------------------------+
-| HiHydroSoil| .. image:: ./img/HiHydroSoil.png| https://www.wateraccounting.org               |
-|            |    :height: 40pt                |                                               |
+| HiHydroSoil| .. image:: ./img/HiHydroSoil.png| No longer provided.                           |
+|            |    :height: 40pt                | Download current version from:                |
+|            |                                 | https://www.futurewater.eu/projects/hihydrosoil/|
 +------------+---------------------------------+-----------------------------------------------+
 | JRC        | .. image:: ./img/JRC.png        | https://global-surface-water.appspot.com      |
 |            |    :height: 40pt                |                                               |
@@ -318,9 +310,6 @@ Details can be found at `Products
 |            |    :height: 40pt                |                                               |
 +------------+---------------------------------+-----------------------------------------------+
 | RFE        | .. image:: ./img/RFE.png        | https://data.noaa.gov/dataset                 |
-|            |    :height: 40pt                |                                               |
-+------------+---------------------------------+-----------------------------------------------+
-| SEBS       | .. image:: ./img/SEBS.png       | https://www.wateraccounting.org               |
 |            |    :height: 40pt                |                                               |
 +------------+---------------------------------+-----------------------------------------------+
 | SoilGrids  | .. image:: ./img/SoilGrids.png  | https://www.isric.org                         |
