@@ -32,7 +32,7 @@ Products
     22, Precipitation, RFE, None, FTP, v2, daily, P, 0.1°, -40.05, 40.05, 01/01/2001, continues
     23, Precipitation, TRMM, NASA, HTTPS, v7, monthly, P, 0.25, -50, 50, 01/01/1980, 30/09/2019
     24, Precipitation, TRMM, NASA, HTTPS, v7a, monthly, P, 0.25, -50, 50, 01/01/2000, 30/09/2010
-    25, Radiation, CFSR, None, HTTPS, v1, daily, dlwsfc dswsfc ulwsfc uswsfc dlwsfc dswsfc ulwsfc ulwsfc uswsfc, 0.3122121~, -89.91710~, 89.917106~, 01/01/1979, 31/03/2011
+    25, Radiation, CFSR, None, HTTPS, v1, daily, dlwsfc dswsfc ulwsfc uswsfc dlwsfc dswsfc ulwsfc ulwsfc uswsfc, 0.5, -90, 90, 01/01/1979, 31/03/2011
     26, Reflectance, MOD09GQ, NASA, HTTPS, v6, daily, REFb01 REFb02, 250m, Global, Global, 24/02/2000, continues
     27, Snow, MOD10A2, NASA, HTTPS, v6, 8-day, SnowFrac SnowExt, 500m, Global, Global, 18/02/2000, continues
     28, Soil Moisture, ASCAT, VITO, HTTPS, v3.1.1, daily, SWI_010, 0.1°, -90, 90, 01/01/2007, continues
