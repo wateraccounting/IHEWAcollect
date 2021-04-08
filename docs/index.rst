@@ -270,7 +270,7 @@ Details can be found at `Products
 +------------+---------------------------------+-----------------------------------------------+
 | HiHydroSoil| .. image:: ./img/HiHydroSoil.png| No longer provided.                           |
 |            |    :height: 40pt                | Download current version from:                |
-|            |                                 | https://www.futurewater.eu/projects/hihydrosoil/|
+|            |                                 | www.futurewater.eu/projects/hihydrosoil/      |
 +------------+---------------------------------+-----------------------------------------------+
 | JRC        | .. image:: ./img/JRC.png        | https://global-surface-water.appspot.com      |
 |            |    :height: 40pt                |                                               |
