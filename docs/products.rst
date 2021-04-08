@@ -14,30 +14,29 @@ Products
     4, Equivalent Water Height, GRACE-FO CSR/GFZ/JPL, PODAAC, HTTPS, v3.2, daily, EWH, 1°, -90, 90, 01/06/2018, continues
     5, Evapotranspiration, FEWS, None, HTTPS, v4, daily, ETp, 1°, -90.5, 90.5, 01/01/2001, continues
     6, Evapotranspiration, GLDAS, NASA, HTTPS, v2.1, 3 hourly monthly, ETa, 0.25°, -60, 90, 01/01/2000, continues
-    7, Evapotranspiration, GLEAM, GLEAM, SFTP, v3.3a, daily monthly, ETa, 0.25°, -89.875, 89.875, 01/01/1980, 31/12/2018
-    8, Evapotranspiration, GLEAM, GLEAM, SFTP, v3.3b, daily monthly, ETa, 0.25°, -89.875, 89.875, 01/01/2003, 31/12/2018
-    9, Evapotranspiration, MOD16A2, NASA, HTTPS, v6, 8-day, ETA, 500m, Global, Global, 01/01/2001, continues
-    10, Evapotranspiration, SSEBop, None, HTTPS, v4, monthly, ETa, 1km, -60, 80, 01/01/2003, continues
-    11, Flow Direction Map, HydroSHEDS, None, HTTPS, v1, n/a, DIR, 3s 15s 30s, , , n/a, n/a
-    12, Gross Primary Production, MOD17A2H, NASA, HTTPS, v6, 8-day, GPP, 500m, Global, Global, 18/02/2000, continues
-    13, Land Cover, MCD12Q1, NASA, HTTPS, v6, yearly, LC, 500m, Global, Global, 01/01/2001, 31/12/2018
-    14, Land Surface Temperature, MOD11A2, NASA, HTTPS, v6, 8-day, LSTday LSTnight, 1km, Global, Global, 18/02/2000, continues
-    15, NDVI, MOD13Q1, NASA, HTTPS, v6, 16-day, NDVI, 250m, Global, Global, 24/02/2000, continues
-    16, NDVI, MYD13, NASA, HTTPS, v6, 16-day, NDVI, 250m, Global, Global, 24/02/2000, continues
-    17, NDVI, PROBAV, VITO, HTTPS, v1.01, daily, NDVI, 100m, Global, Global, 12/03/2014, continues
-    18, Net Primary Production, MOD17A3H, NASA, HTTPS, v6, 8-day, NPP, 500m, Global, Global, 18/02/2000, continues
-    19, Potential Evaporation, MOD16A2, NASA, HTTPS, v6, 8-day, ETP, 500m, Global, Global, 01/01/2001, continues
-    20, Precipitation, CHIRPS, None, FTP, v2.0, daily - monthly, P, 0.05°, -50, 50, 01/01/1981, continues
-    21, Precipitation, GPM, NASA, HTTPS, v6, daily monthly, P, 0.1°, -90, 90, 01/06/2000, 30/09/2019
-    22, Precipitation, RFE, None, FTP, v2, daily, P, 0.1°, -40.05, 40.05, 01/01/2001, continues
-    23, Precipitation, TRMM, NASA, HTTPS, v7, monthly, P, 0.25, -50, 50, 01/01/1980, 30/09/2019
-    24, Precipitation, TRMM, NASA, HTTPS, v7a, monthly, P, 0.25, -50, 50, 01/01/2000, 30/09/2010
-    25, Radiation, CFSR, None, HTTPS, v1, daily, dlwsfc dswsfc ulwsfc uswsfc dlwsfc dswsfc ulwsfc ulwsfc uswsfc, 0.5, -90, 90, 01/01/1979, 31/03/2011
-    26, Reflectance, MOD09GQ, NASA, HTTPS, v6, daily, REFb01 REFb02, 250m, Global, Global, 24/02/2000, continues
-    27, Snow, MOD10A2, NASA, HTTPS, v6, 8-day, SnowFrac SnowExt, 500m, Global, Global, 18/02/2000, continues
-    28, Soil Moisture, ASCAT, VITO, HTTPS, v3.1.1, daily, SWI_010, 0.1°, -90, 90, 01/01/2007, continues
-    29, Soil Parameters, SoilGrids, None, HTTPS, v1, n/a, BDRICM BDRLOG BDTICM BLDFIE(1to7) CLYPPT(1to7) CRFVOL(1to7) OCSTHA(1to7) ORCDRC(1to7) SLTPPT(1to7) SNDPPT(1to7), 250m, -56, 84, n/a, n/a
-    30, Vegetation Indices, MOD15A2H, NASA, HTTPS, v6, 8-day, Fpar LAI, 500m, Global, Global, 18/02/2000, continues
-    31, Water Extent, JRC, None, HTTPS, v1, n/a, occurrence, 30m, -60, 80, n/a, n/a
+    7, Evapotranspiration, GLEAM, GLEAM, SFTP, v3.3a v3.3b, daily monthly, ETa, 0.25°, -90, 90, 01/01/1980, 31/12/2018
+    8, Evapotranspiration, MOD16A2, NASA, HTTPS, v6, 8-day, ETA, 500m, Global, Global, 01/01/2001, continues
+    9, Evapotranspiration, SSEBop, None, HTTPS, v4, monthly, ETa, 1km, -60, 80, 01/01/2003, continues
+    10, Flow Direction Map, HydroSHEDS, None, HTTPS, v1, n/a, DIR, 3s 15s 30s, , , n/a, n/a
+    11, Gross Primary Production, MOD17A2H, NASA, HTTPS, v6, 8-day, GPP, 500m, Global, Global, 18/02/2000, continues
+    12, Land Cover, MCD12Q1, NASA, HTTPS, v6, yearly, LC, 500m, Global, Global, 01/01/2001, 31/12/2018
+    13, Land Surface Temperature, MOD11A2, NASA, HTTPS, v6, 8-day, LSTday LSTnight, 1km, Global, Global, 18/02/2000, continues
+    14, NDVI, MOD13Q1, NASA, HTTPS, v6, 16-day, NDVI, 250m, Global, Global, 24/02/2000, continues
+    15, NDVI, MYD13, NASA, HTTPS, v6, 16-day, NDVI, 250m, Global, Global, 24/02/2000, continues
+    16, NDVI, PROBAV, VITO, HTTPS, v1.01, daily, NDVI, 100m, Global, Global, 12/03/2014, continues
+    17, Net Primary Production, MOD17A3H, NASA, HTTPS, v6, 8-day, NPP, 500m, Global, Global, 18/02/2000, continues
+    18, Potential Evaporation, MOD16A2, NASA, HTTPS, v6, 8-day, ETP, 500m, Global, Global, 01/01/2001, continues
+    19, Precipitation, CHIRPS, None, FTP, v2.0, daily - monthly, P, 0.05°, -50, 50, 01/01/1981, continues
+    20, Precipitation, GPM, NASA, HTTPS, v6, daily monthly, P, 0.1°, -90, 90, 01/06/2000, 30/09/2019
+    21, Precipitation, RFE, None, FTP, v2, daily, P, 0.1°, -40.05, 40.05, 01/01/2001, continues
+    22, Precipitation, TRMM, NASA, HTTPS, v7, monthly, P, 0.25, -50, 50, 01/01/1980, 30/09/2019
+    23, Precipitation, TRMM, NASA, HTTPS, v7a, monthly, P, 0.25, -50, 50, 01/01/2000, 30/09/2010
+    24, Radiation, CFSR, None, HTTPS, v1, daily, dlwsfc dswsfc ulwsfc uswsfc dlwsfc dswsfc ulwsfc ulwsfc uswsfc, 0.5, -90, 90, 01/01/1979, 31/03/2011
+    25, Reflectance, MOD09GQ, NASA, HTTPS, v6, daily, REFb01 REFb02, 250m, Global, Global, 24/02/2000, continues
+    26, Snow, MOD10A2, NASA, HTTPS, v6, 8-day, SnowFrac SnowExt, 500m, Global, Global, 18/02/2000, continues
+    27, Soil Moisture, ASCAT, VITO, HTTPS, v3.1.1, daily, SWI_010, 0.1°, -90, 90, 01/01/2007, continues
+    28, Soil Parameters, SoilGrids, None, HTTPS, v1, n/a, BDRICM BDRLOG BDTICM BLDFIE(1to7) CLYPPT(1to7) CRFVOL(1to7) OCSTHA(1to7) ORCDRC(1to7) SLTPPT(1to7) SNDPPT(1to7), 250m, -56, 84, n/a, n/a
+    29, Vegetation Indices, MOD15A2H, NASA, HTTPS, v6, 8-day, Fpar LAI, 500m, Global, Global, 18/02/2000, continues
+    30, Water Extent, JRC, None, HTTPS, v1, n/a, occurrence, 30m, -60, 80, n/a, n/a
     
 
