@@ -62,7 +62,7 @@ class Download(User):
         'path': '',
         'is_save_temp': False,
         'is_save_remote': False,
-        'is_save_list': False,
+        'is_save_list': True,
         'time': {
             'start': None,
             'now': None,
@@ -148,7 +148,8 @@ class Download(User):
         # Class self.__conf['path']
         vname, rtype, vdata = 'workspace', str, workspace
         if self.check_input(vname, rtype, vdata):
-            path = os.path.join(vdata, 'IHEWAcollect')
+            path = vdata
+            # path = os.path.join(vdata, 'IHEWAcollect')
             if not os.path.exists(path):
                 os.makedirs(path)
             self.__conf['path'] = path
@@ -243,6 +244,15 @@ class Download(User):
         status = -1
         self._log_close()
         # self._folder_clean()
+
+        folder = self.__conf['folder']
+
+        if not next(os.scandir(folder['r']), None):
+            os.rmdir(folder['r'])
+
+        if not next(os.scandir(folder['t']), None):
+            os.rmdir(folder['t'])
+
         return status
 
     def _time(self) -> dict:
@@ -355,7 +365,8 @@ class Download(User):
             folder = {
                 'r': os.path.join(path, 'remote'),
                 't': os.path.join(path, 'temporary'),
-                'l': os.path.join(path, 'download')
+                'l': path
+                # 'l': os.path.join(path, 'download')
             }
 
             for key, value in folder.items():
@@ -449,13 +460,13 @@ class Download(User):
         """
         # Class self.__tmp <- Base.product
         template = self.__tmp
-
+               
         if self.__status['code'] == 0:
             product = self.__conf['product']
             module_name_base = '{tmp}.{prod}'.format(
                 tmp=self._Base__conf['product']['data']['template'],
                 prod=product['name'])
-
+            
             # Load module
             # module_obj = None
             module_name = template['name']
@@ -491,19 +502,37 @@ class Download(User):
                 # importlib.import_module('IHEWAcollect.templates.IHE.ALEXI')
                 try:
                     # def template_load(self) -> dict:
-                    module_obj = \
-                        importlib.import_module('.{m}'.format(m=product['name']),
-                                                '.templates.{p}'.format(
-                                                    p=product['template']))
+                    if('MOD' in product['name']):
+                        # product['name'] = 'MODIS_products'
+                        module_obj = \
+                            importlib.import_module('IHEWAcollect.templates'
+                                                    '.{p}.{n}'.format(
+                                                        p=product['template'],
+                                                        n='MODIS_products'))
+                    else:
+                    
+                        module_obj = \
+                            importlib.import_module('.{m}'.format(m=product['name']),
+                                                    '.templates.{p}'.format(
+                                                        p=product['template']))
+                       
                     # print('Loaded module from .templates.{p}.{m}'.format(
                     #     p=product['template'],
                     #     m=template['name']))
                 except ImportError:
+                    # if('MOD' in product['name']):
+                    #     # product['name'] = 'MODIS_products'
+                    #     module_obj = \
+                    #         importlib.import_module('IHEWAcollect.templates'
+                    #                                 '.{p}.{n}'.format(
+                    #                                     p=product['template'],
+                    #                                     n=product['name']))
+                    # else:
                     module_obj = \
-                        importlib.import_module('IHEWAcollect.templates'
-                                                '.{p}.{n}'.format(
-                                                    p=product['template'],
-                                                    n=product['name']))
+                            importlib.import_module('IHEWAcollect.templates'
+                                                    '.{p}.{n}'.format(
+                                                        p=product['template'],
+                                                        n=product['name']))
                     # print('Loaded module from .templates.{p}.{n}'.format(
                     #     p=product['template'],
                     #     n=product['name']))
@@ -1042,10 +1071,11 @@ if __name__ == "__main__":
                             is_save_temp=True,
                             is_save_remote=True,
                             is_save_list=True
-                            )
+        )
 
-    print('\n=====\nGet Products table for Docs\n')
     download.get_products()
+
+    # download.generate_encrypt()
 
     # import yaml
     # fp = open(os.path.join(path, 'config.yml'), 'w+')
@@ -1056,7 +1086,6 @@ if __name__ == "__main__":
     # ##### #
     # ECMWF #
     # ##### #
-    print('\n=====\nTest ECMWF\n')
     from ecmwfapi import ECMWFDataServer
 
     file_conn_auth = os.path.join(os.path.expanduser("~"), ".ecmwfapirc")
@@ -1102,7 +1131,6 @@ if __name__ == "__main__":
     # ### #
     # CDS #
     # ### #
-    # print('\n=====\nTest CDS\n')
     # import cdsapi
     #
     # file_conn_auth = os.path.join(os.path.expanduser("~"), ".cdsapirc")

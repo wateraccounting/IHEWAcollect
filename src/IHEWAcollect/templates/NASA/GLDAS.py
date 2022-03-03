@@ -331,6 +331,15 @@ def get_download_args(latlim, lonlim, date,
         np.ceil((lonlim[1] - prod_lon_w) / prod_lon_size)
     ], dtype=np.int)
 
+    # Adjust the lon, lat limits based on the grids of the data
+    lonlim = np.array([
+        (y_id[0] * prod_lon_size + prod_lon_w),
+        (y_id[1] * prod_lon_size + prod_lon_w)
+    ], dtype=np.float)
+    latlim = np.array([
+        (x_id[0] * prod_lat_size + prod_lat_s),
+        (x_id[1] * prod_lat_size + prod_lat_s)
+    ], dtype=np.float)
     # [w,n]--[w,s]
     #   |      |
     # [e,n]--[e,s]
@@ -492,8 +501,8 @@ def convert_data(args):
     #  -> temporary (unzip)
     #   -> local (gis)
     msg = 'Converting  "{f}"'.format(f=local_file)
-    print('\33[94m{}\33[0m'.format(msg))
-    __this.Log.write(datetime.datetime.now(), msg=msg)
+   #print('\33[94m{}\33[0m'.format(msg))
+    #__this.Log.write(datetime.datetime.now(), msg=msg)
 
     # --------- #
     # Load data #

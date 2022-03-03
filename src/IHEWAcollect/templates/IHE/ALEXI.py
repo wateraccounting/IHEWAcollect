@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-**JRC Module**
+**ALEXI Module**
 
 """
 import datetime
+import ftplib
 # General modules
 import os
 import sys
+from urllib.parse import urlparse
 
 import numpy as np
 import pandas as pd
-import requests
 
-# from requests.auth import HTTPBasicAuth => .netrc
 # from joblib import Parallel, delayed
 
 # from netCDF4 import Dataset
@@ -20,16 +20,14 @@ import requests
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        Clip_Dataset_GDAL, Merge_Dataset_GDAL, \
-        Open_array_info, Open_tiff_array, Save_as_tiff
+        Extract_Data_gz, Open_tiff_array, Save_as_tiff
 
     from ..gis import GIS
     from ..dtime import Dtime
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        Clip_Dataset_GDAL, Merge_Dataset_GDAL, \
-        Open_array_info, Open_tiff_array, Save_as_tiff
+        Extract_Data_gz, Open_tiff_array, Save_as_tiff
 
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
@@ -39,7 +37,10 @@ except ImportError:
 __this = sys.modules[__name__]
 
 
-def _init(status, conf):
+def _init(status, conf) -> tuple:
+    # test = sys.modules
+    # print('GIS' in test)
+
     # From download.py
     __this.status = status
     __this.conf = conf
@@ -127,63 +128,53 @@ def DownloadData(status, conf) -> int:
         date_e = pd.Timestamp(arg_period_e)
 
     # Creates dates library
+    if product['resolution'] == 'weekly':
+        date_doy = date_s.timetuple().tm_yday
+        date_year = date_s.timetuple().tm_year
+
+        # Change the startdate so it includes an ALEXI date
+        date_doy_s = int(np.ceil(date_doy / 7.0) * 7 + 1)
+
+        # Stringify date DOY start
+        date_doy_s = '{doy}-{yr}'.format(doy=date_doy_s, yr=date_year)
+
+        date_day = datetime.datetime.strptime(date_doy_s, '%j-%Y')
+        date_month = '%02d' % date_day.month
+        date_day = '%02d' % date_day.day
+        date = (str(date_year) + '-' + str(date_month) + '-' + str(date_day))
+
+        # String to datetime
+        date_doy = datetime.datetime.strptime(date,
+                                              '%Y-%m-%d').timetuple().tm_yday
+        date = pd.Timestamp(date)
+
     if np.logical_or(pd.Timestamp(date_s) is pd.NaT,
                      pd.Timestamp(date_e) is pd.NaT):
         date_s = pd.Timestamp.now()
         date_e = pd.Timestamp.now()
-
-    if product['freq'] is None:
-        date_dates = pd.date_range(date_e, date_e, periods=1)
-    elif 'D' in product['freq']:
-        freq = np.fromstring(product['freq'], dtype=float, sep='D')
-        if len(freq) > 0:
-            date_s_doy = int(np.floor(date_s.dayofyear / freq[0])) * int(freq[0]) + 1
-            date_e_doy = int(np.floor(date_e.dayofyear / freq[0])) * int(freq[0]) + 1
-
-            date_s = pd.to_datetime('{}-{}'.format(date_s.year, date_s_doy),
-                                    format='%Y-%j')
-            date_e = pd.to_datetime('{}-{}'.format(date_e.year, date_e_doy),
-                                    format='%Y-%j')
-
-            date_years = date_e.year - date_s.year
-            if date_years > 0:
-                date_s_year = date_s.year
-
-                i = 0
-                date_ey = pd.Timestamp('{}-12-31'.format(date_s_year + i))
-                date_dates = pd.date_range(
-                    date_s, date_ey, freq=product['freq'])
-
-                for i in range(1, date_years):
-                    date_sy = pd.Timestamp('{}-01-01'.format(date_s_year + i))
-                    date_ey = pd.Timestamp('{}-12-31'.format(date_s_year + i))
-                    date_dates = date_dates.union(pd.date_range(
-                        date_sy, date_ey, freq=product['freq']))
-
-                i = date_years
-                date_sy = pd.Timestamp('{}-01-01'.format(date_s_year + i))
-                date_dates = date_dates.union(pd.date_range(
-                    date_sy, date_e, freq=product['freq']))
-            else:
-                date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
-        else:
-            date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
+        date_dates = pd.date_range(date_s, date_e)
     else:
         date_dates = pd.date_range(date_s, date_e, freq=product['freq'])
 
     # =========== #
     # 3. Download #
     # =========== #
-    status_cod = download_product(latlim, lonlim, date_dates,
-                                  account, folder, product,
-                                  is_waitbar)
+    if product['resolution'] == 'daily':
+        status_cod = download_product_daily(latlim, lonlim, date_dates,
+                                            account, folder, product,
+                                            is_waitbar)
+    if product['resolution'] == 'weekly':
+        status_cod = download_product_weekly(date, date_s, date_e,
+                                             latlim, lonlim, date_dates,
+                                             account, folder, product,
+                                             is_waitbar)
 
     return status_cod
 
 
-def download_product(latlim, lonlim, dates,
-                     account, folder, product,
-                     is_waitbar) -> int:
+def download_product_daily(latlim, lonlim, dates,
+                           account, folder, product,
+                           is_waitbar) -> int:
     # Define local variable
     status_cod = -1
     # total = len(dates)
@@ -197,10 +188,84 @@ def download_product(latlim, lonlim, dates,
     #                     length=50)
 
     for date in dates:
-        args = get_download_args(latlim, lonlim, date,
-                                 account, folder, product)
+        if date == pd.Timestamp(year=2008, month=12, day=31):
+            pass
+        elif date == pd.Timestamp(year=2012, month=12, day=31):
+            pass
+        elif date == pd.Timestamp(year=2016, month=12, day=31):
+            pass
+        else:
+            args = get_download_args(latlim, lonlim, date,
+                                     account, folder, product)
 
-        status_cod = start_download(args)
+            status_cod = start_download(args)
+
+        # Update waitbar
+        # if is_waitbar == 1:
+        #     amount += 1
+        #     collect.WaitBar(amount, total,
+        #                     prefix='Progress:', suffix='Complete',
+        #                     length=50)
+
+    return status_cod
+
+
+def download_product_weekly(date, date_s, dates_e,
+                            latlim, lonlim, dates,
+                            account, folder, product,
+                            is_waitbar) -> int:
+    # Define local variable
+    status_cod = -1
+    # total = len(dates)
+    date_year = date_s.timetuple().tm_year
+
+    # Create Waitbar
+    # amount = 0
+    # if is_waitbar == 1:
+    #     amount = 0
+    #     collect.WaitBar(amount, total,
+    #                     prefix='Progress:', suffix='Complete',
+    #                     length=50)
+
+    # Define the stop conditions
+    date_stop = dates_e.toordinal()
+    date_end = 0
+    while date_end == 0:
+
+        # Download the data from server
+
+        tmp_args = get_download_args(latlim, lonlim, date,
+                                     account, folder, product)
+
+        args = []
+        i = 0
+        for value in tmp_args:
+            if i == 8:
+                url_dir = product['data']['dir'].format(
+                    dtime=date + pd.DateOffset(days=-7))
+                args.append(url_dir)
+            else:
+                args.append(value)
+
+        status_cod = start_download(tuple(args))
+
+        # Create the new date for the next download
+        date_doy = date.timetuple().tm_yday
+        # Define next day
+        date_doy_next_int = int(date_doy + 7)
+        if date_doy_next_int >= 366:
+            date_doy_next_int = 8
+            date_year += 1
+        date_doy_next_str = str('%s-%s' % (date_doy_next_int, date_year))
+
+        date_day_next = datetime.datetime.strptime(date_doy_next_str, '%j-%Y')
+        date_month = '%02d' % date_day_next.month
+        date_day = '%02d' % date_day_next.day
+        date_str = (str(date_year) + '-' + str(date_month) + '-' + str(date_day))
+        # Check if this file must be downloaded
+        date = pd.Timestamp(date_str)
+        if date.toordinal() > date_stop:
+            date_end = 1
 
         # Update waitbar
         # if is_waitbar == 1:
@@ -394,75 +459,70 @@ def start_download(args) -> int:
             __this.Log.write(datetime.datetime.now(), msg=msg)
 
     if is_start_download:
-        # remote_fname_latlon = remote_fname.format(dtime=date, lat=1, lon=1)
-        remote_fnames, remote_files = start_download_tiles(latlim, lonlim,
-                                                           remote_fname, remote_file)
+        # Download the data from server if the file not exists
+        msg = 'Downloading "{f}"'.format(f=remote_fname)
+        print('{}'.format(msg))
+        __this.Log.write(datetime.datetime.now(), msg=msg)
 
-        for ifile in range(len(remote_fnames)):
-            # Download the data from server if the file not exists
-            msg = 'Downloading "{f}"'.format(f=remote_fnames[ifile])
-            print('{}'.format(msg))
-            __this.Log.write(datetime.datetime.now(), msg=msg)
+        is_download = True
+        if os.path.exists(remote_file):
+            if np.ceil(os.stat(remote_file).st_size / 1024) > 0:
+                is_download = False
 
-            is_download = True
-            if os.path.exists(remote_files[ifile]):
-                if np.ceil(os.stat(remote_files[ifile]).st_size / 1024) > 0:
-                    is_download = False
+                msg = 'Exist "{f}"'.format(f=remote_file)
+                print('\33[93m{}\33[0m'.format(msg))
+                __this.Log.write(datetime.datetime.now(), msg=msg)
 
-                    msg = 'Exist "{f}"'.format(f=remote_files[ifile])
-                    print('\33[93m{}\33[0m'.format(msg))
-                    __this.Log.write(datetime.datetime.now(), msg=msg)
+        # ------------- #
+        # Download data #
+        # ------------- #
+        if is_download:
+            url_parse = urlparse(url_server)
+            url_host = url_parse.hostname
+            # url_port = url_parse.port
+            url = '{sr}{dr}{fn}'.format(sr=url_host,
+                                        dr='',
+                                        fn='')
+            # print('url: "{f}"'.format(f=url))
 
-            # ------------- #
-            # Download data #
-            # ------------- #
-            if is_download:
-                url = '{sr}{dr}{fl}'.format(sr=url_server,
-                                            dr=url_dir,
-                                            fl=remote_fnames[ifile])
-                # print('url: "{f}"'.format(f=url))
-
-                try:
-                    # Connect to server
-                    conn = requests.get(url)
-                    # conn.raise_for_status()
-                except requests.exceptions.RequestException as err:
-                    # Connect error
-                    msg = 'Not able to download {fn}, from {sr}{dr}'.format(
-                        sr=url_server,
-                        dr=url_dir,
-                        fn=remote_fnames[ifile])
-                    print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
-                    __this.Log.write(datetime.datetime.now(),
-                                     msg='{}\n{}'.format(msg, str(err)))
-                    remote_file_status += 1
-                else:
-                    # Fetch data
-                    # conn.status_code == requests.codes.ok
-                    with open(remote_files[ifile], 'wb') as fp:
-                        fp.write(conn.content)
-                        conn.close()
-                        remote_file_status += 0
+            try:
+                # Connect to server
+                conn = ftplib.FTP(url)
+                # conn.login()
+                conn.login(username, password)
+                conn.cwd(url_dir)
+            except ftplib.all_errors as err:
+                # Connect error
+                msg = 'Not able to download {fn}, from {sr}{dr}'.format(
+                    sr=url_server,
+                    dr=url_dir,
+                    fn=remote_fname)
+                print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
+                __this.Log.write(datetime.datetime.now(),
+                                 msg='{}\n{}'.format(msg, str(err)))
+                remote_file_status += 1
             else:
-                remote_file_status += 0
+                # Fetch data
+                # conn.status_code == ftplib.FTP.codes.ok
+                with open(remote_file, "wb") as fp:
+                    conn.retrbinary("RETR " + remote_fname, fp.write)
+                    conn.close()
+                    remote_file_status += 0
+        else:
+            remote_file_status += 0
 
         # ---------------- #
         # Download success #
         # ---------------- #
-        if len(remote_fnames) > 0:
-            if remote_file_status == 0:
-                local_file_status += convert_data(args)
-        else:
-            msg = 'No tiles found!'
-            print('{}'.format(msg))
-            __this.Log.write(datetime.datetime.now(), msg=msg)
+        if remote_file_status == 0:
+            local_file_status = convert_data(args)
 
-        # --------------- #
-        # Download finish #
-        # --------------- #
-        # raw_data = None
-        # dataset = None
-        # data = None
+            # --------------- #
+            # Download finish #
+            # --------------- #
+            # raw_data = None
+            # dataset = None
+            # data = None
     else:
         local_file_status = 0
 
@@ -471,34 +531,6 @@ def start_download(args) -> int:
     msg = 'Finish'
     __this.Log.write(datetime.datetime.now(), msg=msg)
     return status_cod
-
-
-def start_download_tiles(latlim, lonlim, fname_r, file_r) -> tuple:
-    latmin = int(np.floor(latlim[0] / 10.) * 10)
-    latmax = int(np.ceil(latlim[1] / 10.) * 10)
-    lonmin = int(np.floor(lonlim[0] / 10.) * 10)
-    lonmax = int(np.ceil(lonlim[1] / 10.) * 10)
-
-    lat_steps = range(latmin + 10, latmax + 10, 10)
-    lon_steps = range(lonmin, lonmax, 10)
-
-    fnames = []
-    files = []
-    for lon_step in lon_steps:
-        if lon_step < 0:
-            string_long = "%sW" % abs(lon_step)
-        else:
-            string_long = "%sE" % lon_step
-        for lat_step in lat_steps:
-            if lat_step < 0:
-                string_lat = "%sS" % abs(lat_step)
-            else:
-                string_lat = "%sN" % lat_step
-
-            fnames.append(fname_r.format(lat=string_lat, lon=string_long))
-            files.append(file_r.format(lat=string_lat, lon=string_long))
-
-    return fnames, files
 
 
 def convert_data(args):
@@ -527,63 +559,37 @@ def convert_data(args):
     # --------- #
     # Load data #
     # --------- #
-    # From downloaded remote file
-    remote_fnames, remote_files = start_download_tiles(latlim, lonlim,
-                                                       remote_fname,
-                                                       remote_file)
-    temp_file_part = []
-    # temp_file_part_4326 = []
-    for ifile in range(len(remote_fnames)):
+    if product['resolution'] == "daily":
         # From downloaded remote file
 
         # From generated temporary file
-        temp_file_part.append(
-            temp_file.format(ipart=str(ifile + 1)))
-        # temp_file_part_4326.append(
-        #     temp_file.format(dtime=date, ipart='{}_4326'.format(str(ifile + 1))))
-
+        temp_file_part = temp_file.format(dtime=date)
         # Generate temporary files
-        # Convert_hdf5_to_tiff(remote_files[ifile], temp_file_part[ifile],
-        #                      data_variable)
-        #
-        # reproject_MODIS(temp_file_part[ifile], temp_file_part_4326[ifile], '4326')
+        Extract_Data_gz(remote_file, temp_file_part)
 
-        # Clip_Dataset_GDAL(remote_files[ifile], temp_file_part[ifile],
-        #                   latlim, lonlim)
+        data_raw = np.fromfile(temp_file_part, dtype="<f4")
+        data_raw = np.resize(data_raw, [pixel_h, pixel_w])
+        data_raw = np.flipud(data_raw)
 
-        geo_trans, geo_proj, size_x, size_y = Open_array_info(remote_files[ifile])
-        lat_min_merge = np.maximum(latlim[0], geo_trans[3] + size_y * geo_trans[5])
-        lat_max_merge = np.minimum(latlim[1], geo_trans[3])
-        lon_min_merge = np.maximum(lonlim[0], geo_trans[0])
-        lon_max_merge = np.minimum(lonlim[1], geo_trans[0] + size_x * geo_trans[1])
+        # data = np.flipud(data_tmp[y_id[0]:y_id[1], x_id[0]:x_id[1]])
+    if product['resolution'] == "weekly":
+        # From downloaded remote file
+        data_raw = Open_tiff_array(remote_file)
 
-        lonmerge = [lon_min_merge, lon_max_merge]
-        latmerge = [lat_min_merge, lat_max_merge]
+        # From generated temporary file
+        # Generate temporary files
 
-        Clip_Dataset_GDAL(remote_files[ifile], temp_file_part[ifile],
-                          latmerge, lonmerge)
+    # Convert meta data to float
+    # if np.logical_or(isinstance(data_raw_missing, str),
+    #                  isinstance(data_raw_scale, str)):
+    #     data_raw_missing = float(data_raw_missing)
+    #     data_raw_scale = float(data_raw_scale)
 
-        # Convert meta data to float
-        # if np.logical_or(isinstance(data_raw_missing, str),
-        #                  isinstance(data_raw_scale, str)):
-        #     data_raw_missing = float(data_raw_missing)
-        #     data_raw_scale = float(data_raw_scale)
-
-    temp_file_part_all = temp_file.format(ipart=0)
-    Merge_Dataset_GDAL(temp_file_part, temp_file_part_all)
-
+    # --------- #
+    # Clip data #
+    # --------- #
     # get data to 2D matrix
-    geo_trans, geo_proj, \
-        size_x, size_y = Open_array_info(temp_file_part_all)
-    lat_min_merge = np.maximum(latlim[0], geo_trans[3] + size_y * geo_trans[5])
-    lat_max_merge = np.minimum(latlim[1], geo_trans[3])
-    lon_min_merge = np.maximum(lonlim[0], geo_trans[0])
-    lon_max_merge = np.minimum(lonlim[1], geo_trans[0] + size_x * geo_trans[1])
-
-    lonmerge = [lon_min_merge, lon_max_merge]
-    latmerge = [lat_min_merge, lat_max_merge]
-
-    data_tmp = Open_tiff_array(temp_file_part_all)
+    data_tmp = data_raw[y_id[0]:y_id[1], x_id[0]:x_id[1]]
 
     # check data type
     # filled numpy.ma.MaskedArray as numpy.ndarray
@@ -620,7 +626,7 @@ def convert_data(args):
     # Convert #
     # ------- #
     # scale, units
-    # data = np.where(data < 0, np.nan, data)
+    data = np.where(data < 0.0, np.nan, data)
     data = data * data_multiplier
 
     # novalue data
@@ -629,8 +635,8 @@ def convert_data(args):
     # ------------ #
     # Saveas GTiff #
     # ------------ #
-    geo = [lonmerge[0] - geo_trans[1], geo_trans[1], 0,
-           latmerge[1] - geo_trans[5] / 2., 0, geo_trans[5]]
+    geo = [lonlim[0], pixel_size, 0,
+           latlim[1], 0, -pixel_size]
     Save_as_tiff(name=local_file, data=data, geo=geo, projection="WGS84")
 
     if __this.conf['is_save_remote']:

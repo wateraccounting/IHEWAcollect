@@ -10,10 +10,16 @@ import os
 import sys
 import urllib
 
-import gdal
+# import gdal
 import numpy as np
 import requests
 
+try:
+    # from osgeo import gdal, osr, gdalconst
+    from osgeo import gdal, osr
+except ImportError:
+    import gdal
+    import osr
 # from requests.auth import HTTPBasicAuth => .netrc
 # from joblib import Parallel, delayed
 

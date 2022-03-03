@@ -1,28 +1,24 @@
 # -*- coding: utf-8 -*-
 """
-**MOD16A2 Module**
+**ETmonitor Module**
 
 """
 import datetime
+import ftplib
 # General modules
-import inspect
 import os
-import re
 import sys
+from urllib.parse import urlparse
 
 import numpy as np
 import pandas as pd
-import requests
-from bs4 import BeautifulSoup
-# from requests.auth import HTTPBasicAuth => .netrc
-from joblib import Parallel, delayed
 
-# from netCDF4 import Dataset
+# from joblib import Parallel, delayed
 
 # IHEWAcollect Modules
 try:
     from ..collect import \
-        Convert_hdf5_to_tiff, reproject_MODIS, Clip_Dataset_GDAL, Merge_Dataset_GDAL, \
+        reproject_MODIS, Clip_Dataset_GDAL, \
         Open_array_info, Open_tiff_array, Save_as_tiff
 
     from ..gis import GIS
@@ -30,12 +26,13 @@ try:
     from ..util import Log
 except ImportError:
     from IHEWAcollect.templates.collect import \
-        Convert_hdf5_to_tiff, reproject_MODIS, Clip_Dataset_GDAL, Merge_Dataset_GDAL, \
+        reproject_MODIS, Clip_Dataset_GDAL, \
         Open_array_info, Open_tiff_array, Save_as_tiff
 
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
     from IHEWAcollect.templates.util import Log
+
 
 __this = sys.modules[__name__]
 
@@ -44,12 +41,6 @@ def _init(status, conf):
     # From download.py
     __this.status = status
     __this.conf = conf
-    __this.path = os.path.join(
-        os.getcwd(),
-        os.path.dirname(
-            inspect.getfile(
-                inspect.currentframe()))
-    )
 
     account = conf['account']
     folder = conf['folder']
@@ -64,8 +55,7 @@ def _init(status, conf):
 
 
 def DownloadData(status, conf) -> int:
-    """
-    This function downloads GLEAM ET data
+    """This is main interface.
 
     Args:
         status (dict): Status.
@@ -94,13 +84,13 @@ def DownloadData(status, conf) -> int:
         np.max(
             [
                 arg_bbox['s'],
-                product['data']['lat']['s']
+                -90.0
             ]
         ),
         np.min(
             [
                 arg_bbox['n'],
-                product['data']['lat']['n']
+                90.0
             ]
         )
     ]
@@ -109,13 +99,13 @@ def DownloadData(status, conf) -> int:
         np.max(
             [
                 arg_bbox['w'],
-                product['data']['lon']['w']
+                -180.0
             ]
         ),
         np.min(
             [
                 arg_bbox['e'],
-                product['data']['lon']['e']
+                180.0
             ]
         )
     ]
@@ -195,7 +185,6 @@ def download_product(latlim, lonlim, dates,
     # Define local variable
     status_cod = -1
     # total = len(dates)
-    cores = 1
 
     # Create Waitbar
     # amount = 0
@@ -205,26 +194,18 @@ def download_product(latlim, lonlim, dates,
     #                     prefix='Progress:', suffix='Complete',
     #                     length=50)
 
-    if not cores:
-        for date in dates:
-            args = get_download_args(latlim, lonlim, date,
-                                     account, folder, product)
+    for date in dates:
+        args = get_download_args(latlim, lonlim, date,
+                                 account, folder, product)
 
-            status_cod = start_download(args)
+        status_cod = start_download(args)
 
-            # Update waitbar
-            # if is_waitbar == 1:
-            #     amount += 1
-            #     collect.WaitBar(amount, total,
-            #                     prefix='Progress:', suffix='Complete',
-            #                     length=50)
-    else:
-        status_cod = Parallel(n_jobs=cores)(
-            delayed(
-                start_download)(
-                get_download_args(
-                    latlim, lonlim, date,
-                    account, folder, product)) for date in dates)
+        # Update waitbar
+        # if is_waitbar == 1:
+        #     amount += 1
+        #     collect.WaitBar(amount, total,
+        #                     prefix='Progress:', suffix='Complete',
+        #                     length=50)
 
     return status_cod
 
@@ -327,6 +308,16 @@ def get_download_args(latlim, lonlim, date,
         np.ceil((lonlim[1] - prod_lon_w) / prod_lon_size)
     ], dtype=np.int)
 
+    # Adjust the lon, lat limits based on the grids of the data
+    lonlim = np.array([
+        (x_id[0] * prod_lat_size + prod_lon_w),
+        (x_id[1] * prod_lat_size + prod_lon_w)
+    ], dtype=np.float)
+    latlim = np.array([
+        (prod_lat_n - y_id[1] * prod_lat_size),
+        (prod_lat_n - y_id[0] * prod_lat_size)
+    ], dtype=np.float)
+
     # [w,s]--[e,s]
     #   |      |
     # [w,n]--[e,n]
@@ -368,7 +359,7 @@ def get_download_args(latlim, lonlim, date,
         username, password, apitoken, \
         url_server, url_dir, \
         fname_r, fname_t, fname_l, \
-        file_r, file_t, file_l, \
+        file_r, file_t, file_l,\
         y_id, x_id, pixel_size, pixel_w, pixel_h, \
         data_ndv, data_type, data_multiplier, data_variable
 
@@ -381,8 +372,8 @@ def start_download(args) -> int:
         product, \
         username, password, apitoken, \
         url_server, url_dir, \
-        remote_fname, temp_fname, local_fname, \
-        remote_file, temp_file, local_file, \
+        remote_fname, temp_fname, local_fname,\
+        remote_file, temp_file, local_file,\
         y_id, x_id, pixel_size, pixel_w, pixel_h, \
         data_ndv, data_type, data_multiplier, data_variable = args
 
@@ -401,85 +392,63 @@ def start_download(args) -> int:
             __this.Log.write(datetime.datetime.now(), msg=msg)
 
     if is_start_download:
-        # https://disc.gsfc.nasa.gov/data-access#python
-        # C:\Users\qpa001\.netrc
-        file_conn_auth = os.path.join(os.path.expanduser("~"), ".netrc")
-        with open(file_conn_auth, 'w+') as fp:
-            fp.write('machine {m} login {u} password {p}\n'.format(
-                m='urs.earthdata.nasa.gov',
-                u=username,
-                p=password
-            ))
-
         # Download the data from server if the file not exists
-        file = os.path.join(__this.path, '{p}-{v}.html'.format(
-            p=product['name'],
-            v=product['version']
-        ))
-        remote_fnames, remote_files, lonlat = start_download_tiles(date, file,
-                                                                   url_server, url_dir,
-                                                                   username, password,
-                                                                   latlim, lonlim,
-                                                                   remote_fname,
-                                                                   remote_file)
+        msg = 'Downloading "{f}"'.format(f=remote_fname)
+        print('{}'.format(msg))
+        __this.Log.write(datetime.datetime.now(), msg=msg)
 
-        for ifile in range(len(remote_fnames)):
-            msg = 'Downloading "{f}"'.format(f=remote_fnames[ifile])
-            print('{}'.format(msg))
-            __this.Log.write(datetime.datetime.now(), msg=msg)
+        is_download = True
+        if os.path.exists(remote_file):
+            if np.ceil(os.stat(remote_file).st_size / 1024) > 0:
+                is_download = False
 
-            is_download = True
-            if os.path.exists(remote_files[ifile]):
-                if np.ceil(os.stat(remote_files[ifile]).st_size / 1024) > 0:
-                    is_download = False
+                msg = 'Exist "{f}"'.format(f=remote_file)
+                print('\33[93m{}\33[0m'.format(msg))
+                __this.Log.write(datetime.datetime.now(), msg=msg)
 
-                    msg = 'Exist "{f}"'.format(f=remote_files[ifile])
-                    print('\33[93m{}\33[0m'.format(msg))
-                    __this.Log.write(datetime.datetime.now(), msg=msg)
+        # ------------- #
+        # Download data #
+        # ------------- #
+        if is_download:
+            url_parse = urlparse(url_server)
+            url_host = url_parse.hostname
+            # url_port = url_parse.port
+            url = '{sr}{dr}{fn}'.format(sr=url_host,
+                                        dr='',
+                                        fn='')
+            # print('url: "{f}"'.format(f=url))
 
-            # ------------- #
-            # Download data #
-            # ------------- #
-            if is_download:
-                url = '{sr}{dr}{fl}'.format(sr=url_server,
-                                            dr=url_dir,
-                                            fl=remote_fnames[ifile])
-                # print('url: "{f}"'.format(f=url))
-
-                try:
-                    # Connect to server
-                    conn = requests.get(url)
-                    # conn.raise_for_status()
-                except requests.exceptions.RequestException as err:
-                    # Connect error
-                    msg = 'Not able to download {fn}, from {sr}{dr}'.format(
-                        sr=url_server,
-                        dr=url_dir,
-                        fn=remote_fnames[ifile])
-                    print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
-                    __this.Log.write(datetime.datetime.now(),
-                                     msg='{}\n{}'.format(msg, str(err)))
-                    remote_file_status += 1
-                else:
-                    # Fetch data
-                    # conn.status_code == requests.codes.ok
-                    with open(remote_files[ifile], 'wb') as fp:
-                        fp.write(conn.content)
-                        conn.close()
-                        remote_file_status += 0
+            try:
+                # Connect to server
+                conn = ftplib.FTP(url)
+                # conn.login()
+                conn.login(username, password)
+                conn.cwd(url_dir)
+            except ftplib.all_errors as err:
+                # Connect error
+                msg = 'Not able to download {fn}, from {sr}{dr}'.format(
+                    sr=url_server,
+                    dr=url_dir,
+                    fn=remote_fname)
+                print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
+                __this.Log.write(datetime.datetime.now(),
+                                 msg='{}\n{}'.format(msg, str(err)))
+                remote_file_status += 1
             else:
-                remote_file_status += 0
+                # Fetch data
+                # conn.status_code == ftplib.FTP.codes.ok
+                with open(remote_file, "wb") as fp:
+                    conn.retrbinary("RETR " + remote_fname, fp.write)
+                    conn.close()
+                    remote_file_status += 0
+        else:
+            remote_file_status += 0
 
         # ---------------- #
         # Download success #
         # ---------------- #
-        if len(remote_fnames) > 0:
-            if remote_file_status == 0:
-                local_file_status += convert_data(args)
-        else:
-            msg = 'No tiles found!'
-            print('{}'.format(msg))
-            __this.Log.write(datetime.datetime.now(), msg=msg)
+        if remote_file_status == 0:
+            local_file_status = convert_data(args)
 
         # --------------- #
         # Download finish #
@@ -497,81 +466,16 @@ def start_download(args) -> int:
     return status_cod
 
 
-def start_download_scan(url, file, username, password, lat, lon) -> tuple:
-    """Scan tile name
-    """
-    ctime = ''
-
-    # Connect to server
-    # conn = requests.get(url)
-    # soup = BeautifulSoup(conn.content, "html.parser")
-    if __this.conf['is_save_list']:
-        # Scan available data on the server
-        # Curl or Menually to CSR-v3.1.html
-        with open(file, 'w') as fp:
-            conn = requests.get(url)
-            fp.write(conn.text)
-
-    # Scan available data on local drive
-    conn = open(file, 'r', encoding='UTF8')
-    soup = BeautifulSoup(conn, "html.parser")
-
-    for ele in soup.findAll('a', attrs={'href': re.compile('(?i)(hdf)$')}):
-        # print('{lon}{lat}'.format(lat=lat, lon=lon) == ele['href'].split('.')[-4],
-        #       ele)
-        if '{lon}{lat}'.format(lat=lat, lon=lon) == ele['href'].split('.')[-4]:
-            ctime = ele['href'].split('.')[-2]
-
-    return ctime
-
-
-def start_download_tiles(date, file,
-                         url_server, url_dir, username, password,
-                         latlim, lonlim, fname_r, file_r) -> tuple:
-    """Get tile name
-    """
-    url = '{sr}{dr}'.format(sr=url_server, dr=url_dir)
-    # print('url: "{f}"'.format(f=url))
-
-    latmin = int(np.floor((90.0 - latlim[1]) / 10.))
-    latmax = int(np.ceil((90.0 - latlim[0]) / 10.))
-    lonmin = int(np.floor((180.0 + lonlim[0]) / 10.))
-    lonmax = int(np.ceil((180.0 + lonlim[1]) / 10.))
-
-    lat_steps = range(latmin, latmax, 1)
-    lon_steps = range(lonmin, lonmax, 1)
-
-    fnames = []
-    files = []
-    lonlat = []
-    for lon_step in lon_steps:
-        string_long = 'h{:02d}'.format(lon_step)
-        for lat_step in lat_steps:
-            string_lat = 'v{:02d}'.format(lat_step)
-            lonlat.append([lon_step * 10.0 - 180.0, 90.0 - lat_step * 10.0])
-
-            ctime = start_download_scan(url, file, username, password,
-                                        string_lat, string_long)
-
-            if ctime != '':
-                fnames.append(fname_r.format(dtime=date, ctime=ctime,
-                                             lat=string_lat, lon=string_long))
-                files.append(file_r.format(dtime=date, ctime=ctime,
-                                           lat=string_lat, lon=string_long))
-
-    return fnames, files, lonlat
-
-
 def convert_data(args):
     """
     """
     # Unpack the arguments
-    latlim, lonlim, date, \
+    latlim, lonlim, date,\
         product, \
         username, password, apitoken, \
         url_server, url_dir, \
-        remote_fname, temp_fname, local_fname, \
-        remote_file, temp_file, local_file, \
+        remote_fname, temp_fname, local_fname,\
+        remote_file, temp_file, local_file,\
         y_id, x_id, pixel_size, pixel_w, pixel_h, \
         data_ndv, data_type, data_multiplier, data_variable = args
 
@@ -595,61 +499,28 @@ def convert_data(args):
     # Load data #
     # --------- #
     # From downloaded remote file
-    file = os.path.join(__this.path, '{p}-{v}.html'.format(
-        p=product['name'],
-        v=product['version']
-    ))
-    remote_fnames, remote_files, lonlat = start_download_tiles(date, file,
-                                                               url_server, url_dir,
-                                                               username, password,
-                                                               latlim, lonlim,
-                                                               remote_fname,
-                                                               remote_file)
-    temp_file_part = []
-    temp_file_part_4326 = []
-    for ifile in range(len(remote_fnames)):
-        # From downloaded remote file
 
-        # From generated temporary file
-        temp_file_part.append(
-            temp_file.format(dtime=date, ipart=str(ifile + 1)))
-        temp_file_part_4326.append(
-            temp_file.format(dtime=date, ipart='{}_4326'.format(str(ifile + 1))))
+    # From generated temporary file
+    temp_file_part = temp_file.format(dtime=date, ipart=0)
+    temp_file_part_4326 = temp_file.format(dtime=date, ipart='{}_4326'.format(0))
 
-        # Generate temporary files
-        Convert_hdf5_to_tiff(remote_files[ifile], temp_file_part[ifile],
-                             data_variable)
+    # Generate temporary files
+    reproject_MODIS(remote_file, temp_file_part_4326, '4326')
 
-        reproject_MODIS(temp_file_part[ifile], temp_file_part_4326[ifile], '4326')
+    # Convert meta data to float
+    # if np.logical_or(isinstance(data_raw_missing, str),
+    #                  isinstance(data_raw_scale, str)):
+    #     data_raw_missing = float(data_raw_missing)
+    #     data_raw_scale = float(data_raw_scale)
 
-        Clip_Dataset_GDAL(temp_file_part_4326[ifile], temp_file_part[ifile],
-                          latlim, lonlim)
+    # --------- #
+    # Clip data #
+    # --------- #
+    # Clip_Dataset_GDAL(temp_file_part_4326, temp_file_part,
+    #                   latlim, lonlim)
 
-        # geo_trans, geo_proj, \
-        #     size_x, size_y = Open_array_info(temp_file_part_4326[ifile])
-        # lat_min_merge = np.maximum(latlim[0], geo_trans[3] + size_y * geo_trans[5])
-        # lat_max_merge = np.minimum(latlim[1], geo_trans[3])
-        # lon_min_merge = np.maximum(lonlim[0], geo_trans[0])
-        # lon_max_merge = np.minimum(lonlim[1], geo_trans[0] + size_x * geo_trans[1])
-        #
-        # lonmerge = [lon_min_merge, lon_max_merge]
-        # latmerge = [lat_min_merge, lat_max_merge]
-        #
-        # Clip_Dataset_GDAL(temp_file_part_4326[ifile], temp_file_part[ifile],
-        #                   latmerge, lonmerge)
-
-        # Convert meta data to float
-        # if np.logical_or(isinstance(data_raw_missing, str),
-        #                  isinstance(data_raw_scale, str)):
-        #     data_raw_missing = float(data_raw_missing)
-        #     data_raw_scale = float(data_raw_scale)
-
-    temp_file_part_all = temp_file.format(dtime=date, ipart=0)
-    Merge_Dataset_GDAL(temp_file_part, temp_file_part_all)
-
-    # get data to 2D matrix
     geo_trans, geo_proj, \
-        size_x, size_y = Open_array_info(temp_file_part_all)
+        size_x, size_y = Open_array_info(temp_file_part_4326)
     lat_min_merge = np.maximum(latlim[0], geo_trans[3] + size_y * geo_trans[5])
     lat_max_merge = np.minimum(latlim[1], geo_trans[3])
     lon_min_merge = np.maximum(lonlim[0], geo_trans[0])
@@ -658,7 +529,21 @@ def convert_data(args):
     lonmerge = [lon_min_merge, lon_max_merge]
     latmerge = [lat_min_merge, lat_max_merge]
 
-    data_tmp = Open_tiff_array(temp_file_part_all)
+    Clip_Dataset_GDAL(temp_file_part_4326, temp_file_part,
+                      latmerge, lonmerge)
+
+    # get data to 2D matrix
+    geo_trans, geo_proj, \
+        size_x, size_y = Open_array_info(temp_file_part)
+    lat_min_merge = np.maximum(latlim[0], geo_trans[3] + size_y * geo_trans[5])
+    lat_max_merge = np.minimum(latlim[1], geo_trans[3])
+    lon_min_merge = np.maximum(lonlim[0], geo_trans[0])
+    lon_max_merge = np.minimum(lonlim[1], geo_trans[0] + size_x * geo_trans[1])
+
+    lonmerge = [lon_min_merge, lon_max_merge]
+    latmerge = [lat_min_merge, lat_max_merge]
+
+    data_tmp = Open_tiff_array(temp_file_part)
 
     # check data type
     # filled numpy.ma.MaskedArray as numpy.ndarray

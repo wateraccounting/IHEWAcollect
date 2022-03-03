@@ -69,7 +69,7 @@ products:
               fname:
                 r: 'EDAY_CERES_{dtime:%Y%j}.dat.gz'
                 t: 'EDAY_CERES_{dtime:%Y%j}.dat'
-                l: 'ALEXI_v1_mm.d_D-{dtime:%Y%m%d}.tif'
+                l: 'ALEXI_v1_mm.d_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -116,7 +116,7 @@ products:
               fname:
                 r: 'ALEXI_weekly_mm_{dtime:%j_%Y}.tif'
                 t: null
-                l: 'ALEXI_v1_mm.7d_7D-{dtime:%Y%m%d}.tif'
+                l: 'ALEXI_v1_mm.7d_7D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -198,7 +198,7 @@ products:
               fname:
                 r: 'c_gls_SWI_{dtime:%Y%m%d}1200_GLOBE_ASCAT_V3.1.1.nc'
                 t: null
-                l: 'ASCAT_v3.1.1_._D-{dtime:%Y%m%d}.tif'
+                l: 'ASCAT_v3.1.1_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -289,7 +289,7 @@ products:
               fname:
                 r: 'dlwsfc.gdas.{dtime:%Y%m}.grb2'
                 t: 'dlwsfc-{dtime:%Y%m%d}-{ipart}.nc'
-                l: 'CFSR_v1_W.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'CFSR_v1_W.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -335,7 +335,7 @@ products:
               fname:
                 r: 'dswsfc.gdas.{dtime:%Y%m}.grb2'
                 t: 'dswsfc-{dtime:%Y%m%d}-{ipart}.nc'
-                l: 'CFSR_v1_W.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'CFSR_v1_W.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -381,7 +381,7 @@ products:
               fname:
                 r: 'ulwsfc.gdas.{dtime:%Y%m}.grb2'
                 t: 'ulwsfc-{dtime:%Y%m%d}-{ipart}.nc'
-                l: 'CFSR_v1_W.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'CFSR_v1_W.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -427,7 +427,7 @@ products:
               fname:
                 r: 'uswsfc.gdas.{dtime:%Y%m}.grb2'
                 t: 'uswsfc-{dtime:%Y%m%d}-{ipart}.nc'
-                l: 'CFSR_v1_W.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'CFSR_v1_W.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -480,7 +480,7 @@ products:
               fname:
                 r: 'dlwsfc.gdas.{dtime:%Y%m}.grib2'
                 t: 'dlwsfc-{dtime:%Y%m%d}-{ipart}.nc'
-                l: 'CFSR_v2_W.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'CFSR_v2_W.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -525,7 +525,7 @@ products:
               fname:
                 r: 'dswsfc.gdas.{dtime:%Y%m}.grib2'
                 t: 'dswsfc-{dtime:%Y%m%d}-{ipart}.nc'
-                l: 'CFSR_v2_W.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'CFSR_v2_W.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -570,7 +570,7 @@ products:
               fname:
                 r: 'ulwsfc.gdas.{dtime:%Y%m}.grib2'
                 t: 'ulwsfc-{dtime:%Y%m%d}-{ipart}.nc'
-                l: 'CFSR_v2_W.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'CFSR_v2_W.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -615,7 +615,7 @@ products:
               fname:
                 r: 'uswsfc.gdas.{dtime:%Y%m}.grib2'
                 t: 'uswsfc-{dtime:%Y%m%d}-{ipart}.nc'
-                l: 'CFSR_v2_W.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'CFSR_v2_W.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -680,7 +680,7 @@ products:
     v2.0:
       precipitation:
         daily:
-          url: 'ftp://chg-ftpout.geog.ucsb.edu'
+          url: 'ftp://data.chc.ucsb.edu'
           protocol: 'FTP'
           method: 'get'
           freq: 'D'
@@ -694,7 +694,7 @@ products:
               fname:
                 r: 'chirps-v2.0.{dtime:%Y.%m.%d}.tif.gz'
                 t: 'chirps-v2.0.{dtime:%Y.%m.%d}.tif'
-                l: 'CHIRPS_v2.0_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'CHIRPS_v2.0_mm_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -727,7 +727,7 @@ products:
                 w: 7200
                 h: 2000
         monthly:
-          url: 'ftp://chg-ftpout.geog.ucsb.edu'
+          url: 'ftp://data.chc.ucsb.edu'
           protocol: 'FTP'
           method: 'get'
           freq: 'MS'
@@ -741,7 +741,7 @@ products:
               fname:
                 r: 'chirps-v2.0.{dtime:%Y.%m}.tif.gz'
                 t: 'chirps-v2.0.{dtime:%Y.%m}.tif'
-                l: 'CHIRPS_v2.0_mm.m_MS-{dtime:%Y%m}.tif'
+                l: 'CHIRPS_v2.0_mm.m_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -821,7 +821,7 @@ products:
               fname:
                 r: 'M01CMRSETGlobal{dtime:Y%YM%m}.tif'
                 t: null
-                l: 'CMRSET_v1_mm.m_MS-{dtime:%Y%m}.tif'
+                l: 'CMRSET_v1_mm.m_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -855,37 +855,37 @@ products:
                 h: 3600
 
   # API
-  Copernicus:
-    account: 'Copernicus'
-    template: 'EU'
-    meta:
-      owner: 'European Centre for Medium-Range Weather Forecasts'
-      description:
-        'We are both a research institute and a 24/7 operational service, producing global
-         numerical weather predictions and other data for our Member and Co-operating States
-         and the broader community. The Centre has one of the largest supercomputer facilities
-         and meteorological data archives in the world. Other strategic activities include
-         delivering advanced training and assisting the WMO in implementing its programmes.
+  # Copernicus:
+  #   account: 'Copernicus'
+  #   template: 'EU'
+  #   meta:
+  #     owner: 'European Centre for Medium-Range Weather Forecasts'
+  #     description:
+  #       'We are both a research institute and a 24/7 operational service, producing global
+  #        numerical weather predictions and other data for our Member and Co-operating States
+  #        and the broader community. The Centre has one of the largest supercomputer facilities
+  #        and meteorological data archives in the world. Other strategic activities include
+  #        delivering advanced training and assisting the WMO in implementing its programmes.
 
-         We operate two services from the EU’s Copernicus Earth observation programme, the
-         Copernicus Atmosphere Monitoring Service (CAMS) and the Copernicus Climate Change
-         Service (C3S). We also contribute to the Copernicus Emergency Management Service (CEMS).'
-      websites:
-        - 'https://www.ecmwf.int/'
-      protocols:
-        - 'ECMWF'
-      methods:
-        - 'api'
-      ftypes:
-        - ''
-      versions:
-        - ''
-      datasets:
-        - ''
-      resolutions:
-        - ''
-      projection:
-        - 'WGS84'
+  #        We operate two services from the EU’s Copernicus Earth observation programme, the
+  #        Copernicus Atmosphere Monitoring Service (CAMS) and the Copernicus Climate Change
+  #        Service (C3S). We also contribute to the Copernicus Emergency Management Service (CEMS).'
+  #     websites:
+  #       - 'https://www.ecmwf.int/'
+  #     protocols:
+  #       - 'ECMWF'
+  #     methods:
+  #       - 'api'
+  #     ftypes:
+  #       - ''
+  #     versions:
+  #       - ''
+  #     datasets:
+  #       - ''
+  #     resolutions:
+  #       - ''
+  #     projection:
+  #       - 'WGS84'
 #    v1:
 #      evapotranspiration:
 #        monthly:
@@ -906,7 +906,7 @@ products:
 #              fname:
 #                r: 'M01CMRSETGlobal{dtime:Y%YM%m}.tif'
 #                t: null
-#                l: 'CMRSET_v1_mm.m_MS-{dtime:%Y%m}.tif'
+#                l: 'CMRSET_v1_mm.m_MS-{dtime:%Y.%m}.tif'
 #              fmt:
 #                d: null
 #                r: 'dtime'
@@ -967,18 +967,18 @@ products:
       datasets:
         - 'GRACE'
       resolutions:
-        - 'daily'
+        - 'monthly'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
     v3.1:
       grace:
-        daily:
+        monthly:
           url: 'https://podaac-tools.jpl.nasa.gov'
           protocol: 'HTTPS'
           method: 'post'
-          freq: 'D'
+          freq: 'MS'
           variables:
-            EWH:
+            GRACE_TWSA:
               variable: null
               name: 'equivalent water height'
               description:
@@ -987,7 +987,7 @@ products:
               fname:
                 r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRAC_UTCSR_BA01_0600_LND_v03.tif'
                 t: ''
-                l: 'CSR_v3.1_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'CSR_v3.1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime.dtime'
@@ -1021,13 +1021,13 @@ products:
                 h: 180
     v3.2:
       grace:
-        daily:
+        monthly:
           url: 'https://podaac-tools.jpl.nasa.gov'
           protocol: 'HTTPS'
           method: 'post'
-          freq: 'D'
+          freq: 'MS'
           variables:
-            EWH:
+            GRACE_TWSA:
               variable: null
               name: 'equivalent water height'
               description:
@@ -1036,7 +1036,7 @@ products:
               fname:
                 r : 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRFO_UTCSR_BA01_0600_LND_v03.tif'
                 t: ''
-                l: 'CSR_v3.2_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'CSR_v3.2_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime.dtime'
@@ -2916,7 +2916,7 @@ products:
 #              fname:
 #                r: 'M01CMRSETGlobal{dtime:Y%YM%m}.tif'
 #                t: null
-#                l: 'CMRSET_v1_mm.m_MS-{dtime:%Y%m}.tif'
+#                l: 'CMRSET_v1_mm.m_MS-{dtime:%Y.%m}.tif'
 #              fmt:
 #                d: null
 #                r: 'dtime'
@@ -2992,7 +2992,7 @@ products:
               fname:
                 r: 'ET_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
                 t: 'ET_ETmonitor_mm-month_{dtime:%Y_%m_01}.{ipart}.tif'
-                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -3033,7 +3033,7 @@ products:
               fname:
                 r: 'ETpot_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
                 t: 'ETpot_ETmonitor_mm-month_{dtime:%Y_%m_01}_4326.tif'
-                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -3074,7 +3074,7 @@ products:
               fname:
                 r: 'Ew_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
                 t: 'Ew_ETmonitor_mm-month_{dtime:%Y_%m_01}_4326.tif'
-                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -3115,7 +3115,7 @@ products:
               fname:
                 r: 'Es_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
                 t: 'Es_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
-                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -3156,7 +3156,7 @@ products:
               fname:
                 r: 'Ei_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
                 t: 'Ei_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
-                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -3197,7 +3197,7 @@ products:
               fname:
                 r: 'Tr_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
                 t: 'Tr_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
-                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -3255,7 +3255,7 @@ products:
       versions:
         - 'v4'
       datasets:
-        - 'Potential Evaporation'
+        - 'Evapotranspiration'
       resolutions:
         - 'daily'
       projection:
@@ -3270,14 +3270,14 @@ products:
           variables:
             ETP:
               variable: null
-              name: 'Daily Potential Evaporation'
+              name: 'Daily Potential Evapotranspiration'
               description:
                 ''
               dir: '/downloads/sciweb1/shared/fews/web/global/daily/pet/downloads/daily/'
               fname:
                 r: 'et{dtime:%y%m%d}.tar.gz'
                 t: 'et{dtime:%y%m%d}.bil'
-                l: 'FEWS_v4_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'FEWS_v4_mm_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -3338,18 +3338,18 @@ products:
       datasets:
         - 'GRACE'
       resolutions:
-        - 'daily'
+        - 'monthly'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
     v3.1:
       grace:
-        daily:
+        monthly:
           url: 'https://podaac-tools.jpl.nasa.gov'
           protocol: 'HTTPS'
           method: 'post'
-          freq: 'D'
+          freq: 'MS'
           variables:
-            EWH:
+            GRACE_TWSA:
               variable: null
               name: 'equivalent water height'
               description:
@@ -3358,7 +3358,7 @@ products:
               fname:
                 r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRAC_GFZOP_BA01_0600_LND_v03.tif'
                 t: ''
-                l: 'GFZ_v3.1_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'GFZ_v3.1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime.dtime'
@@ -3392,13 +3392,13 @@ products:
                 h: 180
     v3.2:
       grace:
-        daily:
+        monthly:
           url: 'https://podaac-tools.jpl.nasa.gov'
           protocol: 'HTTPS'
           method: 'post'
-          freq: 'D'
+          freq: 'MS'
           variables:
-            EWH:
+            GRACE_TWSA:
               variable: null
               name: 'equivalent water height'
               description:
@@ -3407,7 +3407,7 @@ products:
               fname:
                 r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRFO_GFZOP_BA01_0600_LND_v03.tif'
                 t: ''
-                l: 'GFZ_v3.2_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'GFZ_v3.2_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime.dtime'
@@ -3538,7 +3538,7 @@ products:
               fname:
                 r: 'GLDAS_NOAH025_M.A{dtime:%Y%m}.021.nc4'
                 t: null
-                l: 'GLDAS_v2.1_mm.d_MS-{dtime:%Y%m}.tif'
+                l: 'GLDAS_v2.1_mm.d_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -3619,7 +3619,7 @@ products:
               fname:
                 r: 'Et_{dtime:%Y}_GLEAM_v3.3a.nc'
                 t: null
-                l: 'GLEAM_v3.3a_mm.d_D-{dtime:%Y%m%d}.tif'
+                l: 'GLEAM_v3.3a_mm.d_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -3666,7 +3666,7 @@ products:
               fname:
                 r: 'Et_1980_2018_GLEAM_v3.3a_MO.nc'
                 t: null
-                l: 'GLEAM_v3.3a_mm.m_MS-{dtime:%Y%m}.tif'
+                l: 'GLEAM_v3.3a_mm.m_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: null
@@ -3715,7 +3715,7 @@ products:
               fname:
                 r: 'Et_{dtime:%Y}_GLEAM_v3.3b.nc'
                 t: null
-                l: 'GLEAM_v3.3b_mm.d_D-{dtime:%Y%m%d}.tif'
+                l: 'GLEAM_v3.3b_mm.d_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -3762,7 +3762,7 @@ products:
               fname:
                 r: 'Et_2003_2018_GLEAM_v3.3b_MO.nc'
                 t: null
-                l: 'GLEAM_v3.3b_mm.m_MS-{dtime:%Y%m}.tif'
+                l: 'GLEAM_v3.3b_mm.m_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: null
@@ -3854,7 +3854,7 @@ products:
               fname:
                 r: '3B-DAY.MS.MRG.3IMERG.{dtime:%Y%m%d}-S000000-E235959.V06.nc4'
                 t: null
-                l: 'GPM_v6_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'GPM_v6_mm_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -3871,7 +3871,7 @@ products:
               units:
                 r: 'mm'
                 l: 'mm'
-                m: 1.0
+                m: 24.0
               lat:
                 s: -90.0
                 n: 90.0
@@ -3901,7 +3901,7 @@ products:
               fname:
                 r: '3B-MO.MS.MRG.3IMERG.{dtime:%Y%m01}-S000000-E235959.{dtime:%m}.V06B.HDF5'
                 t: null
-                l: 'GPM_v6_mm.d_MS-{dtime:%Y%m}.tif'
+                l: 'GPM_v6_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -4042,18 +4042,18 @@ products:
       datasets:
         - 'GRACE'
       resolutions:
-        - 'daily'
+        - 'monthly'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
     v3.1:
       grace:
-        daily:
+        monthly:
           url: 'https://podaac-tools.jpl.nasa.gov'
           protocol: 'HTTPS'
           method: 'post'
-          freq: 'D'
+          freq: 'MS'
           variables:
-            EWH:
+            GRACE_TWSA:
               variable: null
               name: 'equivalent water height'
               description:
@@ -4062,7 +4062,7 @@ products:
               fname:
                 r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRAC_JPLEM_BA01_0600_LND_v03.tif'
                 t: ''
-                l: 'JPL_v3.1_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'JPL_v3.1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime.dtime'
@@ -4096,13 +4096,13 @@ products:
                 h: 180
     v3.2:
       grace:
-        daily:
+        monthly:
           url: 'https://podaac-tools.jpl.nasa.gov'
           protocol: 'HTTPS'
           method: 'post'
-          freq: 'D'
+          freq: 'MS'
           variables:
-            EWH:
+            GRACE_TWSA:
               variable: null
               name: 'equivalent water height'
               description:
@@ -4111,7 +4111,7 @@ products:
               fname:
                 r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRFO_JPLEM_BA01_0600_LND_v03.tif'
                 t: ''
-                l: 'JPL_v3.2_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'JPL_v3.2_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime.dtime'
@@ -4395,7 +4395,7 @@ products:
               fname:
                 r: 'MCD43A3.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MCD43A3.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MCD43A3_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MCD43A3_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4437,7 +4437,7 @@ products:
               fname:
                 r: 'MCD43A3.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MCD43A3.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MCD43A3_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MCD43A3_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4518,7 +4518,7 @@ products:
               fname:
                 r: 'MOD09GQ.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD09GQ.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD09GQ_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MOD09GQ_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4560,7 +4560,7 @@ products:
               fname:
                 r: 'MOD09GQ.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD09GQ.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD09GQ_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MOD09GQ_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4660,7 +4660,7 @@ products:
               fname:
                 r: 'MOD10A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD10A2.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD10A2_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MOD10A2_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4702,7 +4702,7 @@ products:
               fname:
                 r: 'MOD10A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD10A2.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD10A2_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MOD10A2_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4785,7 +4785,7 @@ products:
               fname:
                 r: 'MOD11A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD11A2.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD11A2_v6_K_D-{dtime:%Y%m%d}.tif'
+                l: 'MOD11A2_v6_K_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4827,7 +4827,7 @@ products:
               fname:
                 r: 'MOD11A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD11A2.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD11A2_v6_K_D-{dtime:%Y%m%d}.tif'
+                l: 'MOD11A2_v6_K_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4911,7 +4911,7 @@ products:
               fname:
                 r: 'MOD13Q1.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD13Q1.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD13Q1_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MOD13Q1_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4990,7 +4990,7 @@ products:
               fname:
                 r: 'MOD15A2H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD15A2H.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD15A2H_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MOD15A2H_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -5032,7 +5032,7 @@ products:
               fname:
                 r: 'MOD15A2H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD15A2H.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD15A2H_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MOD15A2H_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -5109,11 +5109,11 @@ products:
               name: 'Eight Daily Evapotranspiration'
               description:
                 ''
-              dir: '/MOLT/MOD16A2.006/{dtime:%Y.%m.%d}/'
+              dir: '/MOLT/MOD16A2GF.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD16A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
-                t: 'MOD16A2.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD16A2_v6_mm.d_D-{dtime:%Y%m%d}.tif'
+                r: 'MOD16A2GF.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
+                t: 'MOD16A2GF.A{dtime:%Y%j}.006.{ipart}.tif'
+                l: 'MOD16A2GF_v6_mm.d_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -5151,11 +5151,11 @@ products:
               name: 'Eight Daily Potential Evapotranspiration'
               description:
                 ''
-              dir: '/MOLT/MOD16A2.006/{dtime:%Y.%m.%d}/'
+              dir: '/MOLT/MOD16A2GF.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD16A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
-                t: 'MOD16A2.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD16A2_v6_._D-{dtime:%Y%m%d}.tif'
+                r: 'MOD16A2GF.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
+                t: 'MOD16A2GF.A{dtime:%Y%j}.006.{ipart}.tif'
+                l: 'MOD16A2GF_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -5237,7 +5237,7 @@ products:
               fname:
                 r: 'MOD17A2H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD17A2H.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD17A2H_v6_kgC.m2_8D-{dtime:%Y%m%d}.tif'
+                l: 'MOD17A2H_v6_kgC.m2_8D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -5319,7 +5319,7 @@ products:
               fname:
                 r: 'MOD17A3H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD17A3H.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD17A3H_v6_kgC.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'MOD17A3H_v6_kgC.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -5397,7 +5397,7 @@ products:
               fname:
                 r: ''
                 t: null
-                l: 'MSWEP_v2.1_mm.d_D-{dtime:%Y%m%d}.tif'
+                l: 'MSWEP_v2.1_mm.d_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: ''
                 r: ''
@@ -5480,7 +5480,7 @@ products:
               fname:
                 r: 'MOD13Q1.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD13Q1.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MYD13_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MYD13_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -5565,7 +5565,7 @@ products:
               fname:
                 r: 'PROBAV_S1_TOC_{lon}{lat}_{dtime:%Y%m%d}_100M_V101.HDF5'
                 t: 'PROBAV_S1_TOC_{dtime:%Y%m%d}_100M_V101.{ipart}.tif'
-                l: 'PROBAV_v1.01_._D-{dtime:%Y%m%d}.tif'
+                l: 'PROBAV_v1.01_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon'
@@ -5643,7 +5643,7 @@ products:
               fname:
                 r: 'africa_rfe.{dtime:%Y%m%d}.tif.zip'
                 t: 'africa_rfe.{dtime:%Y%m%d}.tif'
-                l: 'RFE_v2_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'RFE_v2_mm_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -5723,7 +5723,7 @@ products:
               fname:
                 r: 'ETm{dtime:%Y%m}.mat'
                 t: null
-                l: 'ETM_v1_._D-{dtime:%Y%m}.tif'
+                l: 'ETM_v1_._D-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -5776,14 +5776,14 @@ products:
       ftypes:
         - 'zip'
       versions:
-        - 'v4'
+        - 'v5'
       datasets:
         - 'Evapotranspiration'
       resolutions:
         - 'monthly'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
-    v4:
+    v5:
       evapotranspiration:
         monthly:
           url: 'https://edcintl.cr.usgs.gov'
@@ -5796,11 +5796,11 @@ products:
               name: 'Monthly Actual Evapotranspiration'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/fews/web/global/monthly/eta/downloads/'
+              dir: '/downloads/sciweb1/shared/fews/web/global/monthly/etav5/downloads/'
               fname:
                 r: 'm{dtime:%Y%m}.zip'
-                t: 'm{dtime:%Y%m}_modisSSEBopETv4_actual_mm.tif'
-                l: 'SSEBop_v4_mm.m_MS-{dtime:%Y%m}.tif'
+                t: 'm{dtime:%Y%m}_modisSSEBopETv5_actual_mm.tif'
+                l: 'SSEBop_v4_mm.m_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -8214,7 +8214,7 @@ products:
               fname:
                 r: '3B43.{dtime:%Y%m01}.7.HDF'
                 t: '3B43.{dtime:%Y%m01}.7.tif'
-                l: 'TRMM_v7_mm.d_MS-{dtime:%Y%m}.tif'
+                l: 'TRMM_v7_mm.d_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -8265,7 +8265,7 @@ products:
               fname:
                 r: '3B43.{dtime:%Y%m01}.7A.HDF'
                 t: '3B43.{dtime:%Y%m01}.7A.tif'
-                l: 'TRMM_v7_mm.d_MS-{dtime:%Y%m}.tif'
+                l: 'TRMM_v7_mm.d_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
