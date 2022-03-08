@@ -148,9 +148,9 @@ def DownloadData(status, conf) -> int:
 
             # convert data from adf to a tiff file
             if resolution == "30s":
-                input_bil = os.path.join(output_folder_trash,
-                                         '%s.bil' % file_name_extract2)
-                output_tiff = Convert_bil_to_tiff(input_bil, output_tiff)
+                input_adf = os.path.join(output_folder_trash, file_name_extract2,
+                                         file_name_extract2, 'hdr.adf')
+                output_tiff = Convert_adf_to_tiff(input_adf, output_tiff)
 
             geo_out, proj, size_X, size_Y = Open_array_info(output_tiff)
             if (resolution == "3s" and (
@@ -163,7 +163,7 @@ def DownloadData(status, conf) -> int:
                 SignVer = 1
 
                 # If the sign before the filename is a south sign than latitude is negative
-                if SignV is "s":
+                if SignV == "s":
                     SignVer = -1
                 Bound2 = int(SignVer) * int(Vfile)
 
@@ -172,7 +172,7 @@ def DownloadData(status, conf) -> int:
                 SignH = str(nameFile)[3]
                 SignHor = 1
                 # If the sign before the filename is a west sign than longitude is negative
-                if SignH is "w":
+                if SignH == "w":
                     SignHor = -1
                 Bound1 = int(SignHor) * int(Hfile)
 
@@ -214,7 +214,7 @@ def DownloadData(status, conf) -> int:
                 SignV = str(file_name)[0]
                 SignVer = 1
                 # If the sign before the filename is a south sign than latitude is negative
-                if SignV is "s":
+                if SignV == "s":
                     SignVer = -1
                 Bound2 = int(SignVer) * int(Vfile)
 
@@ -223,7 +223,7 @@ def DownloadData(status, conf) -> int:
                 SignH = str(file_name)[3]
                 SignHor = 1
                 # If the sign before the filename is a west sign than longitude is negative
-                if SignH is "w":
+                if SignH == "w":
                     SignHor = -1
                 Bound1 = int(SignHor) * int(Hfile)
 
@@ -489,7 +489,7 @@ def Download_Data(nameFile, output_folder_trash, parameter, para_name, resolutio
                 url = "https://edcintl.cr.usgs.gov/downloads/sciweb1/shared/hydrosheds/sa_%s_zip_grid/%s" % (
                 resolution, nameFile)
             if resolution == '30s':
-                url = "https://edcintl.cr.usgs.gov/downloads/sciweb1/shared/hydrosheds/sa_%s_zip_bil/%s" % (
+                url = "https://edcintl.cr.usgs.gov/downloads/sciweb1/shared/hydrosheds/sa_%s_zip_grid/%s" % (
                 resolution, nameFile)
             file_name = url.split('/')[-1]
             output_file = os.path.join(output_folder_trash, file_name)
@@ -552,7 +552,7 @@ def Find_Document_names_15s_30s(latlim, lonlim, parameter, resolution):
             if resolution == "15s":
                 name = '%s_%s_%s_grid.zip' % (continent, parameter, resolution)
             if resolution == "30s":
-                name = '%s_%s_%s_bil.zip' % (continent, parameter, resolution)
+                name = '%s_%s_%s_grid.zip' % (continent, parameter, resolution)
             continents_download = np.append(continents_download, name)
 
     return (continents_download)

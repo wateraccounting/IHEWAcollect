@@ -1702,9 +1702,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'af_dem_30s_bil.zip'
+                r: 'af_dem_30s_grid.zip'
                 t: 'DEM-af_30s_merged.adf'
                 l: 'DEM_v1_m-30s_af.tif'
               fmt:
@@ -1743,9 +1743,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'as_dem_30s_bil.zip'
+                r: 'as_dem_30s_grid.zip'
                 t: 'DEM-as_30s_merged.adf'
                 l: 'DEM_v1_m-30s_as.tif'
               fmt:
@@ -1784,9 +1784,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'au_dem_30s_bil.zip'
+                r: 'au_dem_30s_grid.zip'
                 t: 'DEM-au_30s_merged.adf'
                 l: 'DEM_v1_m-30s_au.tif'
               fmt:
@@ -1825,9 +1825,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'ca_dem_30s_bil.zip'
+                r: 'ca_dem_30s_grid.zip'
                 t: 'DEM-ca_30s_merged.adf'
                 l: 'DEM_v1_m-30s_ca.tif'
               fmt:
@@ -1866,9 +1866,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'eu_dem_30s_bil.zip'
+                r: 'eu_dem_30s_grid.zip'
                 t: 'DEM-eu_30s_merged.adf'
                 l: 'DEM_v1_m-30s_eu.tif'
               fmt:
@@ -1907,9 +1907,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'na_dem_30s_bil.zip'
+                r: 'na_dem_30s_grid.zip'
                 t: 'DEM-na_30s_merged.adf'
                 l: 'DEM_v1_m-30s_na.tif'
               fmt:
@@ -1948,9 +1948,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'sa_dem_30s_bil.zip'
+                r: 'sa_dem_30s_grid.zip'
                 t: 'DEM-sa_30s_merged.adf'
                 l: 'DEM_v1_m-30s_sa.tif'
               fmt:
@@ -2581,9 +2581,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'af_dir_30s_bil.zip'
+                r: 'af_dir_30s_grid.zip'
                 t: 'DIR-af_30s_merged.adf'
                 l: 'DIR_v1_m-30s_af.tif'
               fmt:
@@ -2622,9 +2622,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'as_dir_30s_bil.zip'
+                r: 'as_dir_30s_grid.zip'
                 t: 'DIR-as_30s_merged.adf'
                 l: 'DIR_v1_m-30s_as.tif'
               fmt:
@@ -2663,9 +2663,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'au_dir_30s_bil.zip'
+                r: 'au_dir_30s_grid.zip'
                 t: 'DIR-au_30s_merged.adf'
                 l: 'DIR_v1_m-30s_au.tif'
               fmt:
@@ -2704,9 +2704,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'ca_dir_30s_bil.zip'
+                r: 'ca_dir_30s_grid.zip'
                 t: 'DIR-ca_30s_merged.adf'
                 l: 'DIR_v1_m-30s_ca.tif'
               fmt:
@@ -2745,9 +2745,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'eu_dir_30s_bil.zip'
+                r: 'eu_dir_30s_grid.zip'
                 t: 'DIR-eu_30s_merged.adf'
                 l: 'DIR_v1_m-30s_eu.tif'
               fmt:
@@ -2786,9 +2786,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'na_dir_30s_bil.zip'
+                r: 'na_dir_30s_grid.zip'
                 t: 'DIR-na_30s_merged.adf'
                 l: 'DIR_v1_m-30s_na.tif'
               fmt:
@@ -2827,9 +2827,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'sa_dir_30s_bil.zip'
+                r: 'sa_dir_30s_grid.zip'
                 t: 'DIR-sa_30s_merged.adf'
                 l: 'DIR_v1_m-30s_sa.tif'
               fmt:
