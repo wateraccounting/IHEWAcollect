@@ -76,17 +76,19 @@ def DownloadData(status, conf) -> int:
     cores = 1
 
     bbox = conf['product']['bbox']
-    Startdate = conf['product']['period']['s']
-    Enddate = conf['product']['period']['e']
+#    Startdate = conf['product']['period']['s']
+#    Enddate = conf['product']['period']['e']
 
     para_name = conf['product']['parameter']
     resolution = conf['product']['resolution']
-    variable = conf['product']['variable']
-    TimeFreq = conf['product']['freq']
+#    variable = conf['product']['variable']
+#    TimeFreq = conf['product']['freq']
     latlim = conf['product']['data']['lat']
     lonlim = conf['product']['data']['lon']
 
     folder = conf['folder']
+    url1 = conf['product']['url']
+    dir1 = conf['product']['data']['dir']
 
     # Define parameter depedent variables
     parameter = para_name.lower()
@@ -118,7 +120,7 @@ def DownloadData(status, conf) -> int:
         try:
             # Download the data from
             # http://earlywarning.usgs.gov/hydrodata/
-            output_file, file_name = Download_Data(nameFile,
+            output_file, file_name = Download_Data(nameFile, url1, dir1,
                                                    output_folder_trash, parameter,
                                                    para_name, resolution)
 
@@ -282,14 +284,9 @@ def DownloadData(status, conf) -> int:
 
         datasetTot[datasetTot < -9999] = -9999
 
-    if resolution == '15s':
+    if resolution == '15s' or resolution == '30s':
         output_file_merged = os.path.join(output_folder_trash, 'merged.tif')
-        datasetTot, geo_out = Merge_DEM_15s_30s(output_folder_trash, output_file_merged,
-                                                latlim, lonlim, resolution)
-
-    if resolution == '30s':
-        output_file_merged = os.path.join(output_folder_trash, 'merged.tif')
-        datasetTot, geo_out = Merge_DEM_15s_30s(output_folder_trash, output_file_merged,
+        datasetTot, geo_out = Merge_DEM_15s_30s(output_tiff, output_folder_trash, output_file_merged,
                                                 latlim, lonlim, resolution)
 
     # name of the end result
@@ -305,10 +302,8 @@ def DownloadData(status, conf) -> int:
     # shutil.rmtree(output_folder_trash)
 
 
-def Merge_DEM_15s_30s(output_folder_trash, output_file_merged, latlim, lonlim,
+def Merge_DEM_15s_30s(tiff_file, output_folder_trash, output_file_merged, latlim, lonlim,
                       resolution):
-    os.chdir(output_folder_trash)
-    tiff_files = glob.glob('*.tif')
     resolution_geo = []
     lonmin = lonlim[0]
     lonmax = lonlim[1]
@@ -324,64 +319,63 @@ def Merge_DEM_15s_30s(output_folder_trash, output_file_merged, latlim, lonlim,
 
     data_tot = np.ones([size_y_tot, size_x_tot]) * -9999.
 
-    for tiff_file in tiff_files:
-        inFile = os.path.join(output_folder_trash, tiff_file)
-        geo, proj, size_X, size_Y = Open_array_info(inFile)
-        resolution_geo = geo[1]
+#    for tiff_file in tiff_files:
+    inFile = os.path.join(output_folder_trash, tiff_file)
+    geo, proj, size_X, size_Y = Open_array_info(inFile)
+    resolution_geo = geo[1]
 
-        lonmin_one = geo[0]
-        lonmax_one = geo[0] + size_X * geo[1]
-        latmin_one = geo[3] + size_Y * geo[5]
-        latmax_one = geo[3]
+    lonmin_one = geo[0]
+    lonmax_one = geo[0] + size_X * geo[1]
+    latmin_one = geo[3] + size_Y * geo[5]
+    latmax_one = geo[3]
 
-        if lonmin_one < lonmin:
-            lonmin_clip = lonmin
-        else:
-            lonmin_clip = lonmin_one
+    if lonmin_one < lonmin:
+        lonmin_clip = lonmin
+    else:
+        lonmin_clip = lonmin_one
 
-        if lonmax_one > lonmax:
-            lonmax_clip = lonmax
-        else:
-            lonmax_clip = lonmax_one
+    if lonmax_one > lonmax:
+        lonmax_clip = lonmax
+    else:
+        lonmax_clip = lonmax_one
 
-        if latmin_one < latmin:
-            latmin_clip = latmin
-        else:
-            latmin_clip = latmin_one
+    if latmin_one < latmin:
+        latmin_clip = latmin
+    else:
+        latmin_clip = latmin_one
 
-        if latmax_one > latmax:
-            latmax_clip = latmax
-        else:
-            latmax_clip = latmax_one
+    if latmax_one > latmax:
+        latmax_clip = latmax
+    else:
+        latmax_clip = latmax_one
 
-        size_x_clip = int(np.round((lonmax_clip - lonmin_clip) / resolution_geo))
-        size_y_clip = int(np.round((latmax_clip - latmin_clip) / resolution_geo))
+    size_x_clip = int(np.round((lonmax_clip - lonmin_clip) / resolution_geo))
+    size_y_clip = int(np.round((latmax_clip - latmin_clip) / resolution_geo))
 
-        inFile = os.path.join(output_folder_trash, tiff_file)
-        geo, proj, size_X, size_Y = Open_array_info(inFile)
-        data_tmp = Open_tiff_array(inFile)
-        if isinstance(data_tmp, np.ma.MaskedArray):
-            Data = data_tmp.filled()
-        else:
-            Data = np.asarray(data_tmp)
+    geo, proj, size_X, size_Y = Open_array_info(inFile)
+    data_tmp = Open_tiff_array(inFile)
+    if isinstance(data_tmp, np.ma.MaskedArray):
+        Data = data_tmp.filled()
+    else:
+        Data = np.asarray(data_tmp)
 
-        lonmin_tiff = geo[0]
-        latmax_tiff = geo[3]
-        lon_tiff_position = int(np.round((lonmin_clip - lonmin_tiff) / resolution_geo))
-        lat_tiff_position = int(np.round((latmax_tiff - latmax_clip) / resolution_geo))
-        lon_data_tot_position = int(np.round((lonmin_clip - lonmin) / resolution_geo))
-        lat_data_tot_position = int(np.round((latmax - latmax_clip) / resolution_geo))
+    lonmin_tiff = geo[0]
+    latmax_tiff = geo[3]
+    lon_tiff_position = int(np.round((lonmin_clip - lonmin_tiff) / resolution_geo))
+    lat_tiff_position = int(np.round((latmax_tiff - latmax_clip) / resolution_geo))
+    lon_data_tot_position = int(np.round((lonmin_clip - lonmin) / resolution_geo))
+    lat_data_tot_position = int(np.round((latmax - latmax_clip) / resolution_geo))
 
-        # Data[Data < -9999.] = -9999.
-        Data = np.where(Data < -9999.0, -9999.0, Data)
+    # Data[Data < -9999.] = -9999.
+    Data = np.where(Data < -9999.0, -9999.0, Data)
+    data_tot[lat_data_tot_position:lat_data_tot_position + size_y_clip,
+    lon_data_tot_position:lon_data_tot_position + size_x_clip][
         data_tot[lat_data_tot_position:lat_data_tot_position + size_y_clip,
-        lon_data_tot_position:lon_data_tot_position + size_x_clip][
-            data_tot[lat_data_tot_position:lat_data_tot_position + size_y_clip,
-            lon_data_tot_position:lon_data_tot_position + size_x_clip] == -9999] = \
-        Data[lat_tiff_position:lat_tiff_position + size_y_clip,
-        lon_tiff_position:lon_tiff_position + size_x_clip][
-            data_tot[lat_data_tot_position:lat_data_tot_position + size_y_clip,
-            lon_data_tot_position:lon_data_tot_position + size_x_clip] == -9999]
+        lon_data_tot_position:lon_data_tot_position + size_x_clip] == -9999] = \
+    Data[lat_tiff_position:lat_tiff_position + size_y_clip,
+    lon_tiff_position:lon_tiff_position + size_x_clip][
+        data_tot[lat_data_tot_position:lat_data_tot_position + size_y_clip,
+        lon_data_tot_position:lon_data_tot_position + size_x_clip] == -9999]
 
     geo_out = [lonmin, resolution_geo, 0.0, latmax, 0.0, -1 * resolution_geo]
     geo_out = tuple(geo_out)
@@ -461,7 +455,7 @@ def Find_Document_Names(latlim, lonlim, parameter):
     return (name, rangeLon, rangeLat)
 
 
-def Download_Data(nameFile, output_folder_trash, parameter, para_name, resolution):
+def Download_Data(nameFile, url1, dir1, output_folder_trash, parameter, para_name, resolution):
     """
     This function downloads the DEM data from the HydroShed website
 
@@ -485,12 +479,8 @@ def Download_Data(nameFile, output_folder_trash, parameter, para_name, resolutio
             if resolution == '3s':
                 url = "https://edcintl.cr.usgs.gov/downloads/sciweb1/shared/hydrosheds/sa_%s_%s_grid/%s/%s" % (
                 para_name2, resolution, continent2, nameFile)
-            if resolution == '15s':
-                url = "https://edcintl.cr.usgs.gov/downloads/sciweb1/shared/hydrosheds/sa_%s_zip_grid/%s" % (
-                resolution, nameFile)
-            if resolution == '30s':
-                url = "https://edcintl.cr.usgs.gov/downloads/sciweb1/shared/hydrosheds/sa_%s_zip_grid/%s" % (
-                resolution, nameFile)
+            if resolution == '15s' or resolution == '30s':
+                url = '{}{}/{}'.format(url1, dir1, nameFile)
             file_name = url.split('/')[-1]
             output_file = os.path.join(output_folder_trash, file_name)
             if sys.version_info[0] == 3:
