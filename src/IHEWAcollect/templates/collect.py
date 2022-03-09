@@ -1357,7 +1357,7 @@ def Clip_Dataset_GDAL(input_name, output_name, latlim, lonlim):
 def Clip_Data(input_file, latlim, lonlim):
     """
     Clip the data to the defined extend of the user (latlim, lonlim) or to the
-    extend of the DEM tile
+    extent of the DEM tile
 
     Keyword Arguments:
     input_file -- output data, output of the clipped dataset

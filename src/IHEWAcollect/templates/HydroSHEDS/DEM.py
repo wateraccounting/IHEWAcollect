@@ -142,17 +142,9 @@ def DownloadData(status, conf) -> int:
 
             output_tiff = os.path.join(output_folder_trash, file_name_tiff)
 
-            # convert data from adf to a tiff file
-            if (resolution == "15s" or resolution == "3s"):
-                input_adf = os.path.join(output_folder_trash, file_name_extract2,
-                                         file_name_extract2, 'hdr.adf')
-                output_tiff = Convert_adf_to_tiff(input_adf, output_tiff)
-
-            # convert data from adf to a tiff file
-            if resolution == "30s":
-                input_adf = os.path.join(output_folder_trash, file_name_extract2,
-                                         file_name_extract2, 'hdr.adf')
-                output_tiff = Convert_adf_to_tiff(input_adf, output_tiff)
+            input_adf = os.path.join(output_folder_trash, file_name_extract2,
+                                     file_name_extract2, 'hdr.adf')
+            output_tiff = Convert_adf_to_tiff(input_adf, output_tiff)
 
             geo_out, proj, size_X, size_Y = Open_array_info(output_tiff)
             if (resolution == "3s" and (
@@ -477,8 +469,8 @@ def Download_Data(nameFile, url1, dir1, output_folder_trash, parameter, para_nam
             para_name2 = para_name.lower()
             # info about the roots http://www.hydrosheds.org/download/getroot
             if resolution == '3s':
-                url = "https://edcintl.cr.usgs.gov/downloads/sciweb1/shared/hydrosheds/sa_%s_%s_grid/%s/%s" % (
-                para_name2, resolution, continent2, nameFile)
+                dir2 = dir1.format(continent.upper())
+                url = '{}{}/{}'.format(url1, dir2, nameFile)
             if resolution == '15s' or resolution == '30s':
                 url = '{}{}/{}'.format(url1, dir1, nameFile)
             file_name = url.split('/')[-1]
@@ -505,11 +497,10 @@ def Download_Data(nameFile, url1, dir1, output_folder_trash, parameter, para_nam
                 para_name2 = para_name.lower()
                 # info about the roots http://www.hydrosheds.org/download/getroot
                 if resolution == '3s':
-                    url = "https://edcintl.cr.usgs.gov/downloads/sciweb1/shared/hydrosheds/sa_%s_%s_grid/%s/%s" % (
-                    para_name2, resolution, continent2, nameFile)
+                    dir2 = dir1.format(continent.upper())
+                    url = '{}{}/{}'.format(url1, dir2, nameFile)
                 if resolution == '15s':
-                    url = "https://edcintl.cr.usgs.gov/downloads/sciweb1/shared/hydrosheds/sa_%s_zip_grid/%s" % (
-                    resolution, nameFile)
+                    url = '{}{}/{}'.format(url1, dir1, nameFile)
                 file_name = url.split('/')[-1]
                 output_file = os.path.join(output_folder_trash, file_name)
                 if sys.version_info[0] == 3:
