@@ -1116,7 +1116,7 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/AF/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/{}/'
               fname:
                 r: '{lat}{lon}_dem_grid.zip'
                 t: 'DEM-af_3s_merged_{lat}{lon}.adf'

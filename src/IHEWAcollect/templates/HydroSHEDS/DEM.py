@@ -133,12 +133,11 @@ def DownloadData(status, conf) -> int:
             file_name_extract = file_name.split('_')[0:3]
             if resolution == '3s':
                 file_name_extract2 = file_name_extract[0] + '_' + file_name_extract[1]
-
-            if resolution == '15s':
-                file_name_extract2 = file_name_extract[0] + '_' + file_name_extract[1] + '_15s'
-
-            if resolution == '30s':
-                file_name_extract2 = file_name_extract[0] + '_' + file_name_extract[1] + '_30s'
+            elif resolution == '15s' or resolution == '30s':
+                file_name_extract2 = file_name_extract[0] + '_' + file_name_extract[1] + '_{res}'.format(res=resolution)
+#
+#            if resolution == '30s':
+#                file_name_extract2 = file_name_extract[0] + '_' + file_name_extract[1] + '_30s'
 
             output_tiff = os.path.join(output_folder_trash, file_name_tiff)
 
@@ -278,7 +277,7 @@ def DownloadData(status, conf) -> int:
 
     if resolution == '15s' or resolution == '30s':
         output_file_merged = os.path.join(output_folder_trash, 'merged.tif')
-        datasetTot, geo_out = Merge_DEM_15s_30s(output_tiff, output_folder_trash, output_file_merged,
+        datasetTot, geo_out = Merge_DEM_15s_30s(output_folder_trash, output_file_merged,
                                                 latlim, lonlim, resolution)
 
     # name of the end result
@@ -294,80 +293,77 @@ def DownloadData(status, conf) -> int:
     # shutil.rmtree(output_folder_trash)
 
 
-def Merge_DEM_15s_30s(tiff_file, output_folder_trash, output_file_merged, latlim, lonlim,
+def Merge_DEM_15s_30s(output_folder_trash, output_file_merged, latlim, lonlim,
                       resolution):
-    resolution_geo = []
-    lonmin = lonlim[0]
-    lonmax = lonlim[1]
-    latmin = latlim[0]
-    latmax = latlim[1]
-    if resolution == "15s":
-        resolution_geo = 0.00416667
-    if resolution == "30s":
-        resolution_geo = 0.00416667 * 2
-
+    
+    os.chdir(output_folder_trash)
+    tiff_files = glob.glob('*{res}*.tif'.format(res=resolution))
+    
+    latmin, latmax, lonmin, lonmax, resolution_geo = fullpixel_clipping_limits_tifflist(latlim, lonlim, tiff_files)
+ 
     size_x_tot = int(np.round((lonmax - lonmin) / resolution_geo))
     size_y_tot = int(np.round((latmax - latmin) / resolution_geo))
 
     data_tot = np.ones([size_y_tot, size_x_tot]) * -9999.
 
-#    for tiff_file in tiff_files:
-    inFile = os.path.join(output_folder_trash, tiff_file)
-    geo, proj, size_X, size_Y = Open_array_info(inFile)
-    resolution_geo = geo[1]
+    for tiff_file in tiff_files:
+        inFile = os.path.join(output_folder_trash, tiff_file)
+        geo, proj, size_X, size_Y = Open_array_info(inFile)
+        resolution_geo = geo[1]
+    
+        lonmin_one = geo[0]
+        lonmax_one = geo[0] + size_X * geo[1]
+        latmin_one = geo[3] + size_Y * geo[5]
+        latmax_one = geo[3]
 
-    lonmin_one = geo[0]
-    lonmax_one = geo[0] + size_X * geo[1]
-    latmin_one = geo[3] + size_Y * geo[5]
-    latmax_one = geo[3]
-
-    if lonmin_one < lonmin:
-        lonmin_clip = lonmin
-    else:
-        lonmin_clip = lonmin_one
-
-    if lonmax_one > lonmax:
-        lonmax_clip = lonmax
-    else:
-        lonmax_clip = lonmax_one
-
-    if latmin_one < latmin:
-        latmin_clip = latmin
-    else:
-        latmin_clip = latmin_one
-
-    if latmax_one > latmax:
-        latmax_clip = latmax
-    else:
-        latmax_clip = latmax_one
-
-    size_x_clip = int(np.round((lonmax_clip - lonmin_clip) / resolution_geo))
-    size_y_clip = int(np.round((latmax_clip - latmin_clip) / resolution_geo))
-
-    geo, proj, size_X, size_Y = Open_array_info(inFile)
-    data_tmp = Open_tiff_array(inFile)
-    if isinstance(data_tmp, np.ma.MaskedArray):
-        Data = data_tmp.filled()
-    else:
-        Data = np.asarray(data_tmp)
-
-    lonmin_tiff = geo[0]
-    latmax_tiff = geo[3]
-    lon_tiff_position = int(np.round((lonmin_clip - lonmin_tiff) / resolution_geo))
-    lat_tiff_position = int(np.round((latmax_tiff - latmax_clip) / resolution_geo))
-    lon_data_tot_position = int(np.round((lonmin_clip - lonmin) / resolution_geo))
-    lat_data_tot_position = int(np.round((latmax - latmax_clip) / resolution_geo))
-
-    # Data[Data < -9999.] = -9999.
-    Data = np.where(Data < -9999.0, -9999.0, Data)
-    data_tot[lat_data_tot_position:lat_data_tot_position + size_y_clip,
-    lon_data_tot_position:lon_data_tot_position + size_x_clip][
+        
+        if lonmin_one < lonmin:
+            lonmin_clip = lonmin
+        else:
+            lonmin_clip = lonmin_one
+    
+        if lonmax_one > lonmax:
+            lonmax_clip = lonmax
+        else:
+            lonmax_clip = lonmax_one
+    
+        if latmin_one < latmin:
+            latmin_clip = latmin
+        else:
+            latmin_clip = latmin_one
+    
+        if latmax_one > latmax:
+            latmax_clip = latmax
+        else:
+            latmax_clip = latmax_one
+    
+        size_x_clip = int(np.round((lonmax_clip - lonmin_clip) / resolution_geo))
+        size_y_clip = int(np.round((latmax_clip - latmin_clip) / resolution_geo))
+    
+        geo, proj, size_X, size_Y = Open_array_info(inFile)
+        data_tmp = Open_tiff_array(inFile)
+        if isinstance(data_tmp, np.ma.MaskedArray):
+            Data = data_tmp.filled()
+        else:
+            Data = np.asarray(data_tmp)
+    
+        lonmin_tiff = geo[0]
+        latmax_tiff = geo[3]
+        lon_tiff_position = int(np.round((lonmin_clip - lonmin_tiff) / resolution_geo))
+        lat_tiff_position = int(np.round((latmax_tiff - latmax_clip) / resolution_geo))
+        lon_data_tot_position = int(np.round((lonmin_clip - lonmin) / resolution_geo))
+        lat_data_tot_position = int(np.round((latmax - latmax_clip) / resolution_geo))
+    
+        # Data[Data < -9999.] = -9999.
+        Data = np.where(Data < -9999.0, -9999.0, Data)
         data_tot[lat_data_tot_position:lat_data_tot_position + size_y_clip,
-        lon_data_tot_position:lon_data_tot_position + size_x_clip] == -9999] = \
-    Data[lat_tiff_position:lat_tiff_position + size_y_clip,
-    lon_tiff_position:lon_tiff_position + size_x_clip][
-        data_tot[lat_data_tot_position:lat_data_tot_position + size_y_clip,
-        lon_data_tot_position:lon_data_tot_position + size_x_clip] == -9999]
+        lon_data_tot_position:lon_data_tot_position + size_x_clip][
+            data_tot[lat_data_tot_position:lat_data_tot_position + size_y_clip,
+            lon_data_tot_position:lon_data_tot_position + size_x_clip] == -9999] = \
+        Data[lat_tiff_position:lat_tiff_position + size_y_clip,
+        lon_tiff_position:lon_tiff_position + size_x_clip][
+            data_tot[lat_data_tot_position:lat_data_tot_position + size_y_clip,
+            lon_data_tot_position:lon_data_tot_position + size_x_clip] == -9999]
 
     geo_out = [lonmin, resolution_geo, 0.0, latmax, 0.0, -1 * resolution_geo]
     geo_out = tuple(geo_out)
@@ -547,3 +543,57 @@ class DEM_15s_extents:
                  'af': [-19, 55, -35, 38],
                  'as': [57, 180, -12, 61],
                  'au': [112, 180, -56, -10]}
+
+
+def fullpixel_clipping_limits_tifflist(latlim, lonlim, input_tiffs):
+    """
+    Adjust clipping limits to ensure perfect lineup with original map.
+    This is to be used when map will be clipped or reprojected again later to avoid cummulating errors.
+    
+    Arguments:
+
+    """  
+    latmin = np.zeros(len(input_tiffs))*np.nan
+    lonmin = np.zeros(len(input_tiffs))*np.nan
+    latmax = np.zeros(len(input_tiffs))*np.nan
+    lonmax = np.zeros(len(input_tiffs))*np.nan
+    
+    for i, input_tiff in enumerate(input_tiffs):
+        dest_in = gdal.Open(input_tiff)
+        Geo_in = dest_in.GetGeoTransform()
+        
+        prod_lat_n = Geo_in[3]
+    #    prod_lat_s = 1
+        prod_lat_size = Geo_in[5]#int(dest_in.RasterYSize)
+        
+        prod_lon_w = Geo_in[0]
+        prod_lon_size = Geo_in[1] #int(dest_in.RasterXSize)
+        
+        y_id = np.array([
+                np.floor((prod_lat_n - latlim[1]) / abs(prod_lat_size)),
+                np.ceil((prod_lat_n - latlim[0]) / abs(prod_lat_size))
+                ], dtype=np.int)
+        x_id = np.array([
+                abs(np.floor((lonlim[0] - prod_lon_w) / prod_lon_size)),
+                abs(np.ceil((lonlim[1] - prod_lon_w) / prod_lon_size))
+                ], dtype=np.int)
+    
+         # Adjust the lon, lat limits based on the grids of the data
+        lonlim1 = np.array([
+                (x_id[0] * prod_lon_size + prod_lon_w),
+                (x_id[1] * prod_lon_size + prod_lon_w)
+                ], dtype=np.float)
+        latlim1 = np.array([
+                (y_id[0] * prod_lat_size + prod_lat_n),
+                (y_id[1] * prod_lat_size + prod_lat_n)
+                ], dtype=np.float)
+        latmin[i] = latlim1[1]
+        latmax[i] = latlim1[0]
+        lonmin[i] = lonlim1[0]
+        lonmax[i] = lonlim1[1]  
+    latmin = np.nanmin(latmin)
+    latmax = np.nanmax(latmax)
+    lonmin = np.nanmin(lonmin)
+    lonmax = np.nanmax(lonmax)
+    
+    return latmin, latmax, lonmin, lonmax, prod_lon_size
