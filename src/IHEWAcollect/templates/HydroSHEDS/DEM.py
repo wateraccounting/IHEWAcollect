@@ -35,7 +35,7 @@ try:
 except ImportError:
     from IHEWAcollect.templates.collect import \
         Extract_Data_gz, Open_tiff_array, Save_as_tiff, \
-        Extract_Data, Convert_adf_to_tiff, Convert_bil_to_tiff, Open_array_info, Clip_Data
+        Extract_Data_zip, Convert_adf_to_tiff, Convert_bil_to_tiff, Open_array_info, Clip_Data
     from IHEWAcollect.templates.gis import GIS
     from IHEWAcollect.templates.dtime import Dtime
     from IHEWAcollect.templates.util import Log
@@ -277,7 +277,7 @@ def DownloadData(status, conf) -> int:
 
     if resolution == '15s' or resolution == '30s':
         output_file_merged = os.path.join(output_folder_trash, 'merged.tif')
-        datasetTot, geo_out = Merge_DEM_15s_30s(output_folder_trash, output_file_merged,
+        datasetTot, geo_out = Merge_DEM_15s_30s(name, output_folder_trash, output_file_merged,
                                                 latlim, lonlim, resolution)
 
     # name of the end result
@@ -293,21 +293,19 @@ def DownloadData(status, conf) -> int:
     # shutil.rmtree(output_folder_trash)
 
 
-def Merge_DEM_15s_30s(output_folder_trash, output_file_merged, latlim, lonlim,
+def Merge_DEM_15s_30s(file_names, output_folder_trash, output_file_merged, latlim, lonlim,
                       resolution):
-    
-    os.chdir(output_folder_trash)
-    tiff_files = glob.glob('*{res}*.tif'.format(res=resolution))
+
+    tiff_files = [os.path.join(output_folder_trash,
+                               f.replace('.zip','_trans_temporary.tif')) for f in file_names]
     
     latmin, latmax, lonmin, lonmax, resolution_geo = fullpixel_clipping_limits_tifflist(latlim, lonlim, tiff_files)
- 
     size_x_tot = int(np.round((lonmax - lonmin) / resolution_geo))
     size_y_tot = int(np.round((latmax - latmin) / resolution_geo))
 
     data_tot = np.ones([size_y_tot, size_x_tot]) * -9999.
 
-    for tiff_file in tiff_files:
-        inFile = os.path.join(output_folder_trash, tiff_file)
+    for inFile in tiff_files:
         geo, proj, size_X, size_Y = Open_array_info(inFile)
         resolution_geo = geo[1]
     
@@ -336,7 +334,7 @@ def Merge_DEM_15s_30s(output_folder_trash, output_file_merged, latlim, lonlim,
             latmax_clip = latmax
         else:
             latmax_clip = latmax_one
-    
+        
         size_x_clip = int(np.round((lonmax_clip - lonmin_clip) / resolution_geo))
         size_y_clip = int(np.round((latmax_clip - latmin_clip) / resolution_geo))
     
@@ -356,6 +354,7 @@ def Merge_DEM_15s_30s(output_folder_trash, output_file_merged, latlim, lonlim,
     
         # Data[Data < -9999.] = -9999.
         Data = np.where(Data < -9999.0, -9999.0, Data)
+        
         data_tot[lat_data_tot_position:lat_data_tot_position + size_y_clip,
         lon_data_tot_position:lon_data_tot_position + size_x_clip][
             data_tot[lat_data_tot_position:lat_data_tot_position + size_y_clip,
@@ -411,7 +410,7 @@ def Find_Document_Names(latlim, lonlim, parameter):
     the filenames that must be downloaded from the hydroshed webpage
 
     Keyword Arguments:
-    latlim -- [ymin, ymax] (values must be between -50 and 50)
+    latlim -- [ymin, ymax] (values must be between -60 and 60)
     lonlim -- [xmin, xmax] (values must be between -180 and 180)
     """
     # find tiles that must be downloaded
@@ -459,32 +458,53 @@ def Download_Data(nameFile, url1, dir1, output_folder_trash, parameter, para_nam
 
     # download data from the internet
     allcontinents = ["af", "as", "au", "ca", "eu", "na", "sa"]
-    for continent in allcontinents:
+    
+    if resolution == '15s' or resolution == '30s':
+        url = '{}{}/{}'.format(url1, dir1, nameFile)   
+        file_name = url.split('/')[-1]
+        output_file = os.path.join(output_folder_trash, file_name)
         try:
-            continent2 = continent.upper()
-            para_name2 = para_name.lower()
-            # info about the roots http://www.hydrosheds.org/download/getroot
-            if resolution == '3s':
-                dir2 = dir1.format(continent.upper())
-                url = '{}{}/{}'.format(url1, dir2, nameFile)
-            if resolution == '15s' or resolution == '30s':
-                url = '{}{}/{}'.format(url1, dir1, nameFile)
-            file_name = url.split('/')[-1]
-            output_file = os.path.join(output_folder_trash, file_name)
             if sys.version_info[0] == 3:
                 urllib.request.urlretrieve(url, output_file)
             if sys.version_info[0] == 2:
                 urllib.urlretrieve(url, output_file)
             size_data = int(os.stat(output_file).st_size)
-
-            if size_data > 10000:
-                break
+    
+#            if size_data > 10000:
+#                break
+            
         except BaseException as err:
             msg = "\nWas not able to download file %s" % nameFile
             print('{}\n{}'.format(msg, str(err)))
             __this.Log.write(datetime.datetime.now(),
                              msg='{}\n{}'.format(msg, str(err)))
-            continue
+#            continue
+    
+    if resolution == '3s':    
+        for continent in allcontinents:
+            try:
+                continent2 = continent.upper()
+                para_name2 = para_name.lower()
+                # info about the roots http://www.hydrosheds.org/download/getroot
+                if resolution == '3s':
+                    dir2 = dir1.format(continent2)
+                    url = '{}{}/{}'.format(url1, dir2, nameFile)
+                file_name = url.split('/')[-1]
+                output_file = os.path.join(output_folder_trash, file_name)
+                if sys.version_info[0] == 3:
+                    urllib.request.urlretrieve(url, output_file)
+                if sys.version_info[0] == 2:
+                    urllib.urlretrieve(url, output_file)
+                size_data = int(os.stat(output_file).st_size)
+    
+                if size_data > 10000:
+                    break
+            except BaseException as err:
+                msg = "\nWas not able to download file %s" % nameFile
+    #            print('{}\n{}'.format(msg, str(err)))
+                __this.Log.write(datetime.datetime.now(),
+                                 msg='{}\n{}'.format(msg, str(err)))
+                continue
 
     if int(os.stat(output_file).st_size) == 0:
         for continent in allcontinents:
@@ -522,10 +542,10 @@ def Find_Document_names_15s_30s(latlim, lonlim, parameter, resolution):
 
     for continent in continents:
         extent = DEM_15s_extents.Continent[continent]
-        if (extent[0] <= lonlim[0] and extent[1] >= lonlim[0]
-            and extent[2] <= latlim[0] and extent[3] >= latlim[0]) \
-                and (extent[0] <= lonlim[1] and extent[1] >= lonlim[1] \
-                     and extent[2] <= latlim[1] and extent[3] >= latlim[1]) == True:
+        if (extent[0] <= lonlim[0] and extent[1] > lonlim[0]
+            and extent[2] <= latlim[0] and extent[3] > latlim[0]) \
+                or (extent[0] < lonlim[1] and extent[1] >= lonlim[1] \
+                     and extent[2] < latlim[1] and extent[3] >= latlim[1]) == True:
             if resolution == "15s":
                 name = '%s_%s_%s_grid.zip' % (continent, parameter, resolution)
             if resolution == "30s":
@@ -536,12 +556,12 @@ def Find_Document_names_15s_30s(latlim, lonlim, parameter, resolution):
 
 
 class DEM_15s_extents:
-    Continent = {'na': [-138, -52, 24, 60],
-                 'ca': [-119, -60, 5, 39],
+    Continent = {'na': [-145, -52, 25, 60],
+                 'ca': [-119, -60, 5, 30],
                  'sa': [-93, -32, -56, 15],
-                 'eu': [-14, 70, 12, 62],
+                 'eu': [-14, 65, 12, 60],
                  'af': [-19, 55, -35, 38],
-                 'as': [57, 180, -12, 61],
+                 'as': [55, 180, -12, 60],
                  'au': [112, 180, -56, -10]}
 
 
