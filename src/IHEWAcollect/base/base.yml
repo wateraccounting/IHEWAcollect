@@ -69,7 +69,7 @@ products:
               fname:
                 r: 'EDAY_CERES_{dtime:%Y%j}.dat.gz'
                 t: 'EDAY_CERES_{dtime:%Y%j}.dat'
-                l: 'ALEXI_v1_mm.d_D-{dtime:%Y%m%d}.tif'
+                l: 'ALEXI_v1_mm.d_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -116,7 +116,7 @@ products:
               fname:
                 r: 'ALEXI_weekly_mm_{dtime:%j_%Y}.tif'
                 t: null
-                l: 'ALEXI_v1_mm.7d_7D-{dtime:%Y%m%d}.tif'
+                l: 'ALEXI_v1_mm.7d_7D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -198,7 +198,7 @@ products:
               fname:
                 r: 'c_gls_SWI_{dtime:%Y%m%d}1200_GLOBE_ASCAT_V3.1.1.nc'
                 t: null
-                l: 'ASCAT_v3.1.1_._D-{dtime:%Y%m%d}.tif'
+                l: 'ASCAT_v3.1.1_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -289,7 +289,7 @@ products:
               fname:
                 r: 'dlwsfc.gdas.{dtime:%Y%m}.grb2'
                 t: 'dlwsfc-{dtime:%Y%m%d}-{ipart}.nc'
-                l: 'CFSR_v1_W.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'CFSR_v1_W.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -335,7 +335,7 @@ products:
               fname:
                 r: 'dswsfc.gdas.{dtime:%Y%m}.grb2'
                 t: 'dswsfc-{dtime:%Y%m%d}-{ipart}.nc'
-                l: 'CFSR_v1_W.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'CFSR_v1_W.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -381,7 +381,7 @@ products:
               fname:
                 r: 'ulwsfc.gdas.{dtime:%Y%m}.grb2'
                 t: 'ulwsfc-{dtime:%Y%m%d}-{ipart}.nc'
-                l: 'CFSR_v1_W.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'CFSR_v1_W.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -427,7 +427,7 @@ products:
               fname:
                 r: 'uswsfc.gdas.{dtime:%Y%m}.grb2'
                 t: 'uswsfc-{dtime:%Y%m%d}-{ipart}.nc'
-                l: 'CFSR_v1_W.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'CFSR_v1_W.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -480,7 +480,7 @@ products:
               fname:
                 r: 'dlwsfc.gdas.{dtime:%Y%m}.grib2'
                 t: 'dlwsfc-{dtime:%Y%m%d}-{ipart}.nc'
-                l: 'CFSR_v2_W.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'CFSR_v2_W.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -525,7 +525,7 @@ products:
               fname:
                 r: 'dswsfc.gdas.{dtime:%Y%m}.grib2'
                 t: 'dswsfc-{dtime:%Y%m%d}-{ipart}.nc'
-                l: 'CFSR_v2_W.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'CFSR_v2_W.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -570,7 +570,7 @@ products:
               fname:
                 r: 'ulwsfc.gdas.{dtime:%Y%m}.grib2'
                 t: 'ulwsfc-{dtime:%Y%m%d}-{ipart}.nc'
-                l: 'CFSR_v2_W.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'CFSR_v2_W.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -615,7 +615,7 @@ products:
               fname:
                 r: 'uswsfc.gdas.{dtime:%Y%m}.grib2'
                 t: 'uswsfc-{dtime:%Y%m%d}-{ipart}.nc'
-                l: 'CFSR_v2_W.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'CFSR_v2_W.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -680,7 +680,7 @@ products:
     v2.0:
       precipitation:
         daily:
-          url: 'ftp://chg-ftpout.geog.ucsb.edu'
+          url: 'ftp://data.chc.ucsb.edu'
           protocol: 'FTP'
           method: 'get'
           freq: 'D'
@@ -694,7 +694,7 @@ products:
               fname:
                 r: 'chirps-v2.0.{dtime:%Y.%m.%d}.tif.gz'
                 t: 'chirps-v2.0.{dtime:%Y.%m.%d}.tif'
-                l: 'CHIRPS_v2.0_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'CHIRPS_v2.0_mm_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -727,7 +727,7 @@ products:
                 w: 7200
                 h: 2000
         monthly:
-          url: 'ftp://chg-ftpout.geog.ucsb.edu'
+          url: 'ftp://data.chc.ucsb.edu'
           protocol: 'FTP'
           method: 'get'
           freq: 'MS'
@@ -741,7 +741,7 @@ products:
               fname:
                 r: 'chirps-v2.0.{dtime:%Y.%m}.tif.gz'
                 t: 'chirps-v2.0.{dtime:%Y.%m}.tif'
-                l: 'CHIRPS_v2.0_mm.m_MS-{dtime:%Y%m}.tif'
+                l: 'CHIRPS_v2.0_mm.m_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -821,7 +821,7 @@ products:
               fname:
                 r: 'M01CMRSETGlobal{dtime:Y%YM%m}.tif'
                 t: null
-                l: 'CMRSET_v1_mm.m_MS-{dtime:%Y%m}.tif'
+                l: 'CMRSET_v1_mm.m_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -855,37 +855,37 @@ products:
                 h: 3600
 
   # API
-  Copernicus:
-    account: 'Copernicus'
-    template: 'EU'
-    meta:
-      owner: 'European Centre for Medium-Range Weather Forecasts'
-      description:
-        'We are both a research institute and a 24/7 operational service, producing global
-         numerical weather predictions and other data for our Member and Co-operating States
-         and the broader community. The Centre has one of the largest supercomputer facilities
-         and meteorological data archives in the world. Other strategic activities include
-         delivering advanced training and assisting the WMO in implementing its programmes.
+  # Copernicus:
+  #   account: 'Copernicus'
+  #   template: 'EU'
+  #   meta:
+  #     owner: 'European Centre for Medium-Range Weather Forecasts'
+  #     description:
+  #       'We are both a research institute and a 24/7 operational service, producing global
+  #        numerical weather predictions and other data for our Member and Co-operating States
+  #        and the broader community. The Centre has one of the largest supercomputer facilities
+  #        and meteorological data archives in the world. Other strategic activities include
+  #        delivering advanced training and assisting the WMO in implementing its programmes.
 
-         We operate two services from the EU’s Copernicus Earth observation programme, the
-         Copernicus Atmosphere Monitoring Service (CAMS) and the Copernicus Climate Change
-         Service (C3S). We also contribute to the Copernicus Emergency Management Service (CEMS).'
-      websites:
-        - 'https://www.ecmwf.int/'
-      protocols:
-        - 'ECMWF'
-      methods:
-        - 'api'
-      ftypes:
-        - ''
-      versions:
-        - ''
-      datasets:
-        - ''
-      resolutions:
-        - ''
-      projection:
-        - 'WGS84'
+  #        We operate two services from the EU’s Copernicus Earth observation programme, the
+  #        Copernicus Atmosphere Monitoring Service (CAMS) and the Copernicus Climate Change
+  #        Service (C3S). We also contribute to the Copernicus Emergency Management Service (CEMS).'
+  #     websites:
+  #       - 'https://www.ecmwf.int/'
+  #     protocols:
+  #       - 'ECMWF'
+  #     methods:
+  #       - 'api'
+  #     ftypes:
+  #       - ''
+  #     versions:
+  #       - ''
+  #     datasets:
+  #       - ''
+  #     resolutions:
+  #       - ''
+  #     projection:
+  #       - 'WGS84'
 #    v1:
 #      evapotranspiration:
 #        monthly:
@@ -906,7 +906,7 @@ products:
 #              fname:
 #                r: 'M01CMRSETGlobal{dtime:Y%YM%m}.tif'
 #                t: null
-#                l: 'CMRSET_v1_mm.m_MS-{dtime:%Y%m}.tif'
+#                l: 'CMRSET_v1_mm.m_MS-{dtime:%Y.%m}.tif'
 #              fmt:
 #                d: null
 #                r: 'dtime'
@@ -967,18 +967,18 @@ products:
       datasets:
         - 'GRACE'
       resolutions:
-        - 'daily'
+        - 'monthly'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
     v3.1:
       grace:
-        daily:
+        monthly:
           url: 'https://podaac-tools.jpl.nasa.gov'
           protocol: 'HTTPS'
           method: 'post'
-          freq: 'D'
+          freq: 'MS'
           variables:
-            EWH:
+            GRACE_TWSA:
               variable: null
               name: 'equivalent water height'
               description:
@@ -987,7 +987,7 @@ products:
               fname:
                 r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRAC_UTCSR_BA01_0600_LND_v03.tif'
                 t: ''
-                l: 'CSR_v3.1_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'CSR_v3.1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime.dtime'
@@ -1021,13 +1021,13 @@ products:
                 h: 180
     v3.2:
       grace:
-        daily:
+        monthly:
           url: 'https://podaac-tools.jpl.nasa.gov'
           protocol: 'HTTPS'
           method: 'post'
-          freq: 'D'
+          freq: 'MS'
           variables:
-            EWH:
+            GRACE_TWSA:
               variable: null
               name: 'equivalent water height'
               description:
@@ -1036,7 +1036,7 @@ products:
               fname:
                 r : 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRFO_UTCSR_BA01_0600_LND_v03.tif'
                 t: ''
-                l: 'CSR_v3.2_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'CSR_v3.2_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime.dtime'
@@ -1111,12 +1111,12 @@ products:
           method: 'get'
           freq: null
           variables:
-            af:
+            DEM:
               variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/AF/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/{}/'
               fname:
                 r: '{lat}{lon}_dem_grid.zip'
                 t: 'DEM-af_3s_merged_{lat}{lon}.adf'
@@ -1152,268 +1152,22 @@ products:
               dem:
                 w: 88800
                 h: 87600
-            as:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/AS/'
-              fname:
-                r: '{lat}{lon}_dem_grid.zip'
-                t: 'DEM-as_3s_merged_{lat}{lon}.adf'
-                l: 'DEM_v1_m-3s_as.tif'
-              fmt:
-                d: null
-                r: 'latlon'
-                t: 'latlon'
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'AIG'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: -12.0
-                n: 61.0
-                r: 0.0008333333333332999934
-              lon:
-                w: 57.0
-                e: 180.0
-                r: 0.0008333333333332999934
-              time:
-                s: null
-                e: null
-              dem:
-                w: 147600
-                h: 87600
-            au:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/AU/'
-              fname:
-                r: '{lat}{lon}_dem_grid.zip'
-                t: 'DEM-au_3s_merged_{lat}{lon}.adf'
-                l: 'DEM_v1_m-3s_au.tif'
-              fmt:
-                d: null
-                r: 'latlon'
-                t: 'latlon'
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'AIG'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: -56.0
-                n: -10.0
-                r: 0.0008333333333332999934
-              lon:
-                w: 112.0
-                e: 180.0
-                r: 0.0008333333333332999934
-              time:
-                s: null
-                e: null
-              dem:
-                w: 81600
-                h: 55200
-            ca:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/CA/'
-              fname:
-                r: '{lat}{lon}_dem_grid.zip'
-                t: 'DEM-ca_3s_merged_{lat}{lon}.adf'
-                l: 'DEM_v1_m-3s_ca.tif'
-              fmt:
-                d: null
-                r: 'latlon'
-                t: 'latlon'
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'AIG'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: 5.0
-                n: 39.0
-                r: 0.0008333333333332999934
-              lon:
-                w: -119.0
-                e: -60.0
-                r: 0.0008333333333332999934
-              time:
-                s: null
-                e: null
-              dem:
-                w: 70800
-                h: 40800
-            eu:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/EU/'
-              fname:
-                r: '{lat}{lon}_dem_grid.zip'
-                t: 'DEM-eu_3s_merged_{lat}{lon}.adf'
-                l: 'DEM_v1_m-3s_eu.tif'
-              fmt:
-                d: null
-                r: 'latlon'
-                t: 'latlon'
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'AIG'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: '.'
-                l: '.'
-                m: 1.0
-              lat:
-                s: 12.0
-                n: 62.0
-                r: 0.0008333333333332999934
-              lon:
-                w: -14.0
-                e: 70.0
-                r: 0.0008333333333332999934
-              time:
-                s: null
-                e: null
-              dem:
-                w: 100800
-                h: 60000
-            na:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/NA/'
-              fname:
-                r: '{lat}{lon}_dem_grid.zip'
-                t: 'DEM-na_3s_merged_{lat}{lon}.adf'
-                l: 'DEM_v1_m-3s_na.tif'
-              fmt:
-                d: null
-                r: 'latlon'
-                t: 'latlon'
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'AIG'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: 24.0
-                n: 60.0
-                r: 0.0008333333333332999934
-              lon:
-                w: -138.0
-                e: -52.0
-                r: 0.0008333333333332999934
-              time:
-                s: null
-                e: null
-              dem:
-                w: 103200
-                h: 43200
-            sa:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_dem_3s_grid/SA/'
-              fname:
-                r: '{lat}{lon}_dem_grid.zip'
-                t: 'DEM-sa_3s_merged_{lat}{lon}.adf'
-                l: 'DEM_v1_m-3s_sa.tif'
-              fmt:
-                d: null
-                r: 'latlon'
-                t: 'latlon'
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'AIG'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: -56.0
-                n: 15.0
-                r: 0.0008333333333332999934
-              lon:
-                w: -93.0
-                e: -32.0
-                r: 0.0008333333333332999934
-              time:
-                s: null
-                e: null
-              dem:
-                w: 73200
-                h: 85200
         15s:
           url: 'https://edcintl.cr.usgs.gov'
           protocol: 'HTTPS'
           method: 'get'
           freq: null
           variables:
-            af:
+            DEM:
               variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
               dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
               fname:
-                r: 'af_dem_15s_grid.zip'
-                t: 'DEM-af_15s_merged.adf'
-                l: 'DEM_v1_m-15s_af.tif'
+                r: '{}_dem_15s_grid.zip'
+                t: 'DEM-{}_15s_merged.adf'
+                l: 'DEM_v1_m-15s_{}.tif'
               fmt:
                 d: null
                 r: null
@@ -1445,267 +1199,21 @@ products:
               dem:
                 w: 17760
                 h: 17520
-            as:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
-              fname:
-                r: 'as_dem_15s_grid.zip'
-                t: 'DEM-as_15s_merged.adf'
-                l: 'DEM_v1_m-15s_as.tif'
-              fmt:
-                d: null
-                r: null
-                t: null
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'AIG'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: -12.0
-                n: 61.0
-                r: 0.004166666666666599822
-              lon:
-                w: 57.0
-                e: 180.0
-                r: 0.004166666666666599822
-              time:
-                s: null
-                e: null
-              dem:
-                w: 29520
-                h: 17520
-            au:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
-              fname:
-                r: 'au_dem_15s_grid.zip'
-                t: 'DEM-au_15s_merged.adf'
-                l: 'DEM_v1_m-15s_au.tif'
-              fmt:
-                d: null
-                r: null
-                t: null
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'AIG'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: -56.0
-                n: -10.0
-                r: 0.004166666666666599822
-              lon:
-                w: 112.0
-                e: 180.0
-                r: 0.004166666666666599822
-              time:
-                s: null
-                e: null
-              dem:
-                w: 16320
-                h: 11040
-            ca:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
-              fname:
-                r: 'ca_dem_15s_grid.zip'
-                t: 'DEM-ca_15s_merged.adf'
-                l: 'DEM_v1_m-15s_ca.tif'
-              fmt:
-                d: null
-                r: null
-                t: null
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'AIG'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: 5.0
-                n: 39.0
-                r: 0.004166666666666599822
-              lon:
-                w: -119.0
-                e: -60.0
-                r: 0.004166666666666599822
-              time:
-                s: null
-                e: null
-              dem:
-                w: 14160
-                h: 8160
-            eu:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
-              fname:
-                r: 'eu_dem_15s_grid.zip'
-                t: 'DEM-eu_15s_merged.adf'
-                l: 'DEM_v1_m-15s_eu.tif'
-              fmt:
-                d: null
-                r: null
-                t: null
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'AIG'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: 12.0
-                n: 62.0
-                r: 0.004166666666666599822
-              lon:
-                w: -14.0
-                e: 70.0
-                r: 0.004166666666666599822
-              time:
-                s: null
-                e: null
-              dem:
-                w: 20160
-                h: 12000
-            na:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
-              fname:
-                r: 'na_dem_15s_grid.zip'
-                t: 'DEM-na_15s_merged.adf'
-                l: 'DEM_v1_m-15s_na.tif'
-              fmt:
-                d: null
-                r: null
-                t: null
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'AIG'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: 24.0
-                n: 60.0
-                r: 0.004166666666666599822
-              lon:
-                w: -138.0
-                e: -52.0
-                r: 0.004166666666666599822
-              time:
-                s: null
-                e: null
-              dem:
-                w: 20640
-                h: 8640
-            sa:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_15s_zip_grid/'
-              fname:
-                r: 'sa_dem_15s_grid.zip'
-                t: 'DEM-sa_15s_merged.adf'
-                l: 'DEM_v1_m-15s_sa.tif'
-              fmt:
-                d: null
-                r: null
-                t: null
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'AIG'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: -56.0
-                n: 15.0
-                r: 0.004166666666666599822
-              lon:
-                w: -93.0
-                e: -32.0
-                r: 0.004166666666666599822
-              time:
-                s: null
-                e: null
-              dem:
-                w: 14640
-                h: 17040
         30s:
           url: 'https://edcintl.cr.usgs.gov'
           protocol: 'HTTPS'
           method: 'get'
           freq: null
           variables:
-            af:
+            DEM:
               variable: null
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'af_dem_30s_bil.zip'
-                t: 'DEM-af_30s_merged.adf'
+                r: '{}_dem_30s_grid.zip'
+                t: 'DEM-{}_30s_merged.adf'
                 l: 'DEM_v1_m-30s_af.tif'
               fmt:
                 d: null
@@ -1738,252 +1246,6 @@ products:
               dem:
                 w: 8880
                 h: 8760
-            as:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
-              fname:
-                r: 'as_dem_30s_bil.zip'
-                t: 'DEM-as_30s_merged.adf'
-                l: 'DEM_v1_m-30s_as.tif'
-              fmt:
-                d: null
-                r: null
-                t: null
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'EHdr'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: -12.0
-                n: 61.0
-                r: 0.008333333333333300258
-              lon:
-                w: 57.0
-                e: 180.0
-                r: 0.008333333333333300258
-              time:
-                s: null
-                e: null
-              dem:
-                w: 14760
-                h: 8760
-            au:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
-              fname:
-                r: 'au_dem_30s_bil.zip'
-                t: 'DEM-au_30s_merged.adf'
-                l: 'DEM_v1_m-30s_au.tif'
-              fmt:
-                d: null
-                r: null
-                t: null
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'EHdr'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: -56.0
-                n: -10.0
-                r: 0.008333333333333300258
-              lon:
-                w: 112.0
-                e: 180.0
-                r: 0.008333333333333300258
-              time:
-                s: null
-                e: null
-              dem:
-                w: 8160
-                h: 5520
-            ca:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
-              fname:
-                r: 'ca_dem_30s_bil.zip'
-                t: 'DEM-ca_30s_merged.adf'
-                l: 'DEM_v1_m-30s_ca.tif'
-              fmt:
-                d: null
-                r: null
-                t: null
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'EHdr'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: 5.0
-                n: 39.0
-                r: 0.008333333333333300258
-              lon:
-                w: -119.0
-                e: -60.0
-                r: 0.008333333333333300258
-              time:
-                s: null
-                e: null
-              dem:
-                w: 7080
-                h: 4080
-            eu:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
-              fname:
-                r: 'eu_dem_30s_bil.zip'
-                t: 'DEM-eu_30s_merged.adf'
-                l: 'DEM_v1_m-30s_eu.tif'
-              fmt:
-                d: null
-                r: null
-                t: null
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'EHdr'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: 12.0
-                n: 62.0
-                r: 0.008333333333333300258
-              lon:
-                w: -14.0
-                e: 70.0
-                r: 0.008333333333333300258
-              time:
-                s: null
-                e: null
-              dem:
-                w: 10080
-                h: 6000
-            na:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
-              fname:
-                r: 'na_dem_30s_bil.zip'
-                t: 'DEM-na_30s_merged.adf'
-                l: 'DEM_v1_m-30s_na.tif'
-              fmt:
-                d: null
-                r: null
-                t: null
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'EHdr'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: 24.0
-                n: 60.0
-                r: 0.008333333333333300258
-              lon:
-                w: -138.0
-                e: -52.0
-                r: 0.008333333333333300258
-              time:
-                s: null
-                e: null
-              dem:
-                w: 10320
-                h: 4320
-            sa:
-              variable: null
-              name: 'HydroSHEDS Digital Elevation Model'
-              description:
-                ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
-              fname:
-                r: 'sa_dem_30s_bil.zip'
-                t: 'DEM-sa_30s_merged.adf'
-                l: 'DEM_v1_m-30s_sa.tif'
-              fmt:
-                d: null
-                r: null
-                t: null
-                l: null
-              ftype:
-                r: 'zip'
-                t: 'EHdr'
-                l: 'GTiff'
-              dtype:
-                r: 'binary'
-                t: 'int16'
-                l: 'float32'
-              units:
-                r: 'm'
-                l: 'm'
-                m: 1.0
-              lat:
-                s: -56.0
-                n: 15.0
-                r: 0.008333333333333300258
-              lon:
-                w: -93.0
-                e: -32.0
-                r: 0.008333333333333300258
-              time:
-                s: null
-                e: null
-              dem:
-                w: 7320
-                h: 8520
       DIR:
         3s:
           url: 'https://edcintl.cr.usgs.gov'
@@ -2581,9 +1843,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'af_dir_30s_bil.zip'
+                r: 'af_dir_30s_grid.zip'
                 t: 'DIR-af_30s_merged.adf'
                 l: 'DIR_v1_m-30s_af.tif'
               fmt:
@@ -2622,9 +1884,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'as_dir_30s_bil.zip'
+                r: 'as_dir_30s_grid.zip'
                 t: 'DIR-as_30s_merged.adf'
                 l: 'DIR_v1_m-30s_as.tif'
               fmt:
@@ -2663,9 +1925,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'au_dir_30s_bil.zip'
+                r: 'au_dir_30s_grid.zip'
                 t: 'DIR-au_30s_merged.adf'
                 l: 'DIR_v1_m-30s_au.tif'
               fmt:
@@ -2704,9 +1966,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'ca_dir_30s_bil.zip'
+                r: 'ca_dir_30s_grid.zip'
                 t: 'DIR-ca_30s_merged.adf'
                 l: 'DIR_v1_m-30s_ca.tif'
               fmt:
@@ -2745,9 +2007,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'eu_dir_30s_bil.zip'
+                r: 'eu_dir_30s_grid.zip'
                 t: 'DIR-eu_30s_merged.adf'
                 l: 'DIR_v1_m-30s_eu.tif'
               fmt:
@@ -2786,9 +2048,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'na_dir_30s_bil.zip'
+                r: 'na_dir_30s_grid.zip'
                 t: 'DIR-na_30s_merged.adf'
                 l: 'DIR_v1_m-30s_na.tif'
               fmt:
@@ -2827,9 +2089,9 @@ products:
               name: 'HydroSHEDS Digital Elevation Model'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_bil/'
+              dir: '/downloads/sciweb1/shared/hydrosheds/sa_30s_zip_grid/'
               fname:
-                r: 'sa_dir_30s_bil.zip'
+                r: 'sa_dir_30s_grid.zip'
                 t: 'DIR-sa_30s_merged.adf'
                 l: 'DIR_v1_m-30s_sa.tif'
               fmt:
@@ -2916,7 +2178,7 @@ products:
 #              fname:
 #                r: 'M01CMRSETGlobal{dtime:Y%YM%m}.tif'
 #                t: null
-#                l: 'CMRSET_v1_mm.m_MS-{dtime:%Y%m}.tif'
+#                l: 'CMRSET_v1_mm.m_MS-{dtime:%Y.%m}.tif'
 #              fmt:
 #                d: null
 #                r: 'dtime'
@@ -2992,7 +2254,7 @@ products:
               fname:
                 r: 'ET_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
                 t: 'ET_ETmonitor_mm-month_{dtime:%Y_%m_01}.{ipart}.tif'
-                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -3033,7 +2295,7 @@ products:
               fname:
                 r: 'ETpot_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
                 t: 'ETpot_ETmonitor_mm-month_{dtime:%Y_%m_01}_4326.tif'
-                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -3074,7 +2336,7 @@ products:
               fname:
                 r: 'Ew_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
                 t: 'Ew_ETmonitor_mm-month_{dtime:%Y_%m_01}_4326.tif'
-                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -3115,7 +2377,7 @@ products:
               fname:
                 r: 'Es_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
                 t: 'Es_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
-                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -3156,7 +2418,7 @@ products:
               fname:
                 r: 'Ei_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
                 t: 'Ei_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
-                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -3197,7 +2459,7 @@ products:
               fname:
                 r: 'Tr_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
                 t: 'Tr_ETmonitor_mm-month_{dtime:%Y_%m_01}.tif'
-                l: 'ETmonitor_v1_mm_MS-{dtime:%Y%m}.tif'
+                l: 'ETmonitor_v1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -3255,7 +2517,7 @@ products:
       versions:
         - 'v4'
       datasets:
-        - 'Potential Evaporation'
+        - 'Evapotranspiration'
       resolutions:
         - 'daily'
       projection:
@@ -3270,14 +2532,14 @@ products:
           variables:
             ETP:
               variable: null
-              name: 'Daily Potential Evaporation'
+              name: 'Daily Potential Evapotranspiration'
               description:
                 ''
               dir: '/downloads/sciweb1/shared/fews/web/global/daily/pet/downloads/daily/'
               fname:
                 r: 'et{dtime:%y%m%d}.tar.gz'
                 t: 'et{dtime:%y%m%d}.bil'
-                l: 'FEWS_v4_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'FEWS_v4_mm_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -3338,18 +2600,18 @@ products:
       datasets:
         - 'GRACE'
       resolutions:
-        - 'daily'
+        - 'monthly'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
     v3.1:
       grace:
-        daily:
+        monthly:
           url: 'https://podaac-tools.jpl.nasa.gov'
           protocol: 'HTTPS'
           method: 'post'
-          freq: 'D'
+          freq: 'MS'
           variables:
-            EWH:
+            GRACE_TWSA:
               variable: null
               name: 'equivalent water height'
               description:
@@ -3358,7 +2620,7 @@ products:
               fname:
                 r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRAC_GFZOP_BA01_0600_LND_v03.tif'
                 t: ''
-                l: 'GFZ_v3.1_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'GFZ_v3.1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime.dtime'
@@ -3392,13 +2654,13 @@ products:
                 h: 180
     v3.2:
       grace:
-        daily:
+        monthly:
           url: 'https://podaac-tools.jpl.nasa.gov'
           protocol: 'HTTPS'
           method: 'post'
-          freq: 'D'
+          freq: 'MS'
           variables:
-            EWH:
+            GRACE_TWSA:
               variable: null
               name: 'equivalent water height'
               description:
@@ -3407,7 +2669,7 @@ products:
               fname:
                 r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRFO_GFZOP_BA01_0600_LND_v03.tif'
                 t: ''
-                l: 'GFZ_v3.2_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'GFZ_v3.2_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime.dtime'
@@ -3538,7 +2800,7 @@ products:
               fname:
                 r: 'GLDAS_NOAH025_M.A{dtime:%Y%m}.021.nc4'
                 t: null
-                l: 'GLDAS_v2.1_mm.d_MS-{dtime:%Y%m}.tif'
+                l: 'GLDAS_v2.1_mm.d_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -3619,7 +2881,7 @@ products:
               fname:
                 r: 'Et_{dtime:%Y}_GLEAM_v3.3a.nc'
                 t: null
-                l: 'GLEAM_v3.3a_mm.d_D-{dtime:%Y%m%d}.tif'
+                l: 'GLEAM_v3.3a_mm.d_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -3666,7 +2928,7 @@ products:
               fname:
                 r: 'Et_1980_2018_GLEAM_v3.3a_MO.nc'
                 t: null
-                l: 'GLEAM_v3.3a_mm.m_MS-{dtime:%Y%m}.tif'
+                l: 'GLEAM_v3.3a_mm.m_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: null
@@ -3715,7 +2977,7 @@ products:
               fname:
                 r: 'Et_{dtime:%Y}_GLEAM_v3.3b.nc'
                 t: null
-                l: 'GLEAM_v3.3b_mm.d_D-{dtime:%Y%m%d}.tif'
+                l: 'GLEAM_v3.3b_mm.d_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -3762,7 +3024,7 @@ products:
               fname:
                 r: 'Et_2003_2018_GLEAM_v3.3b_MO.nc'
                 t: null
-                l: 'GLEAM_v3.3b_mm.m_MS-{dtime:%Y%m}.tif'
+                l: 'GLEAM_v3.3b_mm.m_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: null
@@ -3854,7 +3116,7 @@ products:
               fname:
                 r: '3B-DAY.MS.MRG.3IMERG.{dtime:%Y%m%d}-S000000-E235959.V06.nc4'
                 t: null
-                l: 'GPM_v6_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'GPM_v6_mm_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -3871,7 +3133,7 @@ products:
               units:
                 r: 'mm'
                 l: 'mm'
-                m: 1.0
+                m: 24.0
               lat:
                 s: -90.0
                 n: 90.0
@@ -3901,7 +3163,7 @@ products:
               fname:
                 r: '3B-MO.MS.MRG.3IMERG.{dtime:%Y%m01}-S000000-E235959.{dtime:%m}.V06B.HDF5'
                 t: null
-                l: 'GPM_v6_mm.d_MS-{dtime:%Y%m}.tif'
+                l: 'GPM_v6_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -4042,18 +3304,18 @@ products:
       datasets:
         - 'GRACE'
       resolutions:
-        - 'daily'
+        - 'monthly'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
     v3.1:
       grace:
-        daily:
+        monthly:
           url: 'https://podaac-tools.jpl.nasa.gov'
           protocol: 'HTTPS'
           method: 'post'
-          freq: 'D'
+          freq: 'MS'
           variables:
-            EWH:
+            GRACE_TWSA:
               variable: null
               name: 'equivalent water height'
               description:
@@ -4062,7 +3324,7 @@ products:
               fname:
                 r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRAC_JPLEM_BA01_0600_LND_v03.tif'
                 t: ''
-                l: 'JPL_v3.1_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'JPL_v3.1_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime.dtime'
@@ -4096,13 +3358,13 @@ products:
                 h: 180
     v3.2:
       grace:
-        daily:
+        monthly:
           url: 'https://podaac-tools.jpl.nasa.gov'
           protocol: 'HTTPS'
           method: 'post'
-          freq: 'D'
+          freq: 'MS'
           variables:
-            EWH:
+            GRACE_TWSA:
               variable: null
               name: 'equivalent water height'
               description:
@@ -4111,7 +3373,7 @@ products:
               fname:
                 r: 'GRD-3_{dtime_s:%Y%j}-{dtime_e:%Y%j}_GRFO_JPLEM_BA01_0600_LND_v03.tif'
                 t: ''
-                l: 'JPL_v3.2_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'JPL_v3.2_mm_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime.dtime'
@@ -4395,7 +3657,7 @@ products:
               fname:
                 r: 'MCD43A3.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MCD43A3.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MCD43A3_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MCD43A3_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4437,7 +3699,7 @@ products:
               fname:
                 r: 'MCD43A3.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MCD43A3.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MCD43A3_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MCD43A3_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4518,7 +3780,7 @@ products:
               fname:
                 r: 'MOD09GQ.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD09GQ.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD09GQ_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MOD09GQ_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4560,7 +3822,7 @@ products:
               fname:
                 r: 'MOD09GQ.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD09GQ.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD09GQ_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MOD09GQ_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4660,7 +3922,7 @@ products:
               fname:
                 r: 'MOD10A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD10A2.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD10A2_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MOD10A2_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4702,7 +3964,7 @@ products:
               fname:
                 r: 'MOD10A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD10A2.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD10A2_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MOD10A2_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4785,7 +4047,7 @@ products:
               fname:
                 r: 'MOD11A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD11A2.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD11A2_v6_K_D-{dtime:%Y%m%d}.tif'
+                l: 'MOD11A2_v6_K_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4827,7 +4089,7 @@ products:
               fname:
                 r: 'MOD11A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD11A2.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD11A2_v6_K_D-{dtime:%Y%m%d}.tif'
+                l: 'MOD11A2_v6_K_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4911,7 +4173,7 @@ products:
               fname:
                 r: 'MOD13Q1.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD13Q1.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD13Q1_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MOD13Q1_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4990,7 +4252,7 @@ products:
               fname:
                 r: 'MOD15A2H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD15A2H.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD15A2H_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MOD15A2H_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -5032,7 +4294,7 @@ products:
               fname:
                 r: 'MOD15A2H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD15A2H.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD15A2H_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MOD15A2H_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -5109,11 +4371,11 @@ products:
               name: 'Eight Daily Evapotranspiration'
               description:
                 ''
-              dir: '/MOLT/MOD16A2.006/{dtime:%Y.%m.%d}/'
+              dir: '/MOLT/MOD16A2GF.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD16A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
-                t: 'MOD16A2.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD16A2_v6_mm.d_D-{dtime:%Y%m%d}.tif'
+                r: 'MOD16A2GF.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
+                t: 'MOD16A2GF.A{dtime:%Y%j}.006.{ipart}.tif'
+                l: 'MOD16A2GF_v6_mm.d_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -5151,11 +4413,11 @@ products:
               name: 'Eight Daily Potential Evapotranspiration'
               description:
                 ''
-              dir: '/MOLT/MOD16A2.006/{dtime:%Y.%m.%d}/'
+              dir: '/MOLT/MOD16A2GF.006/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD16A2.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
-                t: 'MOD16A2.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD16A2_v6_._D-{dtime:%Y%m%d}.tif'
+                r: 'MOD16A2GF.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
+                t: 'MOD16A2GF.A{dtime:%Y%j}.006.{ipart}.tif'
+                l: 'MOD16A2GF_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -5237,7 +4499,7 @@ products:
               fname:
                 r: 'MOD17A2H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD17A2H.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD17A2H_v6_kgC.m2_8D-{dtime:%Y%m%d}.tif'
+                l: 'MOD17A2H_v6_kgC.m2_8D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -5319,7 +4581,7 @@ products:
               fname:
                 r: 'MOD17A3H.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD17A3H.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD17A3H_v6_kgC.m2_D-{dtime:%Y%m%d}.tif'
+                l: 'MOD17A3H_v6_kgC.m2_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -5397,7 +4659,7 @@ products:
               fname:
                 r: ''
                 t: null
-                l: 'MSWEP_v2.1_mm.d_D-{dtime:%Y%m%d}.tif'
+                l: 'MSWEP_v2.1_mm.d_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: ''
                 r: ''
@@ -5480,7 +4742,7 @@ products:
               fname:
                 r: 'MOD13Q1.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
                 t: 'MOD13Q1.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MYD13_v6_._D-{dtime:%Y%m%d}.tif'
+                l: 'MYD13_v6_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -5565,7 +4827,7 @@ products:
               fname:
                 r: 'PROBAV_S1_TOC_{lon}{lat}_{dtime:%Y%m%d}_100M_V101.HDF5'
                 t: 'PROBAV_S1_TOC_{dtime:%Y%m%d}_100M_V101.{ipart}.tif'
-                l: 'PROBAV_v1.01_._D-{dtime:%Y%m%d}.tif'
+                l: 'PROBAV_v1.01_._D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon'
@@ -5643,7 +4905,7 @@ products:
               fname:
                 r: 'africa_rfe.{dtime:%Y%m%d}.tif.zip'
                 t: 'africa_rfe.{dtime:%Y%m%d}.tif'
-                l: 'RFE_v2_mm_D-{dtime:%Y%m%d}.tif'
+                l: 'RFE_v2_mm_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -5723,7 +4985,7 @@ products:
               fname:
                 r: 'ETm{dtime:%Y%m}.mat'
                 t: null
-                l: 'ETM_v1_._D-{dtime:%Y%m}.tif'
+                l: 'ETM_v1_._D-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -5776,14 +5038,14 @@ products:
       ftypes:
         - 'zip'
       versions:
-        - 'v4'
+        - 'v5'
       datasets:
         - 'Evapotranspiration'
       resolutions:
         - 'monthly'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
-    v4:
+    v5:
       evapotranspiration:
         monthly:
           url: 'https://edcintl.cr.usgs.gov'
@@ -5796,11 +5058,11 @@ products:
               name: 'Monthly Actual Evapotranspiration'
               description:
                 ''
-              dir: '/downloads/sciweb1/shared/fews/web/global/monthly/eta/downloads/'
+              dir: '/downloads/sciweb1/shared/fews/web/global/monthly/etav5/downloads/'
               fname:
                 r: 'm{dtime:%Y%m}.zip'
-                t: 'm{dtime:%Y%m}_modisSSEBopETv4_actual_mm.tif'
-                l: 'SSEBop_v4_mm.m_MS-{dtime:%Y%m}.tif'
+                t: 'm{dtime:%Y%m}_modisSSEBopETv5_actual_mm.tif'
+                l: 'SSEBop_v4_mm.m_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: 'dtime'
@@ -8214,7 +7476,7 @@ products:
               fname:
                 r: '3B43.{dtime:%Y%m01}.7.HDF'
                 t: '3B43.{dtime:%Y%m01}.7.tif'
-                l: 'TRMM_v7_mm.d_MS-{dtime:%Y%m}.tif'
+                l: 'TRMM_v7_mm.d_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -8265,7 +7527,7 @@ products:
               fname:
                 r: '3B43.{dtime:%Y%m01}.7A.HDF'
                 t: '3B43.{dtime:%Y%m01}.7A.tif'
-                l: 'TRMM_v7_mm.d_MS-{dtime:%Y%m}.tif'
+                l: 'TRMM_v7_mm.d_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'

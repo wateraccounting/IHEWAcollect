@@ -154,6 +154,74 @@ def Convert_bil_to_tiff(input_bil, output_tiff):
     return (output_tiff)
 
 
+# def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scale=1.0, geo=None):
+#     """
+#     This function converts the hdf5 files into tiff files
+
+#     Keyword Arguments:
+#     input_adf -- name, name of the adf file
+#     output_tiff -- Name of the output tiff file
+#     Band_number -- bandnumber of the hdf5 that needs to be converted
+#     scaling_factor -- factor multipied by data is the output array
+#     geo -- [minimum lon, pixelsize, rotation, maximum lat, rotation,
+#             pixelsize], (geospatial dataset)
+#     """
+#     # Open the hdf file
+#     g = gdal.Open(inputname_hdf, gdal.GA_ReadOnly)
+
+#     #  Define temporary file out and band name in
+#     Band_number = 0
+
+#     if isinstance(Band, int):
+#         Band_number = Band
+
+#     if isinstance(Band, str):
+#         for i in range(0, len(g.GetSubDatasets()), 1):
+#             # print('    ', g.GetSubDatasets()[i][0].split(':')[-1])
+#             if Band == g.GetSubDatasets()[i][0].split(':')[-1]:
+#                 Band_number = i
+#                 # print(Band, g.GetSubDatasets()[i][0].split(':')[-1], Band_number)
+
+#     name_in = g.GetSubDatasets()[Band_number][0]
+
+#     # Get environmental variable
+#     # WA_env_paths = os.environ["GDAL_DRIVER"].split(';')
+#     # GDAL_env_path = WA_env_paths[0]
+#     # GDAL_TRANSLATE_PATH = os.path.join(GDAL_env_path, 'gdal_translate.exe')
+#     GDAL_TRANSLATE_PATH = 'gdal_translate.exe'
+
+
+  
+#     # run gdal translate command
+#     # os.path.join
+#     FullCmd = '{exe} ' \
+#               '-a_scale {scale} ' \
+#               '-ot Float32 ' \
+#               '-of GTiff ' \
+#               '"{file_i}" ' \
+#               '"{file_o}"'.format(
+#                   exe=GDAL_TRANSLATE_PATH,
+#                   scale=scale,
+#                   file_i=name_in.replace('"', '""'),
+#                   file_o=Filename_tiff_end.replace('"', '""'))
+#     # FullCmd = '%s -of GTiff %s %s' % (GDAL_TRANSLATE_PATH, name_in, Filename_tiff_end)
+#     Run_command_window(FullCmd)
+
+#     if isinstance(geo, dict):
+#         # Get the data array
+#         dest = gdal.Open(Filename_tiff_end)
+#         Data = dest.GetRasterBand(1).ReadAsArray()
+#         dest = None
+
+#         # If the band data is not SM change the DN values into PROBA-V values and write into the spectral_reflectance_PROBAV
+#         Data_scaled = Data * geo['scaling_factor']
+
+#         # Save the PROBA-V as a tif file
+#         Save_as_tiff(Filename_tiff_end, Data_scaled, geo['transform'], "WGS84")
+
+#     return ()
+
+
 def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scale=1.0, geo=None):
     """
     This function converts the hdf5 files into tiff files
@@ -170,7 +238,7 @@ def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scale=1.0, geo=
     g = gdal.Open(inputname_hdf, gdal.GA_ReadOnly)
 
     #  Define temporary file out and band name in
-    Band_number = 0
+    # Band_number = 0
 
     if isinstance(Band, int):
         Band_number = Band
@@ -178,7 +246,7 @@ def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scale=1.0, geo=
     if isinstance(Band, str):
         for i in range(0, len(g.GetSubDatasets()), 1):
             # print('    ', g.GetSubDatasets()[i][0].split(':')[-1])
-            if Band == g.GetSubDatasets()[i][0].split(':')[-1]:
+            if Band in g.GetSubDatasets()[i][0].split(':')[-1]:
                 Band_number = i
                 # print(Band, g.GetSubDatasets()[i][0].split(':')[-1], Band_number)
 
@@ -219,47 +287,127 @@ def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scale=1.0, geo=
 
     return ()
 
+def Convert_hdf5_to_tiff_merg_clip(inputname_hdf, Filename_tiff_end, Band, latlim, lonlim, scale=1.0, geo=None):
+    tifs_from_hdf = []
 
-# def Convert_hdf_to_tiff(inputname_hdf, Filename_tiff_end, Band_number, scaling_factor):
-#     """
-#     This function converts the hdf5 files into tiff files
-#
-#     Keyword Arguments:
-#     input_adf -- name, name of the adf file
-#     output_tiff -- Name of the output tiff file
-#     Band_number -- bandnumber of the hdf5 that needs to be converted
-#     scaling_factor -- factor multipied by data is the output array
-#     geo -- [minimum lon, pixelsize, rotation, maximum lat, rotation,
-#             pixelsize], (geospatial dataset)
-#     """
-#     # Open the hdf file
-#     g = gdal.Open(inputname_hdf, gdal.GA_ReadOnly)
-#
-#     #  Define temporary file out and band name in
-#     name_in = g.GetSubDatasets()[Band_number][0]
-#
-#     # Get environmental variable
-#     # WA_env_paths = os.environ["GDAL_DRIVER"].split(';')
-#     # GDAL_env_path = WA_env_paths[0]
-#     # GDAL_TRANSLATE_PATH = os.path.join(GDAL_env_path, 'gdal_translate.exe')
-#     GDAL_TRANSLATE_PATH = 'gdal_translate.exe'
-#
-#     # run gdal translate command
-#     FullCmd = '%s -of GTiff %s %s' % (GDAL_TRANSLATE_PATH, name_in, Filename_tiff_end)
-#     Run_command_window(FullCmd)
-#
-#     # # Get the data array
-#     # dest = gdal.Open(Filename_tiff_end)
-#     # Data = dest.GetRasterBand(1).ReadAsArray()
-#     # dest = None
-#     #
-#     # Data_scaled = Data * scaling_factor
-#     #
-#     # # Save the PROBA-V as a tif file
-#     # Save_as_tiff(Filename_tiff_end, Data_scaled, geo_out, "WGS84")
-#
-#     return ()
+    g = gdal.Open(inputname_hdf[0], gdal.GA_ReadOnly)
+    if isinstance(Band, int):
+        Band_number = Band
+    if isinstance(Band, str):
+        for i in range(0, len(g.GetSubDatasets()), 1):
+            if Band in g.GetSubDatasets()[i][0].split(':')[-1]:
+                Band_number = i
+    g = None
 
+    for i, fin in enumerate(inputname_hdf):
+        fout = '/vsimem/fromhdf'+str(i)+'.tif'
+        g = gdal.Open(fin, gdal.GA_ReadOnly)
+
+        name_in = g.GetSubDatasets()[Band_number][0]
+        ds = gdal.Open(name_in, gdal.GA_ReadOnly)
+        gdal.Translate(fout, ds)
+        tifs_from_hdf.append(fout)
+        ds = None
+        g = None
+
+    # # ## Merge and reproject
+    gdal.Warp('/vsimem/merged.tif', tifs_from_hdf,  format="GTiff",
+        options="-overwrite -multi -wm 80% -t_srs EPSG:4326 -co TILED=YES -co BIGTIFF=YES -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS")
+
+    # clip the merged raster
+    gdal.Translate(Filename_tiff_end, '/vsimem/merged.tif', projWin = [lonlim[0], latlim[1], lonlim[1], latlim[0]])
+
+    return ()
+# def Convert_hdf5_to_tiff(inputname_hdf, Filename_tiff_end, Band, scale=1.0, geo=None):
+    """
+    This function converts the hdf5 files into tiff files
+
+    Keyword Arguments:
+    input_adf -- name, name of the adf file
+    output_tiff -- Name of the output tiff file
+    Band_number -- bandnumber of the hdf5 that needs to be converted
+    scaling_factor -- factor multipied by data is the output array
+    geo -- [minimum lon, pixelsize, rotation, maximum lat, rotation,
+            pixelsize], (geospatial dataset)
+    """
+    # get tile numbers from file names
+    TilesVertical_from_file=[]
+    TilesHorizontal_from_file = []
+    for f in inputname_hdf:
+        # print(f)
+        TilesVertical_from_file.append(int(f[-24:-22]))
+        TilesHorizontal_from_file.append(int(f[-27:-25]))
+
+    TilesVertical = [TilesVertical_from_file[0],TilesVertical_from_file[-1]]
+    TilesHorizontal = [TilesHorizontal_from_file[0], TilesHorizontal_from_file[-1]]
+
+    # get no data value and array size from the first hdf
+    # Open the hdf file
+    g = gdal.Open(inputname_hdf[0], gdal.GA_ReadOnly)
+
+    #  Define temporary file out and band name in
+    # Band_number = 0
+
+    if isinstance(Band, int):
+        Band_number = Band
+
+    if isinstance(Band, str):
+        for i in range(0, len(g.GetSubDatasets()), 1):
+            # print('    ', g.GetSubDatasets()[i][0].split(':')[-1])
+            if('"'+Band+'"' == g.GetSubDatasets()[i][0].split(':')[-1]):
+                Band_number = i
+                # print(Band, g.GetSubDatasets()[i][0].split(':')[-1], Band_number)
+    name_in = g.GetSubDatasets()[Band_number][0]
+    band_ds = gdal.Open(name_in, gdal.GA_ReadOnly)
+    NDV = band_ds.GetRasterBand(1).GetNoDataValue()
+    band_array = band_ds.ReadAsArray().astype(np.int16)
+    v,h = band_array.shape
+
+    # Make a new tile for the data
+    sizeX = int((TilesHorizontal[1] - TilesHorizontal[0] + 1) * h)
+    sizeY = int((TilesVertical[1] - TilesVertical[0] + 1) * v)
+    DataTot = np.zeros((sizeY, sizeX))
+    del g
+
+    # iterate through files
+    for Vertical in range(int(TilesVertical[0]), int(TilesVertical[1])+1):
+        countY=(TilesVertical[1] - TilesVertical[0] + 1) - (Vertical - TilesVertical[0])
+        for Horizontal in range(int(TilesHorizontal[0]), int(TilesHorizontal[1]) + 1):
+            countX=Horizontal - TilesHorizontal[0] + 1
+
+            part_name = 'h{:02d}v{:02d}'.format(Horizontal,Vertical)
+
+            for f in inputname_hdf:
+                if part_name in f:
+                   
+                    # Open .hdf for the band selected and collect all tiles to one array
+                    dataset = gdal.Open(f)
+                    name_in = dataset.GetSubDatasets()[Band_number][0]
+                    band_ds = gdal.Open(name_in)
+                    if Horizontal == TilesHorizontal[0] and Vertical == TilesVertical[0]:
+                        geo_t = band_ds.GetGeoTransform()
+                        # get the projection value
+                        proj = band_ds.GetProjection()
+
+                    data = band_ds.ReadAsArray()
+                    countYdata = (TilesVertical[1] - TilesVertical[0] + 2) - countY
+                    DataTot[int((countYdata - 1) * v):int(countYdata * v), int((countX - 1) * h):int(countX * h)]=data * scale
+                    del data
+                    del dataset
+
+    # Make geotiff file
+    
+    driver = gdal.GetDriverByName("GTiff")
+    dst_ds = driver.Create(Filename_tiff_end, DataTot.shape[1], DataTot.shape[0], 1, gdal.GDT_Float32, ['COMPRESS=LZW'])
+
+    dst_ds.SetProjection(proj)
+
+    dst_ds.GetRasterBand(1).SetNoDataValue(NDV)
+    dst_ds.SetGeoTransform(geo_t)
+    dst_ds.GetRasterBand(1).WriteArray(DataTot)
+    dst_ds = None
+
+    return ()
 
 def Extract_Data_zip(input_file, output_folder):
     """
@@ -1146,6 +1294,21 @@ def Merge_Dataset_GDAL(input_names, output_name):
 
     return output_name
 
+def Merge_and_reproject_Dataset_GDAL(input_names, output_name, epsg_to):
+    GDALWARP_PATH = 'gdalwarp.exe'
+
+    input_name = ''
+    for file in input_names:
+        input_name += '"{f}" '.format(f=file)
+
+    FullCmd = ' '.join([GDALWARP_PATH,
+                    '-overwrite -multi -wm 80% -co TILED=YES -co BIGTIFF=YES -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS ',
+                    '-t_srs EPSG:%s'
+                    ' -of GTiff' % (epsg_to), input_name, output_name])
+    
+    Run_command_window(FullCmd)
+
+    return output_name
 
 def Clip_Dataset_GDAL(input_name, output_name, latlim, lonlim):
     """
@@ -1194,7 +1357,7 @@ def Clip_Dataset_GDAL(input_name, output_name, latlim, lonlim):
 def Clip_Data(input_file, latlim, lonlim):
     """
     Clip the data to the defined extend of the user (latlim, lonlim) or to the
-    extend of the DEM tile
+    extent of the DEM tile
 
     Keyword Arguments:
     input_file -- output data, output of the clipped dataset

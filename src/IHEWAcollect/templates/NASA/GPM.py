@@ -182,7 +182,7 @@ def download_product(latlim, lonlim, dates,
     # Define local variable
     status_cod = -1
     # total = len(dates)
-    cores = 1
+    cores = 1#-1
 
     # Create Waitbar
     # amount = 0
@@ -286,6 +286,9 @@ def get_download_args(latlim, lonlim, date,
     data_ndv = product['nodata']
     data_type = product['data']['dtype']['l']
     data_multiplier = float(product['data']['units']['m'])
+    if (product['freq'] is not None) and ('D' not in product['freq']):
+        data_multiplier = data_multiplier*date.days_in_month
+
     data_variable = product['data']['variable']
 
     # Define arg_IDs
@@ -341,6 +344,8 @@ def get_download_args(latlim, lonlim, date,
     # [w,s]--[w,n]
     #   |      |
     # [e,s]--[e,n]
+
+
     y_id = np.array([
         np.floor((lonlim[0] - prod_lon_w) / prod_lon_size),
         np.ceil((lonlim[1] - prod_lon_w) / prod_lon_size)
@@ -349,6 +354,26 @@ def get_download_args(latlim, lonlim, date,
         np.floor((latlim[0] - prod_lat_s) / prod_lat_size),
         np.ceil((latlim[1] - prod_lat_s) / prod_lat_size)
     ], dtype=np.int)
+
+
+   # Adjust the lon, lat limits based on the grids of the data
+    lonlim = np.array([
+        (y_id[0] * prod_lon_size + prod_lon_w),
+        (y_id[1] * prod_lon_size + prod_lon_w)
+    ], dtype=np.float)
+    latlim = np.array([
+        (x_id[0] * prod_lat_size + prod_lat_s),
+        (x_id[1] * prod_lat_size + prod_lat_s)
+    ], dtype=np.float)
+
+     # Define IDs
+    # x_id = np.int16(np.array([np.ceil((latlim[0] + 90)*10),
+    #                                np.floor((latlim[1] + 90)*10)]))
+    # y_id = np.int16(np.array([np.floor((lonlim[0])*10),
+    #                          np.ceil((lonlim[1])*10)]) + 1800)
+    # print(lonlim,latlim)
+    # print(prod_lon_w,prod_lat_s, prod_lon_size, prod_lat_size)
+    # print(x_id,y_id)
 
     return latlim, lonlim, date, \
         product, \
@@ -390,17 +415,17 @@ def start_download(args) -> int:
     if is_start_download:
         # https://disc.gsfc.nasa.gov/data-access#python
         # C:\Users\qpa001\.netrc
-        file_conn_auth = os.path.join(os.path.expanduser("~"), ".netrc")
-        with open(file_conn_auth, 'w+') as fp:
-            fp.write('machine {m} login {u} password {p}\n'.format(
-                m='urs.earthdata.nasa.gov',
-                u=username,
-                p=password
-            ))
+        # file_conn_auth = os.path.join(os.path.expanduser("~"), ".netrc")
+        # with open(file_conn_auth, 'w+') as fp:
+        #     fp.write('machine {m} login {u} password {p}\n'.format(
+        #         m='urs.earthdata.nasa.gov',
+        #         u=username,
+        #         p=password
+        #     ))
 
         # Download the data from server if the file not exists
         msg = 'Downloading "{f}"'.format(f=remote_fname)
-        print('{}'.format(msg))
+        # print('{}'.format(msg))
         __this.Log.write(datetime.datetime.now(), msg=msg)
 
         is_download = True
@@ -487,8 +512,8 @@ def convert_data(args):
     #  -> temporary (unzip)
     #   -> local (gis)
     msg = 'Converting  "{f}"'.format(f=local_file)
-    print('\33[94m{}\33[0m'.format(msg))
-    __this.Log.write(datetime.datetime.now(), msg=msg)
+   #print('\33[94m{}\33[0m'.format(msg))
+    #__this.Log.write(datetime.datetime.now(), msg=msg)
 
     # --------- #
     # Load data #
@@ -601,7 +626,7 @@ def convert_data(args):
 
 def clean(path):
     msg = 'Cleaning    "{f}"'.format(f=path)
-    print('{}'.format(msg))
+    # print('{}'.format(msg))
     __this.Log.write(datetime.datetime.now(), msg=msg)
 
     for root, dirs, files in os.walk(path):

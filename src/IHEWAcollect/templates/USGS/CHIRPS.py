@@ -292,7 +292,7 @@ def get_download_args(latlim, lonlim, date,
     prod_lon_w = product['data']['lon']['w']
     prod_lat_n = product['data']['lat']['n']
     # prod_lon_e = product['data']['lon']['e']
-    # prod_lat_s = product['data']['lat']['s']
+    prod_lat_s = product['data']['lat']['s']
     prod_lat_size = abs(product['data']['lat']['r'])
     prod_lon_size = abs(product['data']['lon']['r'])
 
@@ -313,6 +313,17 @@ def get_download_args(latlim, lonlim, date,
         np.floor((lonlim[0] - prod_lon_w) / prod_lon_size),
         np.ceil((lonlim[1] - prod_lon_w) / prod_lon_size)
     ], dtype=np.int)
+
+
+     # Adjust the lon, lat limits based on the grids of the data
+    lonlim = np.array([
+        (y_id[0] * prod_lon_size + prod_lon_w),
+        (y_id[1] * prod_lon_size + prod_lon_w)
+    ], dtype=np.float)
+    latlim = np.array([
+        (x_id[0] * prod_lat_size + prod_lat_s),
+        (x_id[1] * prod_lat_size + prod_lat_s)
+    ], dtype=np.float)
 
     # [w,s]--[e,s]
     #   |      |
@@ -384,13 +395,13 @@ def start_download(args) -> int:
             is_start_download = False
 
             msg = 'Exist "{f}"'.format(f=local_file)
-            print('\33[92m{}\33[0m'.format(msg))
+            # print('\33[92m{}\33[0m'.format(msg))
             __this.Log.write(datetime.datetime.now(), msg=msg)
 
     if is_start_download:
         # Download the data from server if the file not exists
         msg = 'Downloading "{f}"'.format(f=remote_fname)
-        print('{}'.format(msg))
+        # print('{}'.format(msg))
         __this.Log.write(datetime.datetime.now(), msg=msg)
 
         is_download = True
@@ -399,7 +410,7 @@ def start_download(args) -> int:
                 is_download = False
 
                 msg = 'Exist "{f}"'.format(f=remote_file)
-                print('\33[93m{}\33[0m'.format(msg))
+                # print('\33[93m{}\33[0m'.format(msg))
                 __this.Log.write(datetime.datetime.now(), msg=msg)
 
         # ------------- #
@@ -416,7 +427,8 @@ def start_download(args) -> int:
 
             try:
                 # Connect to server
-                conn = ftplib.FTP(url)
+                conn = ftplib.FTP()
+                conn.connect(url)
                 conn.login()
                 # conn.login(username, password) Error 530
                 conn.cwd(url_dir)
@@ -426,17 +438,24 @@ def start_download(args) -> int:
                     sr=url_server,
                     dr=url_dir,
                     fn=remote_fname)
-                print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
+                # print('\33[91m{}\n{}\33[0m'.format(msg, str(err)))
                 __this.Log.write(datetime.datetime.now(),
                                  msg='{}\n{}'.format(msg, str(err)))
                 remote_file_status += 1
             else:
                 # Fetch data
                 # conn.status_code == ftplib.FTP.codes.ok
-                with open(remote_file, "wb") as fp:
-                    conn.retrbinary("RETR " + remote_fname, fp.write)
-                    conn.close()
-                    remote_file_status += 0
+                try:
+                    with open(remote_file, "wb") as fp:
+                        conn.retrbinary("RETR " + remote_fname, fp.write)
+                        fp.close()
+                        remote_file_status += 0
+                except Exception as k:
+                    # print('\33[91m{}\n{}\33[0m'.format(msg, str(k)))
+                    __this.Log.write(datetime.datetime.now(),
+                        msg='{}\n{}'.format(msg, str(k)))
+                finally:
+                    conn.quit()
         else:
             remote_file_status += 0
 
@@ -482,7 +501,7 @@ def convert_data(args):
     #  -> temporary (unzip)
     #   -> local (gis)
     msg = 'Converting  "{f}"'.format(f=local_file)
-    print('\33[94m{}\33[0m'.format(msg))
+    # print('\33[94m{}\33[0m'.format(msg))
     __this.Log.write(datetime.datetime.now(), msg=msg)
 
     # --------- #
@@ -578,7 +597,7 @@ def convert_data(args):
 
 def clean(path):
     msg = 'Cleaning    "{f}"'.format(f=path)
-    print('{}'.format(msg))
+    # print('{}'.format(msg))
     __this.Log.write(datetime.datetime.now(), msg=msg)
 
     for root, dirs, files in os.walk(path):
