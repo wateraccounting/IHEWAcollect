@@ -461,34 +461,6 @@ def start_download(args) -> int:
     return status_cod
 
 
-# def start_download_scan(url, file, username, password, lat, lon) -> tuple:
-    """Scan tile name
-    """
-    ctime = ''
-
-    #Connect to server
-    conn = requests.get(url)
-    soup = BeautifulSoup(conn.content, "html.parser")
-    if __this.conf['is_save_list']:
-        # Scan available data on the server
-        # Curl or Menually to CSR-v3.1.html
-        with open(file, 'w') as fp:
-            conn = requests.get(url)
-            fp.write(conn.text)
-
-    # # Scan available data on local drive
-    # conn = open(file, 'r', encoding='UTF8')
-    # soup = BeautifulSoup(conn, "html.parser")
-
-    for ele in soup.findAll('a', attrs={'href': re.compile('(?i)(hdf)$')}):
-        # print('{lon}{lat}'.format(lat=lat, lon=lon) == ele['href'].split('.')[-4],
-        #       ele)
-        if '{lon}{lat}'.format(lat=lat, lon=lon) == ele['href'].split('.')[-4]:
-            ctime = ele['href'].split('.')[-2]
-    
-    return ctime
-
-
 def convert_data(args, arg2):
     """
     """
