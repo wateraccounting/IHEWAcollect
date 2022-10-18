@@ -29,13 +29,13 @@ Data is converted from original file format to .tiff format.
 
 
 Products
---------
+============
 List of products which can be downloaded through the IHEWAcollect package: 
 https://ihewacollect.readthedocs.io/en/latest/products.html
 
 
 Installation
--------
+============
 See installation notes on our wiki page: https://github.com/wateraccounting/IHEWAcollect/wiki/Installation
 
 In order to have access to all products, accounts are needed from the following providers:
@@ -59,11 +59,11 @@ In order to have access to all products, accounts are needed from the following 
 +------------+-----------------------------------------------------------------------+
 
 Usage
--------
+============
 
 
 Licence
--------
+============
 This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
 http://creativecommons.org/licenses/by-nc-sa/4.0/
 
