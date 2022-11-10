@@ -68,5 +68,5 @@ This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAl
 http://creativecommons.org/licenses/by-nc-sa/4.0/
 
 .. image:: https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png
-   :width: 450
+   :width: 150
    :alt: "Creative Commons License"
