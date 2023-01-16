@@ -314,15 +314,14 @@ def get_download_args(latlim, lonlim, date,
         np.ceil((lonlim[1] - prod_lon_w) / prod_lon_size)
     ], dtype=np.int)
 
-
-     # Adjust the lon, lat limits based on the grids of the data
+    # Adjust the lon, lat limits based on the grids of the data
     lonlim = np.array([
-        (y_id[0] * prod_lon_size + prod_lon_w),
-        (y_id[1] * prod_lon_size + prod_lon_w)
+        (x_id[0] * prod_lon_size + prod_lon_w),
+        (x_id[1] * prod_lon_size + prod_lon_w)
     ], dtype=np.float)
     latlim = np.array([
-        (x_id[0] * prod_lat_size + prod_lat_s),
-        (x_id[1] * prod_lat_size + prod_lat_s)
+        (-y_id[1] * prod_lat_size + prod_lat_n),
+        (-y_id[0] * prod_lat_size + prod_lat_n)
     ], dtype=np.float)
 
     # [w,s]--[e,s]
