@@ -113,3 +113,22 @@ class IHEStringError(Exception):
         # __str__() obviously expects a string to be returned,
         # so make sure not to send any other data types
         return repr(self.msg)
+
+
+class IHEPassError(Exception):
+    """IHEPassError Class
+
+    Args:
+        vname (str): Account name.
+        msg (bool): Extra message.
+    """
+    def __init__(self, vname, msg=None):
+        if msg is None:
+            self.msg = '"{k}" refused the connection, please check password file.'.format(
+                k=vname)
+        self.name = vname
+
+    def __str__(self):
+        # __str__() obviously expects a string to be returned,
+        # so make sure not to send any other data types
+        return repr(self.msg)

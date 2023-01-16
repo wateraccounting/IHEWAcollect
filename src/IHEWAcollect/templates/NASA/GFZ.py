@@ -11,7 +11,7 @@ import inspect
 import os
 import re
 import sys
-
+from io import BytesIO
 import numpy as np
 import pandas as pd
 import pycurl
@@ -19,7 +19,12 @@ from bs4 import BeautifulSoup
 # import requests
 # # from requests.auth import HTTPBasicAuth => .netrc
 from joblib import Parallel, delayed
-
+try:
+    from .base.exception import IHEClassInitError,\
+        IHEStringError, IHETypeError, IHEKeyError, IHEFileError, IHEPassError
+except ImportError:
+    from IHEWAcollect.base.exception import IHEClassInitError,\
+        IHEStringError, IHETypeError, IHEKeyError, IHEFileError, IHEPassError
 # from netCDF4 import Dataset
 
 # IHEWAcollect Modules
@@ -463,15 +468,19 @@ def start_download(args) -> int:
                                                 dr=url_dir,
                                                 fl=remote_fnames[ifile])
                     # print('url: "{f}"'.format(f=url))
-
-                    with open(remote_files[ifile], 'wb') as fp:
-                        conn = pycurl.Curl()
-                        conn.setopt(conn.URL, url)
-                        conn.setopt(conn.USERPWD, '%s:%s' % (username, password))
-                        conn.setopt(conn.WRITEDATA, fp)
-                        conn.perform()
-                        conn.close()
-
+                    buffer = BytesIO()
+                    conn = pycurl.Curl()
+                    conn.setopt(conn.URL, url)
+                    conn.setopt(conn.USERPWD, '%s:%s' % (username, password))
+                    conn.setopt(conn.WRITEDATA, buffer)
+                    conn.perform()
+                    conn.close()
+                    body = buffer.getvalue()
+                    if '401 Unauthorized' in str(body):
+                        raise IHEPassError('PODAAC') from None
+                    else:
+                        with open(remote_files[ifile], 'wb') as fp:
+                            fp.write(body)
                     # try:
                     #     # Connect to server
                     #     conn = requests.post(url)
