@@ -417,13 +417,13 @@ def start_download(args) -> int:
     if is_start_download:
         # https://disc.gsfc.nasa.gov/data-access#python
         # C:\Users\qpa001\.netrc
-        file_conn_auth = os.path.join(os.path.expanduser("~"), ".netrc")
-        with open(file_conn_auth, 'w+') as fp:
-            fp.write('machine {m} login {u} password {p}\n'.format(
-                m='urs.earthdata.nasa.gov',
-                u=username,
-                p=password
-            ))
+        # file_conn_auth = os.path.join(os.path.expanduser("~"), ".netrc")
+        # with open(file_conn_auth, 'w+') as fp:
+        #     fp.write('machine {m} login {u} password {p}\n'.format(
+        #         m='urs.earthdata.nasa.gov',
+        #         u=username,
+        #         p=password
+        #     ))
 
         # Download the data from server if the file not exists
         remote_files = []
