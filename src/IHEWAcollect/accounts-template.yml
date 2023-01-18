@@ -1,0 +1,41 @@
+accounts:
+
+  Copernicus:
+    username: ''
+    password: ''
+    apitoken: null
+
+  IHEWA_GUESS:
+    username: ''
+    password: ''
+    apitoken: null
+
+  NASA:
+    username: ''
+    password: ''
+    apitoken: null
+
+  ECMWF:
+    username: ''
+    password: ''
+    apitoken: ''
+
+  GLEAM:
+    username: ''
+    password: ''
+    apitoken: null
+
+  IHEWA:
+    username: ''
+    password: ''
+    apitoken: null
+
+  PODAAC:
+    username: ''
+    password: ''
+    apitoken: null
+
+  VITO:
+    username: ''
+    password: ''
+    apitoken: null

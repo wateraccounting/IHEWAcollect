@@ -10,6 +10,7 @@ import datetime
 import importlib
 import inspect
 import os
+from pathlib import Path
 
 # import sys
 
@@ -108,6 +109,7 @@ class Download(User):
 
     def __init__(self, workspace='',
                  product='', version='', parameter='', resolution='', variable='',
+                 acct_path=str(Path(__file__).parents[0]),
                  bbox={}, period={}, nodata=-9999,
                  is_status=True, is_save_temp=False, is_save_remote=False, is_save_list=False,
                  **kwargs):
@@ -119,7 +121,13 @@ class Download(User):
             'resolution': resolution,
             'variable': variable
         }
-
+        
+        vname, rtype, vdata = 'acct_path', str, acct_path
+        if self.check_input(vname, rtype, vdata):
+            self.__status['acct_path'] = vdata
+        else:
+            self.__status['code'] = 1      
+        
         # Class self.__status['is_print']
         vname, rtype, vdata = 'is_status', bool, is_status
         if self.check_input(vname, rtype, vdata):
@@ -169,7 +177,7 @@ class Download(User):
 
         # super(Download, self).__init__(**kwargs)
         if self.__status['code'] == 0:
-            User.__init__(self, workspace, product, is_status, **kwargs)
+            User.__init__(self, acct_path, product, is_status, **kwargs)
         else:
             raise IHEClassInitError('Download') from None
 
