@@ -24,6 +24,7 @@ try:
         IHEStringError, IHETypeError, IHEKeyError, IHEFileError, IHEPassError
 except ImportError:
     from IHEWAcollect.base.exception import IHEClassInitError,\
+        IHEStringError, IHETypeError, IHEKeyError, IHEFileError, IHEPassError
 # from netCDF4 import Dataset
 
 # IHEWAcollect Modules
