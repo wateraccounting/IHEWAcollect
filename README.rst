@@ -35,30 +35,32 @@ https://ihewacollect.readthedocs.io/en/latest/products.html
 
 
 Installation
--------
+-------------
 See installation notes on our wiki page: https://github.com/wateraccounting/IHEWAcollect/wiki/Installation
 
 In order to have access to all products, accounts are needed from the following providers:
-(`username, password` or `apitoken`)
+(`username, password` or `apitoken`). 
+Default location for this file is located at src/IHEWAcollect/accounts-template.yml.
+You must rename this file accounts.yml and fill out your credentials for the data you wish to download - note that some of the datasets do not require credentials.
 
++-------------+---------------------------------------------+---------------------------+
+| Accounts    | Link                                        | Products (to be completed)|
++=============+=============================================+===========================+
+| Copernicus  | https://www.copernicus.eu/en                |                           |
++-------------+---------------------------------------------+---------------------------+
+| ECMWF       | https://www.ecmwf.int                       |                           |
++-------------+---------------------------------------------+---------------------------+
+| GLEAM       | http://www.gleam.eu                         | GLEAM                     |
++-------------+---------------------------------------------+---------------------------+
+| NASA        | https://www.earthdata.nasa.gov/             | GPM, MODIS products, GLDAS|
++-------------+---------------------------------------------+---------------------------+
+| PODAAC (API)| https://podaac-tools.jpl.nasa.gov/drive/    | GRACE (JPL, CSR, GFZ)     |
++-------------+---------------------------------------------+---------------------------+
+| VITO        | https://www.vito-eodata.be/PDF/datapool     | Proba-V                   |
++-------------+---------------------------------------------+---------------------------+
 
-+-------------+-----------------------------------------------------------------------+
-| Accounts    | Link                                                                  |
-+=============+=======================================================================+
-| Copernicus  | https://www.copernicus.eu/en                                          |
-+-------------+-----------------------------------------------------------------------+
-| ECMWF       | https://www.ecmwf.int                                                 |
-+-------------+-----------------------------------------------------------------------+
-| GLEAM       | http://www.gleam.eu                                                   |
-+-------------+-----------------------------------------------------------------------+
-| NASA        | https://www.nasa.gov                                                  |
-+-------------+-----------------------------------------------------------------------+
-| PODAAC (API)| https://podaac-tools.jpl.nasa.gov/drive/                              |
-+-------------+-----------------------------------------------------------------------+
-| VITO        | https://www.vito-eodata.be/PDF/datapool                               |
-+-------------+-----------------------------------------------------------------------+
-| WaPOR       | http://www.fao.org/in-action/remote-sensing-for-water-productivity/en |
-+-------------+-----------------------------------------------------------------------+
+.. | WaPOR       | https://wapor.apps.fao.org/                 |                           | Hiding these lines as WaPOR not yet in IHEWAcollect
+.. +-------------+---------------------------------------------+---------------------------+ Hiding these lines as WaPOR not yet in IHEWAcollect
 
 Usage
 -------
