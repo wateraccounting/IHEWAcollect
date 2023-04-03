@@ -449,7 +449,7 @@ def start_download(args) -> int:
             try:
                 # Connect to server
                 conn = requests.get(url) 
-                # conn.raise_for_status()
+                conn.raise_for_status()
             except requests.exceptions.RequestException as err:
                 # Connect error
                 msg = 'Not able to download {fn}, from {sr}{dr}'.format(
