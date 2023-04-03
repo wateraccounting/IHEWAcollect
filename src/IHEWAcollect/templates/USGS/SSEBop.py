@@ -11,7 +11,7 @@ import inspect
 import numpy as np
 import pandas as pd
 import requests
-
+import time
 # from requests.auth import HTTPBasicAuth
 from joblib import Parallel, delayed
 
@@ -635,5 +635,8 @@ def clean(path,log_file,part_file_name):
         for filename in files:
             # print(filename)
             if(part_file_name in filename):
-                os.remove(os.path.join(root, filename))
-
+                try:
+                  os.remove(os.path.join(root, filename))
+                except:
+                  time.sleep(5)
+                  os.remove(os.path.join(root, filename))
