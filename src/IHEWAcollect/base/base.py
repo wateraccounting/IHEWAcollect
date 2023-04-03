@@ -95,12 +95,12 @@ class Base(object):
         """Class instantiation
         """
         # Class self.__status['is_print']
+        self.__status['code'] = 0
         vname, rtype, vdata = 'is_print', bool, is_print
         if self.check_input(vname, rtype, vdata):
             self.__status['is_print'] = vdata
         else:
             self.__status['code'] = 1
-
         # Class self.__conf['product']['name']
         self.__conf['product']['name'] = product
 
@@ -113,7 +113,6 @@ class Base(object):
                 v=self.__conf['product']['name'])
         else:
             raise IHEClassInitError('Base') from None
-
     def _conf(self,):
         """Get configuration
 
