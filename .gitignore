@@ -120,3 +120,4 @@ venv.bak/
 # mypy
 .mypy_cache/
 src/IHEWAcollect/accounts.yml
+notebooks/download_data
