@@ -4,7 +4,9 @@
 Products
 ========
 
-.. csv-table:: Product Detail
+**Downloadable products at time of pip release 0.0.31**
+
+.. csv-table:: 
     :header: "variable", "product","account","protocol","version","freq.","parameters","resolution","lat_s","lat_n","time_s","time_e"
     :widths: 10,10,10,10,10,10,10,10,10,10,10,10
 
@@ -31,11 +33,11 @@ Products
     Soil Parameters, SoilGrids, None, HTTPS, v1, n/a, BDRICM BDRLOG BDTICM BLDFIE(1to7) CLYPPT(1to7) CRFVOL(1to7) OCSTHA(1to7) ORCDRC(1to7) SLTPPT(1to7) SNDPPT(1to7), 250m, -56, 84, n/a, n/a
     Vegetation Indices, MOD15A2H, NASA, HTTPS, v6, 8-day, Fpar LAI, 500m, Global, Global, 18/02/2000, continues
     Water Extent, JRC, None, HTTPS, v1, n/a, occurrence, 30m, -60, 80, n/a, n/a
-    
-Currently unavailable or dropped
 
 
-.. csv-table:: Product Detail
+**No longer or temporarily unavailable**
+
+.. csv-table:: 
     :header: "variable", "product","account","protocol","version","freq.","parameters","resolution","lat_s","lat_n","time_s","time_e"
     :widths: 10,10,10,10,10,10,10,10,10,10,10,10
     
