@@ -295,7 +295,7 @@ def Convert_hdf5_to_tiff_merg_clip(inputname_hdf, Filename_tiff_end, Band, latli
         Band_number = Band
     if isinstance(Band, str):
         for i in range(0, len(g.GetSubDatasets()), 1):
-            if Band in g.GetSubDatasets()[i][0].split(':')[-1]:
+            if Band == g.GetSubDatasets()[i][0].split(':')[-1]:
                 Band_number = i
     g = None
 

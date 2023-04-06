@@ -2855,8 +2855,8 @@ products:
       ftypes:
         - 'NetCDF'
       versions:
-        - 'v3.3a'
-        - 'v3.3b'
+        - 'v3.6a'
+        - 'v3.6b'
       datasets:
         - 'Evapotranspiration'
       resolutions:
@@ -2864,7 +2864,7 @@ products:
         - 'monthly'
       projection:
         - 'EPSG:4326 - WGS 84 - Geographic'
-    v3.3a:
+    v3.6a:
       evapotranspiration:
         daily:
           url: 'sftp://hydras.ugent.be:2225'
@@ -2877,11 +2877,11 @@ products:
               name: 'Daily Evapotranspiration'
               description:
                 ''
-              dir: '/data/v3.3a/daily/{dtime:%Y}/'
+              dir: '/data/v3.6a/daily/{dtime:%Y}/'
               fname:
-                r: 'Et_{dtime:%Y}_GLEAM_v3.3a.nc'
+                r: 'Et_{dtime:%Y}_GLEAM_v3.6a.nc'
                 t: null
-                l: 'GLEAM_v3.3a_mm.d_D-{dtime:%Y.%m.%d}.tif'
+                l: 'GLEAM_v3.6a_mm.d_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -2924,11 +2924,11 @@ products:
               name: 'Monthly Evapotranspiration'
               description:
                 ''
-              dir: '/data/v3.3a/monthly/'
+              dir: '/data/v3.6a/monthly/'
               fname:
-                r: 'Et_1980_2018_GLEAM_v3.3a_MO.nc'
+                r: 'Et_1980-2021_GLEAM_v3.6a_MO.nc'
                 t: null
-                l: 'GLEAM_v3.3a_mm.m_MS-{dtime:%Y.%m}.tif'
+                l: 'GLEAM_v3.6a_mm.m_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: null
@@ -2960,7 +2960,7 @@ products:
               dem:
                 w: 1440
                 h: 720
-    v3.3b:
+    v3.6b:
       evapotranspiration:
         daily:
           url: 'sftp://hydras.ugent.be:2225'
@@ -2973,11 +2973,11 @@ products:
               name: 'Daily Evapotranspiration'
               description:
                 ''
-              dir: '/data/v3.3b/daily/{dtime:%Y}/'
+              dir: '/data/v3.6b/daily/{dtime:%Y}/'
               fname:
-                r: 'Et_{dtime:%Y}_GLEAM_v3.3b.nc'
+                r: 'Et_{dtime:%Y}_GLEAM_v3.6b.nc'
                 t: null
-                l: 'GLEAM_v3.3b_mm.d_D-{dtime:%Y.%m.%d}.tif'
+                l: 'GLEAM_v3.6b_mm.d_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime'
@@ -3020,11 +3020,11 @@ products:
               name: 'Monthly Evapotranspiration'
               description:
                 ''
-              dir: '/data/v3.3b/monthly/'
+              dir: '/data/v3.6b/monthly/'
               fname:
-                r: 'Et_2003_2018_GLEAM_v3.3b_MO.nc'
+                r: 'Et_2003-2021_GLEAM_v3.6b_MO.nc'
                 t: null
-                l: 'GLEAM_v3.3b_mm.m_MS-{dtime:%Y.%m}.tif'
+                l: 'GLEAM_v3.6b_mm.m_MS-{dtime:%Y.%m}.tif'
               fmt:
                 d: null
                 r: null
@@ -4336,14 +4336,14 @@ products:
     meta:
       owner: 'United States Geological Survey'
       description:
-        'The MOD16A2 Version 6 Evapotranspiration/Latent Heat Flux product is an 8-day composite
+        'The MOD16A2 Version 6.1 Evapotranspiration/Latent Heat Flux product is an 8-day composite
          dataset produced at 500 meter (m) pixel resolution. The algorithm used for the MOD16 data
          product collection is based on the logic of the Penman-Monteith equation, which includes
          inputs of daily meteorological reanalysis data along with Moderate Resolution Imaging
          Spectroradiometer (MODIS) remotely sensed data products such as vegetation property dynamics,
          albedo, and land cover.'
       websites:
-        - 'https://lpdaac.usgs.gov/products/mod16a2v006'
+        - 'https://lpdaac.usgs.gov/products/mod16a2gfv061/'
       protocols:
         - 'HTTPS'
       methods:
@@ -4351,14 +4351,14 @@ products:
       ftypes:
         - 'HDF'
       versions:
-        - 'v6'
+        - 'v6.1'
       datasets:
         - 'Evapotranspiration'
       resolutions:
         - 'eight_daily'
       projection:
         - 'USER:100023 - * Generated CRS (+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs) - Projected'
-    v6:
+    v6.1:
       evapotranspiration:
         eight_daily:
           url: 'https://e4ftl01.cr.usgs.gov'
@@ -4371,11 +4371,11 @@ products:
               name: 'Eight Daily Evapotranspiration'
               description:
                 ''
-              dir: '/MOLT/MOD16A2GF.006/{dtime:%Y.%m.%d}/'
+              dir: '/MOLT/MOD16A2GF.061/{dtime:%Y.%m.%d}/'
               fname:
-                r: 'MOD16A2GF.A{dtime:%Y%j}.{lon}{lat}.006.{ctime}.hdf'
-                t: 'MOD16A2GF.A{dtime:%Y%j}.006.{ipart}.tif'
-                l: 'MOD16A2GF_v6_mm.d_D-{dtime:%Y.%m.%d}.tif'
+                r: 'MOD16A2GF.A{dtime:%Y%j}.{lon}{lat}.061.{ctime}.hdf'
+                t: 'MOD16A2GF.A{dtime:%Y%j}.061.{ipart}.tif'
+                l: 'MOD16A2GF_v61_mm.8d_D-{dtime:%Y.%m.%d}.tif'
               fmt:
                 d: 'dtime'
                 r: 'dtime.latlon.ctime'
@@ -4392,8 +4392,8 @@ products:
                 l: 'float32'
               units:
                 r: 'kg.m2.8d'
-                l: 'mm.d'
-                m: 0.0125
+                l: 'mm.8d'
+                m: 0.1
               lat:
                 s: -10007554.677
                 n: 10007554.677
